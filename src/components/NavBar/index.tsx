@@ -1,12 +1,17 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable react-hooks/rules-of-hooks */
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
 
-const index = () => {
+import Dropdown from '@/components/NavBar/dropDown'
+
+function NavBar() {
   // 테스트용 accessToken state 만들어서 로그인 상태, 로그아웃 상태 UI 테스트
-  const [accessToken, setAccessToken] = useState(true)
+  const [accessToken] = useState(true)
+  const [isOpenMenu, setIsOpenMenu] = useState(false)
+
+  const handleDropdownVisible = () => {
+    setIsOpenMenu(!isOpenMenu)
+  }
 
   return (
     <div className="bg-white border-b border-solid border-gray-300">
@@ -29,14 +34,20 @@ const index = () => {
               height={20}
             />
             <div className="border-l mx-12 border-solid md:mx-25 border-gray-300 h-22" />
-            <div className="flex gap-10 items-center">
+            <div className="relative flex gap-10 items-center">
               <Image
                 src="images/ic-test-profile.svg"
                 alt="프로필 이미지"
                 width={32}
                 height={32}
               />
-              <div className="text-md-medium text-black">이영훈</div>
+              <div
+                className="text-md-medium cursor-pointer text-black"
+                onClick={handleDropdownVisible}
+              >
+                이영훈
+              </div>
+              {isOpenMenu && <Dropdown />}
             </div>
           </div>
         ) : (
@@ -50,4 +61,4 @@ const index = () => {
   )
 }
 
-export default index
+export default NavBar
