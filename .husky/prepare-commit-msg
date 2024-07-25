@@ -8,7 +8,7 @@ BRANCH_NAME=$(git symbolic-ref --short HEAD)
 BRANCH_NAME="${BRANCH_NAME##*/}"
  
 # 3. 브랜치 이름에서 JIRA 이슈키를 추출합니다.
-JIRA_ID=$(echo $BRANCH_NAME | egrep -o 'PJ-[0-9]+')
+JIRA_ID=$(echo $BRANCH_NAME | egrep -o 'FP-[0-9]+')
  
 # 4. 현재 브랜치가 건너뛸 목록에 있는지 확인합니다.
 BRANCH_EXCLUDED=$(printf "%s\n" "${BRANCHES_TO_SKIP[@]}" | grep -c "^$BRANCH_NAME$")
