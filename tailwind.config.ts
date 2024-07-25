@@ -29,7 +29,51 @@ const config: Config = {
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       borderRadius: PX0_50,
-      fontSize: PX0_100,
+      fontSize: {
+        ...PX0_100,
+        // 3xl
+        '3xl-bold': ['32px', { lineHeight: '42px', fontWeight: '700' }],
+        '3xl-semibold': ['32px', { lineHeight: '42px', fontWeight: '600' }],
+
+        // 2xl
+        '2xl-bold': ['24px', { lineHeight: '32px', fontWeight: '700' }],
+        '2xl-semibold': ['24px', { lineHeight: '32px', fontWeight: '600' }],
+        '2xl-medium': ['24px', { lineHeight: '32px', fontWeight: '500' }],
+        '2xl-regular': ['24px', { lineHeight: '32px', fontWeight: '400' }],
+
+        // xl
+        'xl-bold': ['20px', { lineHeight: '32px', fontWeight: '700' }],
+        'xl-semibold': ['20px', { lineHeight: '32px', fontWeight: '600' }],
+        'xl-medium': ['20px', { lineHeight: '32px', fontWeight: '500' }],
+        'xl-regular': ['20px', { lineHeight: '32px', fontWeight: '400' }],
+
+        // 2lg
+        '2lg-bold': ['18px', { lineHeight: '26px', fontWeight: '700' }],
+        '2lg-semibold': ['18px', { lineHeight: '26px', fontWeight: '600' }],
+        '2lg-medium': ['18px', { lineHeight: '26px', fontWeight: '500' }],
+        '2lg-regular': ['18px', { lineHeight: '26px', fontWeight: '400' }],
+
+        // lg
+        'lg-bold': ['16px', { lineHeight: '26px', fontWeight: '700' }],
+        'lg-semibold': ['16px', { lineHeight: '26px', fontWeight: '600' }],
+        'lg-medium': ['16px', { lineHeight: '26px', fontWeight: '500' }],
+        'lg-regular': ['16px', { lineHeight: '26px', fontWeight: '400' }],
+
+        // md
+        'md-bold': ['14px', { lineHeight: '24px', fontWeight: '700' }],
+        'md-semibold': ['14px', { lineHeight: '24px', fontWeight: '600' }],
+        'md-medium': ['14px', { lineHeight: '24px', fontWeight: '500' }],
+        'md-regular': ['14px', { lineHeight: '24px', fontWeight: '400' }],
+
+        // sm
+        'sm-semibold': ['13px', { lineHeight: '22px', fontWeight: '600' }],
+        'sm-medium': ['13px', { lineHeight: '22px', fontWeight: '500' }],
+
+        // xs
+        'xs-semibold': ['12px', { lineHeight: '18px', fontWeight: '600' }],
+        'xs-medium': ['12px', { lineHeight: '18px', fontWeight: '500' }],
+        'xs-regular': ['12px', { lineHeight: '18px', fontWeight: '400' }],
+      },
       spacing: PX0_200,
       width: PX0_1920,
       height: PX0_1920,
@@ -69,6 +113,11 @@ const config: Config = {
           200: '#2EB4FF',
           300: '#0085FF',
         },
+      },
+      screens: {
+        sm: { min: '375px' },
+        md: { min: '744px' },
+        lg: { min: '1200px' },
       },
     },
   },
