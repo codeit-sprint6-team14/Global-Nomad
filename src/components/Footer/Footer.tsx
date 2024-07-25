@@ -10,30 +10,54 @@ function Footer() {
           <p className="text-gray-700 lg:mr-200">FAQ</p>
         </div>
         <div className="flex space-x-4 mt-4 gap-10 md:mt-0">
-          <Image
-            src="/images/icon-facebook.svg"
-            alt="facebook icon"
-            width={20}
-            height={20}
-          />
-          <Image
-            src="/images/icon-twitter.svg"
-            alt="twitter icon"
-            width={20}
-            height={20}
-          />
-          <Image
-            src="/images/icon-youtube.svg"
-            alt="youtube icon"
-            width={20}
-            height={20}
-          />
-          <Image
-            src="/images/icon-instagram.svg"
-            alt="instagram icon"
-            width={20}
-            height={20}
-          />
+          <a
+            href="https://facebook.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Image
+              src="/images/icon-facebook.svg"
+              alt="facebook icon"
+              width={20}
+              height={20}
+              className="cursor-pointer"
+            />
+          </a>
+          <a href="https://x.com/" target="_blank" rel="noopener noreferrer">
+            <Image
+              src="/images/icon-twitter.svg"
+              alt="twitter icon"
+              width={20}
+              height={20}
+              className="cursor-pointer"
+            />
+          </a>
+          <a
+            href="https://www.youtube.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Image
+              src="/images/icon-youtube.svg"
+              alt="youtube icon"
+              width={20}
+              height={20}
+              className="cursor-pointer"
+            />
+          </a>
+          <a
+            href="https://www.instagram.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Image
+              src="/images/icon-instagram.svg"
+              alt="instagram icon"
+              width={20}
+              height={20}
+              className="cursor-pointer"
+            />
+          </a>
         </div>
       </div>
     </div>
