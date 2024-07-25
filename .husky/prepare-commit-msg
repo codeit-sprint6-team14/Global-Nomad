@@ -1,22 +1,4 @@
-# 1. 설정되지 않은 경우 건너뛸 분기를 정의합니다.
-if [ -z "$BRANCHES_TO_SKIP" ]; then
-  BRANCHES_TO_SKIP=(main develop release hotfix)
-fi
- 
-# 2. 현재 브랜치 이름을 가져옵니다.
-BRANCH_NAME=$(git symbolic-ref --short HEAD)
-BRANCH_NAME="${BRANCH_NAME##*/}"
- 
-# 3. 브랜치 이름에서 JIRA 이슈키를 추출합니다.
-JIRA_ID=$(echo $BRANCH_NAME | egrep -o 'FP-[0-9]+')
- 
-# 4. 현재 브랜치가 건너뛸 목록에 있는지 확인합니다.
-BRANCH_EXCLUDED=$(printf "%s\n" "${BRANCHES_TO_SKIP[@]}" | grep -c "^$BRANCH_NAME$")
- 
-# 5. 커밋 메시지에 이미 JIRA 이슈키가 포함되어 있는지 확인합니다.
-BRANCH_IN_COMMIT=$(grep -c "$JIRA_ID" $1)
- 
-# 6. 커밋 메시지에 이슈키가 포함되어 있지 않다면 이슈키를 추가합니다.
-if [ -n "$JIRA_ID" ] && ! [[ $BRANCH_EXCLUDED -eq 1 ]] && ! [[ $BRANCH_IN_COMMIT -ge 1 ]]; then
-  sed -i.bak -e "1s/^/[$JIRA_ID] /" $1
-fi
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+npx jira-prepare-commit-msg $1

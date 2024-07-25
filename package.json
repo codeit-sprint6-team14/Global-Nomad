@@ -15,6 +15,7 @@
     "@tanstack/react-query": "^5.51.11",
     "@tanstack/react-query-devtools": "^5.51.11",
     "axios": "^1.7.2",
+    "jira-prepare-commit-msg": "^1.7.2",
     "jotai": "^2.9.1",
     "next": "14.2.5",
     "react": "^18",
@@ -48,7 +49,7 @@
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "eslint-plugin-storybook": "^0.8.0",
-    "husky": "^8.0.0",
+    "husky": "^8.0.3",
     "lint-staged": "^15.2.7",
     "postcss": "^8",
     "prettier": "^3.3.3",
@@ -61,5 +62,13 @@
       "prettier --write",
       "eslint --fix"
     ]
+  },
+  "jira-prepare-commit-msg": {
+    "messagePattern": "[$J] $M",
+    "jiraTicketPattern": "([A-Z]+-\\d+)",
+    "commentChar": "#",
+    "isConventionalCommit": false,
+    "allowEmptyCommitMessage": false,
+    "gitRoot": ""
   }
 }
