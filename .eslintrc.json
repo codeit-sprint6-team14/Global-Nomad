@@ -29,6 +29,13 @@
     // 경고표시, 파일 확장자를 .ts나 .tsx 모두 허용함
     "react/jsx-filename-extension": ["warn", { "extensions": [".ts", ".tsx"] }],
     "no-useless-catch": "off", // 불필요한 catch 못쓰게 하는 기능 끔
-    "react/jsx-pascal-case": "off"
-  }
+    "react/jsx-pascal-case": "off",
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ]
+  },
+  "func-style": ["error", "expression"]
 }
