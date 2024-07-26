@@ -1,6 +1,7 @@
-import Image from 'next/image'
+/* eslint-disable react/function-component-definition */
+import Image from 'next/image';
 
-function Footer() {
+const Footer = () => {
   return (
     <div className="bg-black w-full h-160 p-30 ">
       <div className="flex flex-col items-center gap-30 md:flex-row  md:justify-center ">
@@ -61,6 +62,6 @@ function Footer() {
         </div>
       </div>
     </div>
-  )
-}
-export default Footer
+  );
+};
+export default Footer;
