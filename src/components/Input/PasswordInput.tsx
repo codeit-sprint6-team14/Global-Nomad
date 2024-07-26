@@ -12,10 +12,10 @@ type PasswordProps = {
 }
 
 const PasswordInput = ({ id, placeholder, register, error }: PasswordProps) => {
-  const [pwVisible, setPwVisible] = useState(true)
+  const [isPwVisible, setIsPwVisible] = useState(true)
 
   const togglePWEye = () => {
-    setPwVisible((prev) => !prev)
+    setIsPwVisible((prev) => !prev)
   }
 
   return (
@@ -23,14 +23,14 @@ const PasswordInput = ({ id, placeholder, register, error }: PasswordProps) => {
       <DefaultInput
         id={id}
         isAuth
-        type={pwVisible ? 'password' : 'text'}
+        type={isPwVisible ? 'password' : 'text'}
         placeholder={placeholder}
         {...register}
         error={error}
       />
       <Image
         src={
-          pwVisible
+          isPwVisible
             ? '/images/icon-visibility-on.svg'
             : '/images/icon-visibility-off.svg'
         }
