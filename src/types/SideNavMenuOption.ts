@@ -1,5 +1,5 @@
 export default interface SideNavMenuOptionProps {
-  imgSrc: string
+  imgSrc: JSX.Element
   text: string
   isActive: boolean
 }

@@ -1,22 +1,33 @@
-const menuOptionList = [
+import MyInformation from '../../../public/images/icon-my-information.svg'
+import BookingHistory from '../../../public/images/icon-booking-history.svg'
+import BookingStatus from '../../../public/images/icon-booking-status.svg'
+import Setting from '../../../public/images/icon-setting.svg'
+
+interface MenuOptionList {
+  id: number
+  imgSrc: JSX.Element
+  text: string
+}
+
+const menuOptionList: MenuOptionList[] = [
   {
     id: 1,
-    imgSrc: '/images/icon-my-information.svg',
+    imgSrc: <MyInformation />,
     text: '내 정보',
   },
   {
     id: 2,
-    imgSrc: '/images/icon-booking-history.svg',
+    imgSrc: <BookingHistory />,
     text: '예약 내역',
   },
   {
     id: 3,
-    imgSrc: '/images/icon-setting.svg',
+    imgSrc: <Setting />,
     text: '내 체험 관리',
   },
   {
     id: 4,
-    imgSrc: '/images/icon-booking-status.svg',
+    imgSrc: <BookingStatus />,
     text: '예약 현황',
   },
 ]
