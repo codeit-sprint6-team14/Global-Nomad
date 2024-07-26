@@ -1,6 +1,4 @@
 import React from 'react';
-import NavButton from './navButton';
-import PageButton from './pageButton';
 
 interface PaginationProps {
   totalPages: number;
@@ -36,33 +34,41 @@ const Pagination: React.FC<PaginationProps> = ({
 
   return (
     <div className="flex items-center justify-center gap-10">
-      <NavButton
+      <button
         onClick={handlePreviousGroup}
         disabled={currentGroup === 1}
-        className=""
+        className={`w-55 h-55 sm:w-40 sm:h-40 box-border bg-white border rounded-15 hover:bg-gray-200
+          ${currentGroup === 1 ? 'border-gray-400 text-gray-400' : 'border-green-950 text-black'}
+          `}
       >
         ◀
-      </NavButton>
+      </button>
 
       {Array.from({ length: endPage - startPage + 1 }, (_, index) => {
         const page = startPage + index;
         return (
-          <PageButton
+          <button
             key={page}
-            page={page}
-            currentPage={currentPage}
-            onPageChange={onPageChange}
-          />
+            onClick={() => onPageChange(page)}
+            className={`w-55 h-55 sm:w-40 sm:h-40 box-border border border-green-950 rounded-15 font-pretendard text-2lg-regular ${
+              currentPage === page
+                ? 'bg-green-950 text-white'
+                : 'bg-white hover:bg-gray-200'
+            }`}
+          >
+            {page}
+          </button>
         );
       })}
 
-      <NavButton
+      <button
         onClick={handleNextGroup}
         disabled={endPage === totalPages}
-        className=""
+        className={`w-55 h-55 sm:w-40 sm:h-40 box-border bg-white border rounded-15 hover:bg-gray-200
+          ${endPage === totalPages ? 'border-gray-400 text-gray-400' : 'border-green-950 text-black'}`}
       >
         ▶
-      </NavButton>
+      </button>
     </div>
   );
 };
