@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <div>
       <NavBar />
-      <SideNavMenu.sideNavMenu />
+      <SideNavMenu />
       <Footer />
     </div>
   )

@@ -1,13 +1,33 @@
-import menuOptionList from './menuOptionList'
-import sideNavMenu from './sideNavMenu'
-import sideNavMenuOption from './sideNavMenuOption'
-import sideNavMenuOptionList from './sideNavMenuOptionList'
+import Image from 'next/image'
+import SideNavMenuOptionList from './sideNavMenuOptionList'
 
-const SideNavMenu = {
-  sideNavMenu,
-  sideNavMenuOption,
-  sideNavMenuOptionList,
-  menuOptionList,
+const SideNavMenu = () => {
+  return (
+    <div className="w-max h-max p-24 border border-solid rounded-12 border-gray-300">
+      <div className=" flex flex-col gap-24">
+        <div className="relative flex justify-center">
+          <div className="relative w-160 h-160 rounded-full overflow-hidden ">
+            <Image
+              src="/images/test-profile-img.png"
+              alt="프로필이미지"
+              fill
+              style={{ objectFit: 'cover' }}
+              priority
+            />
+          </div>
+          <div className="w-44 h-44 bg-green-300 absolute bottom-[-2px] right-70 md:right-30 lg:right-95 flex justify-center items-center rounded-full">
+            <Image
+              src="/images/icon-pencil.svg"
+              alt="연필이미지"
+              width={24}
+              height={24}
+            />
+          </div>
+        </div>
+        <SideNavMenuOptionList />
+      </div>
+    </div>
+  )
 }
 
 export default SideNavMenu

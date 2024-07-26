@@ -1,6 +1,6 @@
-import SideNavMenu from '@/components/SideNavMenu/index'
 import { useState } from 'react'
 import menuOptionList from './menuOptionList'
+import SideNavMenuOption from './sideNavMenuOption'
 
 const SideNavMenuOptionList = () => {
   const [activeOption, setActiveOption] = useState(0)
@@ -9,7 +9,7 @@ const SideNavMenuOptionList = () => {
     <div className="w-296 md:w-203 lg:w-336 flex flex-col gap-8">
       {menuOptionList.map((option) => (
         <ul key={option.id} onClick={() => setActiveOption(option.id)}>
-          <SideNavMenu.sideNavMenuOption
+          <SideNavMenuOption
             imgSrc={option.imgSrc}
             text={option.text}
             isActive={activeOption === option.id}

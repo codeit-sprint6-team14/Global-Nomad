@@ -1,5 +1,4 @@
 import SideNavMenuOptionProps from '@/types/SideNavMenuOption'
-// import Image from 'next/image'
 
 const SideNavMenuOption = ({
   imgSrc,
