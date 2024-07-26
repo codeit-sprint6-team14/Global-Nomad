@@ -6,7 +6,7 @@ import DownArrow from '@/../public/svgs/down-arrow.svg'
 const Filter = () => {
   const [isOpen, setIsOpen] = useState(false)
 
-  const handleFilter = () => {
+  const handleDropDownToggle = () => {
     setIsOpen(!isOpen)
   }
 
@@ -18,7 +18,7 @@ const Filter = () => {
     <div className="relative">
       <button
         type="button"
-        onClick={handleFilter}
+        onClick={handleDropDownToggle}
         className="flex gap-21 items-center justify-center w-107 h-51 rounded-15 border border-green-300 bg-white text-green-300 md:w-160 md:h-53 md:gap-70"
       >
         가격
