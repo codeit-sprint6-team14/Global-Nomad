@@ -1,6 +1,3 @@
-/* eslint-disable react/require-default-props */
-/* eslint-disable default-case */
-/* eslint-disable react/function-component-definition */
 import Image from 'next/image'
 import { useState } from 'react'
 import { UseFormRegisterReturn } from 'react-hook-form'
@@ -28,7 +25,6 @@ const PasswordInput = ({ id, placeholder, register, error }: PasswordProps) => {
         isAuth
         type={pwVisible ? 'password' : 'text'}
         placeholder={placeholder}
-        // eslint-disable-next-line react/jsx-props-no-spreading
         {...register}
         error={error}
       />

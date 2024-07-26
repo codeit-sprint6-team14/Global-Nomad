@@ -1,6 +1,3 @@
-/* eslint-disable react/require-default-props */
-/* eslint-disable default-case */
-/* eslint-disable react/function-component-definition */
 import { InputHTMLAttributes } from 'react'
 import { UseFormRegisterReturn } from 'react-hook-form'
 
@@ -39,7 +36,6 @@ const DefaultInput = ({
       className={`${styleClass} ${className}`}
       type={type}
       placeholder={placeholder}
-      // eslint-disable-next-line react/jsx-props-no-spreading
       {...register}
     />
   )
