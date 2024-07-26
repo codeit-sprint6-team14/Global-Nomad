@@ -8,7 +8,7 @@ const SideNavMenuOption = ({
 }: SideNavMenuOptionProps) => {
   return (
     <li
-      className={`flex items-center py-9 pl-16 ${isActive && 'bg-green-100 rounded-12'}`}
+      className={`flex cursor-pointer items-center py-9 pl-16 ${isActive && 'bg-green-100 rounded-12'}`}
     >
       <div className={`w-24 h-24 ${isActive ? 'text-black' : 'text-gray-600'}`}>
         {imgSrc}
