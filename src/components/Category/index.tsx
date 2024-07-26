@@ -17,7 +17,7 @@ const CategoryButton = ({ children }: CategoryButtonProps) => {
       <button
         type="button"
         onClick={handleClick}
-        className={`flex items-center justify-center rounded-15 text-lg-medium border border-green-300 w-100 h-51 md:text-2lg-medium md:w-127 md:h-53 ${isActive ? 'bg-black-100 text-white' : 'text-green-300'}`}
+        className={`flex h-51 w-100 items-center justify-center rounded-15 border border-green-300 text-lg-medium md:h-53 md:w-127 md:text-2lg-medium ${isActive ? 'bg-black-100 text-white' : 'text-green-300'}`}
       >
         {children}
       </button>
