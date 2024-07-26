@@ -1,42 +1,58 @@
 {
   "root": true,
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint", "prettier", "simple-import-sort"],
-  "parserOptions": {
-    "project": "./tsconfig.json",
-    "createDefaultProgram": true
-  },
+  "ignorePatterns": ["postcss.config.mjs", "tailwind.config.js"],
   "env": {
-    // 전역객체를 eslint가 인식하는 구간
-    "browser": true, // document나 window 인식되게 함
+    "browser": true,
+    "es6": true,
     "node": true,
-    "es6": true
+    "es2021": true
   },
-  "ignorePatterns": ["node_modules/", "postcss.config.mjs", "src/stories"], // eslint 미적용될 폴더나 파일 명시
+  "plugins": ["import", "react", "@typescript-eslint", "prettier"],
   "extends": [
-    "airbnb",
-    "airbnb-typescript",
-    "airbnb/hooks",
     "next/core-web-vitals",
-    "plugin:@typescript-eslint/recommended", // ts 권장
-    "plugin:prettier/recommended", // eslint의 포매팅을 prettier로 사용.
-    "prettier" // eslint-config-prettier prettier와 중복된 eslint 규칙 제거
+    "eslint:recommended",
+    "plugin:import/recommended",
+    "plugin:import/typescript",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended"
   ],
   "rules": {
-    "simple-import-sort/imports": "warn",
-    "simple-import-sort/exports": "warn",
-    "react/react-in-jsx-scope": "off", // react 17부턴 import 안해도돼서 기능 끔
-    // 경고표시, 파일 확장자를 .ts나 .tsx 모두 허용함
-    "react/jsx-filename-extension": ["warn", { "extensions": [".ts", ".tsx"] }],
-    "no-useless-catch": "off", // 불필요한 catch 못쓰게 하는 기능 끔
-    "react/jsx-pascal-case": "off",
-    "jsx-a11y/click-events-have-key-events": "off",
-    "jsx-a11y/no-static-element-interactions": "off",
-    "prettier/prettier": [
-      "error",
+    "react/jsx-key": "warn",
+    "no-unused-vars": "off",
+    "import/no-unresolved": "off",
+    "react/react-in-jsx-scope": "off",
+    "no-unsafe-optional-chaining": 1,
+
+    "react/no-unknown-property": [
+      2,
       {
-        "endOfLine": "auto"
+        "ignore": ["jsx", "global"]
       }
     ]
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    },
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      },
+      "typescript": {
+        "alwaysTryTypes": true
+      }
+    }
+  },
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "sourceType": "module",
+    "ecmaVersion": 2018,
+    "project": "./tsconfig.json"
   }
 }

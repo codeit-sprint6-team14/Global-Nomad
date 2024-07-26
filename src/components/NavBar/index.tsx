@@ -52,8 +52,12 @@ function NavBar() {
           </div>
         ) : (
           <div className="flex gap-24">
-            <div className="text-md-medium text-black">로그인</div>
-            <div className="text-md-medium text-black">회원가입</div>
+            <div className="text-md-medium text-black cursor-pointer">
+              로그인
+            </div>
+            <div className="text-md-medium text-black cursor-pointer">
+              회원가입
+            </div>
           </div>
         )}
       </div>
