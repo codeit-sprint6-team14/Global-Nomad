@@ -11,7 +11,7 @@ type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   className?: string
   placeholder: string
   isAuth?: boolean
-  register: UseFormRegisterReturn
+  register?: UseFormRegisterReturn
 }
 
 const DefaultInput = ({
