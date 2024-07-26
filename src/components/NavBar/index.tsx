@@ -28,7 +28,7 @@ function NavBar() {
         {accessToken ? (
           <div className="flex items-center">
             <Image
-              src="images/ic-bell.svg"
+              src="images/icon-bell.svg"
               alt="네비바 알림 벨"
               width={20}
               height={20}
@@ -36,7 +36,7 @@ function NavBar() {
             <div className="border-l mx-12 border-solid md:mx-25 border-gray-300 h-22" />
             <div className="relative flex gap-10 items-center">
               <Image
-                src="images/ic-test-profile.svg"
+                src="images/icon-test-profile.svg"
                 alt="프로필 이미지"
                 width={32}
                 height={32}
