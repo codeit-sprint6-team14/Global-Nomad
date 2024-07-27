@@ -12,11 +12,7 @@ interface CustomDropdownProps {
   onSelect?: (option: Option) => void;
 }
 
-const CustomDropdown = ({
-  options,
-  defaultOption,
-  onSelect,
-}: CustomDropdownProps) => {
+const CustomDropdown = ({ options, defaultOption, onSelect }: CustomDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSelectedOption, setIsSelectedOption] = useState<Option | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -24,10 +20,7 @@ const CustomDropdown = ({
   useEffect(() => {
     // 드롭다운 바깥 클릭시 드롭다운 닫힘
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
     };
@@ -54,20 +47,11 @@ const CustomDropdown = ({
         className="flex h-56 w-full cursor-pointer items-center justify-between rounded-4 border border-gray-700 bg-white px-12"
         onClick={toggleDropdown}
       >
-        <span
-          className={`${isSelectedOption ? 'text-black' : 'text-gray-700'}`}
-        >
+        <span className={`${isSelectedOption ? 'text-black' : 'text-gray-700'}`}>
           {isSelectedOption ? isSelectedOption.label : defaultOption}
         </span>
-        <span
-          className={`transform transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
-        >
-          <Image
-            src="./images/icon-arrow-dropdown.svg"
-            width={12}
-            height={12}
-            alt="dropdown button"
-          />
+        <span className={`transform transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}>
+          <Image src="./images/icon-arrow-dropdown.svg" width={12} height={12} alt="dropdown button" />
         </span>
       </div>
       {isOpen && (
@@ -83,15 +67,9 @@ const CustomDropdown = ({
               onClick={() => handleOptionClick(option)}
             >
               <div className="mx-8 w-14">
-                {isSelectedOption &&
-                  isSelectedOption.value === option.value && (
-                    <Image
-                      src="./images/icon-checked.svg"
-                      width={13}
-                      height={13}
-                      alt="checked icon"
-                    />
-                  )}
+                {isSelectedOption && isSelectedOption.value === option.value && (
+                  <Image src="./images/icon-checked.svg" width={13} height={13} alt="checked icon" />
+                )}
               </div>
               <span>{option.label}</span>
             </li>

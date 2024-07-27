@@ -29,11 +29,7 @@ const PasswordInput = ({ id, placeholder, register, error }: PasswordProps) => {
         error={error}
       />
       <Image
-        src={
-          isPwVisible
-            ? '/images/icon-visibility-on.svg'
-            : '/images/icon-visibility-off.svg'
-        }
+        src={isPwVisible ? '/images/icon-visibility-on.svg' : '/images/icon-visibility-off.svg'}
         alt="password visibility"
         width={24}
         height={24}

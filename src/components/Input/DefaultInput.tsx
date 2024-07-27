@@ -30,15 +30,7 @@ const DefaultInput = ({
 
   const styleClass = `${baseStyle} ${error ? errorBorder : normalBorder}`;
 
-  return (
-    <input
-      id={id}
-      className={`${styleClass} ${className}`}
-      type={type}
-      placeholder={placeholder}
-      {...register}
-    />
-  );
+  return <input id={id} className={`${styleClass} ${className}`} type={type} placeholder={placeholder} {...register} />;
 };
 
 export default DefaultInput;
