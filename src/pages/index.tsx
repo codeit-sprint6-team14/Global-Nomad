@@ -1,4 +1,5 @@
-import Footer from '@/components/Footer';
+// import Footer from '@/components/Footer';
+import Cards from '@/components/Cards/index';
 import NavBar from '@/components/NavBar';
 import SideNavMenu from '@/components/SideNavMenu/index';
 
@@ -7,7 +8,8 @@ export default function Home() {
     <div>
       <NavBar />
       <SideNavMenu />
-      <Footer />
+      <Cards />
+      {/* <Footer /> */}
     </div>
   );
 }
