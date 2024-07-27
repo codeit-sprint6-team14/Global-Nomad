@@ -1,5 +1,4 @@
-import SideNavMenuOptionProps from '@/types/SideNavMenuOption'
-// import Image from 'next/image'
+import SideNavMenuOptionProps from '@/types/SideNavMenuOption';
 
 const SideNavMenuOption = ({
   imgSrc,
@@ -8,18 +7,18 @@ const SideNavMenuOption = ({
 }: SideNavMenuOptionProps) => {
   return (
     <li
-      className={`flex cursor-pointer items-center py-9 pl-16 ${isActive && 'bg-green-100 rounded-12'}`}
+      className={`flex cursor-pointer items-center py-9 pl-16 ${isActive && 'rounded-12 bg-green-100'}`}
     >
-      <div className={`w-24 h-24 ${isActive ? 'text-black' : 'text-gray-600'}`}>
+      <div className={`h-24 w-24 ${isActive ? 'text-black' : 'text-gray-600'}`}>
         {imgSrc}
       </div>
       <span
-        className={`ml-14 text-lg-bold  ${isActive ? 'text-black-100' : 'text-gray-600'}`}
+        className={`ml-14 text-lg-bold ${isActive ? 'text-black-100' : 'text-gray-600'}`}
       >
         {text}
       </span>
     </li>
-  )
-}
+  );
+};
 
-export default SideNavMenuOption
+export default SideNavMenuOption;

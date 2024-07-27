@@ -6,9 +6,9 @@ const nextConfig = {
       test: /\.svg$/i,
       issuer: /\.[jt]sx?$/,
       use: ['@svgr/webpack'],
-    })
-    return config
+    });
+    return config;
   },
-}
+};
 
-export default nextConfig
+export default nextConfig;

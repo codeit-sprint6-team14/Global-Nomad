@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/function-component-definition */
 
+
 // interface ButtonProps {
 //   disabled?: boolean;
 //   type: 'button' | 'submit' | 'reset' | undefined;
@@ -26,6 +27,7 @@ const Button = ({
 }: ButtonProps) => {
   const baseStyle = 'text-lg-bold w-350 h-48 rounded-6';
   const disabledStyle = 'bg-gray-600 cursor-not-allowed text-white';
+
   const variantStyles: Record<ButtonVariant, string> = {
     primary: 'bg-black-100 text-white',
     secondary: 'bg-white text-black-100 border border-black-100',
