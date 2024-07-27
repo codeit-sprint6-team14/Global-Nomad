@@ -1,15 +1,16 @@
-import Image from 'next/image'
+/* eslint-disable react/function-component-definition */
+import Image from 'next/image';
 
-function Footer() {
+const Footer = () => {
   return (
-    <div className="bg-black w-full h-160 p-30 ">
-      <div className="flex flex-col items-center gap-30 md:flex-row  md:justify-center ">
+    <div className="h-160 w-full bg-black p-30">
+      <div className="flex flex-col items-center gap-30 md:flex-row md:justify-center">
         <div className="flex gap-30">
           <p className="text-gray-700 lg:mr-200">©codeit - 2023</p>
           <p className="text-gray-700">Privacy Policy</p>
           <p className="text-gray-700 lg:mr-200">FAQ</p>
         </div>
-        <div className="flex space-x-4 mt-4 gap-10 md:mt-0">
+        <div className="mt-4 flex gap-10 space-x-4 md:mt-0">
           <a
             href="https://facebook.com"
             target="_blank"
@@ -61,6 +62,7 @@ function Footer() {
         </div>
       </div>
     </div>
-  )
-}
-export default Footer
+  );
+};
+
+export default Footer;

@@ -1,10 +1,10 @@
-import DefaultInput from './DefaultInput'
-import PasswordInput from './PasswordInput'
-import DropDownInput from './DropDownInput'
+import DefaultInput from './DefaultInput';
+import DropDownInput from './DropDownInput';
+import PasswordInput from './PasswordInput';
 
 const Input = Object.assign(DefaultInput, {
   Password: PasswordInput,
   DropDown: DropDownInput,
-})
+});
 
-export default Input
+export default Input;
