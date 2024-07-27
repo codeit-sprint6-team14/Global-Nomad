@@ -1,14 +1,14 @@
 const dropDown = () => {
   return (
-    <ul className="h-max w-120 border bg-white border-solid border-gray-300 rounded-6 absolute right-[-12px] top-40">
-      <li className="text-center cursor-pointer hover:bg-green-100 text-gray-800 text-md-medium py-12 border-b border-gray-300 w-full px-16">
+    <ul className="absolute right-[-12px] top-40 h-max w-120 rounded-6 border border-solid border-gray-300 bg-white">
+      <li className="w-full cursor-pointer border-b border-gray-300 px-16 py-12 text-center text-md-medium text-gray-800 hover:bg-green-100">
         로그아웃
       </li>
-      <li className="text-md-medium cursor-pointer text-center w-full hover:bg-green-100 text-gray-800 py-12 px-16">
+      <li className="w-full cursor-pointer px-16 py-12 text-center text-md-medium text-gray-800 hover:bg-green-100">
         마이페이지
       </li>
     </ul>
-  )
-}
+  );
+};
 
-export default dropDown
+export default dropDown;

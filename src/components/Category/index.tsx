@@ -1,16 +1,16 @@
 /* eslint-disable react/function-component-definition */
-import { useState } from 'react'
+import { useState } from 'react';
 
 interface CategoryButtonProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 const CategoryButton = ({ children }: CategoryButtonProps) => {
-  const [isActive, setIsActive] = useState(false)
+  const [isActive, setIsActive] = useState(false);
 
   const handleClick = () => {
-    setIsActive(!isActive)
-  }
+    setIsActive(!isActive);
+  };
 
   return (
     <div>
@@ -22,7 +22,7 @@ const CategoryButton = ({ children }: CategoryButtonProps) => {
         {children}
       </button>
     </div>
-  )
-}
+  );
+};
 
-export default CategoryButton
+export default CategoryButton;

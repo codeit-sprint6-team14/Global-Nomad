@@ -1,18 +1,17 @@
 /* eslint-disable react/function-component-definition */
-import { useState } from 'react'
-
-import DownArrow from '@/../public/svgs/down-arrow.svg'
+import DownArrow from '@/../public/svgs/down-arrow.svg';
+import { useState } from 'react';
 
 const Filter = () => {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleDropDownToggle = () => {
-    setIsOpen(!isOpen)
-  }
+    setIsOpen(!isOpen);
+  };
 
   const handleOptionClick = () => {
-    setIsOpen(false)
-  }
+    setIsOpen(false);
+  };
 
   return (
     <div className="relative">
@@ -47,7 +46,7 @@ const Filter = () => {
         </ul>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Filter
+export default Filter;

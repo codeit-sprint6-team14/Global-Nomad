@@ -1,12 +1,12 @@
-import MyInformation from '@/../public/images/icon-my-information.svg'
-import BookingHistory from '@/../public/images/icon-booking-history.svg'
-import BookingStatus from '@/../public/images/icon-booking-status.svg'
-import Setting from '@/../public/images/icon-setting.svg'
+import BookingHistory from '@/../public/images/icon-booking-history.svg';
+import BookingStatus from '@/../public/images/icon-booking-status.svg';
+import MyInformation from '@/../public/images/icon-my-information.svg';
+import Setting from '@/../public/images/icon-setting.svg';
 
 interface MenuOptionListProps {
-  id: number
-  imgSrc: JSX.Element
-  text: string
+  id: number;
+  imgSrc: JSX.Element;
+  text: string;
 }
 
 const menuOptionList: MenuOptionListProps[] = [
@@ -30,6 +30,6 @@ const menuOptionList: MenuOptionListProps[] = [
     imgSrc: <BookingStatus />,
     text: '예약 현황',
   },
-]
+];
 
-export default menuOptionList
+export default menuOptionList;

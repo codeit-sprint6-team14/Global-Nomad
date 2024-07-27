@@ -4,7 +4,6 @@ about: 코드 리팩토링 작업
 title: ''
 labels: ''
 assignees: ''
-
 ---
 
 # 🔨 Refactor

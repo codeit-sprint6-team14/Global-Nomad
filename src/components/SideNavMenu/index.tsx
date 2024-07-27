@@ -1,33 +1,13 @@
-import Image from 'next/image'
-import SideNavMenuOptionList from './sideNavMenuOptionList'
+import SideNavMenuOptionList from './sideNavMenuOptionList';
+import SideNavMenuProfile from './sideNavMenuProfile';
 
 const SideNavMenu = () => {
   return (
-    <div className="w-max h-max p-24 border border-solid rounded-12 border-gray-300">
-      <div className=" flex flex-col gap-24">
-        <div className="relative flex justify-center">
-          <div className="relative w-160 h-160 rounded-full overflow-hidden ">
-            <Image
-              src="/images/test-profile-img.png"
-              alt="프로필이미지"
-              fill
-              style={{ objectFit: 'cover' }}
-              priority
-            />
-          </div>
-          <div className="w-44 h-44 bg-green-300 absolute bottom-[-2px] right-70 md:right-30 lg:right-95 flex justify-center items-center rounded-full">
-            <Image
-              src="/images/icon-pencil.svg"
-              alt="연필이미지"
-              width={24}
-              height={24}
-            />
-          </div>
-        </div>
-        <SideNavMenuOptionList />
-      </div>
+    <div className="flex h-max w-max flex-col gap-24 rounded-12 border border-solid border-gray-300 p-24">
+      <SideNavMenuProfile />
+      <SideNavMenuOptionList />
     </div>
-  )
-}
+  );
+};
 
-export default SideNavMenu
+export default SideNavMenu;

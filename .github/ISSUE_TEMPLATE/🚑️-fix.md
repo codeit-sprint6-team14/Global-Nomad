@@ -4,7 +4,6 @@ about: 버그 수정 작업
 title: ''
 labels: ''
 assignees: ''
-
 ---
 
 # 🚑️ Fix
