@@ -1,7 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 
 const Search = () => {
+  const [isFocused, setIsFocused] = useState(false);
+  const [value, setValue] = useState('');
+
+  const handleFocus = () => setIsFocused(true);
+  const handleBlur = () => {
+    if (value === '') setIsFocused(false);
+  };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setValue(e.target.value);
+
   return (
     <div className="box-shadow: 0px 4px 16px 0px #1122110D flex h-129 w-343 flex-col gap-15 rounded-16 border px-24 py-16 md:h-166 md:w-696 md:gap-20 md:py-32 lg:h-178 lg:w-1200 lg:gap-32">
       <label htmlFor="search" className="text-lg-bold md:text-xl-bold">
@@ -20,10 +30,18 @@ const Search = () => {
             type="text"
             id="search"
             name="search"
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            onChange={handleChange}
+            value={value}
             placeholder=""
             className="h-56 w-full rounded-4 border border-gray-700 pl-[22%] text-md-regular md:pl-[8%] lg:pl-[4%]"
           />
           <p>내가 원하는 체험은</p>
+          className=
+          {`pointer-events-none absolute left-40 bg-white text-md-regular text-gray-600 transition-all duration-300 ${
+            isFocused || value ? 'top-[-20%]' : 'top-15'
+          }`}
         </div>
         <button
           type="button"
@@ -35,4 +53,5 @@ const Search = () => {
     </div>
   );
 };
+
 export default Search;
