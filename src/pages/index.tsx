@@ -7,6 +7,7 @@ export default function Home() {
     <div>
       <NavBar />
       <CardResource.popularExperienceCard />
+      <CardResource.standardExperienceCard />
       <Footer />
     </div>
   );
