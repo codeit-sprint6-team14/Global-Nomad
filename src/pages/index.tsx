@@ -1,12 +1,12 @@
-import Footer from '@/components/Footer'
-import NavBar from '@/components/NavBar'
-import SideNavMenu from '@/components/SideNavMenu'
+import Footer from '@/components/Footer';
+import NavBar from '@/components/NavBar';
+import CardResource from '@/components/CardResource';
 
 export default function Home() {
   return (
     <div>
       <NavBar />
-      <SideNavMenu.sideNavMenu />
+      <CardResource.popularExperienceCard />
       <Footer />
     </div>
   );
