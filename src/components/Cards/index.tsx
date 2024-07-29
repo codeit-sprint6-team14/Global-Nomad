@@ -1,21 +1,25 @@
-import CardItem from '@/components/Cards/cardItem';
-import { Card } from '@/types/CardListData';
-import { useState } from 'react';
+// 필요한 카드 구성 요소들
+// image
+// header
+// title
+// body
+// footer
+// footerButton
+import CardBody from './cardBody';
+import CardButton from './cardButton';
+import CardFooter from './cardFooter';
+import CardHeader from './cardHeader';
+import CardImage from './cardImage';
+import CardItem from './cardItem';
+import CardTitle from './cardTitle';
 
-import CardsData from './cardDataList';
+const Card = Object.assign(CardItem, {
+  Image: CardImage,
+  Header: CardHeader,
+  Title: CardTitle,
+  Body: CardBody,
+  Footer: CardFooter,
+  Button: CardButton,
+});
 
-const Cards = () => {
-  const [cardListData] = useState(CardsData);
-
-  if (!cardListData) return null;
-
-  return (
-    <ul className="flex flex-col gap-8">
-      {cardListData.map((card: Card) => (
-        <CardItem card={card} key={card.id} />
-      ))}
-    </ul>
-  );
-};
-
-export default Cards;
+export default Card;
