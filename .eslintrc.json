@@ -23,6 +23,7 @@
     "import/no-unresolved": "off",
     "react/react-in-jsx-scope": "off",
     "no-unsafe-optional-chaining": 1,
+    "react/prop-types": "off",
 
     "react/no-unknown-property": [
       2,
