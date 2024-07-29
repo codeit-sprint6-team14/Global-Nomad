@@ -22,21 +22,26 @@ const ReservationInfoModal = () => {
           <p>거절 0</p>
         </div>
       </div>
+      <div className="mt-4 border border-gray-300"></div>
       <div className="flex flex-col gap-24 px-24 py-24">
-        <h2>예약 날짜</h2>
+        <h2 className="text-xl-semibold">예약 날짜</h2>
         <div className="flex flex-col gap-2">
-          <span>2023년 2월 12일</span>
+          <span className="text-xl-regular text-black">2023년 2월 12일</span>
           <div>Dropdown</div>
         </div>
         <div className="flex flex-col gap-16">
-          <h2>예약 내역</h2>
+          <h2 className="text-xl-semibold">예약 내역</h2>
           <div className="flex flex-col gap-6 rounded-4 border">
             <div className="flex flex-col gap-6 pl-16 pt-8">
-              <span>닉네임 정만철</span>
-              <span>인원 10명</span>
+              <p className="text-lg-semibold text-gray-700">
+                닉네임 <span className="text-lg-medium text-black">정만철</span>
+              </p>
+              <p className="text-lg-semibold text-gray-700">
+                인원 <span className="text-lg-medium text-black">10명</span>
+              </p>
             </div>
             <div className="flex justify-end pb-8 pr-16">
-              <p className="h-44 w-82 rounded-26 bg-gray-50 py-10 text-center text-md-bold">
+              <p className="h-44 w-82 rounded-26 bg-orange-100 py-10 text-center text-md-bold text-orange-200">
                 예약 확정
               </p>
             </div>
@@ -44,8 +49,10 @@ const ReservationInfoModal = () => {
         </div>
       </div>
       <div className="flex justify-between px-24">
-        <h2>예약 현황</h2>
-        <span>10/10</span>
+        <h2 className="text-xl-semibold">예약 현황</h2>
+        <p className="text-xl-semibold">
+          <span className="text-xl-semibold text-blue-200">10</span>/10
+        </p>
       </div>
     </div>
   );
