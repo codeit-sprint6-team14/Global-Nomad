@@ -14,4 +14,6 @@ const CardImage = ({ imageUrl }: { imageUrl: string }) => {
   );
 };
 
+export const CardImageType = (<CardImage imageUrl="" />).type;
+
 export default CardImage;
