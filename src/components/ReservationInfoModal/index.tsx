@@ -3,6 +3,8 @@
 import Image from 'next/image';
 import { useState } from 'react';
 
+import ReservationCard from '../ReservationCard';
+
 const ReservationInfoModal = () => {
   const [selectedTab, setSelectedTab] = useState('신청');
 
@@ -55,20 +57,9 @@ const ReservationInfoModal = () => {
         </div>
         <div className="flex flex-col gap-16">
           <h2 className="text-xl-semibold">예약 내역</h2>
-          <div className="flex flex-col gap-6 rounded-4 border">
-            <div className="flex flex-col gap-6 pl-16 pt-8">
-              <p className="text-lg-semibold text-gray-700">
-                닉네임 <span className="text-lg-medium text-black">정만철</span>
-              </p>
-              <p className="text-lg-semibold text-gray-700">
-                인원 <span className="text-lg-medium text-black">10명</span>
-              </p>
-            </div>
-            <div className="flex justify-end pb-8 pr-16">
-              <p className="h-44 w-82 rounded-26 bg-orange-100 py-10 text-center text-md-bold text-orange-200">
-                예약 확정
-              </p>
-            </div>
+          <div className="flex flex-col gap-14">
+            {/* // TODO: 예약 내역 받아오기 */}
+            <ReservationCard nickname={nickname} memberCount={memberCount} />
           </div>
         </div>
       </div>
