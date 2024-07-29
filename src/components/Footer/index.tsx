@@ -1,5 +1,4 @@
 /* eslint-disable react/function-component-definition */
-
 import Image from 'next/image';
 
 const Footer = () => {

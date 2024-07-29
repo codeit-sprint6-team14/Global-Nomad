@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/function-component-definition */
 
-
 // interface ButtonProps {
 //   disabled?: boolean;
 //   type: 'button' | 'submit' | 'reset' | undefined;
