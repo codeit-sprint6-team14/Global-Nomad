@@ -1,6 +1,6 @@
 import { Card } from '@/types/CardListData';
 
-const CardsData: Card[] = [
+const reservationCardsData: Card[] = [
   {
     id: 1,
     activity: {
@@ -74,4 +74,4 @@ const CardsData: Card[] = [
   },
 ];
 
-export default CardsData;
+export default reservationCardsData;
