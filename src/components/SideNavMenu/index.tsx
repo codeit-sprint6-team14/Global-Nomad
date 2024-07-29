@@ -1,13 +1,13 @@
-import menuOptionList from './menuOptionList'
-import sideNavMenu from './sideNavMenu'
-import sideNavMenuOption from './sideNavMenuOption'
-import sideNavMenuOptionList from './sideNavMenuOptionList'
+import SideNavMenuOptionList from './sideNavMenuOptionList';
+import SideNavMenuProfile from './sideNavMenuProfile';
 
-const SideNavMenu = {
-  sideNavMenu,
-  sideNavMenuOption,
-  sideNavMenuOptionList,
-  menuOptionList,
-}
+const SideNavMenu = () => {
+  return (
+    <div className="flex h-max w-max flex-col gap-24 rounded-12 border border-solid border-gray-300 p-24">
+      <SideNavMenuProfile />
+      <SideNavMenuOptionList />
+    </div>
+  );
+};
 
-export default SideNavMenu
+export default SideNavMenu;
