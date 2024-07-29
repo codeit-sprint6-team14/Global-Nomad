@@ -24,3 +24,23 @@ export interface Card {
   createdAt?: string;
   updatedAt?: string;
 }
+
+export interface myActivitiesData {
+  cursorId: number;
+  totalCount: number;
+  activities: Array<ActivityCardsDataType>;
+}
+export interface ActivityCardsDataType {
+  id: number;
+  userId?: number;
+  title: string;
+  description?: string;
+  category?: string;
+  price: number;
+  address?: string;
+  bannerImageUrl: string;
+  rating: number;
+  reviewCount: number;
+  createdAt?: string;
+  updatedAt?: string;
+}
