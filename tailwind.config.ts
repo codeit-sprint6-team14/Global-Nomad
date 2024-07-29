@@ -1,19 +1,16 @@
-import type { Config } from 'tailwindcss'
+import type { Config } from 'tailwindcss';
 
 const createPxObject = (range: number): Record<string, string> => {
-  return Array.from({ length: range + 1 }).reduce<Record<string, string>>(
-    (acc, _, i) => {
-      acc[`${i}`] = `${i}px`
-      return acc
-    },
-    {},
-  )
-}
+  return Array.from({ length: range + 1 }).reduce<Record<string, string>>((acc, _, i) => {
+    acc[`${i}`] = `${i}px`;
+    return acc;
+  }, {});
+};
 
-const PX0_50 = createPxObject(50)
-const PX0_100 = createPxObject(100)
-const PX0_200 = createPxObject(200)
-const PX0_1920 = createPxObject(1920)
+const PX0_50 = createPxObject(50);
+const PX0_100 = createPxObject(100);
+const PX0_200 = createPxObject(200);
+const PX0_1920 = createPxObject(1920);
 
 const config: Config = {
   content: [
@@ -28,8 +25,7 @@ const config: Config = {
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       borderRadius: PX0_50,
       fontSize: {
@@ -124,6 +120,6 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
-}
-export default config
+  plugins: [require('tailwind-scrollbar-hide')],
+};
+export default config;
