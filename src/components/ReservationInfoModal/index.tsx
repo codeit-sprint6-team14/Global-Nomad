@@ -1,11 +1,20 @@
+'use client';
+
 import Image from 'next/image';
+import { useState } from 'react';
 
 const ReservationInfoModal = () => {
+  const [selectedTab, setSelectedTab] = useState('신청');
+
+  const handleTabClick = (tab: string) => {
+    setSelectedTab(tab);
+  };
+
   return (
     <div className="flex w-429 flex-col justify-between rounded-24 border px-1 pb-24 pt-12">
-      <div className="flex h-98 flex-col gap-16 border-b px-24 pt-12">
+      <div className="flex h-98 flex-col gap-16 px-24 py-12">
         <div className="flex items-center justify-between">
-          <h1>예약 정보</h1>
+          <h1 className="text-xl-bold">예약 정보</h1>
           <button type="button">
             <Image
               src="/images/icon-close.svg"
@@ -17,9 +26,24 @@ const ReservationInfoModal = () => {
           </button>
         </div>
         <div className="flex gap-12">
-          <p>신청 12</p>
-          <p>확정 10</p>
-          <p>거절 0</p>
+          <button
+            onClick={() => handleTabClick('신청')}
+            className={`relative ${selectedTab === '신청' ? 'border-b-4 border-green-300 text-xl-semibold text-green-300' : 'text-xl-regular text-gray-800'}`}
+          >
+            신청 12
+          </button>
+          <button
+            onClick={() => handleTabClick('확정')}
+            className={`relative ${selectedTab === '확정' ? 'border-b-4 border-green-300 text-xl-semibold text-green-300' : 'text-xl-regular text-gray-800'}`}
+          >
+            확정 10
+          </button>
+          <button
+            onClick={() => handleTabClick('거절')}
+            className={`relative ${selectedTab === '거절' ? 'border-b-4 border-green-300 text-xl-semibold text-green-300' : 'text-xl-regular text-gray-800'}`}
+          >
+            거절 0
+          </button>
         </div>
       </div>
       <div className="mt-4 border border-gray-300"></div>
