@@ -14,17 +14,25 @@ const ReservationCard = ({ card }: { card: CardType }) => {
   return (
     <Card>
       <Card.Image imageUrl={bannerImageUrl} />
-      <div className="flex w-full flex-col justify-between overflow-hidden py-9 pl-8 pr-14 md:py-12 md:pl-12 md:pr-16 lg:px-24 lg:py-21">
-        <Card.Header cardType="reservation" text={statusText} />
-        <Card.Title title={title} />
-        <Card.Body
-          text={`${date} · ${startTime} - ${endTime} · ${headCount}명`}
-        />
-        <Card.Footer
-          text={`₩${totalPrice}`}
-          buttonName={status === 'pending' ? '예약 취소' : '후기 작성'}
-        />
-      </div>
+      <Card.Header
+        textClassNames="text-md-bold md:text-lg-bold"
+        text={statusText}
+      />
+      <Card.Title title={title} />
+      <Card.Body
+        text={`${date} · ${startTime} - ${endTime} · ${headCount}명`}
+      />
+      <Card.Footer
+        text={`₩${totalPrice}`}
+        status={status}
+        buttonName={
+          status === 'pending'
+            ? '예약 취소'
+            : status === 'completed'
+              ? '후기 작성'
+              : ''
+        }
+      />
     </Card>
   );
 };

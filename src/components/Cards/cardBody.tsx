@@ -6,4 +6,5 @@ const CardBody = ({ text }: { text: string }) => {
   );
 };
 
+export const CardBodyType = (<CardBody text="" />).type;
 export default CardBody;
