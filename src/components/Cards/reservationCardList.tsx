@@ -1,9 +1,8 @@
-// components/Cards.tsx
 import { Card as CardType } from '@/types/CardListData';
 import { useState } from 'react';
 
-import reservationCardsData from './cardDataList';
 import ReservationCard from './reservationCard';
+import reservationCardsData from './reservationCardsData';
 
 const Cards = () => {
   const [cardListData] = useState(reservationCardsData);
