@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useState, useEffect } from 'react';
-import { TimeSlot, DaySchedule } from '@/types/availableSchedulesTypes';
+import { INITIAL_DATE } from '@/constants/date';
+import availableSchedule from '@/mockData/availableSchedule';
+import { DaySchedule, TimeSlot } from '@/types/availableSchedulesTypes';
+import { useEffect, useState } from 'react';
+
 import Button from '../Button';
 import Calendar from '../Calendar';
 import Icon from '../Icons';
-import { INITIAL_DATE } from '@/constants/date';
-
-// mock data
-import availableSchedule from '@/mockData/availableSchedule';
 
 const DateSelectModal = () => {
   const [currentMonth, setCurrentMonth] = useState<Date>(INITIAL_DATE);
