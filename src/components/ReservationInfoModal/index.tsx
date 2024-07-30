@@ -52,10 +52,12 @@ const ReservationInfoModal = () => {
       </div>
       <div className="mt-4 border border-gray-300"></div>
       <div className="flex flex-col gap-24 px-24 py-24">
-        <h2 className="text-xl-semibold">예약 날짜</h2>
-        <div className="flex flex-col gap-2">
-          <span className="text-xl-regular text-black">2023년 2월 12일</span>
-          <div>Dropdown</div>
+        <div className="flex flex-col gap-16">
+          <h2 className="text-xl-semibold">예약 날짜</h2>
+          <div className="flex flex-col gap-2">
+            <span className="text-xl-regular text-black">2023년 2월 12일</span>
+            <div>Dropdown</div>
+          </div>
         </div>
         <div className="flex flex-col gap-16">
           <h2 className="text-xl-semibold">예약 내역</h2>
