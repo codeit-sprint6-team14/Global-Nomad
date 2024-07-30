@@ -2,21 +2,19 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 
 interface StarRatingProps {
-  initialRating?: number;
-  onChange?: (rating: number) => void;
+  rating?: number;
+  onRatingChange?: (rating: number) => void;
 }
 
 const StarRating = ({
-  initialRating = 0,
-  onChange,
+  rating = 0,
+  onRatingChange,
 }: StarRatingProps): JSX.Element => {
-  const [rating, setRating] = useState(Math.round(initialRating));
   const [hover, setHover] = useState(0);
 
   const handleClick = (value: number) => {
-    setRating(value);
-    if (onChange) {
-      onChange(value);
+    if (onRatingChange) {
+      onRatingChange(value);
     }
   };
 
@@ -35,8 +33,8 @@ const StarRating = ({
             <Image
               src={
                 isFilled
-                  ? './images/icon-star-filled.svg'
-                  : './images/icon-star.svg'
+                  ? '/images/icon-star-filled.svg'
+                  : '/images/icon-star.svg'
               }
               alt={isFilled ? 'Filled star' : 'Empty star'}
               layout="fill"

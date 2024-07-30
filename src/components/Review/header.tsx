@@ -14,7 +14,7 @@ const Header = () => {
           className="cursor-pointer"
         />
       </div>
-      <div className="flex gap-8">
+      <div className="flex sm:gap-8 md:gap-24">
         <div className="relative sm:h-100 sm:w-100 md:h-126 md:w-126">
           <Image
             src="/images/test-profile-img.png"
