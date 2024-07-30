@@ -1,4 +1,3 @@
-import React from 'react';
 import { DAYS_OF_WEEK } from '@/constants/date';
 import { CalendarBodyProps } from '@/types/calendarTypes';
 
@@ -33,7 +32,7 @@ const Body = ({ selectedDate, selectActivityDate, availableDates, calendarDates 
 
   const createCalendarElement = (day: Date | null, index: number): JSX.Element => {
     if (!day) {
-      return <td key={index} className="h-32 w-35"></td>;
+      return <td key={`empty-${index}`} className="h-32 w-35"></td>;
     }
 
     return (
@@ -58,8 +57,8 @@ const Body = ({ selectedDate, selectActivityDate, availableDates, calendarDates 
     <table className="w-full text-center">
       <thead className="h-32">
         <tr>
-          {DAYS_OF_WEEK.map((day, i) => (
-            <th key={i} className="text-md-bold text-gray-800">
+          {DAYS_OF_WEEK.map((day) => (
+            <th key={day} className="text-md-bold text-gray-800">
               {day}
             </th>
           ))}
@@ -68,7 +67,7 @@ const Body = ({ selectedDate, selectActivityDate, availableDates, calendarDates 
       <tbody className="h-160">
         {calendarRows.map((row, index) => {
           return (
-            <tr key={index} className="text-xs-semibold">
+            <tr key={`week-${index}`} className="text-xs-semibold">
               {row}
             </tr>
           );
