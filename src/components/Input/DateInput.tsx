@@ -30,12 +30,7 @@ const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>(
         readOnly
       />
       <div className="pointer-events-none absolute top-1/2 -translate-y-1/2 sm:right-8 md:right-15">
-        <Image
-          src="./images/icon-calendar.svg"
-          alt="calendar"
-          width={24}
-          height={24}
-        />
+        <Image src="./images/icon-calendar.svg" alt="calendar" width={24} height={24} />
       </div>
     </div>
   ),
@@ -43,15 +38,8 @@ const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>(
 
 CustomInput.displayName = 'CustomInput';
 
-const DateInput = ({
-  onChange,
-  initialDate,
-  placeholder = 'YY/MM/DD',
-  className,
-}: DateInputProps) => {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(
-    initialDate || null,
-  );
+const DateInput = ({ onChange, initialDate, placeholder = 'YY/MM/DD', className }: DateInputProps) => {
+  const [selectedDate, setSelectedDate] = useState<Date | null>(initialDate || null);
 
   const handleChange = (date: Date | null) => {
     setSelectedDate(date);

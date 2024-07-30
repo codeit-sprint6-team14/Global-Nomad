@@ -1,13 +1,10 @@
 import type { Config } from 'tailwindcss';
 
 const createPxObject = (range: number): Record<string, string> => {
-  return Array.from({ length: range + 1 }).reduce<Record<string, string>>(
-    (acc, _, i) => {
-      acc[`${i}`] = `${i}px`;
-      return acc;
-    },
-    {},
-  );
+  return Array.from({ length: range + 1 }).reduce<Record<string, string>>((acc, _, i) => {
+    acc[`${i}`] = `${i}px`;
+    return acc;
+  }, {});
 };
 
 const PX0_50 = createPxObject(50);
@@ -28,8 +25,7 @@ const config: Config = {
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       borderRadius: PX0_50,
       fontSize: {
@@ -124,6 +120,6 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [require('tailwind-scrollbar-hide')],
 };
 export default config;

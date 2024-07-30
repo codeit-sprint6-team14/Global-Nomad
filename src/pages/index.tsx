@@ -3,6 +3,7 @@ import NavBar from '@/components/NavBar';
 import Review from '@/components/Review';
 import SideNavMenu from '@/components/SideNavMenu/index';
 
+
 export default function Home() {
   return (
     <div>
