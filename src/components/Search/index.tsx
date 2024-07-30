@@ -35,7 +35,7 @@ const Search = () => {
             onChange={handleChange}
             value={value}
             placeholder=""
-            className="h-56 w-full rounded-4 border border-gray-700 bg-white pl-[22%] text-md-regular md:pl-[8%] lg:pl-[4%]"
+            className="h-56 w-full rounded-4 border border-gray-700 bg-white pl-[22%] text-md-regular placeholder-gray-400 focus:bg-white md:pl-[8%] lg:pl-[4%]"
           />
           <p
             className={`pointer-events-none absolute left-40 bg-white text-md-regular text-gray-600 transition-all duration-300 ${
