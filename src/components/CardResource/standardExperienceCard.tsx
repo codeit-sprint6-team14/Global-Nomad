@@ -1,12 +1,14 @@
 import Image from 'next/image';
 
 type StandardExperienceCardProps = {
+  image: string;
   rating: number;
   reviewCount: number;
   title: string;
   price: number;
 };
 const StandardExperienceCard: React.FC<StandardExperienceCardProps> = ({
+  image,
   rating,
   reviewCount,
   title,
@@ -14,7 +16,16 @@ const StandardExperienceCard: React.FC<StandardExperienceCardProps> = ({
 }) => {
   return (
     <div>
-      <div className="flex items-center gap-5">
+      <div className="relative h-168 w-168 overflow-hidden md:h-283 md:w-283">
+        <Image
+          src={image}
+          alt={title}
+          layout="fill"
+          objectFit="cover"
+          className="rounded-20"
+        />
+      </div>
+      <div className="mt-10 flex items-center gap-5">
         <Image src="/images/star.svg" alt="rating" width={18} height={18} />
         <p className="mt-4 text-lg-medium">
           {rating} <span className="text-gray-500">({reviewCount})</span>

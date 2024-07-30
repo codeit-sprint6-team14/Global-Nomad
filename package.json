@@ -17,7 +17,7 @@
     "axios": "^1.7.2",
     "jira-prepare-commit-msg": "^1.7.2",
     "jotai": "^2.9.1",
-    "next": "14.2.5",
+    "next": "^14.2.5",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.52.1"

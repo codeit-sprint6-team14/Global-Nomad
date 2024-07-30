@@ -9,6 +9,9 @@ const nextConfig = {
     });
     return config;
   },
+  images: {
+    unoptimized: process.env.NEXT_PUBLIC_IMAGE_UNOPTIMIZED === 'true', // 환경 변수에 따라 설정
+  },
 };
 
 export default nextConfig;
