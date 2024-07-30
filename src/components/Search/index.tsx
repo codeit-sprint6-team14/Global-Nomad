@@ -35,13 +35,15 @@ const Search = () => {
             onChange={handleChange}
             value={value}
             placeholder=""
-            className="h-56 w-full rounded-4 border border-gray-700 pl-[22%] text-md-regular md:pl-[8%] lg:pl-[4%]"
+            className="h-56 w-full rounded-4 border border-gray-700 bg-white pl-[22%] text-md-regular md:pl-[8%] lg:pl-[4%]"
           />
-          <p>내가 원하는 체험은</p>
-          className=
-          {`pointer-events-none absolute left-40 bg-white text-md-regular text-gray-600 transition-all duration-300 ${
-            isFocused || value ? 'top-[-20%]' : 'top-15'
-          }`}
+          <p
+            className={`pointer-events-none absolute left-40 bg-white text-md-regular text-gray-600 transition-all duration-300 ${
+              isFocused || value ? 'top-[-20%]' : 'top-15'
+            }`}
+          >
+            내가 원하는 체험은
+          </p>
         </div>
         <button
           type="button"
