@@ -1,3 +1,4 @@
+import reviewData from '@/mockData/reviewData';
 import { useState } from 'react';
 
 import Header from './header';
@@ -16,7 +17,15 @@ const Review = () => {
 
   return (
     <div className="w-full bg-white sm:px-16 md:rounded-24 md:px-24">
-      <Header />
+      <Header
+        title={reviewData.title}
+        bannerImageUrl={reviewData.bannerImageUrl}
+        date={reviewData.date}
+        startTime={reviewData.startTime}
+        endTime={reviewData.endTime}
+        totalPrice={reviewData.totalPrice}
+        headCount={reviewData.headCount}
+      />
       <div className="flex w-full justify-center sm:my-34 md:my-46">
         <StarRating rating={rating} onRatingChange={setRating} />
       </div>
