@@ -6,10 +6,7 @@ interface StarRatingProps {
   onRatingChange?: (rating: number) => void;
 }
 
-const StarRating = ({
-  rating = 0,
-  onRatingChange,
-}: StarRatingProps): JSX.Element => {
+const StarRating = ({ rating = 0, onRatingChange }: StarRatingProps): JSX.Element => {
   const [hover, setHover] = useState(0);
 
   const handleClick = (value: number) => {
@@ -31,11 +28,7 @@ const StarRating = ({
             onMouseLeave={() => setHover(0)}
           >
             <Image
-              src={
-                isFilled
-                  ? '/images/icon-star-filled.svg'
-                  : '/images/icon-star.svg'
-              }
+              src={isFilled ? '/images/icon-star-filled.svg' : '/images/icon-star.svg'}
               alt={isFilled ? 'Filled star' : 'Empty star'}
               layout="fill"
               objectFit="contain"

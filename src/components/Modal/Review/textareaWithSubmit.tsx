@@ -1,4 +1,4 @@
-import Button from '../Button';
+import Button from '@/components/Button';
 
 interface TextareaWithSubmitProps {
   text: string;
@@ -7,12 +7,7 @@ interface TextareaWithSubmitProps {
   isSubmitDisabled: boolean;
 }
 
-const TextareaWithSubmit = ({
-  text,
-  onTextChange,
-  onSubmit,
-  isSubmitDisabled,
-}: TextareaWithSubmitProps) => {
+const TextareaWithSubmit = ({ text, onTextChange, onSubmit, isSubmitDisabled }: TextareaWithSubmitProps) => {
   return (
     <div>
       <textarea
@@ -24,9 +19,7 @@ const TextareaWithSubmit = ({
 
       <Button
         className={`w-full sm:mb-33 md:mb-41 ${
-          isSubmitDisabled
-            ? 'cursor-not-allowed bg-gray-500 text-gray-200'
-            : 'text-white hover:bg-gray-800'
+          isSubmitDisabled ? 'cursor-not-allowed bg-gray-500 text-gray-200' : 'text-white hover:bg-gray-800'
         }`}
         onClick={onSubmit}
         disabled={isSubmitDisabled}
