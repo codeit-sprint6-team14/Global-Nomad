@@ -8,12 +8,7 @@ interface ChipProps {
   children: React.ReactNode;
 }
 
-const Chip = ({
-  size = 'sm',
-  type = 'seat',
-  className = '',
-  children,
-}: ChipProps) => {
+const Chip = ({ size = 'sm', type = 'seat', className = '', children }: ChipProps) => {
   const baseStyle = 'pl-4 inline-block rounded-4';
 
   let variantStyle = '';
@@ -44,11 +39,7 @@ const Chip = ({
       break;
   }
 
-  return (
-    <div className={`${baseStyle} ${variantStyle} ${typeStyle} ${className}`}>
-      {children}
-    </div>
-  );
+  return <div className={`${baseStyle} ${variantStyle} ${typeStyle} ${className}`}>{children}</div>;
 };
 
 export default Chip;
