@@ -5,10 +5,12 @@ import { useState } from 'react';
 
 import ReservationCard from '../ReservationCard';
 
-const ReservationInfoModal = () => {
-  const [selectedTab, setSelectedTab] = useState('신청');
+type TabType = '신청' | '확정' | '거절';
 
-  const handleTabClick = (tab: string) => {
+const ReservationInfoModal = () => {
+  const [selectedTab, setSelectedTab] = useState<TabType>('신청');
+
+  const handleTabClick = (tab: TabType) => {
     setSelectedTab(tab);
   };
 
@@ -58,8 +60,8 @@ const ReservationInfoModal = () => {
         <div className="flex flex-col gap-16">
           <h2 className="text-xl-semibold">예약 내역</h2>
           <div className="flex flex-col gap-14">
-            {/* // TODO: 예약 내역 받아오기 */}
-            <ReservationCard nickname={nickname} memberCount={memberCount} />
+            {/* // TODO: 예약 내역 받아오기 map으로 구현할 것! */}
+            <ReservationCard selectedTab={selectedTab} />
           </div>
         </div>
       </div>
