@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
+import Button from '../Button';
 
 const Search = () => {
   const [isFocused, setIsFocused] = useState(false);
@@ -45,12 +46,9 @@ const Search = () => {
             내가 원하는 체험은
           </p>
         </div>
-        <button
-          type="button"
-          className="h-56 w-96 rounded-4 bg-black-100 px-15 py-8 text-lg-bold text-white md:w-136"
-        >
+        <Button className="h-56 w-96 rounded-4 px-15 py-8 text-lg-bold md:w-136">
           검색하기
-        </button>
+        </Button>
       </div>
     </div>
   );
