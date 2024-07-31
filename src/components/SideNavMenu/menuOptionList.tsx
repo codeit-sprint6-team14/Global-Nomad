@@ -1,7 +1,7 @@
-import BookingHistory from '@/../public/images/icon-booking-history.svg';
-import BookingStatus from '@/../public/images/icon-booking-status.svg';
-import MyInformation from '@/../public/images/icon-my-information.svg';
-import Setting from '@/../public/images/icon-setting.svg';
+import BookingHistory from '@/../public/svgs/icon-booking-history.svg';
+import BookingStatus from '@/../public/svgs/icon-booking-status.svg';
+import MyInformation from '@/../public/svgs/icon-my-information.svg';
+import Setting from '@/../public/svgs/icon-setting.svg';
 
 interface MenuOptionListProps {
   id: number;

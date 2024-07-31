@@ -1,6 +1,10 @@
 /* eslint-disable react/function-component-definition */
-import DownArrow from '@/../public/svgs/down-arrow.svg';
+import DownArrow from '@/../public/assets/icons/down-arrow.svg';
 import { useState } from 'react';
+
+import DropDown from '../Dropdown';
+
+const sortOptions = ['가격 낮은 순', '가격 높은 순'];
 
 const Filter = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,32 +22,22 @@ const Filter = () => {
       <button
         type="button"
         onClick={handleDropDownToggle}
-        className="flex h-51 w-107 items-center justify-center gap-21 rounded-15 border border-green-300 bg-white text-green-300 md:h-53 md:w-160 md:gap-70"
+        className="flex h-51 w-107 items-center justify-center gap-21 rounded-15 border border-green-300 bg-white text-green-300 md:h-53 md:w-160 md:gap-70 md:text-2lg-medium"
       >
         가격
         <DownArrow />
       </button>
       {isOpen && (
-        <ul className="absolute mt-8 h-82 w-107 rounded-6 bg-white shadow-lg ring-1 ring-black ring-opacity-5 md:w-160">
-          <li className="border-b">
-            <button
-              type="button"
-              className="h-41 w-full cursor-pointer text-sm-medium text-gray-800 hover:rounded-t-6 hover:bg-gray-200"
-              onClick={handleOptionClick}
-            >
-              가격이 낮은 순
-            </button>
-          </li>
-          <li>
-            <button
-              type="button"
-              className="h-41 w-full cursor-pointer text-sm-medium text-gray-800 hover:rounded-b-6 hover:bg-gray-200"
-              onClick={handleOptionClick}
-            >
-              가격이 높은 순
-            </button>
-          </li>
-        </ul>
+        <DropDown classNames="w-107 mt-6 md:w-160">
+          {sortOptions.map((label) => (
+            <DropDown.Option
+              key={label}
+              className="px-10 md:text-2lg-medium"
+              handleOptionClick={handleOptionClick}
+              label={label}
+            />
+          ))}
+        </DropDown>
       )}
     </div>
   );
