@@ -16,7 +16,7 @@ const DropdownItem = ({ option, isSelected, onClick }: DropdownItemProps) => (
     onClick={onClick}
   >
     <div className="mx-8 w-14">
-      {isSelected && <Image src="/images/icon-checked.svg" width={13} height={13} alt="checked icon" />}
+      {isSelected && <Image src="/icons/checked.svg" width={13} height={13} alt="checked icon" />}
     </div>
     <span>{option.label}</span>
   </li>

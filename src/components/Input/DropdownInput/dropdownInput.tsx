@@ -42,7 +42,7 @@ const DropdownInput = ({ options, defaultOption, onSelect }: DropdownProps) => {
           {isSelectedOption ? isSelectedOption.label : defaultOption}
         </span>
         <span className={`transform transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}>
-          <Image src="/images/icon-arrow-dropdown.svg" width={12} height={12} alt="dropdown button" />
+          <Image src="/icons/arrow-dropdown.svg" width={12} height={12} alt="dropdown button" />
         </span>
       </div>
       {isOpen && (
