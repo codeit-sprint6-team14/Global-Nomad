@@ -2,7 +2,7 @@ import popularExperienceCard from './popularExperienceCard';
 import standardExperienceCard from './standardExperienceCard';
 
 const CardResource = {
-  popularExperienceCard,
-  standardExperienceCard,
+  PopularExperienceCard: popularExperienceCard,
+  StandardExperienceCard: standardExperienceCard,
 };
 export default CardResource;
