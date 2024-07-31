@@ -1,15 +1,13 @@
 import { ButtonProps, DefaultButtonVariant } from '@/types/buttonTypes';
 
-const DefaultButton = ({
-  disabled = false,
-  type = 'button',
-  className = '',
-  variant = 'primary',
-  children,
-  onClick,
-  ...rest
-}: ButtonProps) => {
-  const getButtonStyles = (variant: DefaultButtonVariant, disabled: boolean, className: string) => {
+import BaseButton from './baseButton';
+
+const DefaultButton = ({ variant = 'primary', disabled, className = '', ...props }: ButtonProps) => {
+  const getVariantStyles = (
+    variant: DefaultButtonVariant,
+    disabled: boolean | undefined,
+    className: string | undefined,
+  ) => {
     const baseStyle = 'text-lg-bold rounded-6';
     const disabledStyle = 'bg-gray-600 cursor-not-allowed text-white';
     const variantStyles = {
@@ -20,19 +18,7 @@ const DefaultButton = ({
     return `${baseStyle} ${disabled ? disabledStyle : variantStyles[variant]} ${className}`;
   };
 
-  return (
-    <div>
-      <button
-        disabled={disabled}
-        type={type}
-        className={getButtonStyles(variant, disabled, className)}
-        onClick={onClick}
-        {...rest}
-      >
-        {children}
-      </button>
-    </div>
-  );
+  return <BaseButton className={`${getVariantStyles(variant, disabled, className)}`} {...props} />;
 };
 
 export default DefaultButton;
