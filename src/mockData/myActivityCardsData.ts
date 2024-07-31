@@ -11,8 +11,7 @@ const ActivityCardsData: myActivityCardData[] = [
   },
   {
     id: 2,
-    title:
-      '함께 배우면 즐거운 스트릿 댄스 하지만 오랜 뒤에 난 울고있었어 내게 들었던 아픔을 되돌려받으며~~~',
+    title: '함께 배우면 즐거운 스트릿 댄스 하지만 오랜 뒤에 난 울고있었어 내게 들었던 아픔을 되돌려받으며~~~',
     price: 20000,
     bannerImageUrl: '/images/testImg/dance.png',
     rating: 3,
