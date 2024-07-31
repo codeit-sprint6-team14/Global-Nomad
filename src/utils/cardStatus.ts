@@ -1,13 +1,6 @@
-export type StatusType =
-  | 'pending'
-  | 'confirmed'
-  | 'completed'
-  | 'declined'
-  | 'canceled';
+export type StatusType = 'pending' | 'confirmed' | 'completed' | 'declined' | 'canceled';
 
-const getCardStatus = (
-  status: StatusType,
-): { text: string; colorClass: string } => {
+const getCardStatus = (status: StatusType): { text: string; colorClass: string } => {
   switch (status) {
     case 'pending':
       return { text: '예약 완료', colorClass: 'text-blue-200' };

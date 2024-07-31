@@ -19,8 +19,7 @@ const reservationCardsData: reservationCard[] = [
     id: 2,
     activity: {
       bannerImageUrl: '/images/testImg/dance.png',
-      title:
-        '함께 배우면 즐거운 스트릿 댄스 하지만 오랜 뒤에 난 울고있었어 내게 들었던 아픔을 되돌려받으며~~~',
+      title: '함께 배우면 즐거운 스트릿 댄스 하지만 오랜 뒤에 난 울고있었어 내게 들었던 아픔을 되돌려받으며~~~',
       id: 2,
     },
     status: 'confirmed', // 예약 승인

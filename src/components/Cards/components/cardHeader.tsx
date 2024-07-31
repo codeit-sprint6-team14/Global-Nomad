@@ -1,14 +1,6 @@
 import Image from 'next/image';
 
-const CardHeader = ({
-  text,
-  imgSrc,
-  ClassNames,
-}: {
-  text: string;
-  imgSrc?: string;
-  ClassNames?: string;
-}) => {
+const CardHeader = ({ text, imgSrc, ClassNames }: { text: string; imgSrc?: string; ClassNames?: string }) => {
   return (
     <div className="flex">
       {imgSrc && (

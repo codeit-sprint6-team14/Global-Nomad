@@ -12,10 +12,7 @@ const MyActivityCardList = () => {
   return (
     <ul className="flex flex-col gap-16 lg:gap-24">
       {myActivityCardsData.map((myActivityCard: myActivityCardData) => (
-        <MyActivityCard
-          key={myActivityCard.id}
-          myActivityCard={myActivityCard}
-        />
+        <MyActivityCard key={myActivityCard.id} myActivityCard={myActivityCard} />
       ))}
     </ul>
   );
