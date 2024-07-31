@@ -11,7 +11,7 @@ const TextareaWithSubmit = ({ text, onTextChange, onSubmit, isSubmitDisabled }: 
         onChange={(e) => onTextChange(e.target.value)}
       ></textarea>
 
-      <Button
+      <Button.Default
         className={`w-full sm:mb-33 md:mb-41 ${
           isSubmitDisabled ? 'cursor-not-allowed bg-gray-500 text-gray-200' : 'text-white hover:bg-gray-800'
         }`}
@@ -19,7 +19,7 @@ const TextareaWithSubmit = ({ text, onTextChange, onSubmit, isSubmitDisabled }: 
         disabled={isSubmitDisabled}
       >
         작성하기
-      </Button>
+      </Button.Default>
     </div>
   );
 };
