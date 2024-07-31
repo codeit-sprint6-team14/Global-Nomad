@@ -9,7 +9,7 @@ interface StarRatingProps {
 const StarRating = ({ rating = 0, onRatingChange }: StarRatingProps): JSX.Element => {
   const [hover, setHover] = useState(0);
 
-  const handleClick = (value: number) => {
+  const handleRatings = (value: number) => {
     if (onRatingChange) {
       onRatingChange(value);
     }
@@ -23,7 +23,7 @@ const StarRating = ({ rating = 0, onRatingChange }: StarRatingProps): JSX.Elemen
           <div
             key={starValue}
             className="relative h-56 w-56 cursor-pointer"
-            onClick={() => handleClick(starValue)}
+            onClick={() => handleRatings(starValue)}
             onMouseEnter={() => setHover(starValue)}
             onMouseLeave={() => setHover(0)}
           >

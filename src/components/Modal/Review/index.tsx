@@ -6,6 +6,7 @@ import StarRating from './starRating';
 import TextareaWithSubmit from './textareaWithSubmit';
 
 const Review = () => {
+  const { title, bannerImageUrl, date, startTime, endTime, totalPrice, headCount } = reviewData;
   const [rating, setRating] = useState(0);
   const [reviewText, setReviewText] = useState('');
 
@@ -18,13 +19,13 @@ const Review = () => {
   return (
     <div className="w-full bg-white sm:px-16 md:rounded-24 md:px-24">
       <Header
-        title={reviewData.title}
-        bannerImageUrl={reviewData.bannerImageUrl}
-        date={reviewData.date}
-        startTime={reviewData.startTime}
-        endTime={reviewData.endTime}
-        totalPrice={reviewData.totalPrice}
-        headCount={reviewData.headCount}
+        title={title}
+        bannerImageUrl={bannerImageUrl}
+        date={date}
+        startTime={startTime}
+        endTime={endTime}
+        totalPrice={totalPrice}
+        headCount={headCount}
       />
       <div className="flex w-full justify-center sm:my-34 md:my-46">
         <StarRating rating={rating} onRatingChange={setRating} />
