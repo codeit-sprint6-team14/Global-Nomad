@@ -12,7 +12,6 @@ export default function Home() {
       <NavBar />
       <ReservationCardList />
       {/* <Footer /> */}
-      <MyActivityCardList />
     </div>
   );
 }
