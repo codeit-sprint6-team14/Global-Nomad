@@ -18,7 +18,7 @@ const PasswordInput = ({ placeholder, register, error, ...props }: InputProps) =
         {...props}
       />
       <Image
-        src={isVisible ? '/icons/visibility-on.svg' : '/icons/visibility-off.svg'}
+        src={isVisible ? '/assets/icons/visibility-on.svg' : '/assets/icons/visibility-off.svg'}
         alt="password visibility"
         width={24}
         height={24}

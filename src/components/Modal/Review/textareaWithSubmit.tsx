@@ -12,7 +12,7 @@ const TextareaWithSubmit = ({ text, onTextChange, onSubmit, isSubmitDisabled }: 
       ></textarea>
 
       <Button.Default
-        className={`w-full sm:mb-33 md:mb-41 ${
+        className={`w-full sm:mb-33 sm:h-54 md:mb-41 md:h-56 ${
           isSubmitDisabled ? 'cursor-not-allowed bg-gray-500 text-gray-200' : 'text-white hover:bg-gray-800'
         }`}
         onClick={onSubmit}

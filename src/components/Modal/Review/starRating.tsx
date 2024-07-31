@@ -24,7 +24,7 @@ const StarRating = ({ rating = 0, onRatingChange }: StarRatingProps) => {
             onMouseLeave={() => setHover(0)}
           >
             <Image
-              src={isFilled ? '/icons/star-filled.svg' : '/icons/star-empty.svg'}
+              src={isFilled ? '/assets/icons/star-filled.svg' : '/assets/icons/star-empty.svg'}
               alt={isFilled ? 'Filled star' : 'Empty star'}
               layout="fill"
               objectFit="contain"
