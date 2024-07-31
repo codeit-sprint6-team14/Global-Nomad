@@ -28,6 +28,9 @@ const config: Config = {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      boxShadow: {
+        popover: '0px 2px 8px 0px #78748640',
+      },
       borderRadius: PX0_50,
       fontSize: {
         ...PX0_100,
