@@ -1,8 +1,8 @@
-import React from 'react';
-import PrevButton from '@/../public/svgs/ic-prev-button.svg';
 import NextButton from '@/../public/svgs/ic-next-button.svg';
-import { CalendarHeaderProps } from '@/types/calendarTypes';
+import PrevButton from '@/../public/svgs/ic-prev-button.svg';
 import { MONTHS } from '@/constants/date';
+import { CalendarHeaderProps } from '@/types/calendarTypes';
+import React from 'react';
 
 const Header = ({ currentMonth, handlePrevMonth, handleNextMonth, isAfterCurrentMonth }: CalendarHeaderProps) => {
   return (

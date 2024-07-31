@@ -28,9 +28,7 @@ const CardFooter = ({
   };
 
   return (
-    <div
-      className={`relative flex items-end justify-between ${additionalClassNames}`}
-    >
+    <div className={`relative flex items-end justify-between ${additionalClassNames}`}>
       <div className="pt-7 text-lg-medium text-black md:pt-14 md:text-xl-medium lg:pt-21 lg:text-2xl-medium">
         {text}
       </div>
@@ -45,24 +43,13 @@ const CardFooter = ({
         )}
         {imgSrc && (
           <div className="relative">
-            <div
-              className="relative mr-6 h-32 w-32 cursor-pointer md:h-40 md:w-40"
-              onClick={handleDropdownVisible}
-            >
+            <div className="relative mr-6 h-32 w-32 cursor-pointer md:h-40 md:w-40" onClick={handleDropdownVisible}>
               <Image src={imgSrc} alt="케밥 버튼" fill />
             </div>
             {isOpenMenu && (
               <DropDown classNames="h-max w-120">
-                <DropDown.Option
-                  key="수정하기"
-                  handleOptionClick={handleOptionClick}
-                  label="수정하기"
-                />
-                <DropDown.Option
-                  key="삭제하기"
-                  handleOptionClick={handleOptionClick}
-                  label="삭제하기"
-                />
+                <DropDown.Option key="수정하기" handleOptionClick={handleOptionClick} label="수정하기" />
+                <DropDown.Option key="삭제하기" handleOptionClick={handleOptionClick} label="삭제하기" />
               </DropDown>
             )}
           </div>

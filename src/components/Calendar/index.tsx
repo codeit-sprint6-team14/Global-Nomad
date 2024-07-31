@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
-import Header from './header';
-import Body from './body';
-import { CalendarProps } from '@/types/calendarTypes';
 import { INITIAL_DATE } from '@/constants/date';
+import { CalendarProps } from '@/types/calendarTypes';
+import { useEffect, useState } from 'react';
+
+import Body from './body';
+import Header from './header';
 
 const Calendar = ({ selectedDate, updateDateSelect, availableDates, updateMonthChange, className }: CalendarProps) => {
   const [currentMonth, setCurrentMonth] = useState<Date>(INITIAL_DATE);
