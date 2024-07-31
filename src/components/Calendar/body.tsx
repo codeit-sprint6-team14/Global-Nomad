@@ -7,13 +7,13 @@ const Body = ({ selectedDate, selectActivityDate, availableDates, calendarDates 
     return date.toDateString() === activityDate.toDateString();
   };
 
-  const isActivityDate = (day: Date, availableDates: Date[]) => {
-    return availableDates.some((activityDate) => isSameDate(day, activityDate));
+  const isActivityDate = (date: Date, availableDates: Date[]) => {
+    return availableDates.some((activityDate) => isSameDate(date, activityDate));
   };
 
-  const createCalendarTagClassName = (day: Date): string => {
-    const isSelected = isSameDate(day, selectedDate);
-    const isActivity = isActivityDate(day, availableDates);
+  const createCalendarTagClassName = (date: Date): string => {
+    const isSelected = isSameDate(date, selectedDate);
+    const isActivity = isActivityDate(date, availableDates);
 
     let className = 'h-32 w-35 ';
     switch (true) {
@@ -30,22 +30,26 @@ const Body = ({ selectedDate, selectActivityDate, availableDates, calendarDates 
     return className;
   };
 
-  const createCalendarElement = (day: Date | null, index: number): JSX.Element => {
-    if (!day) {
+  const createCalendarElement = (date: Date | null, index: number): JSX.Element => {
+    if (!date) {
       return <td key={`empty-${index}`} className="h-32 w-35"></td>;
     }
 
     return (
-      <td key={day.toDateString()} className={createCalendarTagClassName(day)} onClick={() => selectActivityDate(day)}>
-        {day.getDate()}
+      <td
+        key={date.toDateString()}
+        className={createCalendarTagClassName(date)}
+        onClick={() => selectActivityDate(date)}
+      >
+        {date.getDate()}
       </td>
     );
   };
 
-  const divideWeek = (days: JSX.Element[]) => {
-    return days.reduce<JSX.Element[][]>((acc, day, i) => {
-      if (i % 7 === 0) acc.push([day]);
-      else acc[acc.length - 1].push(day);
+  const divideWeek = (dates: JSX.Element[]) => {
+    return dates.reduce<JSX.Element[][]>((acc, date, i) => {
+      if (i % 7 === 0) acc.push([date]);
+      else acc[acc.length - 1].push(date);
       return acc;
     }, []);
   };
