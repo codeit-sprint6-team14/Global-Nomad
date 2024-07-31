@@ -1,12 +1,8 @@
+import { StarRatingProps } from '@/types/reviewModalTypes';
 import Image from 'next/image';
 import React, { useState } from 'react';
 
-interface StarRatingProps {
-  rating?: number;
-  onRatingChange?: (rating: number) => void;
-}
-
-const StarRating = ({ rating = 0, onRatingChange }: StarRatingProps): JSX.Element => {
+const StarRating = ({ rating = 0, onRatingChange }: StarRatingProps) => {
   const [hover, setHover] = useState(0);
 
   const handleRatings = (value: number) => {

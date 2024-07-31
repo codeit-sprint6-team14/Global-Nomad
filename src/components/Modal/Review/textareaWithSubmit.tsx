@@ -1,11 +1,5 @@
 import Button from '@/components/Button';
-
-interface TextareaWithSubmitProps {
-  text: string;
-  onTextChange: (text: string) => void;
-  onSubmit: () => void;
-  isSubmitDisabled: boolean;
-}
+import { TextareaWithSubmitProps } from '@/types/reviewModalTypes';
 
 const TextareaWithSubmit = ({ text, onTextChange, onSubmit, isSubmitDisabled }: TextareaWithSubmitProps) => {
   return (

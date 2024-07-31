@@ -1,16 +1,7 @@
 import Icon from '@/components/Icons';
+import { reviewDataProps } from '@/types/reviewModalTypes';
 import Image from 'next/image';
 import React from 'react';
-
-type reviewDataProps = {
-  title: string;
-  bannerImageUrl: string;
-  date: string;
-  startTime: string;
-  endTime: string;
-  totalPrice: number;
-  headCount: number;
-};
 
 const Header = ({ title, bannerImageUrl, date, startTime, endTime, totalPrice, headCount }: reviewDataProps) => {
   return (
