@@ -1,4 +1,4 @@
-import Dropdown from '@/components/NavBar/dropDown';
+import DropDown from '@/components/Dropdown';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -10,6 +10,11 @@ function NavBar() {
 
   const handleDropdownVisible = () => {
     setIsOpenMenu(!isOpenMenu);
+  };
+
+  const handleOptionClick = (label: string) => {
+    console.log(label); // 드롭다운 메뉴 클릭 시 실행할 로직을 추가
+    setIsOpenMenu(false);
   };
 
   return (
@@ -46,7 +51,20 @@ function NavBar() {
               >
                 이영훈
               </div>
-              {isOpenMenu && <Dropdown />}
+              {isOpenMenu && (
+                <DropDown classNames="h-max w-120">
+                  <DropDown.Option
+                    key="로그아웃"
+                    handleOptionClick={handleOptionClick}
+                    label="로그아웃"
+                  />
+                  <DropDown.Option
+                    key="마이페이지"
+                    handleOptionClick={handleOptionClick}
+                    label="마이페이지"
+                  />
+                </DropDown>
+              )}
             </div>
           </div>
         ) : (
