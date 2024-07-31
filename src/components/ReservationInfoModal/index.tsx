@@ -21,7 +21,7 @@ const ReservationInfoModal = () => {
   ];
 
   return (
-    <div className="flex w-429 flex-col justify-between rounded-24 border px-1 pb-24 pt-12">
+    <div className="flex w-429 flex-col justify-between rounded-24 border px-1 pb-24 pt-12 shadow-modal">
       <div className="flex h-98 flex-col gap-16 px-24 py-12">
         <div className="flex items-center justify-between">
           <h1 className="text-xl-bold">예약 정보</h1>
