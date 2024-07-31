@@ -12,6 +12,7 @@ interface CustomDropdownProps {
   onSelect?: (option: Option) => void;
 }
 
+
 const CustomDropdown = ({ options, defaultOption, onSelect }: CustomDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSelectedOption, setIsSelectedOption] = useState<Option | null>(null);

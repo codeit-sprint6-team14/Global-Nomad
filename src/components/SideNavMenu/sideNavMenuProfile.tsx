@@ -4,7 +4,14 @@ const SideNavMenuProfile = () => {
   return (
     <div className="relative flex justify-center">
       <div className="relative h-160 w-160 overflow-hidden rounded-full">
-        <Image src="/images/test-profile-img.png" alt="프로필이미지" fill style={{ objectFit: 'cover' }} priority />
+        <Image
+          src="/images/test-profile-img.png"
+          alt="프로필이미지"
+          fill
+          style={{ objectFit: 'cover' }}
+          priority
+          sizes="(min-width: 375px) 160px"
+        />
       </div>
       <label
         htmlFor="FileInput"
