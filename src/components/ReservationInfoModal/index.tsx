@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { useState } from 'react';
 
+import CustomDropdown from '../Input/DropDownInput';
 import ReservationCard from '../ReservationCard';
 
 type TabType = '신청' | '확정' | '거절';
@@ -14,19 +15,18 @@ const ReservationInfoModal = () => {
     setSelectedTab(tab);
   };
 
+  const dropdownOptions = [
+    { value: '14:00-15:00', label: '14:00-15:00' },
+    { value: '15:00-16:00', label: '15:00-16:00' },
+  ];
+
   return (
     <div className="flex w-429 flex-col justify-between rounded-24 border px-1 pb-24 pt-12">
       <div className="flex h-98 flex-col gap-16 px-24 py-12">
         <div className="flex items-center justify-between">
           <h1 className="text-xl-bold">예약 정보</h1>
           <button type="button">
-            <Image
-              src="/images/icon-close.svg"
-              alt="close"
-              objectFit="contain"
-              width={40}
-              height={40}
-            />
+            <Image src="/images/icon-close.svg" alt="close" objectFit="contain" width={40} height={40} />
           </button>
         </div>
         <div className="flex gap-12">
@@ -56,7 +56,7 @@ const ReservationInfoModal = () => {
           <h2 className="text-xl-semibold">예약 날짜</h2>
           <div className="flex flex-col gap-2">
             <span className="text-xl-regular text-black">2023년 2월 12일</span>
-            <div>Dropdown</div>
+            <CustomDropdown options={dropdownOptions} defaultOption="시간을 선택하세요" />
           </div>
         </div>
         <div className="flex flex-col gap-16">
