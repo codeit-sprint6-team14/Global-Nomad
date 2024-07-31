@@ -1,6 +1,6 @@
-import { Card } from '@/types/CardListData';
+import { reservationCard } from '@/types/cardListData';
 
-const reservationCardsData: Card[] = [
+const reservationCardsData: reservationCard[] = [
   {
     id: 1,
     activity: {

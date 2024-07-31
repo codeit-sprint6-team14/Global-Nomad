@@ -1,8 +1,8 @@
-import { Card as CardType } from '@/types/CardListData';
+import reservationCardsData from '@/mockData/reservationCardsData';
+import { reservationCard } from '@/types/cardListData';
 import { useState } from 'react';
 
 import ReservationCard from './reservationCard';
-import reservationCardsData from './reservationCardsData';
 
 const Cards = () => {
   const [cardListData] = useState(reservationCardsData);
@@ -11,7 +11,7 @@ const Cards = () => {
 
   return (
     <ul className="flex flex-col gap-8">
-      {cardListData.map((card: CardType) => (
+      {cardListData.map((card: reservationCard) => (
         <ReservationCard key={card.id} card={card} />
       ))}
     </ul>

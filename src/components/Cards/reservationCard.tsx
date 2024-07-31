@@ -1,21 +1,19 @@
-// components/ReservationCard.tsx
-import Card from '@/components/Cards';
-import { Card as CardType } from '@/types/CardListData';
-import getCardStatus from '@/utils/cardStatus';
+import Card from '@/components/Cards/components';
+import { reservationCard } from '@/types/cardListData';
+import getCardStatus, { StatusType } from '@/utils/cardStatus';
+import { formatPrice } from '@/utils/formatPrice';
 
-const ReservationCard = ({ card }: { card: CardType }) => {
+const ReservationCard = ({ card }: { card: reservationCard }) => {
   const { bannerImageUrl, title } = card.activity;
   const { status, totalPrice, headCount, date, startTime, endTime } = card;
 
-  const statusText = getCardStatus(
-    status as 'pending' | 'confirmed' | 'completed' | 'declined' | 'canceled',
-  );
+  const { text: statusText, colorClass } = getCardStatus(status as StatusType);
 
   return (
     <Card>
       <Card.Image imageUrl={bannerImageUrl} />
       <Card.Header
-        textClassNames="text-md-bold md:text-lg-bold"
+        ClassNames={`${colorClass} text-md-bold md:text-lg-bold `}
         text={statusText}
       />
       <Card.Title title={title} />
@@ -23,7 +21,7 @@ const ReservationCard = ({ card }: { card: CardType }) => {
         text={`${date} · ${startTime} - ${endTime} · ${headCount}명`}
       />
       <Card.Footer
-        text={`₩${totalPrice}`}
+        text={formatPrice(totalPrice)}
         status={status}
         buttonName={
           status === 'pending'

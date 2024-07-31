@@ -1,10 +1,10 @@
-import { ActivityCardsDataType } from '@/types/CardListData';
+import { myActivityCardData } from '@/types/cardListData';
 
-const ActivityCardsData: ActivityCardsDataType[] = [
+const ActivityCardsData: myActivityCardData[] = [
   {
     id: 1,
     title: '열기구 타면서 하늘을 날아보자',
-    price: 50000,
+    price: 500000,
     bannerImageUrl: '/images/testImg/air-balloon.png',
     rating: 2,
     reviewCount: 293,

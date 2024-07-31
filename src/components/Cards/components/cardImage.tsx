@@ -9,6 +9,8 @@ const CardImage = ({ imageUrl }: { imageUrl: string }) => {
         style={{ objectFit: 'cover' }}
         src={imageUrl}
         alt="카드 배너 이미지"
+        sizes="(min-width: 375px) 128px, (min-width: 744px) 156px, (min-width: 1200px) 204px"
+        priority
       />
     </div>
   );

@@ -10,6 +10,7 @@ const SideNavMenuProfile = () => {
           fill
           style={{ objectFit: 'cover' }}
           priority
+          sizes="(min-width: 375px) 160px"
         />
       </div>
       <label

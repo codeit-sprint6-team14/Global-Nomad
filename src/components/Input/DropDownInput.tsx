@@ -1,15 +1,15 @@
-import Image from 'next/image'
-import React, { useState, useRef, useEffect } from 'react'
+import Image from 'next/image';
+import React, { useEffect, useRef, useState } from 'react';
 
 type Option = {
-  value: string
-  label: string
-}
+  value: string;
+  label: string;
+};
 
 interface CustomDropdownProps {
-  options: Option[]
-  defaultOption: string
-  onSelect?: (option: Option) => void
+  options: Option[];
+  defaultOption: string;
+  onSelect?: (option: Option) => void;
 }
 
 const CustomDropdown = ({
@@ -17,9 +17,9 @@ const CustomDropdown = ({
   defaultOption,
   onSelect,
 }: CustomDropdownProps) => {
-  const [isOpen, setIsOpen] = useState(false)
-  const [isSelectedOption, setIsSelectedOption] = useState<Option | null>(null)
-  const dropdownRef = useRef<HTMLDivElement>(null)
+  const [isOpen, setIsOpen] = useState(false);
+  const [isSelectedOption, setIsSelectedOption] = useState<Option | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // 드롭다운 바깥 클릭시 드롭다운 닫힘
@@ -28,25 +28,25 @@ const CustomDropdown = ({
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
       ) {
-        setIsOpen(false)
+        setIsOpen(false);
       }
-    }
+    };
 
-    document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [])
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
-  const toggleDropdown = () => setIsOpen(!isOpen)
+  const toggleDropdown = () => setIsOpen(!isOpen);
 
   const handleOptionClick = (option: Option) => {
-    setIsSelectedOption(option)
-    setIsOpen(false)
+    setIsSelectedOption(option);
+    setIsOpen(false);
     if (onSelect) {
-      onSelect(option)
+      onSelect(option);
     }
-  }
+  };
 
   return (
     <div className="relative" ref={dropdownRef}>
@@ -99,7 +99,7 @@ const CustomDropdown = ({
         </ul>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default CustomDropdown
+export default CustomDropdown;
