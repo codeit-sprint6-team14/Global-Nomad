@@ -9,9 +9,9 @@ const MyActivityCard = ({ myActivityCard }: { myActivityCard: myActivityCardData
     <>
       <Card contentsClassNames="flex w-full flex-col p-8 pr-14 md:p-12 lg:px-24 lg:py-14 ">
         <Card.Image imageUrl={bannerImageUrl} />
-        <Card.Header text={`${rating} (${reviewCount})`} imgSrc="/asset/icons/star.svg" />
+        <Card.Header text={`${rating} (${reviewCount})`} imgSrc="/assets/icons/star.svg" />
         <Card.Title title={title} />
-        <Card.Footer text={formatPrice(price)} imgSrc="/asset/icons/kebab.svg" additionalClassNames="mt-auto" />
+        <Card.Footer text={formatPrice(price)} imgSrc="/assets/icons/kebab.svg" additionalClassNames="mt-auto" />
       </Card>
     </>
   );
