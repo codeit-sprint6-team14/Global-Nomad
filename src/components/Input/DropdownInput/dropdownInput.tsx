@@ -2,7 +2,7 @@ import { DropdownProps, Option } from '@/types/dropDownInputTypes';
 import Image from 'next/image';
 import React, { useEffect, useRef, useState } from 'react';
 
-import DropdownInputList from './DropdownInputList';
+import DropdownInputList from './dropdownInputList';
 
 const DropdownInput = ({ options, defaultOption, onSelect }: DropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
