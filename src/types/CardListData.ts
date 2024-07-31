@@ -1,18 +1,18 @@
-export interface CardListData {
+export interface reservationCardData {
   cursorId: number;
-  reservations: Array<Card>;
+  reservations: Array<reservationCard>;
   totalCount: number;
 }
-export interface Activity {
+export interface reservationCardActivity {
   bannerImageUrl: string;
   title: string;
   id?: number;
 }
-export interface Card {
+export interface reservationCard {
   id: number;
   teamId?: string;
   userId?: number;
-  activity: Activity;
+  activity: reservationCardActivity;
   scheduleId?: number;
   status: string;
   reviewSubmitted?: boolean;
@@ -25,12 +25,12 @@ export interface Card {
   updatedAt?: string;
 }
 
-export interface myActivitiesData {
+export interface myActivitiesCardData {
   cursorId: number;
   totalCount: number;
-  activities: Array<ActivityCardsDataType>;
+  activities: Array<myActivityCardData>;
 }
-export interface ActivityCardsDataType {
+export interface myActivityCardData {
   id: number;
   userId?: number;
   title: string;
