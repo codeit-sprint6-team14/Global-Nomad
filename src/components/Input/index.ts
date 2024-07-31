@@ -1,11 +1,11 @@
 import DateInput from './DateInput';
 import DefaultInput from './DefaultInput';
-import DropDownInput from './DropDownInput';
+import DropdownInput from './DropdownInput/DropdownInput';
 import PasswordInput from './PasswordInput';
 
 const Input = Object.assign(DefaultInput, {
   Password: PasswordInput,
-  DropDown: DropDownInput,
+  Dropdown: DropdownInput,
   Date: DateInput,
 });
 
