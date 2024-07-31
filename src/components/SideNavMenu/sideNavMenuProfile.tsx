@@ -5,7 +5,7 @@ const SideNavMenuProfile = () => {
     <div className="relative flex justify-center">
       <div className="relative h-160 w-160 overflow-hidden rounded-full">
         <Image
-          src="/images/test-profile-img.png"
+          src="/images/testImg/test-profile-img.png"
           alt="프로필이미지"
           fill
           style={{ objectFit: 'cover' }}
@@ -18,7 +18,7 @@ const SideNavMenuProfile = () => {
         className="absolute bottom-[-2px] right-70 flex h-44 w-44 cursor-pointer items-center justify-center rounded-full bg-green-300 md:right-30 lg:right-95"
       >
         <Image
-          src="/images/icon-pencil.svg"
+          src="/svgs/icon-pencil.svg"
           alt="연필이미지"
           width={24}
           height={24}

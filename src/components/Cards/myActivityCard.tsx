@@ -15,12 +15,12 @@ const MyActivityCard = ({
         <Card.Image imageUrl={bannerImageUrl} />
         <Card.Header
           text={`${rating} (${reviewCount})`}
-          imgSrc="/images/icon-star.svg"
+          imgSrc="/svgs/icon-star.svg"
         />
         <Card.Title title={title} />
         <Card.Footer
           text={formatPrice(price)}
-          imgSrc="/images/icon-kebab.svg"
+          imgSrc="/svgs/icon-kebab.svg"
           additionalClassNames="mt-auto"
         />
       </Card>

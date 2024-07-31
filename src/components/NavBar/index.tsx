@@ -24,7 +24,7 @@ function NavBar() {
           <Image
             width={172}
             height={30}
-            src="/images/navbar-logo.svg"
+            src="/svgs/navbar-logo.svg"
             alt="네비바 로고"
             priority
           />
@@ -32,7 +32,7 @@ function NavBar() {
         {accessToken ? (
           <div className="flex items-center">
             <Image
-              src="images/icon-bell.svg"
+              src="svgs/icon-bell.svg"
               alt="네비바 알림 벨"
               width={20}
               height={20}
@@ -40,7 +40,7 @@ function NavBar() {
             <div className="mx-12 h-22 border-l border-solid border-gray-300 md:mx-25" />
             <div className="relative flex items-center gap-10">
               <Image
-                src="images/icon-test-profile.svg"
+                src="svgs/icon-test-profile.svg"
                 alt="프로필 이미지"
                 width={32}
                 height={32}
