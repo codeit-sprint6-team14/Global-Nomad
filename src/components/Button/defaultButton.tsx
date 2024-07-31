@@ -1,4 +1,4 @@
-import { DefaultButtonVariant, ButtonProps } from '@/types/buttonTypes';
+import { ButtonProps, DefaultButtonVariant } from '@/types/buttonTypes';
 
 const DefaultButton = ({
   disabled = false,
@@ -10,7 +10,7 @@ const DefaultButton = ({
   ...rest
 }: ButtonProps) => {
   const getButtonStyles = (variant: DefaultButtonVariant, disabled: boolean, className: string) => {
-    const baseStyle = 'text-lg-bold w-350 h-48 rounded-6';
+    const baseStyle = 'text-lg-bold rounded-6';
     const disabledStyle = 'bg-gray-600 cursor-not-allowed text-white';
     const variantStyles = {
       primary: 'bg-black-100 text-white',

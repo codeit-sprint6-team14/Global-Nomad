@@ -6,12 +6,14 @@ import { useEffect, useState } from 'react';
 
 import Button from '../Button';
 import Calendar from '../Calendar';
-import Icon from '../Icons';
+import DesktopComponents from './DesktopComponents';
 
-const DateSelectModal = () => {
+const Desktop = () => {
   const [currentMonth, setCurrentMonth] = useState<Date>(INITIAL_DATE);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null);
+
+  const price = 10000;
 
   INITIAL_DATE.setHours(0, 0, 0, 0);
   const availableDates = availableSchedule
@@ -70,47 +72,35 @@ const DateSelectModal = () => {
       updateDateSelect(new Date(firstActivityDate));
     }
   }, []);
-
   return (
-    <div className="w-480 rounded-24 bg-white px-24 py-32">
-      <header className="mb-24 flex items-center justify-between">
-        <h2 className="text-2xl-bold">날짜</h2>
-        <button type="button">
-          <Icon.Close width={40} height={40} />
-        </button>
-      </header>
-      <main className="mb-64">
+    <section className="h-746 w-384 rounded-8 border border-gray-300 bg-white px-24 py-17 shadow-[0px_10px_30px_3px_rgba(5,16,55,0.15)]">
+      <DesktopComponents.Header price={price} />
+      <main>
+        <h2 className="mb-16 text-xl-bold">날짜</h2>
         <Calendar
           selectedDate={selectedDate}
           updateDateSelect={updateDateSelect}
           availableDates={availableDates}
           updateMonthChange={updateMonthChange}
-          className="mx-auto mb-32"
+          className="mx-auto mb-16 h-241 pt-[11px]"
         />
-        <h3 className="mb-14 text-2lg-bold">예약 가능한 시간</h3>
-        {!isReservationPossible && (
-          <p className="mt-39 text-center text-lg">현재 예약 가능한 날짜와 시간이 없습니다.</p>
-        )}
-        <div className="flex gap-12 overflow-x-auto scrollbar-hide">
-          {getSelectedDateSlots(selectedDate, availableSchedule).map((slot, index) => (
-            <Button.Category
-              key={index}
-              isActive={selectedSlot === slot}
-              onClick={() => handleSlotSelect(slot)}
-              className="rounded-8 md:h-46 md:w-117 md:text-lg-medium"
-            >
-              {slot.startTime}~{slot.endTime}
-            </Button.Category>
-          ))}
-        </div>
+        <DesktopComponents.TimeSlotSelection
+          selectedDate={selectedDate}
+          selectedSlot={selectedSlot}
+          handleSlotSelect={handleSlotSelect}
+          availableSchedule={availableSchedule}
+          getSelectedDateSlots={getSelectedDateSlots}
+        />
       </main>
       <footer>
-        <Button disabled={!isReservationPossible} className="h-56 w-432">
-          예약하기
-        </Button>
+        <div className="mb-16 border-b border-gray-300 pb-24">
+          <DesktopComponents.ParticipantCounter />
+          <Button className="h-56 w-336">예약하기</Button>
+        </div>
+        <DesktopComponents.TotalPrice price={price} />
       </footer>
-    </div>
+    </section>
   );
 };
 
-export default DateSelectModal;
+export default Desktop;
