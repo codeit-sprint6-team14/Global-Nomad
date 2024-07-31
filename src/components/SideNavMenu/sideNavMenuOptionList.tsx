@@ -10,11 +10,7 @@ const SideNavMenuOptionList = () => {
     <div className="flex w-296 flex-col gap-8 md:w-203 lg:w-336">
       {menuOptionList.map((option) => (
         <ul key={option.id} onClick={() => setActiveOption(option.id)}>
-          <SideNavMenuOption
-            imgSrc={option.imgSrc}
-            text={option.text}
-            isActive={activeOption === option.id}
-          />
+          <SideNavMenuOption imgSrc={option.imgSrc} text={option.text} isActive={activeOption === option.id} />
         </ul>
       ))}
     </div>

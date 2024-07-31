@@ -17,19 +17,9 @@ const SideNavMenuProfile = () => {
         htmlFor="FileInput"
         className="absolute bottom-[-2px] right-70 flex h-44 w-44 cursor-pointer items-center justify-center rounded-full bg-green-300 md:right-30 lg:right-95"
       >
-        <Image
-          src="/images/icon-pencil.svg"
-          alt="연필이미지"
-          width={24}
-          height={24}
-        />
+        <Image src="/images/icon-pencil.svg" alt="연필이미지" width={24} height={24} />
       </label>
-      <input
-        id="FileInput"
-        className="hidden"
-        type="file"
-        placeholder="이미지 등록"
-      />
+      <input id="FileInput" className="hidden" type="file" placeholder="이미지 등록" />
     </div>
   );
 };

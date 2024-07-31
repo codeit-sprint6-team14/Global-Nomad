@@ -6,11 +6,7 @@ interface PaginationProps {
   onPageChange: (page: number) => void;
 }
 
-const Pagination: React.FC<PaginationProps> = ({
-  totalPages,
-  currentPage,
-  onPageChange,
-}) => {
+const Pagination: React.FC<PaginationProps> = ({ totalPages, currentPage, onPageChange }) => {
   const pagesPerGroup = 5; // 한 그룹당 페이지 수
 
   // 현재 페이지가 속한 그룹을 계산
@@ -49,9 +45,7 @@ const Pagination: React.FC<PaginationProps> = ({
             key={page}
             onClick={() => onPageChange(page)}
             className={`font-pretendard box-border h-55 w-55 rounded-15 border border-green-950 text-2lg-regular sm:h-40 sm:w-40 ${
-              currentPage === page
-                ? 'bg-green-950 text-white'
-                : 'bg-white hover:bg-gray-200'
+              currentPage === page ? 'bg-green-950 text-white' : 'bg-white hover:bg-gray-200'
             }`}
           >
             {page}
