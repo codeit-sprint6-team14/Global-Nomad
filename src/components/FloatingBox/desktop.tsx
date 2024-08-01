@@ -95,7 +95,7 @@ const Desktop = () => {
       <footer>
         <div className="mb-16 border-b border-gray-300 pb-24">
           <DesktopComponents.ParticipantCounter />
-          <Button className="h-56 w-336">예약하기</Button>
+          <Button.Default className="h-56 w-336">예약하기</Button.Default>
         </div>
         <DesktopComponents.TotalPrice price={price} />
       </footer>

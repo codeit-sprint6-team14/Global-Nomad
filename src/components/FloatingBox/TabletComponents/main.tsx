@@ -17,7 +17,7 @@ const Main = () => {
         <div className="mb-32">
           <Counter />
         </div>
-        <Button className="h-56 w-203">예약하기</Button>
+        <Button.Default className="h-56 w-203">예약하기</Button.Default>
       </main>
     </div>
   );
