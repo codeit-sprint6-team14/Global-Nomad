@@ -34,12 +34,12 @@ const CardFooter = ({
       </div>
       <div>
         {buttonName && (
-          <Button
+          <Button.Default
             className={`h-[32px] w-80 text-md-bold md:h-[40px] md:w-112 md:text-lg-bold lg:h-[43px] lg:w-144`}
             variant={status === 'pending' ? 'secondary' : 'primary'}
           >
             {buttonName}
-          </Button>
+          </Button.Default>
         )}
         {imgSrc && (
           <div className="relative">
