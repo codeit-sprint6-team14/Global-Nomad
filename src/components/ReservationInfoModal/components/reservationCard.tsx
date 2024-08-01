@@ -1,4 +1,4 @@
-import Button from '../Button';
+import Button from '@/components/Button';
 
 type TabType = '신청' | '확정' | '거절';
 
@@ -20,10 +20,10 @@ const ReservationCard = ({ selectedTab }: ReservationCardProps) => {
       <div className="flex justify-end pb-8 pr-16">
         {selectedTab === '신청' ? (
           <div className="flex gap-8">
-            <Button className="h-38 w-82">거절하기</Button>
-            <Button variant="secondary" className="h-38 w-82">
-              확정하기
-            </Button>
+            <Button.Default className="h-38 w-82">확정하기</Button.Default>
+            <Button.Default variant="secondary" className="h-38 w-82">
+              거절하기
+            </Button.Default>
           </div>
         ) : (
           <p
