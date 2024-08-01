@@ -1,24 +1,21 @@
-'use client';
-
 import Image from 'next/image';
 import { useState } from 'react';
 
 import Input from '../Input';
 import ReservationCard from './components/reservationCard';
+import TabButtons, { TabData, TabType } from './components/tabButton';
 
-type TabType = '신청' | '확정' | '거절';
+type ReservationInfoModalProps = {
+  dropdownOptions: { value: string; label: string }[];
+  tabData: TabData[];
+};
 
-const ReservationInfoModal = () => {
+const ReservationInfoModal = ({ dropdownOptions, tabData }: ReservationInfoModalProps) => {
   const [selectedTab, setSelectedTab] = useState<TabType>('신청');
 
   const handleTabClick = (tab: TabType) => {
     setSelectedTab(tab);
   };
-
-  const dropdownOptions = [
-    { value: '14:00-15:00', label: '14:00-15:00' },
-    { value: '15:00-16:00', label: '15:00-16:00' },
-  ];
 
   return (
     <div className="flex w-429 flex-col justify-between rounded-24 border px-1 pb-24 pt-12 shadow-modal">
@@ -29,26 +26,7 @@ const ReservationInfoModal = () => {
             <Image src="/images/icon-close.svg" alt="close" objectFit="contain" width={40} height={40} />
           </button>
         </div>
-        <div className="flex gap-12">
-          <button
-            onClick={() => handleTabClick('신청')}
-            className={`relative ${selectedTab === '신청' ? 'border-b-4 border-green-300 text-xl-semibold text-green-300' : 'text-xl-regular text-gray-800'}`}
-          >
-            신청 12
-          </button>
-          <button
-            onClick={() => handleTabClick('확정')}
-            className={`relative ${selectedTab === '확정' ? 'border-b-4 border-green-300 text-xl-semibold text-green-300' : 'text-xl-regular text-gray-800'}`}
-          >
-            확정 10
-          </button>
-          <button
-            onClick={() => handleTabClick('거절')}
-            className={`relative ${selectedTab === '거절' ? 'border-b-4 border-green-300 text-xl-semibold text-green-300' : 'text-xl-regular text-gray-800'}`}
-          >
-            거절 0
-          </button>
-        </div>
+        <TabButtons tabData={tabData} selectedTab={selectedTab} onTabClick={handleTabClick} />
       </div>
       <div className="mt-4 border border-gray-300"></div>
       <div className="flex flex-col gap-24 px-24 py-24">
