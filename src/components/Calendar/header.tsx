@@ -1,13 +1,12 @@
-import React from 'react';
-import PrevButton from '@/../public/svgs/ic-prev-button.svg';
 import NextButton from '@/../public/svgs/ic-next-button.svg';
-import { CalendarHeaderProps } from '@/types/calendarTypes';
+import PrevButton from '@/../public/svgs/ic-prev-button.svg';
 import { MONTHS } from '@/constants/date';
+import { CalendarHeaderProps } from '@/types/calendarTypes';
 
-const Header = ({ currentMonth, handlePrevMonth, handleNextMonth, isAfterCurrentMonth }: CalendarHeaderProps) => {
+const Header = ({ viewingMonth, handlePrevMonth, handleNextMonth, isViewingFutureMonth }: CalendarHeaderProps) => {
   return (
     <div className="flex justify-between">
-      {isAfterCurrentMonth() ? (
+      {isViewingFutureMonth() ? (
         <button onClick={handlePrevMonth}>
           <PrevButton />
         </button>
@@ -15,7 +14,7 @@ const Header = ({ currentMonth, handlePrevMonth, handleNextMonth, isAfterCurrent
         <div className="h-24 w-16" />
       )}
       <span className="text-black-100">
-        {MONTHS[currentMonth.getMonth()]} {currentMonth.getFullYear()}
+        {MONTHS[viewingMonth.getMonth()]} {viewingMonth.getFullYear()}
       </span>
       <button onClick={handleNextMonth}>
         <NextButton />
