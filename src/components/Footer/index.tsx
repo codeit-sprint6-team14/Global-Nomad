@@ -1,5 +1,7 @@
-/* eslint-disable react/function-component-definition */
-import Image from 'next/image';
+import Facebook from '../../../public/svgs/icon-facebook.svg';
+import Instagram from '../../../public/svgs/icon-instagram.svg';
+import Twitter from '../../../public/svgs/icon-twitter.svg';
+import Youtube from '../../../public/svgs/icon-youtube.svg';
 
 const Footer = () => {
   return (
@@ -12,40 +14,16 @@ const Footer = () => {
         </div>
         <div className="mt-4 flex gap-10 space-x-4 md:mt-0">
           <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
-            <Image
-              src="/images/icon-facebook.svg"
-              alt="facebook icon"
-              width={20}
-              height={20}
-              className="cursor-pointer"
-            />
+            <Facebook />
           </a>
           <a href="https://x.com/" target="_blank" rel="noopener noreferrer">
-            <Image
-              src="/images/icon-twitter.svg"
-              alt="twitter icon"
-              width={20}
-              height={20}
-              className="cursor-pointer"
-            />
+            <Twitter />
           </a>
           <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">
-            <Image
-              src="/images/icon-youtube.svg"
-              alt="youtube icon"
-              width={20}
-              height={20}
-              className="cursor-pointer"
-            />
+            <Youtube />
           </a>
           <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">
-            <Image
-              src="/images/icon-instagram.svg"
-              alt="instagram icon"
-              width={20}
-              height={20}
-              className="cursor-pointer"
-            />
+            <Instagram />
           </a>
         </div>
       </div>

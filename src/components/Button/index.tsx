@@ -1,8 +1,9 @@
 import CategoryButton from './categoryButton';
 import DefaultButton from './defaultButton';
 
-const Button = Object.assign(DefaultButton, {
+const Button = {
+  Default: DefaultButton,
   Category: CategoryButton,
-});
+};
 
 export default Button;

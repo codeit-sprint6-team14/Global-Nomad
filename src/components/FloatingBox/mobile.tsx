@@ -13,9 +13,9 @@ const Mobile = () => {
           <MobileComponents.PriceInfo price={10000} capacity={10} />
           <MobileComponents.DateInfo date="22/11/14" startTime="14:00" endTime="15:00" />
         </div>
-        <Button onClick={handleReservation} className="h-54 w-106">
+        <Button.Default onClick={handleReservation} className="h-54 w-106">
           예약하기
-        </Button>
+        </Button.Default>
       </div>
     </div>
   );
