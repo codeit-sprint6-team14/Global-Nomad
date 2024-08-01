@@ -3,8 +3,8 @@
 import Image from 'next/image';
 import { useState } from 'react';
 
-import CustomDropdown from '../Input/DropDownInput';
-import ReservationCard from '../ReservationCard';
+import Input from '../Input';
+import ReservationCard from './components/reservationCard';
 
 type TabType = '신청' | '확정' | '거절';
 
@@ -56,7 +56,7 @@ const ReservationInfoModal = () => {
           <h2 className="text-xl-semibold">예약 날짜</h2>
           <div className="flex flex-col gap-2">
             <span className="text-xl-regular text-black">2023년 2월 12일</span>
-            <CustomDropdown options={dropdownOptions} defaultOption="시간을 선택하세요" />
+            <Input.Dropdown options={dropdownOptions} defaultOption="시간을 선택하세요" />
           </div>
         </div>
         <div className="flex flex-col gap-16">
