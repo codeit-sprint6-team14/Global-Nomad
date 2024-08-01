@@ -1,24 +1,13 @@
-import { InputHTMLAttributes } from 'react';
-import { UseFormRegisterReturn } from 'react-hook-form';
-
-type InputProps = InputHTMLAttributes<HTMLInputElement> & {
-  id?: string;
-  type?: string;
-  error?: boolean;
-  className?: string;
-  placeholder: string;
-  isAuth?: boolean;
-  register?: UseFormRegisterReturn;
-};
+import { InputProps } from '@/types/defaultInputTypes';
 
 const DefaultInput = ({
-  id,
   type = 'text',
   className,
   error = false,
   placeholder = '입력',
   isAuth = false,
   register,
+  ...props
 }: InputProps) => {
   const baseStyle = `
     block w-full outline-none placeholder:text-gray-600 text-14 md:text-16 focus:border-[1.5px]
@@ -30,7 +19,9 @@ const DefaultInput = ({
 
   const styleClass = `${baseStyle} ${error ? errorBorder : normalBorder}`;
 
-  return <input id={id} className={`${styleClass} ${className}`} type={type} placeholder={placeholder} {...register} />;
+  return (
+    <input className={`${styleClass} ${className}`} type={type} placeholder={placeholder} {...register} {...props} />
+  );
 };
 
 export default DefaultInput;
