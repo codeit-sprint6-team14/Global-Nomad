@@ -10,10 +10,8 @@ const TimeSlotSelection = ({
 }: TimeSlotSelectionProps) => (
   <div>
     <h3 className="mb-14 text-2lg-bold">예약 가능한 시간</h3>
-    {!selectedDate && (
-      <p className="mb-10 mt-24 text-center text-lg-medium">현재 예약 가능한 날짜와 시간이 없습니다.</p>
-    )}
-    <div className="mb-12 flex gap-12 overflow-x-auto border-b border-gray-300 pb-16 scrollbar-hide">
+    {!selectedDate && <p className="mt-34 text-center text-2lg-medium">현재 예약 가능한 날짜와 시간이 없습니다.</p>}
+    <div className="flex gap-12 overflow-x-auto scrollbar-hide">
       {getSelectedDateSlots(selectedDate, availableSchedule).map((slot, index) => (
         <Button.Category
           key={index}
