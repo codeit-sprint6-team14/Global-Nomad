@@ -1,7 +1,9 @@
-import DateSelectModal from './dateSelectModal';
+import DateSelect from './DateSelect';
+import Review from './Review';
 
 const Modal = {
-  DateSelect: DateSelectModal,
+  DateSelect: DateSelect,
+  Review: Review,
 };
 
 export default Modal;
