@@ -63,8 +63,6 @@ const Desktop = () => {
     }
   };
 
-  const isReservationPossible = selectedDate !== null && selectedSlot !== null;
-
   useEffect(() => {
     const firstActivityDate = getFirstActivityDateOfMonth(INITIAL_DATE.getFullYear(), INITIAL_DATE.getMonth());
 
@@ -74,31 +72,26 @@ const Desktop = () => {
   }, []);
   return (
     <section className="h-746 w-384 rounded-8 border border-gray-300 bg-white px-24 py-17 shadow-[0px_10px_30px_3px_rgba(5,16,55,0.15)]">
-      <DesktopComponents.Header price={price} />
-      <main>
-        <h2 className="mb-16 text-xl-bold">날짜</h2>
-        <Calendar
-          selectedDate={selectedDate}
-          updateDateSelect={updateDateSelect}
-          availableDates={availableDates}
-          updateMonthChange={updateMonthChange}
-          className="mx-auto mb-16 h-241 pt-[11px]"
-        />
-        <DesktopComponents.TimeSlotSelection
-          selectedDate={selectedDate}
-          selectedSlot={selectedSlot}
-          handleSlotSelect={handleSlotSelect}
-          availableSchedule={availableSchedule}
-          getSelectedDateSlots={getSelectedDateSlots}
-        />
-      </main>
-      <footer>
-        <div className="mb-16 border-b border-gray-300 pb-24">
-          <DesktopComponents.ParticipantCounter />
-          <Button.Default className="h-56 w-336">예약하기</Button.Default>
-        </div>
-        <DesktopComponents.TotalPrice price={price} />
-      </footer>
+      <DesktopComponents.PriceInfo price={price} />
+      <h2 className="mb-16 text-xl-bold">날짜</h2>
+      <Calendar
+        selectedDate={selectedDate}
+        updateDateSelect={updateDateSelect}
+        availableDates={availableDates}
+        updateMonthChange={updateMonthChange}
+        className="mx-auto mb-16 h-241 pt-[11px]"
+      />
+      <DesktopComponents.TimeSlotSelection
+        selectedDate={selectedDate}
+        selectedSlot={selectedSlot}
+        handleSlotSelect={handleSlotSelect}
+        availableSchedule={availableSchedule}
+        getSelectedDateSlots={getSelectedDateSlots}
+      />
+      <DesktopComponents.ParticipantCounter />
+      <Button.Default className="h-56 w-336">예약하기</Button.Default>
+      <div className="mb-16 border-b border-gray-300 pb-24"></div>
+      <DesktopComponents.TotalPrice price={price} />
     </section>
   );
 };

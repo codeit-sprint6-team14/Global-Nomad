@@ -1,10 +1,10 @@
-import Header from './header';
 import ParticipantCounter from './participantCounter';
+import PriceInfo from './priceInfo';
 import TimeSlotSelection from './timeSlotSelection';
 import TotalPrice from './totalPrice';
 
 const Desktop = {
-  Header,
+  PriceInfo,
   ParticipantCounter,
   TimeSlotSelection,
   TotalPrice,
