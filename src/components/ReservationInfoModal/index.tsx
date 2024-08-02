@@ -1,6 +1,6 @@
-import Image from 'next/image';
 import { useMemo, useState } from 'react';
 
+import Close from '../Icons/close';
 import Input from '../Input';
 import ReservationCard from './components/reservationCard';
 import TabButtons, { TabType } from './components/tabButton';
@@ -42,7 +42,7 @@ const ReservationInfoModal = ({
         <div className="flex items-center justify-between">
           <h1 className="text-xl-bold">예약 정보</h1>
           <button type="button">
-            <Image src="/images/icon-close.svg" alt="close" objectFit="contain" width={40} height={40} />
+            <Close width={40} height={40} />
           </button>
         </div>
         <TabButtons tabData={tabData} selectedTab={selectedTab} onTabClick={handleTabClick} />
