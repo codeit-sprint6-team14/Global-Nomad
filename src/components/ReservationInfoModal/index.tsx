@@ -34,10 +34,7 @@ const ReservationInfoModal = ({
   };
 
   const currentReservations = useMemo(() => reservations[selectedTab], [reservations, selectedTab]);
-  const totalReservationCount = useMemo(
-    () => currentReservations?.reduce((sum, reservation) => sum + reservation.count, 0) || 0,
-    [currentReservations],
-  );
+  const totalReservationCount = useMemo(() => tabData.find((tab) => tab.type === '신청')?.count || 0, [tabData]);
 
   return (
     <div className="flex w-429 flex-col justify-between rounded-24 border px-1 pb-24 pt-12 shadow-modal">
