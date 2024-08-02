@@ -1,16 +1,20 @@
 import { useContext } from 'react';
 
 import Close from '../Icons/close';
-import AlarmInfo from './AlarmInfo';
 import { PopoverContext } from './PopoverRoot';
+import AlarmInfo from './components/AlarmInfo';
 
-type PopoverUIProps = {
+type PopoverUIProps<T> = {
   onClose: () => void;
   alarmCount: number;
-  alarms: Array<{ title: string; dateTime: string; status: string; timeAgo: number }>;
+  alarms: T[];
 };
 
-const PopoverUI = ({ onClose, alarmCount, alarms }: PopoverUIProps) => {
+const PopoverUI = <T extends { title: string; dateTime: string; status: string; timeAgo: number }>({
+  onClose,
+  alarmCount,
+  alarms,
+}: PopoverUIProps<T>) => {
   const context = useContext(PopoverContext);
 
   if (!context) {
@@ -27,8 +31,16 @@ const PopoverUI = ({ onClose, alarmCount, alarms }: PopoverUIProps) => {
           <Close width={24} height={24} color="black" />
         </button>
       </div>
-      {/* // TODO: map으로 리스트 생성하여 알림 정보 렌더링*/}
-      {alarms?.map((alarm, index) => <AlarmInfo key={index} onClose={onClose} {...alarm} />)}
+      {alarms.map((alarm, index) => (
+        <AlarmInfo
+          key={index}
+          onClose={onClose}
+          title={alarm.title}
+          dateTime={alarm.dateTime}
+          status={alarm.status as '승인' | '거절' | '새로 들어왔어요'} // 타입 단언을 사용하지 않고 런타임 시 타입 보장
+          timeAgo={alarm.timeAgo}
+        />
+      ))}
     </div>
   );
 };
