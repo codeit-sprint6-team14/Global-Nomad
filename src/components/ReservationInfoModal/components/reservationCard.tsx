@@ -1,20 +1,20 @@
 import Button from '@/components/Button';
 
-type TabType = '신청' | '확정' | '거절';
-
 type ReservationCardProps = {
   selectedTab: TabType;
+  reservationName: string;
+  reservationCount: number;
 };
 
-const ReservationCard = ({ selectedTab }: ReservationCardProps) => {
+const ReservationCard = ({ selectedTab, reservationName, reservationCount }: ReservationCardProps) => {
   return (
     <div className="flex flex-col gap-6 rounded-4 border">
       <div className="flex flex-col gap-6 pl-16 pt-8">
         <p className="text-lg-semibold text-gray-700">
-          닉네임 <span className="text-lg-medium text-black">정만철</span>
+          닉네임 <span className="text-lg-medium text-black">{reservationName}</span>
         </p>
         <p className="text-lg-semibold text-gray-700">
-          인원 <span className="text-lg-medium text-black">10명</span>
+          인원 <span className="text-lg-medium text-black">{reservationCount}명</span>
         </p>
       </div>
       <div className="flex justify-end pb-8 pr-16">

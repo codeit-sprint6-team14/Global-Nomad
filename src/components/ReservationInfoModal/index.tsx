@@ -1,21 +1,43 @@
 import Image from 'next/image';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import Input from '../Input';
 import ReservationCard from './components/reservationCard';
-import TabButtons, { TabData, TabType } from './components/tabButton';
+import TabButtons, { TabType } from './components/tabButton';
+
+type ReservationData = {
+  name: string;
+  count: number;
+};
 
 type ReservationInfoModalProps = {
   dropdownOptions: { value: string; label: string }[];
-  tabData: TabData[];
+  tabData: { type: TabType; count: number }[];
+  reservationDate: string;
+  reservations: {
+    신청: ReservationData[];
+    확정: ReservationData[];
+    거절: ReservationData[];
+  };
 };
 
-const ReservationInfoModal = ({ dropdownOptions, tabData }: ReservationInfoModalProps) => {
+const ReservationInfoModal = ({
+  tabData,
+  dropdownOptions,
+  reservationDate,
+  reservations = { 신청: [], 확정: [], 거절: [] },
+}: ReservationInfoModalProps) => {
   const [selectedTab, setSelectedTab] = useState<TabType>('신청');
 
   const handleTabClick = (tab: TabType) => {
     setSelectedTab(tab);
   };
+
+  const currentReservations = useMemo(() => reservations[selectedTab], [reservations, selectedTab]);
+  const totalReservationCount = useMemo(
+    () => currentReservations?.reduce((sum, reservation) => sum + reservation.count, 0) || 0,
+    [currentReservations],
+  );
 
   return (
     <div className="flex w-429 flex-col justify-between rounded-24 border px-1 pb-24 pt-12 shadow-modal">
@@ -33,22 +55,28 @@ const ReservationInfoModal = ({ dropdownOptions, tabData }: ReservationInfoModal
         <div className="flex flex-col gap-16">
           <h2 className="text-xl-semibold">예약 날짜</h2>
           <div className="flex flex-col gap-2">
-            <span className="text-xl-regular text-black">2023년 2월 12일</span>
+            <span className="text-xl-regular text-black">{reservationDate}</span>
             <Input.Dropdown options={dropdownOptions} defaultOption="시간을 선택하세요" />
           </div>
         </div>
         <div className="flex flex-col gap-16">
           <h2 className="text-xl-semibold">예약 내역</h2>
           <div className="flex flex-col gap-14">
-            {/* // TODO: 예약 내역 받아오기 map으로 구현할 것! */}
-            <ReservationCard selectedTab={selectedTab} />
+            {currentReservations.map((reservation, index) => (
+              <ReservationCard
+                key={index}
+                selectedTab={selectedTab}
+                reservationName={reservation.name}
+                reservationCount={reservation.count}
+              />
+            ))}
           </div>
         </div>
       </div>
       <div className="flex justify-between px-24">
         <h2 className="text-xl-semibold">예약 현황</h2>
         <p className="text-xl-semibold">
-          <span className="text-xl-semibold text-blue-200">10</span>/10
+          <span className="text-xl-semibold text-blue-200">{totalReservationCount}</span>/10
         </p>
       </div>
     </div>

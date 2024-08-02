@@ -1,17 +1,22 @@
 export type TabType = '신청' | '확정' | '거절';
 
-export type TabData = {
-  type: TabType;
-  count: number;
-};
-
 type TabButtonsProps = {
-  tabData: TabData[];
+  tabData: { type: TabType; count: number }[];
   selectedTab: TabType;
   onTabClick: (tab: TabType) => void;
 };
 
-const TabButton = ({ type, count, isSelected, onClick }: TabData & { isSelected: boolean; onClick: () => void }) => (
+const TabButton = ({
+  type,
+  count,
+  isSelected,
+  onClick,
+}: {
+  type: TabType;
+  count: number;
+  isSelected: boolean;
+  onClick: () => void;
+}) => (
   <button
     onClick={onClick}
     className={`relative ${
@@ -26,6 +31,7 @@ const defaultTabs: TabType[] = ['신청', '확정', '거절'];
 
 const TabButtons: React.FC<TabButtonsProps> = ({ tabData = [], selectedTab, onTabClick }) => {
   const tabMap = new Map(tabData.map((tab) => [tab.type, tab]));
+
   return (
     <div className="flex gap-12">
       {defaultTabs.map((type) => {
