@@ -1,6 +1,6 @@
-import Image from 'next/image';
 import { useContext } from 'react';
 
+import Close from '../Icons/close';
 import AlarmInfo from './AlarmInfo';
 import { PopoverContext } from './PopoverRoot';
 
@@ -22,7 +22,7 @@ const PopoverUI = ({ onClose }: PopoverUIProps) => {
       <div className="flex h-32 w-328 justify-between">
         <h2 className="text-xl-bold text-black-100">알림 6개</h2>
         <button onClick={toggle}>
-          <Image src="/images/icon-close.svg" width={24} height={24} alt="close" />
+          <Close width={24} height={24} color="black" />
         </button>
       </div>
       {/* // TODO: map으로 리스트 생성하여 알림 정보 렌더링*/}

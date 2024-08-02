@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import Close from '@/components/Icons/close';
 
 type AlarmInfoProps = {
   onClose: () => void;
@@ -12,7 +12,7 @@ const AlarmInfo = ({ onClose }: AlarmInfoProps) => {
           <div className="relative flex justify-end">
             <p className="absolute left-0 top-[-15%] h-5 w-5">*</p>
             <button onClick={onClose}>
-              <Image src="/images/icon-close.svg" width={24} height={24} alt="close" />
+              <Close width={24} height={24} />
             </button>
           </div>
           <p className="text-md-regular text-black">
