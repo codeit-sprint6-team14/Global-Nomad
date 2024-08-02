@@ -6,9 +6,11 @@ import { PopoverContext } from './PopoverRoot';
 
 type PopoverUIProps = {
   onClose: () => void;
+  alarmCount: number;
+  alarms: Array<{ title: string; dateTime: string; status: string; timeAgo: number }>;
 };
 
-const PopoverUI = ({ onClose }: PopoverUIProps) => {
+const PopoverUI = ({ onClose, alarmCount, alarms }: PopoverUIProps) => {
   const context = useContext(PopoverContext);
 
   if (!context) {
@@ -20,13 +22,13 @@ const PopoverUI = ({ onClose }: PopoverUIProps) => {
   return (
     <div className="flex w-368 flex-col gap-16 rounded-10 border border-gray-400 bg-green-100 px-20 py-24 shadow-popover">
       <div className="flex h-32 w-328 justify-between">
-        <h2 className="text-xl-bold text-black-100">알림 6개</h2>
+        <h2 className="text-xl-bold text-black-100">알림 {alarmCount}개</h2>
         <button onClick={toggle}>
           <Close width={24} height={24} color="black" />
         </button>
       </div>
       {/* // TODO: map으로 리스트 생성하여 알림 정보 렌더링*/}
-      <AlarmInfo onClose={onClose} />
+      {alarms?.map((alarm, index) => <AlarmInfo key={index} onClose={onClose} {...alarm} />)}
     </div>
   );
 };
