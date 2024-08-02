@@ -23,13 +23,7 @@ const getTypedChildren = (type: ChildrenType, children: ReactNode) => {
   return typedChildren;
 };
 
-const CardItem = ({
-  contentsClassNames,
-  children,
-}: {
-  contentsClassNames?: string;
-  children: ReactNode;
-}) => {
+const CardItem = ({ contentsClassNames, children }: { contentsClassNames?: string; children: ReactNode }) => {
   const cardImage = getTypedChildren(CardImageType, children);
   const cardHeader = getTypedChildren(CardHeaderType, children);
   const cardTitle = getTypedChildren(CardTitleType, children);

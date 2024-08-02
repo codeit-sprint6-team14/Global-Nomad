@@ -12,10 +12,10 @@ export interface CalendarProps extends ActivityDates {
 }
 
 export interface CalendarHeaderProps {
-  currentMonth: Date;
+  viewingMonth: Date;
   handlePrevMonth: () => void;
   handleNextMonth: () => void;
-  isAfterCurrentMonth: () => boolean;
+  isViewingFutureMonth: () => boolean;
 }
 
 export interface CalendarBodyProps extends ActivityDates {

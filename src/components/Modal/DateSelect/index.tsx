@@ -4,16 +4,19 @@ import availableSchedule from '@/mockData/availableSchedule';
 import { DaySchedule, TimeSlot } from '@/types/availableSchedulesTypes';
 import { useEffect, useState } from 'react';
 
-import Button from '../Button';
-import Calendar from '../Calendar';
-import Icon from '../Icons';
+import Calendar from '../../Calendar';
+import Footer from './footer';
+import Header from './header';
+import TimeSlotSelection from './timeSlotSelection';
 
 const DateSelectModal = () => {
   const [currentMonth, setCurrentMonth] = useState<Date>(INITIAL_DATE);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null);
 
-  INITIAL_DATE.setHours(0, 0, 0, 0);
+  const today = new Date(INITIAL_DATE);
+  today.setHours(0, 0, 0, 0);
+
   const availableDates = availableSchedule
     .map((schedule) => new Date(schedule.date))
     .filter((date) => date >= INITIAL_DATE);
@@ -73,12 +76,7 @@ const DateSelectModal = () => {
 
   return (
     <div className="w-480 rounded-24 bg-white px-24 py-32">
-      <header className="mb-24 flex items-center justify-between">
-        <h2 className="text-2xl-bold">날짜</h2>
-        <button type="button">
-          <Icon.Close width={40} height={40} />
-        </button>
-      </header>
+      <Header />
       <main className="mb-64">
         <Calendar
           selectedDate={selectedDate}
@@ -87,28 +85,15 @@ const DateSelectModal = () => {
           updateMonthChange={updateMonthChange}
           className="mx-auto mb-32"
         />
-        <h3 className="mb-14 text-2lg-bold">예약 가능한 시간</h3>
-        {!isReservationPossible && (
-          <p className="mt-39 text-center text-lg">현재 예약 가능한 날짜와 시간이 없습니다.</p>
-        )}
-        <div className="flex gap-12 overflow-x-auto scrollbar-hide">
-          {getSelectedDateSlots(selectedDate, availableSchedule).map((slot, index) => (
-            <Button.Category
-              key={index}
-              isActive={selectedSlot === slot}
-              onClick={() => handleSlotSelect(slot)}
-              className="rounded-8 md:h-46 md:w-117 md:text-lg-medium"
-            >
-              {slot.startTime}~{slot.endTime}
-            </Button.Category>
-          ))}
-        </div>
+        <TimeSlotSelection
+          selectedDate={selectedDate}
+          selectedSlot={selectedSlot}
+          handleSlotSelect={handleSlotSelect}
+          availableSchedule={availableSchedule}
+          getSelectedDateSlots={getSelectedDateSlots}
+        />
       </main>
-      <footer>
-        <Button disabled={!isReservationPossible} className="h-56 w-432">
-          예약하기
-        </Button>
-      </footer>
+      <Footer isReservationPossible={isReservationPossible} />
     </div>
   );
 };
