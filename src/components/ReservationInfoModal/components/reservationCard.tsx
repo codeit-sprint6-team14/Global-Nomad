@@ -1,5 +1,7 @@
 import Button from '@/components/Button';
 
+import { TabType } from './tabButton';
+
 type ReservationCardProps = {
   selectedTab: TabType;
   reservationName: string;

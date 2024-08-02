@@ -1,7 +1,7 @@
 export type TabType = '신청' | '확정' | '거절';
 
-type TabButtonsProps = {
-  tabData: { type: TabType; count: number }[];
+type TabButtonsProps<T> = {
+  tabData: T[];
   selectedTab: TabType;
   onTabClick: (tab: TabType) => void;
 };
@@ -29,7 +29,11 @@ const TabButton = ({
 
 const defaultTabs: TabType[] = ['신청', '확정', '거절'];
 
-const TabButtons: React.FC<TabButtonsProps> = ({ tabData = [], selectedTab, onTabClick }) => {
+const TabButtons = <T extends { type: TabType; count: number }>({
+  tabData,
+  selectedTab,
+  onTabClick,
+}: TabButtonsProps<T>) => {
   const tabMap = new Map(tabData.map((tab) => [tab.type, tab]));
 
   return (
