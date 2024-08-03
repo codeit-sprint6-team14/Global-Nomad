@@ -7,7 +7,7 @@ const DropDownOption = ({
   key?: string | number;
   handleOptionClick: (label: string) => void;
   label: string;
-  className: string;
+  className?: string;
 }) => {
   return (
     <li
