@@ -2,8 +2,6 @@ import MyActivityCard from '@/components/Cards/myActivityCard';
 import { myActivityCardData } from '@/types/cardListData';
 import type { Meta, StoryObj } from '@storybook/react';
 
-// myActivityCardData 타입을 임포트합니다.
-
 // 이미지 옵션 리스트
 const imageOptions = [
   '/assets/images/testImg/air-balloon.png',
