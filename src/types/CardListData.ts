@@ -9,7 +9,7 @@ export interface reservationCardActivity {
   id?: number;
 }
 export interface reservationCard {
-  id: number;
+  id?: number;
   teamId?: string;
   userId?: number;
   activity: reservationCardActivity;

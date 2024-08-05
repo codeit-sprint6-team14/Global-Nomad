@@ -59,9 +59,8 @@ const Calendar = ({ selectedDate, updateDateSelect, availableDates, updateMonthC
     return calenderDates;
   };
 
-  const hasActivityDate = (date: Date) => {
-    return availableDates.some((schedule) => date === schedule);
-  };
+  const hasActivityDate = (date: Date) =>
+    availableDates.some((activityDate) => date.toDateString() === activityDate.toDateString());
 
   const selectActivityDate = (date: Date) => {
     if (hasActivityDate(date)) {

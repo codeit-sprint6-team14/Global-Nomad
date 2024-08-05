@@ -17,11 +17,11 @@ const Counter = () => {
 
   return (
     <div className="flex h-40 w-120 items-center justify-around rounded-6 border border-gray-300">
-      <button onClick={decrement}>
+      <button onClick={decrement} aria-label="감소 버튼">
         <SubtractNumberButton />
       </button>
       <span className="text-md-regular text-gray-800">{count}</span>
-      <button onClick={increment}>
+      <button onClick={increment} aria-label="증가 버튼">
         <AddNumberButton />
       </button>
     </div>
