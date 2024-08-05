@@ -18,7 +18,7 @@ function NavBar({ accessToken = true }: { accessToken?: boolean }) {
   };
 
   return (
-    <div className="border-b border-solid border-gray-300 bg-white">
+    <div className="fixed left-0 right-0 top-0 z-10 border-b border-solid border-gray-300 bg-white">
       <div className="flex h-70 items-center justify-between p-20 lg:mx-auto lg:max-w-[1200px]">
         <Link href="/">
           <Image width={172} height={30} src="/assets/images/navbar-logo.svg" alt="네비바 로고" priority />
