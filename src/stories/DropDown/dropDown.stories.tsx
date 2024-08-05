@@ -1,5 +1,5 @@
-import DropDownList from '@/components/Dropdown/dropDownList';
-import DropDownOption from '@/components/Dropdown/dropDownOption';
+import DropDownList from '@/components/common/Dropdown/dropDownList';
+import DropDownOption from '@/components/common/Dropdown/dropDownOption';
 import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ComponentProps } from 'react';

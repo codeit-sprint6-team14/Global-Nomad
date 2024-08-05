@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import CategoryButton from '@/components/Button/categoryButton';
+import CategoryButton from '@/components/common/Button/categoryButton';
 import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ComponentProps, useState } from 'react';

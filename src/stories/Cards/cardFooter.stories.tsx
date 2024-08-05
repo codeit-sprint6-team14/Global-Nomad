@@ -1,4 +1,4 @@
-import CardFooter from '@/components/Cards/components/cardFooter';
+import CardFooter from '@/components/common/Cards/components/cardFooter';
 import type { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta<typeof CardFooter> = {
