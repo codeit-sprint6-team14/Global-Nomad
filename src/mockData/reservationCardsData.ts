@@ -1,4 +1,4 @@
-import { reservationCard } from '@/types/cardListData';
+import { reservationCard } from '@/types/cardDataList';
 
 const reservationCardsData: reservationCard[] = [
   {

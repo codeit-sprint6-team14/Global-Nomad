@@ -10,9 +10,14 @@ type ReservationData = {
   count: number;
 };
 
-type ReservationInfoModalProps<T> = {
+type TabData = {
+  type: TabType;
+  count: number;
+};
+
+type ReservationInfoModalProps = {
   dropdownOptions: { value: string; label: string }[];
-  tabData: T[];
+  tabData: TabData[];
   reservationDate: string;
   reservations: {
     신청: ReservationData[];
@@ -26,7 +31,7 @@ const ReservationInfoModal = ({
   dropdownOptions,
   reservationDate,
   reservations = { 신청: [], 확정: [], 거절: [] },
-}: ReservationInfoModalProps<T>) => {
+}: ReservationInfoModalProps) => {
   const [selectedTab, setSelectedTab] = useState<TabType>('신청');
 
   const handleTabClick = (tab: TabType) => {

@@ -1,5 +1,5 @@
 import ActivityCardsData from '@/mockData/myActivityCardsData';
-import { myActivityCardData } from '@/types/cardListData';
+import { myActivityCardData } from '@/types/cardDataList';
 import { useState } from 'react';
 
 import MyActivityCard from './myActivityCard';

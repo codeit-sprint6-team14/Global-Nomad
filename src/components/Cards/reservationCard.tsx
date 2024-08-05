@@ -1,5 +1,5 @@
 import Card from '@/components/Cards/components';
-import { reservationCard } from '@/types/cardListData';
+import { reservationCard } from '@/types/cardDataList';
 import getCardStatus, { StatusType } from '@/utils/cardStatus';
 import { formatPrice } from '@/utils/formatPrice';
 

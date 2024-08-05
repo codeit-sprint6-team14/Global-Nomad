@@ -1,5 +1,5 @@
 import ReservationCard from '@/components/Cards/reservationCard';
-import { reservationCard } from '@/types/cardListData';
+import { reservationCard } from '@/types/cardDataList';
 import { StatusType } from '@/utils/cardStatus';
 import type { Meta, StoryObj } from '@storybook/react';
 
