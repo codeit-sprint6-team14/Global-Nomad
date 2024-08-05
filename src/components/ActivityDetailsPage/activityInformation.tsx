@@ -1,13 +1,14 @@
 import getActivity from '@/apis/getActivity';
 import useViewportSize from '@/hooks/useViewportSize';
 import { useQuery } from '@tanstack/react-query';
-import Image from 'next/image';
 
 import FloatingBox from '../FloatingBox';
 import NavBar from '../NavBar';
-import ActivityBanner from './activityBanner';
-import ActivityDescription from './activityDescription';
+import BannerImage from './bannerImage';
+import ActivityDescription from './description';
+import Header from './header';
 import KakaoMap from './kakaoMap';
+import ReviewList from './reviewList';
 
 const ActivityInformation = ({ activityId = '2040' }: { activityId?: string }) => {
   const viewportSize = useViewportSize();
@@ -27,32 +28,24 @@ const ActivityInformation = ({ activityId = '2040' }: { activityId?: string }) =
   return (
     <>
       <NavBar />
+      <div className="lg:mx-auto lg:max-w-[1200px] lg:pt-78">
+        <Header category={category} title={title} rating={rating} reviewCount={reviewCount} address={address} />
 
-      <div className="px-16 pt-16 md:px-24 md:pt-24">
-        <div className="text-md-regular text-black-100">{category}</div>
-        <div className="mt-10 flex items-center justify-between">
-          <h1 className="text-2xl-bold text-black-100 md:text-3xl-bold">{title}</h1>
-          <Image width={40} height={40} src="/assets/icons/kebab.svg" alt="케밥 아이콘" />
-        </div>
-        <div className="mt-16 flex">
-          <Image className="mb-3" width={16} height={16} src="/assets/icons/star.svg" alt="별점 아이콘" />
-          <div className="ml-6 text-md-regular text-black">{`${rating} (${reviewCount})`}</div>
-          <Image className="ml-12" src="/assets/icons/map.svg" width={18} height={18} alt="지도 아이콘" />
-          <div className="ml-2 text-md-regular text-black-100">{address}</div>
-        </div>
-      </div>
-
-      <ActivityBanner bannerImageUrl={bannerImageUrl} subImages={subImages} />
-      <div className="flex">
-        <div className="mx-24 flex flex-col justify-between gap-16 md:pt-0 lg:mx-auto">
-          <ActivityDescription description={description} />
-          <KakaoMap />
-        </div>
-        <div className="">
+        <BannerImage bannerImageUrl={bannerImageUrl} subImages={subImages} />
+        <div className="mx-24 flex justify-between md:pb-40 lg:mx-auto lg:max-w-[1200px]">
+          <div className="flex flex-col md:mr-24 md:pt-0 lg:mr-0">
+            <ActivityDescription description={description} />
+            <KakaoMap address={address} />
+          </div>
           {viewportSize === 'tablet' ? <FloatingBox.Tablet /> : viewportSize === 'desktop' && <FloatingBox.Desktop />}
         </div>
+        <ReviewList />
+        {viewportSize !== 'tablet' && viewportSize !== 'desktop' && (
+          <div className="mt-89">
+            <FloatingBox.Mobile />
+          </div>
+        )}
       </div>
-      {viewportSize !== 'tablet' && viewportSize !== 'desktop' && <FloatingBox.Mobile />}
     </>
   );
 };

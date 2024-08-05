@@ -2,11 +2,11 @@ import useViewportSize from '@/hooks/useViewportSize';
 import { SubImage } from '@/types/activity';
 import Image from 'next/image';
 
-const ActivityBanner = ({ bannerImageUrl, subImages }: { bannerImageUrl: string; subImages: SubImage[] }) => {
+const BannerImage = ({ bannerImageUrl, subImages }: { bannerImageUrl: string; subImages: SubImage[] }) => {
   const viewportSize = useViewportSize();
 
   return (
-    <div className="flex md:mx-24 md:gap-5 md:pb-32 md:pt-16">
+    <div className="flex md:gap-5 md:px-24 md:pb-32 md:pt-16 lg:px-0 lg:pb-85 lg:pt-24">
       {bannerImageUrl && (
         <div className="relative h-310 w-full md:h-auto md:w-[50%] md:overflow-hidden md:rounded-l-7">
           <Image
@@ -37,4 +37,4 @@ const ActivityBanner = ({ bannerImageUrl, subImages }: { bannerImageUrl: string;
   );
 };
 
-export default ActivityBanner;
+export default BannerImage;
