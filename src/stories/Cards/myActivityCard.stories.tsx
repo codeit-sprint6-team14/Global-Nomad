@@ -1,5 +1,5 @@
 import MyActivityCard from '@/components/Cards/myActivityCard';
-import { myActivityCardData } from '@/types/cardListData';
+import { myActivityCardData } from '@/types/cardDataList';
 import type { Meta, StoryObj } from '@storybook/react';
 
 // 이미지 옵션 리스트

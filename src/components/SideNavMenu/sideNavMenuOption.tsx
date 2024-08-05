@@ -1,4 +1,4 @@
-import SideNavMenuOptionProps from '@/types/sideNavMenuOption';
+import SideNavMenuOptionProps from '@/types/sideNavMenuTypes';
 
 const SideNavMenuOption = ({ imgSrc, text, isActive }: SideNavMenuOptionProps) => {
   return (

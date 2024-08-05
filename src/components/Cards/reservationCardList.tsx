@@ -1,5 +1,5 @@
 import reservationCardsData from '@/mockData/reservationCardsData';
-import { reservationCard } from '@/types/cardListData';
+import { reservationCard } from '@/types/cardDataList';
 import { useState } from 'react';
 
 import ReservationCard from './reservationCard';

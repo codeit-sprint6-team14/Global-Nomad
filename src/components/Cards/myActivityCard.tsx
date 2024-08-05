@@ -1,5 +1,5 @@
 import Card from '@/components/Cards/components';
-import { myActivityCardData } from '@/types/cardListData';
+import { myActivityCardData } from '@/types/cardDataList';
 import { formatPrice } from '@/utils/formatPrice';
 
 const MyActivityCard = ({ myActivityCard }: { myActivityCard: myActivityCardData }) => {
