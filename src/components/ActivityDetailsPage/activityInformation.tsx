@@ -13,6 +13,9 @@ import ReviewList from './reviewList';
 const ActivityInformation = ({ activityId = '2040' }: { activityId?: string }) => {
   const viewportSize = useViewportSize();
 
+  const isMobile = viewportSize === 'mobile';
+  const isTablet = viewportSize === 'tablet';
+
   const {
     data: activityData,
     isLoading,
@@ -37,10 +40,10 @@ const ActivityInformation = ({ activityId = '2040' }: { activityId?: string }) =
             <ActivityDescription description={description} />
             <KakaoMap address={address} />
           </div>
-          {viewportSize === 'tablet' ? <FloatingBox.Tablet /> : viewportSize === 'desktop' && <FloatingBox.Desktop />}
+          {!isMobile && (isTablet ? <FloatingBox.Tablet /> : <FloatingBox.Desktop />)}
         </div>
         <ReviewList />
-        {viewportSize !== 'tablet' && viewportSize !== 'desktop' && (
+        {isMobile && (
           <div className="mt-89">
             <FloatingBox.Mobile />
           </div>
