@@ -1,12 +1,11 @@
-import reviewData from '@/mockData/reviewData';
+import { reviewDataProps } from '@/types/reviewModalTypes';
 import { useState } from 'react';
 
 import Header from './header';
 import StarRating from './starRating';
 import TextareaWithSubmit from './textareaWithSubmit';
 
-const Review = () => {
-  const { title, bannerImageUrl, date, startTime, endTime, totalPrice, headCount } = reviewData;
+const Review = ({ title, bannerImageUrl, date, startTime, endTime, totalPrice, headCount }: reviewDataProps) => {
   const [rating, setRating] = useState(0);
   const [reviewText, setReviewText] = useState('');
 
