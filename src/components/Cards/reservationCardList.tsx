@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import ReservationCard from './reservationCard';
 
-const ReservationCardList = () => {
+const Cards = () => {
   const [cardListData] = useState(reservationCardsData);
 
   if (!cardListData) return null;
@@ -18,4 +18,4 @@ const ReservationCardList = () => {
   );
 };
 
-export default ReservationCardList;
+export default Cards;

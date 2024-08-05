@@ -30,6 +30,7 @@ const config: Config = {
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       boxShadow: {
+        popover: '0px 2px 8px 0px rgba(120,116,134,0.25)',
         modal: '0px 4px 16px 0px rgba(17, 34, 17, 0.05)',
       },
       borderRadius: PX0_50,
@@ -116,6 +117,7 @@ const config: Config = {
           100: '#E5F3FF',
           200: '#2EB4FF',
           300: '#0085FF',
+          400: '#0080FF',
         },
       },
       screens: {

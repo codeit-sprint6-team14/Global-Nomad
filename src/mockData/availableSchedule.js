@@ -84,46 +84,6 @@ const availableSchedule = [
       },
     ],
   },
-  {
-    date: '2024-09-10',
-    times: [
-      {
-        id: 7401,
-        startTime: '14:00',
-        endTime: '15:00',
-      },
-      {
-        id: 7402,
-        startTime: '15:00',
-        endTime: '16:00',
-      },
-      {
-        id: 7403,
-        startTime: '16:00',
-        endTime: '17:00',
-      },
-      {
-        id: 7402,
-        startTime: '15:00',
-        endTime: '16:00',
-      },
-      {
-        id: 7403,
-        startTime: '16:00',
-        endTime: '17:00',
-      },
-    ],
-  },
-  {
-    date: '2024-09-22',
-    times: [
-      {
-        id: 7404,
-        startTime: '14:00',
-        endTime: '15:00',
-      },
-    ],
-  },
 ];
 
 export default availableSchedule;

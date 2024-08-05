@@ -48,8 +48,8 @@ const CardFooter = ({
             </div>
             {isOpenMenu && (
               <DropDown classNames="h-max w-120">
-                <DropDown.Option className="" key="수정하기" handleOptionClick={handleOptionClick} label="수정하기" />
-                <DropDown.Option className="" key="삭제하기" handleOptionClick={handleOptionClick} label="삭제하기" />
+                <DropDown.Option key="수정하기" handleOptionClick={handleOptionClick} label="수정하기" />
+                <DropDown.Option key="삭제하기" handleOptionClick={handleOptionClick} label="삭제하기" />
               </DropDown>
             )}
           </div>

@@ -3,8 +3,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 
-// 테스트용 accessToken prop으로 로그인 상태, 로그아웃 상태 UI 테스트
-function NavBar({ accessToken = true }: { accessToken?: boolean }) {
+function NavBar() {
+  // 테스트용 accessToken state 만들어서 로그인 상태, 로그아웃 상태 UI 테스트
+  const [accessToken] = useState(true);
   const [isOpenMenu, setIsOpenMenu] = useState(false);
 
   const handleDropdownVisible = () => {
@@ -27,25 +28,14 @@ function NavBar({ accessToken = true }: { accessToken?: boolean }) {
             <Image src="/assets/icons/bell.svg" alt="네비바 알림 벨" width={20} height={20} />
             <div className="mx-12 h-22 border-l border-solid border-gray-300 md:mx-25" />
             <div className="relative flex items-center gap-10">
-              <Image
-                src="/assets/images/testImg/test-profile.svg"
-                alt="프로필 이미지"
-                className="rounded-full"
-                width={32}
-                height={32}
-              />
+              <Image src="/assets/images/testImg/test-profile.svg" alt="프로필 이미지" width={32} height={32} />
               <div className="cursor-pointer text-md-medium text-black" onClick={handleDropdownVisible}>
                 이영훈
               </div>
               {isOpenMenu && (
                 <DropDown classNames="h-max w-120">
-                  <DropDown.Option className="" key="로그아웃" handleOptionClick={handleOptionClick} label="로그아웃" />
-                  <DropDown.Option
-                    className=""
-                    key="마이페이지"
-                    handleOptionClick={handleOptionClick}
-                    label="마이페이지"
-                  />
+                  <DropDown.Option key="로그아웃" handleOptionClick={handleOptionClick} label="로그아웃" />
+                  <DropDown.Option key="마이페이지" handleOptionClick={handleOptionClick} label="마이페이지" />
                 </DropDown>
               )}
             </div>
