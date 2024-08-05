@@ -19,6 +19,7 @@ const config: Config = {
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+  darkMode: ['class', '[data-mode="dark"]'],
   theme: {
     extend: {
       fontFamily: {
@@ -30,6 +31,7 @@ const config: Config = {
       },
       boxShadow: {
         popover: '0px 2px 8px 0px rgba(120,116,134,0.25)',
+        modal: '0px 4px 16px 0px rgba(17, 34, 17, 0.05)',
       },
       borderRadius: PX0_50,
       fontSize: {
