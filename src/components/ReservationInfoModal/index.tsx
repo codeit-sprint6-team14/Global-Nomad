@@ -3,16 +3,16 @@ import { useMemo, useState } from 'react';
 import Close from '../Icons/close';
 import Input from '../Input';
 import ReservationCard from './components/reservationCard';
-import TabButtons, { TabType } from './components/tabButton';
+import TabButtons, { TabItem, TabType } from './components/tabButton';
 
 type ReservationData = {
   name: string;
   count: number;
 };
 
-type ReservationInfoModalProps<T> = {
+type ReservationInfoModalProps = {
   dropdownOptions: { value: string; label: string }[];
-  tabData: T[];
+  tabData: TabItem[];
   reservationDate: string;
   reservations: {
     신청: ReservationData[];
@@ -26,7 +26,7 @@ const ReservationInfoModal = ({
   dropdownOptions,
   reservationDate,
   reservations = { 신청: [], 확정: [], 거절: [] },
-}: ReservationInfoModalProps<T>) => {
+}: ReservationInfoModalProps) => {
   const [selectedTab, setSelectedTab] = useState<TabType>('신청');
 
   const handleTabClick = (tab: TabType) => {
