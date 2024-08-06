@@ -1,4 +1,4 @@
-import Tablet from '@/components/FloatingBox/tablet';
+import Tablet from '@/components/common/FloatingBox/tablet';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ComponentProps } from 'react';
 

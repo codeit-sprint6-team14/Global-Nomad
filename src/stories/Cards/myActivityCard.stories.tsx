@@ -1,4 +1,4 @@
-import MyActivityCard from '@/components/Cards/myActivityCard';
+import MyActivityCard from '@/components/common/Cards/myActivityCard';
 import { myActivityCardData } from '@/types/cardDataList';
 import type { Meta, StoryObj } from '@storybook/react';
 

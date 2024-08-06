@@ -1,4 +1,4 @@
-import CardTitle from '@/components/Cards/components/cardTitle';
+import CardTitle from '@/components/common/Cards/components/cardTitle';
 import type { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta<typeof CardTitle> = {

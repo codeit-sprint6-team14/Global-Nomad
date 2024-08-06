@@ -1,4 +1,4 @@
-import DateSelectModal from '@/components/Modal/DateSelect';
+import DateSelectModal from '@/components/common/Modal/DateSelect';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ComponentProps } from 'react';
 

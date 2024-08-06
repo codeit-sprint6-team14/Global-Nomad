@@ -1,4 +1,4 @@
-import Counter from '@/components/Counter';
+import Counter from '@/components/common/Counter';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ComponentProps } from 'react';
 
