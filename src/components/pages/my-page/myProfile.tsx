@@ -1,11 +1,19 @@
 import Button from '@/components/common/Button';
 import SideNavMenu from '@/components/common/SideNavMenu';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
+import LeftArrow from '../../../../public/assets/icons/left-arrow.svg';
 import InputSection from './inputSection';
 import PasswordInputSection from './passwordInputSection';
 
 const MyProfile = () => {
+  const router = useRouter();
+
+  const handleGoMyPage = () => {
+    router.push('/my-page');
+  };
+
   const [isDesktop, setIsDesktop] = useState<boolean>(true);
 
   useEffect(() => {
@@ -32,7 +40,12 @@ const MyProfile = () => {
         </div>
         <div className="mb-60 ml-auto mr-auto mt-30 w-343 md:mr-0 md:w-430 lg:w-750">
           <div className="flex items-center justify-between">
-            <h2 className="text-3xl-bold">내 정보</h2>
+            <div className="flex items-center">
+              <div className="block cursor-pointer md:hidden" onClick={handleGoMyPage}>
+                <LeftArrow />
+              </div>
+              <h2 className="ml-10 mt-5 text-3xl-bold md:ml-0">내 정보</h2>
+            </div>
             <Button.Default className="ml-auto h-48 w-120">저장하기</Button.Default>
           </div>
           <InputSection title="닉네임" />
