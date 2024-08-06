@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { Map, MapMarker } from 'react-kakao-maps-sdk';
+import { CustomOverlayMap, Map, MapMarker } from 'react-kakao-maps-sdk';
 
 interface Coordinates {
   lat: number;
@@ -43,9 +43,21 @@ const KakaoMap = ({ address }: { address: string }) => {
   return (
     <div className="pt-16 md:pt-40">
       <Map center={coordinates} className="h-482 w-auto rounded-16 md:h-308 lg:h-476">
-        <MapMarker position={coordinates}>
-          <div style={{ color: '#000' }}>{address}</div>
-        </MapMarker>
+        <MapMarker
+          position={coordinates}
+          image={{
+            src: '/assets/icons/harry-potter.svg',
+            size: { width: 50, height: 50 },
+            options: { offset: { x: 25, y: 25 } },
+          }}
+          clickable={true}
+        />
+        <CustomOverlayMap position={coordinates} yAnchor={2.0}>
+          <div className="whitespace-nowrap rounded-lg bg-[#F59173] px-3 pb-2 pt-4 text-white shadow-md">
+            <div className="text-sm font-bold">{address}</div>
+            <div className="absolute -bottom-2 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 transform bg-[#F59173]"></div>
+          </div>
+        </CustomOverlayMap>
       </Map>
       <div className="flex pt-8">
         <Image src="/assets/icons/map.svg" width={18} height={18} alt="지도 아이콘" />
