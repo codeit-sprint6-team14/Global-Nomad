@@ -1,7 +1,7 @@
 import Button from '@/components/common/Button';
 import SideNavMenu from '@/components/common/SideNavMenu';
+import useViewportSize from '@/hooks/useViewportSize';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 
 import LeftArrow from '../../../../public/assets/icons/left-arrow.svg';
 import InputSection from './inputSection';
@@ -9,25 +9,13 @@ import PasswordInputSection from './passwordInputSection';
 
 const MyProfile = () => {
   const router = useRouter();
-
+  const viewportSize = useViewportSize();
   const handleGoMyPage = () => {
     router.push('/my-page');
   };
 
-  const [isDesktop, setIsDesktop] = useState<boolean>(true);
+  const isDesktop = viewportSize === 'desktop';
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsDesktop(window.innerWidth >= 768); // 태블릿 사이즈 이상의 화면에서 true
-    };
-
-    handleResize(); // 초기 렌더링 시 체크
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
   return (
     <div className="bg-gray-100">
       <div className="ml-auto mr-auto flex md:w-744 lg:w-1200">

@@ -1,27 +1,17 @@
 import SideNavMenu from '@/components/common/SideNavMenu';
+import useViewportSize from '@/hooks/useViewportSize';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
 const Mypage: React.FC = () => {
   const router = useRouter();
+  const viewportSize = useViewportSize(); // 현재 화면 크기를 가져옴
 
   useEffect(() => {
-    const handleResize = () => {
-      if (window.matchMedia('(min-width: 768px)').matches) {
-        if (router.pathname === '/my-page') {
-          router.replace('/my-page/profile');
-        }
-      }
-    };
-
-    handleResize();
-
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [router]);
+    if (viewportSize !== 'mobile' && router.pathname === '/my-page') {
+      router.replace('/my-page/profile');
+    }
+  }, [viewportSize, router]);
 
   return (
     <div className="flex w-full justify-center bg-gray-100">

@@ -5,7 +5,7 @@ import menuOptionList from './menuOptionList';
 import SideNavMenuOption from './sideNavMenuOption';
 
 const SideNavMenuOptionList = () => {
-  const [activeOption, setActiveOption] = useState<number>(0);
+  const [activeOption, setActiveOption] = useState(0);
   const router = useRouter();
 
   useEffect(() => {
