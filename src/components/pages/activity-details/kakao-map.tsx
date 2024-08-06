@@ -41,18 +41,18 @@ const KakaoMap = ({ address }: { address: string }) => {
   }
 
   return (
-    <div className="pt-16 md:pt-40">
+    <div className="z-0 pt-16 md:pt-40">
       <Map center={coordinates} className="h-482 w-auto rounded-16 md:h-308 lg:h-476">
         <MapMarker
           position={coordinates}
           image={{
             src: '/assets/icons/harry-potter.svg',
             size: { width: 50, height: 50 },
-            options: { offset: { x: 25, y: 25 } },
+            options: { offset: { x: 25, y: 65 } },
           }}
           clickable={true}
         />
-        <CustomOverlayMap position={coordinates} yAnchor={2.0}>
+        <CustomOverlayMap position={coordinates} yAnchor={3.6}>
           <div className="whitespace-nowrap rounded-lg bg-[#F59173] px-3 pb-2 pt-4 text-white shadow-md">
             <div className="text-sm font-bold">{address}</div>
             <div className="absolute -bottom-2 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 transform bg-[#F59173]"></div>

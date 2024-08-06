@@ -9,7 +9,7 @@ import Header from './header';
 import KakaoMap from './kakao-map';
 import ReviewList from './review-list';
 
-const ActivityInformation = ({ activityId = '2040' }: { activityId?: string }) => {
+const ActivityInformation = ({ activityId = '2105' }: { activityId?: string }) => {
   const viewportSize = useViewportSize();
 
   const isMobile = viewportSize === 'mobile';
@@ -40,7 +40,7 @@ const ActivityInformation = ({ activityId = '2040' }: { activityId?: string }) =
           </div>
           {!isMobile && (isTablet ? <FloatingBox.Tablet /> : <FloatingBox.Desktop />)}
         </div>
-        <ReviewList />
+        <ReviewList activityId={activityId} />
         {isMobile && (
           <div className="mt-89">
             <FloatingBox.Mobile />

@@ -1,12 +1,22 @@
-import reviewList from '@/mockData/reviewList';
+import { getActivityReviewList } from '@/apis/getActivity';
 import { ReviewType } from '@/types/activityReviews';
+import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
-import { useState } from 'react';
 
 import Review from './review';
 
-const ReviewList = ({ averageRating = 4.2, totalCount = 1300 }) => {
-  const [reviewListData] = useState(reviewList);
+const ReviewList = ({ activityId }: { activityId: string }) => {
+  const {
+    data: reviewListData,
+    isLoading,
+    error,
+  } = useQuery({ queryKey: ['review', activityId], queryFn: () => getActivityReviewList({ activityId }) });
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>An error has occurred</div>;
+  if (!reviewListData) return null;
+
+  const { averageRating, totalCount } = reviewListData;
 
   return (
     <div className="mx-24 flex flex-col gap-18 border-solid border-gray-300 pt-40 md:border-t">
@@ -25,7 +35,7 @@ const ReviewList = ({ averageRating = 4.2, totalCount = 1300 }) => {
           </div>
         </div>
       </div>
-      {reviewListData.map((review: ReviewType) => (
+      {reviewListData.reviews.map((review: ReviewType) => (
         <Review key={review.id} review={review} />
       ))}
     </div>
