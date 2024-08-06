@@ -1,4 +1,4 @@
-import Desktop from '@/components/FloatingBox/desktop';
+import Desktop from '@/components/common/FloatingBox/desktop';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ComponentProps } from 'react';
 

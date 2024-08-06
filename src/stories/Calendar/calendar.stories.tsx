@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import Calendar from '@/components/Calendar';
+import Calendar from '@/components/common/Calendar';
 import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ComponentProps, useState } from 'react';

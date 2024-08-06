@@ -1,4 +1,4 @@
-import Mobile from '@/components/FloatingBox/mobile';
+import Mobile from '@/components/common/FloatingBox/mobile';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ComponentProps } from 'react';
 
