@@ -1,13 +1,24 @@
-import axios from '@/libs/axios';
+import { axiosRequester } from '@/libs/axios';
+import { Activity } from '@/types/activity';
 
-const getActivity = async ({ activityId }: { activityId: string }) => {
-  const res = await axios.get(`activities/${activityId}`);
-  return res.data;
-};
+export async function getActivity({ activityId }: { activityId: string }) {
+  const { data } = await axiosRequester<Activity>({
+    options: {
+      method: 'GET',
+      url: `/activities/${activityId}`,
+    },
+  });
 
-export default getActivity;
+  return data;
+}
 
-export const getActivityReviewList = async ({ activityId }: { activityId: string }) => {
-  const res = await axios.get(`activities/${activityId}/reviews`);
-  return res.data;
-};
+export async function getActivityReviewList({ activityId }: { activityId: string }) {
+  const { data } = await axiosRequester({
+    options: {
+      method: 'GET',
+      url: `/activities/${activityId}/reviews`,
+    },
+  });
+
+  return data;
+}

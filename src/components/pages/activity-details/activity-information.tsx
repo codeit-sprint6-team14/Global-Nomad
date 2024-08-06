@@ -1,14 +1,13 @@
-import getActivity from '@/apis/getActivity';
+import { getActivity } from '@/apis/getActivity';
+import FloatingBox from '@/components/common/FloatingBox';
 import useViewportSize from '@/hooks/useViewportSize';
 import { useQuery } from '@tanstack/react-query';
 
-import FloatingBox from '../FloatingBox';
-import NavBar from '../NavBar';
-import BannerImage from './bannerImage';
+import BannerImage from './banner-image';
 import ActivityDescription from './description';
 import Header from './header';
-import KakaoMap from './kakaoMap';
-import ReviewList from './reviewList';
+import KakaoMap from './kakao-map';
+import ReviewList from './review-list';
 
 const ActivityInformation = ({ activityId = '2040' }: { activityId?: string }) => {
   const viewportSize = useViewportSize();
@@ -30,7 +29,6 @@ const ActivityInformation = ({ activityId = '2040' }: { activityId?: string }) =
 
   return (
     <>
-      <NavBar />
       <div className="lg:mx-auto lg:max-w-[1200px] lg:pt-78">
         <Header category={category} title={title} rating={rating} reviewCount={reviewCount} address={address} />
 

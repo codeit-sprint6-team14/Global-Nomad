@@ -1,7 +1,6 @@
+import DropDown from '@/components/common/Dropdown';
 import Image from 'next/image';
 import { useState } from 'react';
-
-import DropDown from '../Dropdown';
 
 const Header = ({
   category,
@@ -12,8 +11,8 @@ const Header = ({
 }: {
   category: string;
   title: string;
-  rating: string;
-  reviewCount: string;
+  rating: number;
+  reviewCount: number;
   address: string;
 }) => {
   const [isOpenDropdown, setIsOpenDropdown] = useState(false);
