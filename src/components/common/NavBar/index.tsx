@@ -39,7 +39,7 @@ function NavBar({ accessToken = true }: { accessToken?: boolean }) {
                 이영훈
               </div>
               {isOpenMenu && (
-                <DropDown classNames="h-max w-120">
+                <DropDown classNames="h-max w-120 top-40 right-0 z-50">
                   <DropDown.Option className="" key="로그아웃" handleOptionClick={handleOptionClick} label="로그아웃" />
                   <DropDown.Option
                     className=""
