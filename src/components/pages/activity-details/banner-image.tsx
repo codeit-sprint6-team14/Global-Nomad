@@ -15,6 +15,7 @@ const BannerImage = ({ bannerImageUrl, subImages }: { bannerImageUrl: string; su
             style={{ objectFit: 'cover' }}
             alt="배너이미지"
             sizes="(min-width: 375px) 375px, (min-width: 744px) 744px, (min-width: 1200px) 1200px"
+            priority
           />
         </div>
       )}
@@ -28,6 +29,7 @@ const BannerImage = ({ bannerImageUrl, subImages }: { bannerImageUrl: string; su
                 style={{ objectFit: 'cover' }}
                 alt={`서브 이미지 ${subImage.id}`}
                 sizes="96px"
+                priority
               />
             </div>
           ))}

@@ -18,7 +18,9 @@ const ReviewList = ({ averageRating = 4.2, totalCount = 1300 }) => {
             {averageRating >= 4 ? '매우 만족' : averageRating >= 3 ? '보통' : '불만족'}
           </span>
           <div className="flex gap-6">
-            <Image className="mb-3" width={16} height={16} src="/assets/icons/star.svg" alt="별점 아이콘" />
+            <div className="relative mt-2 h-16 w-16">
+              <Image fill src="/assets/icons/star.svg" alt="별점 아이콘" />
+            </div>
             <span className="text-md-regular text-black-100">{totalCount}개 후기</span>
           </div>
         </div>

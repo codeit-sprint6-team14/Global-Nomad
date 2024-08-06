@@ -60,7 +60,9 @@ const KakaoMap = ({ address }: { address: string }) => {
         </CustomOverlayMap>
       </Map>
       <div className="flex pt-8">
-        <Image src="/assets/icons/map.svg" width={18} height={18} alt="지도 아이콘" />
+        <div className="relative mt-2 h-18 w-18">
+          <Image src="/assets/icons/map.svg" alt="지도 아이콘" fill />
+        </div>
         <div className="ml-2 text-md-regular text-black-100">{address}</div>
       </div>
     </div>
