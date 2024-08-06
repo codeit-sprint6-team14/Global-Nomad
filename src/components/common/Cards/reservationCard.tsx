@@ -1,8 +1,7 @@
+import Card from '@/components/common/Cards/components';
 import { reservationCard } from '@/types/cardDataList';
 import getCardStatus, { StatusType } from '@/utils/cardStatus';
 import { formatPrice } from '@/utils/formatPrice';
-
-import Card from './components';
 
 const ReservationCard = ({ card }: { card: reservationCard }) => {
   const { bannerImageUrl, title } = card.activity;
