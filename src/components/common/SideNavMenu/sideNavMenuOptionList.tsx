@@ -1,32 +1,24 @@
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import menuOptionList from './menuOptionList';
 import SideNavMenuOption from './sideNavMenuOption';
 
 const SideNavMenuOptionList = () => {
-  const [activeOption, setActiveOption] = useState(0);
+  const [activeOption, setActiveOption] = useState<number>(0);
   const router = useRouter();
 
-  const handleNavigation = (id: number) => {
-    setActiveOption(id);
+  useEffect(() => {
+    // 현재 경로에 따라 활성화된 메뉴 항목을 설정합니다.
+    const currentPath = router.pathname;
+    const activeId = menuOptionList.find((option) => option.path === currentPath)?.id || 0;
+    setActiveOption(activeId);
+  }, [router.pathname]);
 
-    switch (id) {
-      case 1:
-        router.push('/my-page/profile');
-        break;
-      case 2:
-        router.push('/my-page/reservation-list');
-        break;
-      case 3:
-        router.push('/my-page/activity-settings');
-        break;
-      case 4:
-        router.push('/my-page/schedule');
-        break;
-      default:
-        break;
-    }
+  const handleNavigation = (id: number) => {
+    // 클릭한 메뉴 항목의 경로로 이동합니다.
+    const path = menuOptionList.find((option) => option.id === id)?.path || '/';
+    router.push(path);
   };
 
   return (
