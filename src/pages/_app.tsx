@@ -1,3 +1,4 @@
+import Footer from '@/components/common/Footer';
 import NavBar from '@/components/common/NavBar';
 import '@/styles/globals.css';
 import type { AppProps } from 'next/app';
@@ -13,12 +14,13 @@ const pretendard = localFont({
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
-  const showNavBar = !['/signup', '/signin'].includes(router.pathname);
+  const showNavBarAndFooter = !['/signup', '/signin'].includes(router.pathname);
 
   return (
-    <main className={`${pretendard.variable} ${showNavBar ? 'pt-70' : ''}`}>
-      {showNavBar && <NavBar />}
+    <main className={`${pretendard.variable} ${showNavBarAndFooter ? 'pt-70' : ''}`}>
+      {showNavBarAndFooter && <NavBar />}
       <Component {...pageProps} />
+      {showNavBarAndFooter && <Footer />}
     </main>
   );
 }

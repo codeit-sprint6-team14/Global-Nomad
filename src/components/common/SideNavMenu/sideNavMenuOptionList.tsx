@@ -13,16 +13,16 @@ const SideNavMenuOptionList = () => {
 
     switch (id) {
       case 1:
-        router.push('/mypage/profile');
+        router.push('/my-page/profile');
         break;
       case 2:
-        router.push('/mypage/reservation-list');
+        router.push('/my-page/reservation-list');
         break;
       case 3:
-        router.push('/mypage/activity-settings');
+        router.push('/my-page/activity-settings');
         break;
       case 4:
-        router.push('/mypage/schedule');
+        router.push('/my-page/schedule');
         break;
       default:
         break;
