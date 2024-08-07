@@ -8,7 +8,7 @@ const InputSection: React.FC<InputSectionProps> = ({ title }) => {
   return (
     <>
       <h3 className="mt-30 text-2xl-bold">{title}</h3>
-      <Input className="mt-20" placeholder=""></Input>
+      <Input className="mt-20" placeholder="" />
     </>
   );
 };

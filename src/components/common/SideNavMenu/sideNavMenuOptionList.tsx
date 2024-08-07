@@ -8,23 +8,23 @@ const SideNavMenuOptionList = () => {
   const [activeOption, setActiveOption] = useState(0);
   const router = useRouter();
 
-  useEffect(() => {
-    // 현재 경로에 따라 활성화된 메뉴 항목을 설정합니다.
-    const currentPath = router.pathname;
-    const activeId = menuOptionList.find((option) => option.path === currentPath)?.id || 0;
-    setActiveOption(activeId);
-  }, [router.pathname]);
-
-  const handleNavigation = (id: number) => {
-    // 클릭한 메뉴 항목의 경로로 이동합니다.
-    const path = menuOptionList.find((option) => option.id === id)?.path || '/';
+  const handleOptionClick = (path: string) => {
     router.push(path);
   };
+
+  useEffect(() => {
+    const currentPath = router.asPath;
+    const activeMenuOption = menuOptionList.find((option) => option.path === currentPath);
+
+    if (activeMenuOption) {
+      setActiveOption(activeMenuOption.id);
+    }
+  }, [router.asPath]);
 
   return (
     <div className="flex w-296 flex-col gap-8 md:w-203 lg:w-336">
       {menuOptionList.map((option) => (
-        <ul key={option.id} onClick={() => handleNavigation(option.id)}>
+        <ul key={option.id} onClick={() => handleOptionClick(option.path)}>
           <SideNavMenuOption imgSrc={option.imgSrc} text={option.text} isActive={activeOption === option.id} />
         </ul>
       ))}
