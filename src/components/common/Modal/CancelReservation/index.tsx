@@ -13,7 +13,7 @@ const CancelReservation = () => {
   };
 
   const handleCloseModal = () => {
-    setModalType(null); // 모달 닫기
+    setModalType(null);
   };
 
   return (
