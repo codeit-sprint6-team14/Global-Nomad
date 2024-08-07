@@ -42,7 +42,7 @@ const KakaoMap = ({ address }: { address: string }) => {
 
   return (
     <div className="z-0 pt-16 md:pt-40">
-      <Map center={coordinates} className="h-482 w-auto rounded-16 md:h-308 lg:h-476">
+      <Map center={coordinates} className="h-482 w-auto rounded-16 lg:h-476">
         <MapMarker
           position={coordinates}
           image={{

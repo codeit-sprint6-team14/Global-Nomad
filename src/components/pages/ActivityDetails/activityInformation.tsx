@@ -29,7 +29,7 @@ const ActivityInformation = ({ activityId = '2131' }: { activityId?: string }) =
 
   return (
     <>
-      <div className="lg:mx-auto lg:max-w-[1200px] lg:pt-149">
+      <div className="lg:mx-auto lg:max-w-[1200px] lg:pt-78">
         <Header category={category} title={title} rating={rating} reviewCount={reviewCount} address={address} />
 
         <BannerImage bannerImageUrl={bannerImageUrl} subImages={subImages} />

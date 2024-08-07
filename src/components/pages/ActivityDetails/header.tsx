@@ -16,7 +16,7 @@ const Header = ({ category, title, rating, reviewCount, address }: HeaderProps) 
   };
 
   return (
-    <div className="px-16 pt-87 md:px-24 md:pt-95 lg:p-0">
+    <div className="px-16 pt-16 md:px-24 md:pt-24 lg:p-0">
       <div className="text-md-regular text-black-100">{category}</div>
       <div className="relative mt-10 flex items-center justify-between">
         <h1 className="text-2xl-bold text-black-100 md:text-3xl-bold">{title}</h1>

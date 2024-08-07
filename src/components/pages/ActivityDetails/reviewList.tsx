@@ -1,10 +1,10 @@
 import { getActivityReviewList } from '@/apis/getActivity';
+import Pagination from '@/components/common/Pagination';
 import { ReviewType } from '@/types/activityReviews';
 import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useState } from 'react';
 
-import Pagination from './pagination';
 import Review from './review';
 
 const REVIEWS_PER_PAGE = 1;
