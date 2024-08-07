@@ -61,14 +61,14 @@ const ReservationList = () => {
           </div>
         )}
         {modalType === 'cancel' && (
-          <div className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50">
+          <Modal.Overlay>
             <div ref={modalRef}>
               <Modal.CancelReservation />
             </div>
-          </div>
+          </Modal.Overlay>
         )}
         {modalType === 'review' && (
-          <div className="fixed inset-0 z-10 bg-black bg-opacity-50 md:flex md:items-center md:justify-center">
+          <Modal.Overlay>
             <div ref={modalRef} className="h-full md:h-auto md:w-auto">
               <Modal.Review
                 title="함께 배우면 즐거운 스트릿 댄스"
@@ -80,7 +80,7 @@ const ReservationList = () => {
                 headCount={10}
               />
             </div>
-          </div>
+          </Modal.Overlay>
         )}
       </main>
     </>
