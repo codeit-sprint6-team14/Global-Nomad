@@ -46,16 +46,16 @@ const KakaoMap = ({ address }: { address: string }) => {
         <MapMarker
           position={coordinates}
           image={{
-            src: '/assets/icons/harry-potter.svg',
-            size: { width: 50, height: 50 },
-            options: { offset: { x: 25, y: 65 } },
+            src: '/assets/icons/map-marker.svg',
+            size: { width: 60, height: 60 },
+            options: { offset: { x: 30, y: 65 } },
           }}
           clickable={true}
         />
-        <CustomOverlayMap position={coordinates} yAnchor={3.6}>
-          <div className="whitespace-nowrap rounded-lg bg-[#F59173] px-3 pb-2 pt-4 text-white shadow-md">
+        <CustomOverlayMap position={coordinates} yAnchor={3.4}>
+          <div className="whitespace-nowrap rounded-lg border border-solid border-black-100 bg-gray-100 px-3 pb-2 pt-4 text-black-100 shadow-md">
             <div className="text-sm font-bold">{address}</div>
-            <div className="absolute -bottom-2 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 transform bg-[#F59173]"></div>
+            <div className="absolute -bottom-2 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 transform border-b border-r border-solid border-black-100 bg-white"></div>
           </div>
         </CustomOverlayMap>
       </Map>
