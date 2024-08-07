@@ -17,7 +17,9 @@ const Schedule = () => {
               </div>
             )}
           </div>
-          <MySchedule />
+          <div className="mb-60 ml-auto mr-auto w-343 md:mr-0 md:w-430 lg:w-750">
+            <MySchedule />
+          </div>
         </div>
       </div>
     </div>

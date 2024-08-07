@@ -4,6 +4,8 @@ import { Option } from '@/types/dropDownInputTypes';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
+import Calendar from './calender';
+
 const mockOptions: Option[] = [
   { label: '옵션 1', value: 'value1' },
   { label: '옵션 2', value: 'value2' },
@@ -32,12 +34,13 @@ const MySchedule = () => {
           </div>
           <h2 className="ml-10 mt-5 text-3xl-bold md:ml-0">예약 현황</h2>
         </div>
-        <div className="relative mt-20">
+        <div className="relative mb-20 mt-20">
           <div className="absolute z-10 ml-10 h-24 w-45 -translate-y-2.5 transform bg-white text-center text-md-regular">
             체험명
           </div>
           <Input.Dropdown options={mockOptions} defaultOption={selectedOption} onSelect={handleOptionSelect} />
         </div>
+        <Calendar />
       </div>
     </div>
   );
