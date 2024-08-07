@@ -1,4 +1,4 @@
-import { myActivityCardData } from '@/types/cardListData';
+import { myActivityCardData } from '@/types/cardDataList';
 
 const ActivityCardsData: myActivityCardData[] = [
   {
