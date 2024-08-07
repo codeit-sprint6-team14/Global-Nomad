@@ -5,7 +5,7 @@ const CancelConfirmPopup = () => {
   return (
     <div className="flex h-184 w-288 flex-col items-center justify-evenly border shadow-modal">
       <div className="flex flex-col items-center justify-between gap-16">
-        <Image src="/svgs/ic-check.svg" width={24} height={24} alt="" />
+        <Image src="/assets/icons/check.svg" width={24} height={24} alt="" />
         <p className="text-lg-regular text-black">예약을 취소하시겠어요?</p>
       </div>
       <div className="flex gap-8">
