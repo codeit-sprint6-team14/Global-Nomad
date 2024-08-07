@@ -1,5 +1,7 @@
+import Footer from '@/components/common/Footer';
 import NavBar from '@/components/common/NavBar';
 import '@/styles/globals.css';
+import { Provider } from 'jotai';
 import type { AppProps } from 'next/app';
 import localFont from 'next/font/local';
 import { useRouter } from 'next/router';
@@ -13,12 +15,15 @@ const pretendard = localFont({
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
-  const showNavBar = !['/signup', '/signin'].includes(router.pathname);
+  const showNavBarAndFooter = !['/signup', '/signin', '/my-page/reservation-list'].includes(router.pathname);
 
   return (
-    <main className={`${pretendard.variable} ${showNavBar ? 'pt-70' : ''}`}>
-      {showNavBar && <NavBar />}
-      <Component {...pageProps} />
-    </main>
+    <Provider>
+      <main className={`${pretendard.variable} ${showNavBarAndFooter ? 'pt-70' : ''}`}>
+        {showNavBarAndFooter && <NavBar />}
+        <Component {...pageProps} />
+        {showNavBarAndFooter && <Footer />}
+      </main>
+    </Provider>
   );
 }
