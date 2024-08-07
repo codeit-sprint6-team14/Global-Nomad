@@ -20,11 +20,11 @@ export default function App({ Component, pageProps }: AppProps) {
   const showNavBarAndFooter = !['/signup', '/signin'].includes(router.pathname);
 
   return (
-    <main className={`${pretendard.variable} ${showNavBarAndFooter ? 'pt-70' : ''}`}>      
+    <main className={`${pretendard.variable} ${showNavBarAndFooter ? 'pt-70' : ''}`}>
       <QueryClientProvider client={queryClient}>
-      {showNavBarAndFooter && <NavBar />}
-      <Component {...pageProps} />
-      {showNavBarAndFooter && <Footer />}
+        {showNavBarAndFooter && <NavBar />}
+        <Component {...pageProps} />
+        {showNavBarAndFooter && <Footer />}
       </QueryClientProvider>
     </main>
   );
