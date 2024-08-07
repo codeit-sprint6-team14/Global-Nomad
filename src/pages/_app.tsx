@@ -1,3 +1,4 @@
+import Footer from '@/components/common/Footer';
 import NavBar from '@/components/common/NavBar';
 import '@/styles/globals.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -16,13 +17,14 @@ const pretendard = localFont({
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
-  const showNavBar = !['/signup', '/signin'].includes(router.pathname);
+  const showNavBarAndFooter = !['/signup', '/signin'].includes(router.pathname);
 
   return (
-    <main className={pretendard.variable}>
+    <main className={`${pretendard.variable} ${showNavBarAndFooter ? 'pt-70' : ''}`}>
       <QueryClientProvider client={queryClient}>
-        {showNavBar && <NavBar />}
+        {showNavBarAndFooter && <NavBar />}
         <Component {...pageProps} />
+        {showNavBarAndFooter && <Footer />}
       </QueryClientProvider>
     </main>
   );
