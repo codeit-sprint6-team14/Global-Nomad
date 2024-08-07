@@ -9,7 +9,7 @@ import Header from './header';
 import KakaoMap from './kakaoMap';
 import ReviewList from './reviewList';
 
-const ActivityInformation = ({ activityId = '2105' }: { activityId?: string }) => {
+const ActivityInformation = ({ activityId = '2131' }: { activityId?: string }) => {
   const viewportSize = useViewportSize();
 
   const isMobile = viewportSize === 'mobile';

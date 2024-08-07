@@ -1,20 +1,9 @@
 import DropDown from '@/components/common/Dropdown';
+import { HeaderProps } from '@/types/activity';
 import Image from 'next/image';
 import { useState } from 'react';
 
-const Header = ({
-  category,
-  title,
-  rating,
-  reviewCount,
-  address,
-}: {
-  category: string;
-  title: string;
-  rating: number;
-  reviewCount: number;
-  address: string;
-}) => {
+const Header = ({ category, title, rating, reviewCount, address }: HeaderProps) => {
   const [isOpenDropdown, setIsOpenDropdown] = useState(false);
 
   const handleDropdownVisible = () => {
