@@ -2,21 +2,38 @@ import { getActivityReviewList } from '@/apis/getActivity';
 import { ReviewType } from '@/types/activityReviews';
 import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
+import { useState } from 'react';
 
+import Pagination from './pagination';
 import Review from './review';
 
+const REVIEWS_PER_PAGE = 1;
+
 const ReviewList = ({ activityId }: { activityId: string }) => {
+  const [currentPage, setCurrentPage] = useState(1);
+
   const {
     data: reviewListData,
     isLoading,
     error,
-  } = useQuery({ queryKey: ['review', activityId], queryFn: () => getActivityReviewList({ activityId }) });
+    refetch,
+  } = useQuery({
+    queryKey: ['review', activityId, currentPage],
+    queryFn: () => getActivityReviewList({ activityId, page: currentPage, size: REVIEWS_PER_PAGE }),
+  });
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>An error has occurred</div>;
   if (!reviewListData) return null;
 
-  const { averageRating, totalCount } = reviewListData;
+  const { averageRating, totalCount, reviews } = reviewListData;
+
+  const totalPages = Math.ceil(totalCount / REVIEWS_PER_PAGE);
+
+  const handlePageChange = async (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+    await refetch();
+  };
 
   return (
     <div className="mx-24 flex flex-col gap-18 border-solid border-gray-300 pt-40 md:border-t lg:mx-0">
@@ -35,9 +52,10 @@ const ReviewList = ({ activityId }: { activityId: string }) => {
           </div>
         </div>
       </div>
-      {reviewListData.reviews.map((review: ReviewType) => (
+      {reviews.map((review: ReviewType) => (
         <Review key={review.id} review={review} />
       ))}
+      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
     </div>
   );
 };

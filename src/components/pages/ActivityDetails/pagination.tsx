@@ -1,3 +1,6 @@
+import PrevButton from '@/../public/assets/icons/pagination-left.svg';
+import NextButton from '@/../public/assets/icons/pagination-right.svg';
+
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
@@ -5,51 +8,51 @@ interface PaginationProps {
 }
 
 const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => {
-  const renderPageNumbers = () => {
-    const pageNumbers = [];
-    const maxVisiblePages = 5;
+  const pageGroup = Math.ceil(currentPage / 5);
+  const lastPage = pageGroup * 5;
+  const firstPage = lastPage - 4;
 
-    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2)); // 2
-    // eslint-disable-next-line prefer-const
-    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1); // 6
-
-    if (endPage - startPage + 1 < maxVisiblePages) {
-      startPage = Math.max(1, endPage - maxVisiblePages + 1);
-    }
-
-    for (let i = startPage; i <= endPage; i++) {
-      pageNumbers.push(
-        <button
-          key={i}
-          onClick={() => onPageChange(i)}
-          className={`mx-1 h-8 w-8 rounded-full ${
-            currentPage === i ? 'bg-green-700 text-white' : 'border border-gray-300'
-          }`}
-        >
-          {i}
-        </button>,
-      );
-    }
-
-    return pageNumbers;
-  };
+  const pageNumbers = [];
+  for (let i = firstPage; i <= Math.min(lastPage, totalPages); i++) {
+    pageNumbers.push(i);
+  }
 
   return (
-    <div className="mt-4 flex items-center justify-center">
+    <div className="flex items-center justify-center gap-10 pb-133 pt-40 md:pb-145 lg:pb-293">
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="mx-1 rounded-md border border-gray-300 px-2 py-1 disabled:opacity-50"
+        className={`flex h-40 w-40 items-center justify-center rounded-15 ${
+          currentPage === 1
+            ? 'border border-gray-300 bg-white text-gray-600'
+            : 'border border-green-300 bg-white text-green-300'
+        }`}
       >
-        &#8249;
+        <PrevButton alt="이전페이지" width={15} height={15} />
       </button>
-      {renderPageNumbers()}
+      {pageNumbers.map((number) => (
+        <button
+          key={number}
+          onClick={() => onPageChange(number)}
+          className={`h-40 w-40 rounded-15 px-15 pb-7 pt-9 text-2lg-medium ${
+            currentPage === number
+              ? 'bg-green-300 text-white'
+              : 'border border-solid border-green-300 bg-white text-green-300'
+          }`}
+        >
+          {number}
+        </button>
+      ))}
       <button
         onClick={() => onPageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
-        className="mx-1 rounded-md border border-gray-300 px-2 py-1 disabled:opacity-50"
+        disabled={currentPage === totalPages || currentPage === Math.min(lastPage, totalPages)}
+        className={`flex h-40 w-40 items-center justify-center rounded-15 ${
+          currentPage === totalPages || currentPage === Math.min(lastPage, totalPages)
+            ? 'border border-gray-300 bg-white text-gray-600'
+            : 'border border-green-300 bg-white text-green-300'
+        }`}
       >
-        &#8250;
+        <NextButton alt="다음페이지" width={15} height={15} />
       </button>
     </div>
   );
