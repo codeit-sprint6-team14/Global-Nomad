@@ -5,10 +5,14 @@ const Review = ({ review }: { review: ReviewType }) => {
   const { content, createdAt } = review;
   const { profileImageUrl, nickname = '이영훈' } = review.user;
 
+  const getInitial = (name: string) => {
+    return name.charAt(0).toUpperCase();
+  };
+
   return (
     <div className="flex gap-16 border-b border-solid border-gray-300 pb-24">
-      {profileImageUrl && (
-        <div className="relative h-45 w-45 flex-shrink-0">
+      <div className="relative h-45 w-45 flex-shrink-0">
+        {profileImageUrl ? (
           <Image
             src={profileImageUrl}
             style={{ objectFit: 'cover' }}
@@ -17,8 +21,12 @@ const Review = ({ review }: { review: ReviewType }) => {
             className="rounded-full"
             sizes="(min-width: 375px) 45px"
           />
-        </div>
-      )}
+        ) : (
+          <div className="flex h-45 w-45 items-center justify-center overflow-hidden rounded-full bg-gray-200 text-lg-bold text-gray-600">
+            {getInitial(nickname)}
+          </div>
+        )}
+      </div>
 
       <div>
         <div className="flex items-center">

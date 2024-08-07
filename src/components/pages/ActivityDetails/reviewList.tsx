@@ -19,7 +19,7 @@ const ReviewList = ({ activityId }: { activityId: string }) => {
   const { averageRating, totalCount } = reviewListData;
 
   return (
-    <div className="mx-24 flex flex-col gap-18 border-solid border-gray-300 pt-40 md:border-t">
+    <div className="mx-24 flex flex-col gap-18 border-solid border-gray-300 pt-40 md:border-t lg:mx-0">
       <h1 className="text-xl-bold text-black-100">후기</h1>
       <div className="flex items-center gap-16">
         <div className="text-50 font-semibold leading-[60px] text-black-100">{averageRating}</div>
