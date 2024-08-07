@@ -6,7 +6,16 @@ const SignUp = () => {
   return (
     <div className="my-40 flex flex-col items-center">
       <Link href="/">
-        <Image src="/assets/images/auth-logo.png" width={300} height={300} alt="logo" className="mb-40" />
+        <div className="relative mb-40 sm:h-154 sm:w-270 md:h-192 md:w-340">
+          <Image
+            src="/assets/images/auth-logo.png"
+            alt="logo"
+            sizes="(max-width: 744px) 270px, 340px"
+            fill
+            className="absolute"
+            priority
+          />
+        </div>
       </Link>
       <SignupForm />
       <p className="sm:mt-16 md:mt-32 lg:mt-23">
