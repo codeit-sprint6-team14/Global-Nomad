@@ -1,5 +1,5 @@
-import ActivityCard from './myActivityCard';
-import ReservationCard from './reservationCard';
+import ActivityCard from '@/components/common/Cards/myActivityCard';
+import ReservationCard from '@/components/common/Cards/reservationCard';
 
 const Cards = {
   Activity: ActivityCard,

@@ -2,9 +2,12 @@ import Footer from '@/components/common/Footer';
 import NavBar from '@/components/common/NavBar';
 import '@/styles/globals.css';
 import { Provider } from 'jotai';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { AppProps } from 'next/app';
 import localFont from 'next/font/local';
 import { useRouter } from 'next/router';
+
+const queryClient = new QueryClient();
 
 const pretendard = localFont({
   src: '../../public/fonts/PretendardVariable.woff2',
@@ -19,10 +22,12 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <Provider>
-      <main className={`${pretendard.variable} ${showNavBarAndFooter ? 'pt-70' : ''}`}>
+      <main className={`${pretendard.variable} ${showNavBarAndFooter ? 'pt-70' : ''}`}>      
+        <QueryClientProvider client={queryClient}>
         {showNavBarAndFooter && <NavBar />}
         <Component {...pageProps} />
         {showNavBarAndFooter && <Footer />}
+        </QueryClientProvider>
       </main>
     </Provider>
   );

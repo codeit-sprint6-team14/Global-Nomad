@@ -1,10 +1,9 @@
 import { modalAtom } from '@/store/modalAtom';
+import Card from '@/components/common/Cards/components';
 import { reservationCard } from '@/types/cardDataList';
 import getCardStatus, { StatusType } from '@/utils/cardStatus';
 import { formatPrice } from '@/utils/formatPrice';
 import { useSetAtom } from 'jotai';
-
-import Card from './components';
 
 const ReservationCard = ({ card }: { card: reservationCard }) => {
   const setModalType = useSetAtom(modalAtom);

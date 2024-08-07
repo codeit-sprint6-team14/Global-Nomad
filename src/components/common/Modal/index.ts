@@ -1,6 +1,8 @@
 import CancelReservation from './CancelReservation';
 import DateSelect from './DateSelect';
 import ModalOverlay from './Overlay';
+import CancelConfirmPopup from './CancelConfirm';
+import RegisterConfirmPopup from './RegisterConfirm';
 import Review from './Review';
 
 const Modal = {
@@ -8,6 +10,8 @@ const Modal = {
   Review: Review,
   CancelReservation: CancelReservation,
   Overlay: ModalOverlay,
+  RegisterConfirm: RegisterConfirmPopup,
+  CancelConfirm: CancelConfirmPopup,
 };
 
 export default Modal;

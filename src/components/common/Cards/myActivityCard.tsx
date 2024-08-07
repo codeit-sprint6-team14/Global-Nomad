@@ -1,7 +1,6 @@
+import Card from '@/components/common/Cards/components';
 import { myActivityCardData } from '@/types/cardDataList';
 import { formatPrice } from '@/utils/formatPrice';
-
-import Card from './components';
 
 const MyActivityCard = ({ myActivityCard }: { myActivityCard: myActivityCardData }) => {
   const { title, price, bannerImageUrl, rating, reviewCount } = myActivityCard;
