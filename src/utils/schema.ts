@@ -17,3 +17,11 @@ export const signupValidationSchema = yup.object().shape({
     .max(10, ErrorMessages.NICKNAME_TOO_LONG)
     .matches(/^[가-힣a-zA-Z0-9]+$/, ErrorMessages.NICKNAME_NO_SPECIAL_CHARS),
 });
+
+export const signinValidationSchema = yup.object().shape({
+  email: yup
+    .string()
+    .required(ErrorMessages.EMAIL_REQUIRED)
+    .matches(/^\w+([.-]?\w+)@\w+([.-]?\w+)(\.\w{2,3})+$/, ErrorMessages.INVALID_EMAIL),
+  password: yup.string().required(ErrorMessages.PASSWORD_REQUIRED).min(8, ErrorMessages.INVALID_PASSWORD),
+});
