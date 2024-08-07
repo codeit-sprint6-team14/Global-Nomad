@@ -1,5 +1,5 @@
-import AddNumberButton from '@/../public/svgs/icon-add.svg';
-import SubtractNumberButton from '@/../public/svgs/icon-subtract.svg';
+import AddNumberButton from '@/../public/assets/icons/add-button.svg';
+import SubtractNumberButton from '@/../public/assets/icons/subtract-button.svg';
 import { useState } from 'react';
 
 const Counter = () => {
