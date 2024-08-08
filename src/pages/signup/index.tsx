@@ -19,10 +19,10 @@ const SignUp = () => {
         </div>
       </Link>
       <SignupForm />
-      <p className="sm:mt-16 md:mt-32 lg:mt-23">
+      <p className="sm:mt-24 md:mt-32">
         회원이신가요?{' '}
         <Link href="/signin">
-          <span className="underline md:text-green-300">로그인하기</span>
+          <span className="text-green-300 underline hover:text-gray-700">로그인하기</span>
         </Link>
       </p>
       <SocialForm text="SNS 계정으로 회원가입하기" />
