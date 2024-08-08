@@ -1,4 +1,4 @@
-import Star from '@/../public/svgs/star.svg';
+import Star from '../../../../public/assets/icons/rating.svg';
 
 interface RatingProps {
   rating: number;

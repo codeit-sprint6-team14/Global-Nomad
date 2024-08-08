@@ -71,7 +71,7 @@ const Desktop = () => {
     }
   }, []);
   return (
-    <section className="h-746 w-384 rounded-8 border border-gray-300 bg-white px-24 py-17 shadow-[0px_10px_30px_3px_rgba(5,16,55,0.15)]">
+    <section className="sticky top-0 h-746 w-384 rounded-8 border border-gray-300 bg-white px-24 py-17 shadow-[0px_10px_30px_3px_rgba(5,16,55,0.15)]">
       <DesktopComponents.PriceInfo price={price} />
       <h2 className="mb-16 text-xl-bold">날짜</h2>
       <Calendar
