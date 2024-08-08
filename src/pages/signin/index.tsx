@@ -1,4 +1,5 @@
 import SignInForm from '@/components/pages/auth/signInForm';
+import SocialForm from '@/components/pages/auth/socialForm';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -24,6 +25,7 @@ const SignIn = () => {
           <span className="underline md:text-green-300">회원가입하기</span>
         </Link>
       </p>
+      <SocialForm text="SNS 계정으로 로그인하기" />
     </div>
   );
 };
