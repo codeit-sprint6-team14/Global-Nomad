@@ -5,9 +5,10 @@ interface PaginationProps {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
+  isPlaceholderData: boolean;
 }
 
-const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => {
+const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange, isPlaceholderData }) => {
   const pageGroup = Math.ceil(currentPage / 5);
   const lastPage = pageGroup * 5;
   const firstPage = lastPage - 4;
@@ -21,15 +22,16 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
     <div className="flex items-center justify-center gap-10 pb-133 pt-40 md:pb-145 lg:pb-293">
       <button
         onClick={() => onPageChange(currentPage - 1)}
-        disabled={currentPage === 1}
+        disabled={currentPage === 1 || isPlaceholderData}
         className={`flex h-40 w-40 items-center justify-center rounded-12 ${
-          currentPage === 1
+          currentPage === 1 || isPlaceholderData
             ? 'border border-gray-300 bg-white text-gray-600'
             : 'border border-green-300 bg-white text-green-300 hover:bg-green-100'
         }`}
       >
         <PrevButton alt="이전페이지" width={15} height={15} />
       </button>
+
       {pageNumbers.map((number) => (
         <button
           key={number}
@@ -43,11 +45,12 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
           {number}
         </button>
       ))}
+
       <button
         onClick={() => onPageChange(currentPage + 1)}
-        disabled={currentPage === totalPages || currentPage === Math.min(lastPage, totalPages)}
+        disabled={currentPage === totalPages || isPlaceholderData || currentPage === Math.min(lastPage, totalPages)}
         className={`flex h-40 w-40 items-center justify-center rounded-12 ${
-          currentPage === totalPages || currentPage === Math.min(lastPage, totalPages)
+          currentPage === totalPages || isPlaceholderData || currentPage === Math.min(lastPage, totalPages)
             ? 'border border-gray-300 bg-white text-gray-600'
             : 'border border-green-300 bg-white text-green-300 hover:bg-green-100'
         }`}

@@ -1,6 +1,6 @@
 import { getActivityReviewList } from '@/apis/getActivity';
 import Pagination from '@/components/common/Pagination';
-import { ReviewType } from '@/types/activityReviews';
+import { ReviewData, ReviewType } from '@/types/activityReviews';
 import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useState } from 'react';
@@ -17,9 +17,12 @@ const ReviewList = ({ activityId }: { activityId: string }) => {
     isLoading,
     error,
     refetch,
-  } = useQuery({
+    isPlaceholderData,
+  } = useQuery<ReviewData>({
     queryKey: ['review', activityId, currentPage],
     queryFn: () => getActivityReviewList({ activityId, page: currentPage, size: REVIEWS_PER_PAGE }),
+    placeholderData: (prevData) => prevData,
+    staleTime: 5000,
   });
 
   if (isLoading) return <div>Loading...</div>;
@@ -52,10 +55,17 @@ const ReviewList = ({ activityId }: { activityId: string }) => {
           </div>
         </div>
       </div>
-      {reviews.map((review: ReviewType) => (
-        <Review key={review.id} review={review} />
-      ))}
-      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+      {isLoading ? (
+        <div>Loading...</div>
+      ) : (
+        reviews.map((review: ReviewType) => <Review key={review.id} review={review} />)
+      )}
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+        isPlaceholderData={isPlaceholderData}
+      />
     </div>
   );
 };

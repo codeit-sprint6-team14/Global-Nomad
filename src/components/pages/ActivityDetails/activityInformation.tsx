@@ -1,7 +1,6 @@
-import { getActivity } from '@/apis/getActivity';
 import FloatingBox from '@/components/common/FloatingBox';
+import { useActivityData } from '@/hooks/useActivityData';
 import useViewportSize from '@/hooks/useViewportSize';
-import { useQuery } from '@tanstack/react-query';
 
 import BannerImage from './bannerImage';
 import ActivityDescription from './description';
@@ -15,11 +14,7 @@ const ActivityInformation = ({ activityId = '2131' }: { activityId?: string }) =
   const isMobile = viewportSize === 'mobile';
   const isTablet = viewportSize === 'tablet';
 
-  const {
-    data: activityData,
-    isLoading,
-    error,
-  } = useQuery({ queryKey: ['activity', activityId], queryFn: () => getActivity({ activityId }) });
+  const { activityData, isLoading, error } = useActivityData(activityId);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>An error has occurred</div>;
