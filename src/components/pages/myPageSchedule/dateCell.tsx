@@ -12,6 +12,26 @@ interface DateCellProps {
 }
 
 const DateCell: React.FC<DateCellProps> = ({ day, isCurrentMonth, reservation }) => {
+  const getCircleColor = () => {
+    if (reservation) {
+      if (reservation.completed > 0) {
+        return 'bg-gray-800'; // 완료된 예약
+      }
+      if (reservation.confirmed > 0 && reservation.pending > 0) {
+        return 'bg-blue-300'; // 승인 및 대기 중 예약
+      }
+      if (reservation.confirmed > 0) {
+        return 'bg-orange-200'; // 승인된 예약
+      }
+      if (reservation.pending > 0) {
+        return 'bg-blue-300'; // 대기 중인 예약
+      }
+    }
+    return '';
+  };
+
+  const circleColor = getCircleColor();
+
   return (
     <td
       className={`relative h-154 border text-left align-top text-xl-medium ${
@@ -19,7 +39,10 @@ const DateCell: React.FC<DateCellProps> = ({ day, isCurrentMonth, reservation })
       }`}
     >
       <div className="flex flex-col">
-        <span className="px-10 py-10 lg:px-15">{day}</span>
+        <div className="items-top flex px-5 py-10 lg:px-15">
+          <span>{day}</span>
+          {circleColor && <span className={`ml-5 mt-4 h-7 w-7 rounded-full ${circleColor}`}></span>}
+        </div>
         {isCurrentMonth && reservation && (
           <div className="absolute bottom-0 left-0 right-0 flex flex-col items-start p-1">
             {reservation.completed > 0 && <Chip type="completed" count={reservation.completed} />}
