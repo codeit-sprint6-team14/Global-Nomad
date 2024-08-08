@@ -24,3 +24,11 @@ export type Schedules = {
   startTime: string;
   endTime: string;
 };
+
+export type HeaderProps = {
+  category: string;
+  title: string;
+  rating: number;
+  reviewCount: number;
+  address: string;
+};

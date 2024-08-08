@@ -1,20 +1,9 @@
 import DropDown from '@/components/common/Dropdown';
+import { HeaderProps } from '@/types/activity';
 import Image from 'next/image';
 import { useState } from 'react';
 
-const Header = ({
-  category,
-  title,
-  rating,
-  reviewCount,
-  address,
-}: {
-  category: string;
-  title: string;
-  rating: number;
-  reviewCount: number;
-  address: string;
-}) => {
+const Header = ({ category, title, rating, reviewCount, address }: HeaderProps) => {
   const [isOpenDropdown, setIsOpenDropdown] = useState(false);
 
   const handleDropdownVisible = () => {
@@ -34,6 +23,7 @@ const Header = ({
         <Image
           width={40}
           height={40}
+          style={{ width: 'auto' }}
           src="/assets/icons/kebab.svg"
           alt="케밥 아이콘"
           className="cursor-pointer"
@@ -47,9 +37,13 @@ const Header = ({
         )}
       </div>
       <div className="mt-16 flex">
-        <Image className="mb-3" width={16} height={16} src="/assets/icons/star.svg" alt="별점 아이콘" />
+        <div className="relative mt-2 h-16 w-16">
+          <Image fill src="/assets/icons/star.svg" alt="별점 아이콘" />
+        </div>
         <div className="ml-6 text-md-regular text-black">{`${rating} (${reviewCount})`}</div>
-        <Image className="ml-12" src="/assets/icons/map.svg" width={18} height={18} alt="지도 아이콘" />
+        <div className="relative ml-12 mt-2 h-18 w-18">
+          <Image src="/assets/icons/map.svg" fill alt="지도 아이콘" />
+        </div>
         <div className="ml-2 text-md-regular text-black-100">{address}</div>
       </div>
     </div>

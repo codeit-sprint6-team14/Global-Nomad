@@ -1,9 +1,14 @@
 import Button from '@/components/common/Button';
 import Counter from '@/components/common/Counter';
+import Modal from '@/components/common/Modal';
+import { useState } from 'react';
 
 const Main = () => {
+  const [isOpenModal, setIsOpenModal] = useState(false);
+
   const handleDateSelectModal = () => {
     // TODO: 모달 여닫는 기능 구현
+    setIsOpenModal((prev) => !prev);
   };
 
   return (
@@ -13,6 +18,7 @@ const Main = () => {
         <button onClick={handleDateSelectModal} className="mb-27">
           날짜 선택하기
         </button>
+        {isOpenModal && <Modal.DateSelect />}
         <h2 className="mb-5 text-xl-bold">참여 인원 수</h2>
         <div className="mb-32">
           <Counter />
