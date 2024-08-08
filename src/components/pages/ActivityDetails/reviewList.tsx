@@ -25,8 +25,8 @@ const ReviewList = ({ activityId }: { activityId: string }) => {
     staleTime: 5000,
   });
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>An error has occurred</div>;
+  if (isLoading) return <div>댓글 로딩중입니다...</div>;
+  if (error) return <div>댓글을 불러오는데 실패했습니다.</div>;
   if (!reviewListData) return null;
 
   const { averageRating, totalCount, reviews } = reviewListData;
@@ -55,11 +55,9 @@ const ReviewList = ({ activityId }: { activityId: string }) => {
           </div>
         </div>
       </div>
-      {isLoading ? (
-        <div>Loading...</div>
-      ) : (
-        reviews.map((review: ReviewType) => <Review key={review.id} review={review} />)
-      )}
+      {reviews.map((review: ReviewType) => (
+        <Review key={review.id} review={review} />
+      ))}
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
