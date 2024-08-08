@@ -1,26 +1,33 @@
 import DownArrow from '@/../public/assets/icons/down-arrow.svg';
-import { useState } from 'react';
+import { useClickOutside } from '@/hooks/useClickOutside';
+import { useToggle } from '@/hooks/useToggle';
 
 import DropDown from '../Dropdown';
 
-const sortOptions = ['가격 낮은 순', '가격 높은 순'];
+interface FilterProps {
+  sortOptions: string[];
+}
 
-const Filter = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const handleDropDownToggle = () => {
-    setIsOpen(!isOpen);
-  };
+const Filter = ({ sortOptions }: FilterProps) => {
+  const { current: isOpen, handleToggle } = useToggle(false);
 
   const handleOptionClick = () => {
-    setIsOpen(false);
+    handleToggle();
   };
 
+  const handleOutsideClick = () => {
+    if (isOpen) {
+      handleToggle();
+    }
+  };
+
+  const filterRef = useClickOutside(handleOutsideClick);
+
   return (
-    <div className="relative">
+    <div ref={filterRef}>
       <button
         type="button"
-        onClick={handleDropDownToggle}
+        onClick={handleToggle}
         className="flex h-51 w-107 items-center justify-center gap-21 rounded-15 border border-green-300 bg-white text-green-300 md:h-53 md:w-160 md:gap-70 md:text-2lg-medium"
       >
         가격

@@ -16,7 +16,7 @@ const Review = ({ title, bannerImageUrl, date, startTime, endTime, totalPrice, h
   };
 
   return (
-    <div className="w-full bg-white sm:px-16 md:rounded-24 md:px-24">
+    <div className="h-full w-full bg-white sm:px-16 md:h-750 md:w-480 md:rounded-24 md:px-24">
       <Header
         title={title}
         bannerImageUrl={bannerImageUrl}

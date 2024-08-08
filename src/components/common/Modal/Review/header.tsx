@@ -1,14 +1,24 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import Icon from '@/components/common/Icons';
+import { modalAtom } from '@/store/modalAtom';
 import { reviewDataProps } from '@/types/reviewModalTypes';
+import { useAtom } from 'jotai';
 import Image from 'next/image';
-import React from 'react';
 
 const Header = ({ title, bannerImageUrl, date, startTime, endTime, totalPrice, headCount }: reviewDataProps) => {
+  const [modalType, setModalType] = useAtom(modalAtom);
+
+  const handleCloseModal = () => {
+    setModalType(null);
+  };
+
   return (
     <>
       <div className="flex w-full justify-between py-35">
         <h1 className="font-bold sm:text-28 md:text-2xl-bold">후기 작성</h1>
-        <Icon.Close width={40} height={40} />
+        <button onClick={handleCloseModal}>
+          <Icon.Close width={40} height={40} />
+        </button>
       </div>
       <div className="flex sm:gap-8 md:gap-24">
         <div className="relative sm:h-100 sm:w-100 md:h-126 md:w-126">

@@ -1,8 +1,7 @@
+import ReservationCard from '@/components/common/Cards/reservationCard';
 import reservationCardsData from '@/mockData/reservationCardsData';
 import { reservationCard } from '@/types/cardDataList';
 import { useState } from 'react';
-
-import ReservationCard from './reservationCard';
 
 const ReservationCardList = () => {
   const [cardListData] = useState(reservationCardsData);
