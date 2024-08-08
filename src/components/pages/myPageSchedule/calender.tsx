@@ -2,6 +2,37 @@ import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import React, { useState } from 'react';
 
+import DateCell from './dateCell';
+
+interface DailyReservation {
+  date: string;
+  reservations: {
+    completed: number;
+    confirmed: number;
+    pending: number;
+  };
+}
+
+// Sample reservation data
+const reservations: DailyReservation[] = [
+  {
+    date: '2024-08-09',
+    reservations: {
+      completed: 1,
+      confirmed: 0,
+      pending: 0,
+    },
+  },
+  {
+    date: '2024-08-15',
+    reservations: {
+      completed: 0,
+      confirmed: 1,
+      pending: 2,
+    },
+  },
+];
+
 const dayArr = ['SUN', 'MON', 'TUE', 'WED', 'THUR', 'FRI', 'SAT'];
 
 const Calendar: React.FC = () => {
@@ -40,7 +71,6 @@ const Calendar: React.FC = () => {
   const handleNextClick = () => {
     setCurrentDate(new Date(currentYear, currentMonth + 1, 1));
   };
-
   return (
     <div className="container mx-auto w-342 p-4 md:w-430 lg:w-800">
       <div className="mb-20 flex items-center justify-center gap-20 text-xl-bold">
@@ -74,7 +104,6 @@ const Calendar: React.FC = () => {
                   let isCurrentMonth = false;
                   const dayIndex = weekIdx * 7 + index;
 
-                  // 현재 월인지 확인
                   if (
                     dayIndex >= prevMonthDates.length &&
                     dayIndex < prevMonthDates.length + currentMonthDates.length
@@ -82,15 +111,16 @@ const Calendar: React.FC = () => {
                     isCurrentMonth = true;
                   }
 
+                  const reservationDate = new Date(currentYear, currentMonth, day);
+                  const reservation = reservations.find((res) => res.date === format(reservationDate, 'yyyy-MM-dd'));
+
                   return (
-                    <td
+                    <DateCell
                       key={index}
-                      className={`h-154 border px-10 py-10 text-left align-top text-xl-medium lg:px-15 ${
-                        isCurrentMonth ? 'text-gray-700' : 'text-gray-400'
-                      }`}
-                    >
-                      {day}
-                    </td>
+                      day={day}
+                      isCurrentMonth={isCurrentMonth}
+                      reservation={reservation ? reservation.reservations : undefined}
+                    />
                   );
                 })}
               </tr>
