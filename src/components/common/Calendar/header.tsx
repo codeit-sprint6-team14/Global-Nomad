@@ -1,5 +1,5 @@
-import NextButton from '@/../public/svgs/ic-next-button.svg';
-import PrevButton from '@/../public/svgs/ic-prev-button.svg';
+import NextButton from '@/../public/assets/icons/next-button.svg';
+import PrevButton from '@/../public/assets/icons/prev-button.svg';
 import { MONTHS } from '@/constants/date';
 import { CalendarHeaderProps } from '@/types/calendarTypes';
 

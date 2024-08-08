@@ -5,7 +5,7 @@ const TextareaWithSubmit = ({ text, onTextChange, onSubmit, isSubmitDisabled }: 
   return (
     <div>
       <textarea
-        className="mb-24 w-full resize-none rounded-4 border border-gray-700 p-16 focus:border-black-100 focus:outline-none sm:h-346"
+        className="mb-24 w-full resize-none rounded-4 border border-gray-700 p-16 focus:border-black-100 focus:outline-none sm:h-346 md:h-240"
         placeholder="후기를 작성해주세요"
         value={text}
         onChange={(e) => onTextChange(e.target.value)}
