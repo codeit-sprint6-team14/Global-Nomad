@@ -1,4 +1,4 @@
-import ActivityInformation from '@/components/pages/activity-details/activity-information';
+import ActivityInformation from '@/components/pages/ActivityDetails/activityInformation';
 
 const index = () => {
   return (

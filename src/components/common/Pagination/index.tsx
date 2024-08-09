@@ -1,64 +1,58 @@
-import React from 'react';
+import PrevButton from '@/../public/assets/icons/pagination-left.svg';
+import NextButton from '@/../public/assets/icons/pagination-right.svg';
 
 interface PaginationProps {
-  totalPages: number;
   currentPage: number;
+  totalPages: number;
   onPageChange: (page: number) => void;
 }
 
-const Pagination: React.FC<PaginationProps> = ({ totalPages, currentPage, onPageChange }) => {
-  const pagesPerGroup = 5; // 한 그룹당 페이지 수
+const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => {
+  const pageGroup = Math.ceil(currentPage / 5);
+  const lastPage = pageGroup * 5;
+  const firstPage = lastPage - 4;
 
-  // 현재 페이지가 속한 그룹을 계산
-  const currentGroup = Math.ceil(currentPage / pagesPerGroup);
-
-  // 그룹의 첫 번째 페이지와 마지막 페이지를 계산
-  const startPage = (currentGroup - 1) * pagesPerGroup + 1;
-  const endPage = Math.min(currentGroup * pagesPerGroup, totalPages);
-
-  const handlePreviousGroup = () => {
-    if (currentGroup > 1) {
-      onPageChange(startPage - 1);
-    }
-  };
-
-  const handleNextGroup = () => {
-    if (endPage < totalPages) {
-      onPageChange(endPage + 1);
-    }
-  };
+  const pageNumbers = [];
+  for (let i = firstPage; i <= Math.min(lastPage, totalPages); i++) {
+    pageNumbers.push(i);
+  }
 
   return (
-    <div className="flex items-center justify-center gap-10">
+    <div className="flex items-center justify-center gap-10 pb-133 pt-40 md:pb-145 lg:pb-293">
       <button
-        onClick={handlePreviousGroup}
-        disabled={currentGroup === 1}
-        className={`box-border h-55 w-55 rounded-15 border bg-white hover:bg-gray-200 sm:h-40 sm:w-40 ${currentGroup === 1 ? 'border-gray-400 text-gray-400' : 'border-green-950 text-black'} `}
+        onClick={() => onPageChange(currentPage - 1)}
+        disabled={currentPage === 1}
+        className={`flex h-40 w-40 items-center justify-center rounded-12 ${
+          currentPage === 1
+            ? 'border border-gray-300 bg-white text-gray-600'
+            : 'border border-green-300 bg-white text-green-300 hover:bg-green-100'
+        }`}
       >
-        ◀
+        <PrevButton alt="이전페이지" width={15} height={15} />
       </button>
-
-      {Array.from({ length: endPage - startPage + 1 }, (_, index) => {
-        const page = startPage + index;
-        return (
-          <button
-            key={page}
-            onClick={() => onPageChange(page)}
-            className={`font-pretendard box-border h-55 w-55 rounded-15 border border-green-950 text-2lg-regular sm:h-40 sm:w-40 ${
-              currentPage === page ? 'bg-green-950 text-white' : 'bg-white hover:bg-gray-200'
-            }`}
-          >
-            {page}
-          </button>
-        );
-      })}
-
+      {pageNumbers.map((number) => (
+        <button
+          key={number}
+          onClick={() => onPageChange(number)}
+          className={`h-40 w-40 rounded-12 px-15 pb-7 pt-9 text-2lg-medium ${
+            currentPage === number
+              ? 'bg-green-300 text-white'
+              : 'border border-solid border-green-300 bg-white text-green-300 hover:bg-green-100'
+          }`}
+        >
+          {number}
+        </button>
+      ))}
       <button
-        onClick={handleNextGroup}
-        disabled={endPage === totalPages}
-        className={`box-border h-55 w-55 rounded-15 border bg-white hover:bg-gray-200 sm:h-40 sm:w-40 ${endPage === totalPages ? 'border-gray-400 text-gray-400' : 'border-green-950 text-black'}`}
+        onClick={() => onPageChange(currentPage + 1)}
+        disabled={currentPage === totalPages || currentPage === Math.min(lastPage, totalPages)}
+        className={`flex h-40 w-40 items-center justify-center rounded-12 ${
+          currentPage === totalPages || currentPage === Math.min(lastPage, totalPages)
+            ? 'border border-gray-300 bg-white text-gray-600'
+            : 'border border-green-300 bg-white text-green-300 hover:bg-green-100'
+        }`}
       >
-        ▶
+        <NextButton alt="다음페이지" width={15} height={15} />
       </button>
     </div>
   );

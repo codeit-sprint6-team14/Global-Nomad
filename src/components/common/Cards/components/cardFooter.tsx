@@ -10,12 +10,14 @@ const CardFooter = ({
   imgSrc,
   buttonName,
   additionalClassNames,
+  onButtonClick,
 }: {
   text: string;
   status?: string;
   imgSrc?: string;
   buttonName?: string;
   additionalClassNames?: string;
+  onButtonClick?: () => void;
 }) => {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
 
@@ -38,6 +40,7 @@ const CardFooter = ({
           <Button.Default
             className={`h-[32px] w-80 text-md-bold md:h-[40px] md:w-112 md:text-lg-bold lg:h-[43px] lg:w-144`}
             variant={status === 'pending' ? 'secondary' : 'primary'}
+            onClick={onButtonClick}
           >
             {buttonName}
           </Button.Default>

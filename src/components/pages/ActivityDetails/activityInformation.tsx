@@ -3,13 +3,13 @@ import FloatingBox from '@/components/common/FloatingBox';
 import useViewportSize from '@/hooks/useViewportSize';
 import { useQuery } from '@tanstack/react-query';
 
-import BannerImage from './banner-image';
+import BannerImage from './bannerImage';
 import ActivityDescription from './description';
 import Header from './header';
-import KakaoMap from './kakao-map';
-import ReviewList from './review-list';
+import KakaoMap from './kakaoMap';
+import ReviewList from './reviewList';
 
-const ActivityInformation = ({ activityId = '2040' }: { activityId?: string }) => {
+const ActivityInformation = ({ activityId = '2131' }: { activityId?: string }) => {
   const viewportSize = useViewportSize();
 
   const isMobile = viewportSize === 'mobile';
@@ -34,13 +34,13 @@ const ActivityInformation = ({ activityId = '2040' }: { activityId?: string }) =
 
         <BannerImage bannerImageUrl={bannerImageUrl} subImages={subImages} />
         <div className="mx-24 flex justify-between md:pb-40 lg:mx-auto lg:max-w-[1200px]">
-          <div className="flex flex-col md:mr-24 md:pt-0 lg:mr-0">
+          <div className="flex flex-col md:mr-24 md:pt-0">
             <ActivityDescription description={description} />
             <KakaoMap address={address} />
           </div>
           {!isMobile && (isTablet ? <FloatingBox.Tablet /> : <FloatingBox.Desktop />)}
         </div>
-        <ReviewList />
+        <ReviewList activityId={activityId} />
         {isMobile && (
           <div className="mt-89">
             <FloatingBox.Mobile />
