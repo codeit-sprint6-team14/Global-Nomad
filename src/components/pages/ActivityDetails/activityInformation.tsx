@@ -8,7 +8,7 @@ import Header from './header';
 import KakaoMap from './kakaoMap';
 import ReviewList from './reviewList';
 
-const ActivityInformation = ({ activityId = '2131' }: { activityId?: string }) => {
+const ActivityInformation = ({ activityId = '2195' }: { activityId?: string }) => {
   const viewportSize = useViewportSize();
 
   const isMobile = viewportSize === 'mobile';
@@ -16,8 +16,8 @@ const ActivityInformation = ({ activityId = '2131' }: { activityId?: string }) =
 
   const { activityData, isLoading, error } = useActivityData(activityId);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>An error has occurred</div>;
+  if (isLoading) return <div>체험 상세 데이터 로딩중입니다...</div>;
+  if (error) return <div>체험 상세 데이터를 불러오는데 실패했습니다.</div>;
   if (!activityData) return null;
 
   const { category, title, rating, reviewCount, address, bannerImageUrl, description, subImages } = activityData;
@@ -33,7 +33,7 @@ const ActivityInformation = ({ activityId = '2131' }: { activityId?: string }) =
             <ActivityDescription description={description} />
             <KakaoMap address={address} />
           </div>
-          {!isMobile && (isTablet ? <FloatingBox.Tablet /> : <FloatingBox.Desktop />)}
+          {!isMobile && (isTablet ? <FloatingBox.Tablet /> : <FloatingBox.Desktop activityId={activityId} />)}
         </div>
         <ReviewList activityId={activityId} />
         {isMobile && (
