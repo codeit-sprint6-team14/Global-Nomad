@@ -48,9 +48,9 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
 
       <button
         onClick={() => onPageChange(currentPage + 1)}
-        disabled={currentPage === totalPages || isPlaceholderData || currentPage === Math.min(lastPage, totalPages)}
+        disabled={currentPage === totalPages || isPlaceholderData}
         className={`flex h-40 w-40 items-center justify-center rounded-12 ${
-          currentPage === totalPages || isPlaceholderData || currentPage === Math.min(lastPage, totalPages)
+          currentPage === totalPages || isPlaceholderData
             ? 'border border-gray-300 bg-white text-gray-600'
             : 'border border-green-300 bg-white text-green-300 hover:bg-green-100'
         }`}
