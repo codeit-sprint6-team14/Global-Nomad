@@ -27,7 +27,7 @@ const MySchedule = () => {
 
   return (
     <div>
-      <div className="mb-60 ml-auto mr-auto mt-30 w-343 md:mr-0 md:w-430 lg:w-750">
+      <div className="mb-60 ml-auto mr-auto mt-30 w-343 md:mr-0 md:w-430 lg:w-800">
         <div className="flex items-center">
           <div className="block cursor-pointer md:hidden" onClick={handleGoMyPage}>
             <LeftArrow />

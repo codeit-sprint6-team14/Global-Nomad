@@ -92,7 +92,7 @@ const Calendar: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto w-342 p-4 md:w-430 lg:w-800">
+    <div className="container relative mx-auto w-342 p-4 md:w-430 lg:w-800">
       <div className="mb-20 flex items-center justify-center gap-20 text-xl-bold">
         <button onClick={handlePrevClick}>&lt;&lt;</button>
         <div className="text-xl-bold">{format(currentDate, 'yyyy년 M월', { locale: ko })}</div>
@@ -140,7 +140,7 @@ const Calendar: React.FC = () => {
                       day={day}
                       isCurrentMonth={isCurrentMonth}
                       reservation={reservation ? reservation.reservations : undefined}
-                      onClick={() => isCurrentMonth && handleDateClick(day)}
+                      onClick={() => isCurrentMonth && reservation && handleDateClick(day)}
                     />
                   );
                 })}
@@ -150,7 +150,7 @@ const Calendar: React.FC = () => {
         </table>
       </div>
       {isModalOpen && selectedDate && (
-        <div className="fixed inset-0 z-20">
+        <div className="fixed inset-0 z-20 md:absolute md:z-0 md:mt-50 lg:ml-auto lg:mr-0 lg:w-429">
           <ReservationInfoModal
             tabData={[
               { type: '신청', count: selectedDate.reservations.pending },

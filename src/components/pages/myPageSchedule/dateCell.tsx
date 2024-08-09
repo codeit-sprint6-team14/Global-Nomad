@@ -32,14 +32,16 @@ const DateCell: React.FC<DateCellProps> = ({ day, isCurrentMonth, reservation, o
   };
 
   const circleColor = getCircleColor();
+  const isClickable = !!reservation;
 
   return (
     <td
       className={`relative h-154 border text-left align-top text-xl-medium ${
         isCurrentMonth ? 'text-gray-700' : 'text-gray-400'
-      }`}
+      } ${isClickable ? 'cursor-pointer' : 'cursor-default'}`}
+      onClick={isClickable ? onClick : undefined}
     >
-      <div className="h-full w-full cursor-pointer" onClick={onClick}>
+      <div className="h-full w-full">
         <div className="flex flex-col">
           <div className="items-top flex px-5 py-10 lg:px-15">
             <span>{day}</span>

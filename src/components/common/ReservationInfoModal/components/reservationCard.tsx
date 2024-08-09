@@ -10,7 +10,7 @@ type ReservationCardProps = {
 
 const ReservationCard = ({ selectedTab, reservationName, reservationCount }: ReservationCardProps) => {
   return (
-    <div className="flex h-116 w-330 flex-col gap-6 rounded-4 border md:w-381">
+    <div className="flex h-116 w-330 flex-col gap-6 rounded-4 border md:w-350">
       <div className="flex flex-col gap-6 pl-16 pt-8">
         <p className="text-lg-semibold text-gray-700">
           닉네임 <span className="text-lg-medium text-black">{reservationName}</span>
