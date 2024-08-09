@@ -7,7 +7,7 @@ interface MenuOptionListProps {
   id: number;
   imgSrc: JSX.Element;
   text: string;
-  path: string; // 메뉴 항목의 경로 추가
+  path: string;
 }
 
 const menuOptionList: MenuOptionListProps[] = [

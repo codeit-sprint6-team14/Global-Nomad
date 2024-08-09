@@ -75,7 +75,7 @@ const DateSelectModal = () => {
   }, []);
 
   return (
-    <div className="w-480 rounded-24 bg-white px-24 py-32">
+    <div className="absolute right-50 z-50 w-480 rounded-24 bg-white px-24 py-32">
       <Header />
       <main className="mb-64">
         <Calendar
