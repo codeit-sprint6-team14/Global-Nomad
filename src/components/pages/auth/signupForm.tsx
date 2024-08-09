@@ -1,5 +1,6 @@
 import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
+import { useSignup } from '@/hooks/useSignup';
 import { SignupFormData } from '@/types/formTypes';
 import { signupValidationSchema } from '@/utils/schema';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -16,12 +17,14 @@ const SignupForm = () => {
     mode: 'onChange',
   });
 
-  const onSubmit = () => {
-    // 회원가입 로직 추가 예정
+  const { handleSignup, isLoading, error } = useSignup();
+
+  const onSubmitUserData = async (data: SignupFormData) => {
+    handleSignup(data);
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8 sm:w-350 md:w-640">
+    <form onSubmit={handleSubmit(onSubmitUserData)} className="flex flex-col gap-8 sm:w-350 md:w-640">
       <label htmlFor="email">이메일</label>
       <Input
         id="email"
@@ -70,9 +73,10 @@ const SignupForm = () => {
         <span className="block text-xs-regular text-red-200">{errors.passwordConfirmation.message}</span>
       )}
 
-      <Button.Default type="submit" className="mt-28 h-48 w-full" disabled={!isValid}>
-        회원가입 하기
+      <Button.Default type="submit" className="mt-28 h-48 w-full" disabled={!isValid || isLoading}>
+        {isLoading ? '처리 중...' : '회원가입 하기'}
       </Button.Default>
+      {error && <span className="mt-4 block text-xs-regular text-red-200">{error}</span>}
     </form>
   );
 };
