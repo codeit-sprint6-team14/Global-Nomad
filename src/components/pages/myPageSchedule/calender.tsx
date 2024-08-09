@@ -1,3 +1,4 @@
+import ReservationInfoModal from '@/components/common/ReservationInfoModal';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import React, { useState } from 'react';
@@ -13,7 +14,7 @@ interface DailyReservation {
   };
 }
 
-// Sample reservation data
+// 샘플 예약 데이터
 const reservations: DailyReservation[] = [
   {
     date: '2024-08-09',
@@ -37,6 +38,8 @@ const dayArr = ['SUN', 'MON', 'TUE', 'WED', 'THUR', 'FRI', 'SAT'];
 
 const Calendar: React.FC = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<DailyReservation | null>(null);
 
   const currentYear = currentDate.getFullYear();
   const currentMonth = currentDate.getMonth();
@@ -71,6 +74,23 @@ const Calendar: React.FC = () => {
   const handleNextClick = () => {
     setCurrentDate(new Date(currentYear, currentMonth + 1, 1));
   };
+
+  const handleDateClick = (day: number) => {
+    const clickedDate = new Date(currentYear, currentMonth, day);
+    const formattedDate = format(clickedDate, 'yyyy-MM-dd');
+    const reservation = reservations.find((res) => res.date === formattedDate);
+
+    if (reservation) {
+      setSelectedDate(reservation);
+      setModalOpen(true); // 모달 열기
+    }
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setSelectedDate(null);
+  };
+
   return (
     <div className="container mx-auto w-342 p-4 md:w-430 lg:w-800">
       <div className="mb-20 flex items-center justify-center gap-20 text-xl-bold">
@@ -120,6 +140,7 @@ const Calendar: React.FC = () => {
                       day={day}
                       isCurrentMonth={isCurrentMonth}
                       reservation={reservation ? reservation.reservations : undefined}
+                      onClick={() => isCurrentMonth && handleDateClick(day)}
                     />
                   );
                 })}
@@ -128,6 +149,28 @@ const Calendar: React.FC = () => {
           </tbody>
         </table>
       </div>
+      {isModalOpen && selectedDate && (
+        <div className="fixed inset-0 z-20">
+          <ReservationInfoModal
+            tabData={[
+              { type: '신청', count: selectedDate.reservations.pending },
+              { type: '승인', count: selectedDate.reservations.confirmed },
+              { type: '거절', count: selectedDate.reservations.completed },
+            ]}
+            dropdownOptions={[
+              { value: 'option1', label: '옵션 1' },
+              { value: 'option2', label: '옵션 2' },
+            ]}
+            reservationDate={selectedDate.date}
+            reservations={{
+              신청: Array(selectedDate.reservations.pending).fill({ name: '신청자', count: 1 }),
+              승인: Array(selectedDate.reservations.confirmed).fill({ name: '승인자', count: 1 }),
+              거절: Array(selectedDate.reservations.completed).fill({ name: '거절자', count: 1 }),
+            }}
+            onClose={handleCloseModal} // 모달 닫기 핸들러
+          />
+        </div>
+      )}
     </div>
   );
 };
