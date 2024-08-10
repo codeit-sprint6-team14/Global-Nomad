@@ -8,8 +8,9 @@ export const useActivityAvailableSchedule = ({ activityId, year, month }: Availa
     isLoading,
     error,
   } = useQuery<DaySchedule[]>({
-    queryKey: ['AvailableSchedule', activityId],
+    queryKey: ['AvailableSchedule', activityId, year, month],
     queryFn: () => getActivityAvailableSchedule({ activityId, year, month }),
+    enabled: !!activityId && !!year && !!month,
   });
 
   return { availableSchedule, isLoading, error };
