@@ -2,7 +2,7 @@
 import { INITIAL_DATE } from '@/constants/date';
 import { useActivityAvailableSchedule } from '@/hooks/useActivityAvailableSchedule';
 import { useActivityReservationMutation } from '@/hooks/useReservationMutation';
-import { formSubmitDataAtom } from '@/store/activityReservationFormSubmitAtom';
+import { formSubmitDataAtom } from '@/store/activityDetailsAtom';
 import { DaySchedule, TimeSlot } from '@/types/availableSchedulesTypes';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAtom } from 'jotai';
@@ -22,11 +22,7 @@ const Desktop = ({ activityId }: { activityId: string }) => {
 
   const twoDigitMonth = String(currentMonth.getMonth() + 1).padStart(2, '0');
 
-  const {
-    availableSchedule = [],
-    isLoading,
-    error,
-  } = useActivityAvailableSchedule({
+  const { availableSchedule, isLoading, error } = useActivityAvailableSchedule({
     activityId,
     year: currentMonth.getFullYear(),
     month: twoDigitMonth,
@@ -36,21 +32,20 @@ const Desktop = ({ activityId }: { activityId: string }) => {
 
   INITIAL_DATE.setHours(0, 0, 0, 0);
 
-  const availableDates = availableSchedule
-    .map((schedule) => new Date(schedule.date))
-    .filter((date) => date >= INITIAL_DATE);
+  const availableDates =
+    availableSchedule?.map((schedule) => new Date(schedule.date)).filter((date) => date >= INITIAL_DATE) || [];
 
   const getFirstActivityDateOfMonth = (year: number, month: number) => {
     return (
-      availableSchedule.find((schedule) => {
+      availableSchedule?.find((schedule) => {
         const scheduleDate = new Date(schedule.date);
         return scheduleDate >= INITIAL_DATE && scheduleDate.getFullYear() === year && scheduleDate.getMonth() === month;
       })?.date || null
     );
   };
 
-  const getSelectedDateSlots = (selectedDate: Date | null, schedules: DaySchedule[]) => {
-    const selectedSchedule = schedules.find(
+  const getSelectedDateSlots = (selectedDate: Date | null, schedules?: DaySchedule[]) => {
+    const selectedSchedule = schedules?.find(
       (schedule) => new Date(schedule.date).toDateString() === selectedDate?.toDateString(),
     );
 
@@ -75,7 +70,12 @@ const Desktop = ({ activityId }: { activityId: string }) => {
 
   const updateMonthChange = (newMonth: Date) => {
     setCurrentMonth(newMonth);
-    const firstActivityDate = getFirstActivityDateOfMonth(newMonth.getFullYear(), newMonth.getMonth());
+  };
+
+  useEffect(() => {
+    if (!availableSchedule) return;
+
+    const firstActivityDate = getFirstActivityDateOfMonth(currentMonth.getFullYear(), currentMonth.getMonth());
 
     if (firstActivityDate) {
       updateDateSelect(new Date(firstActivityDate));
@@ -83,15 +83,7 @@ const Desktop = ({ activityId }: { activityId: string }) => {
       setSelectedDate(null);
       setSelectedSlot(null);
     }
-  };
-
-  useEffect(() => {
-    const firstActivityDate = getFirstActivityDateOfMonth(INITIAL_DATE.getFullYear(), INITIAL_DATE.getMonth());
-
-    if (firstActivityDate) {
-      updateDateSelect(new Date(firstActivityDate));
-    }
-  }, []);
+  }, [availableSchedule]);
 
   const { submitReservation, isPending } = useActivityReservationMutation();
 
