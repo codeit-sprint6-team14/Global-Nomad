@@ -1,5 +1,5 @@
 import { axiosRequester } from '@/libs/axios';
-import { formSubmitDataAtomType } from '@/store/activityReservationFormSubmitAtom';
+import { formSubmitDataAtomType } from '@/store/activityDetailsAtom';
 import { Activity } from '@/types/activity';
 import { AvailableScheduleTypeProps, DaySchedule } from '@/types/availableSchedulesTypes';
 import { ReviewListData } from '@/types/reviewList';

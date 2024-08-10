@@ -1,6 +1,6 @@
 import AddNumberButton from '@/../public/assets/icons/add-button.svg';
 import SubtractNumberButton from '@/../public/assets/icons/subtract-button.svg';
-import { formSubmitDataAtom } from '@/store/activityReservationFormSubmitAtom';
+import { formSubmitDataAtom } from '@/store/activityDetailsAtom';
 import { useAtomValue, useSetAtom } from 'jotai';
 
 const Counter = () => {
