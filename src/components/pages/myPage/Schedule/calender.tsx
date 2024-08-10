@@ -1,38 +1,11 @@
 import ReservationInfoModal from '@/components/common/ReservationInfoModal';
+import { DailyReservation } from '@/types/reservationTypes';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import React, { useState } from 'react';
 
 import DateCell from './dateCell';
-
-interface DailyReservation {
-  date: string;
-  reservations: {
-    completed: number;
-    confirmed: number;
-    pending: number;
-  };
-}
-
-// 샘플 예약 데이터
-const reservations: DailyReservation[] = [
-  {
-    date: '2024-08-09',
-    reservations: {
-      completed: 1,
-      confirmed: 0,
-      pending: 0,
-    },
-  },
-  {
-    date: '2024-08-15',
-    reservations: {
-      completed: 0,
-      confirmed: 1,
-      pending: 2,
-    },
-  },
-];
+import reservations from './mockReservations';
 
 const dayArr = ['SUN', 'MON', 'TUE', 'WED', 'THUR', 'FRI', 'SAT'];
 
