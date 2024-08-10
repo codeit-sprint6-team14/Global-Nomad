@@ -18,7 +18,7 @@ const Main = () => {
         <button onClick={handleDateSelectModal} className="mb-27">
           날짜 선택하기
         </button>
-        {isOpenModal && <Modal.DateSelect />}
+        {isOpenModal && <Modal.DateSelect setIsOpenModal={setIsOpenModal} />}
         <h2 className="mb-5 text-xl-bold">참여 인원 수</h2>
         <div className="mb-32">
           <Counter />
