@@ -1,6 +1,8 @@
 import FloatingBox from '@/components/common/FloatingBox';
 import { useActivityData } from '@/hooks/useActivityData';
 import useViewportSize from '@/hooks/useViewportSize';
+import { activityIdAtom } from '@/store/activityDetailsAtom';
+import { useSetAtom } from 'jotai';
 
 import BannerImage from './bannerImage';
 import ActivityDescription from './description';
@@ -8,11 +10,16 @@ import Header from './header';
 import KakaoMap from './kakaoMap';
 import ReviewList from './reviewList';
 
-const ActivityInformation = ({ activityId = '2195' }: { activityId?: string }) => {
+// 리뷰 페이지네이션 테스트 activityId => 2192
+// 캘린더 예약 가능 스케줄 테스트 activityId => 2213
+const ActivityInformation = ({ activityId = '2213' }: { activityId?: string }) => {
   const viewportSize = useViewportSize();
 
   const isMobile = viewportSize === 'mobile';
   const isTablet = viewportSize === 'tablet';
+
+  const setActivityId = useSetAtom(activityIdAtom);
+  setActivityId(activityId);
 
   const { activityData, isLoading, error } = useActivityData(activityId);
 
