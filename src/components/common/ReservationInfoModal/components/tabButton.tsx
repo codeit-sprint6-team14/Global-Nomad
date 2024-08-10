@@ -1,4 +1,4 @@
-export type TabType = '신청' | '확정' | '거절';
+export type TabType = '신청' | '승인' | '거절';
 
 export type TabItem = {
   type: TabType;
@@ -32,7 +32,7 @@ const TabButton = ({
   </button>
 );
 
-const defaultTabs: TabType[] = ['신청', '확정', '거절'];
+const defaultTabs: TabType[] = ['신청', '승인', '거절'];
 
 const TabButtons = ({ tabData, selectedTab, onTabClick }: TabButtonsProps) => {
   const tabMap = new Map(tabData.map((tab) => [tab.type, tab]));

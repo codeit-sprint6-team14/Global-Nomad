@@ -1,9 +1,9 @@
+import LeftArrow from '@/../public/assets/icons/left-arrow.svg';
 import Button from '@/components/common/Button';
 import SideNavMenu from '@/components/common/SideNavMenu';
 import useViewportSize from '@/hooks/useViewportSize';
 import { useRouter } from 'next/router';
 
-import LeftArrow from '../../../../public/assets/icons/left-arrow.svg';
 import InputSection from './inputSection';
 import PasswordInputSection from './passwordInputSection';
 
@@ -14,13 +14,13 @@ const MyProfile = () => {
     router.push('/my-page');
   };
 
-  const isDesktop = viewportSize === 'desktop';
+  const isSideNavbarOpen = viewportSize === 'tablet' || 'desktop';
 
   return (
     <div className="bg-gray-100">
       <div className="ml-auto mr-auto flex md:w-744 lg:w-1200">
         <div className="ml-30 mt-30">
-          {isDesktop && (
+          {isSideNavbarOpen && (
             <div className="hidden w-60 bg-white md:block">
               <SideNavMenu />
             </div>
