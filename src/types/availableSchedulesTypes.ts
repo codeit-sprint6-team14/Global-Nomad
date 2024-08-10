@@ -9,6 +9,12 @@ export interface DaySchedule {
   times: TimeSlot[];
 }
 
+export interface AvailableScheduleTypeProps {
+  activityId: string;
+  year: number;
+  month: string;
+}
+
 export interface TimeSlotSelectionProps {
   selectedDate: Date | null;
   selectedSlot: TimeSlot | null;

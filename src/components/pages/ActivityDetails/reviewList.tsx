@@ -1,6 +1,6 @@
-import { getActivityReviewList } from '@/apis/getActivity';
+import { getActivityReviewList } from '@/apis/activityDetails';
 import Pagination from '@/components/common/Pagination';
-import { ReviewType } from '@/types/activityReviews';
+import { ReviewData, ReviewType } from '@/types/activityReviews';
 import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useState } from 'react';
@@ -17,13 +17,16 @@ const ReviewList = ({ activityId }: { activityId: string }) => {
     isLoading,
     error,
     refetch,
-  } = useQuery({
+    isPlaceholderData,
+  } = useQuery<ReviewData>({
     queryKey: ['review', activityId, currentPage],
     queryFn: () => getActivityReviewList({ activityId, page: currentPage, size: REVIEWS_PER_PAGE }),
+    placeholderData: (prevData) => prevData,
+    staleTime: 5000,
   });
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>An error has occurred</div>;
+  if (isLoading) return <div>댓글 로딩중입니다...</div>;
+  if (error) return <div>댓글을 불러오는데 실패했습니다.</div>;
   if (!reviewListData) return null;
 
   const { averageRating, totalCount, reviews } = reviewListData;
@@ -55,7 +58,12 @@ const ReviewList = ({ activityId }: { activityId: string }) => {
       {reviews.map((review: ReviewType) => (
         <Review key={review.id} review={review} />
       ))}
-      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+        isPlaceholderData={isPlaceholderData}
+      />
     </div>
   );
 };
