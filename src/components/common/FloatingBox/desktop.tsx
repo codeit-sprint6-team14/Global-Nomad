@@ -1,21 +1,41 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { INITIAL_DATE } from '@/constants/date';
-import availableSchedule from '@/mockData/availableSchedule';
+import { useActivityAvailableSchedule } from '@/hooks/useActivityAvailableSchedule';
+import { useActivityReservationMutation } from '@/hooks/useReservationMutation';
+import { formSubmitDataAtom } from '@/store/activityReservationFormSubmitAtom';
 import { DaySchedule, TimeSlot } from '@/types/availableSchedulesTypes';
+import { useQueryClient } from '@tanstack/react-query';
+import { useAtom } from 'jotai';
 import { useEffect, useState } from 'react';
 
 import Button from '../Button';
 import Calendar from '../Calendar';
 import DesktopComponents from './DesktopComponents';
 
-const Desktop = () => {
+const Desktop = ({ activityId }: { activityId: string }) => {
+  const queryClient = useQueryClient();
+
   const [currentMonth, setCurrentMonth] = useState<Date>(INITIAL_DATE);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null);
+  const [formSubmitScheduleId, setFormSubmitScheduleId] = useAtom(formSubmitDataAtom);
+
+  const twoDigitMonth = String(currentMonth.getMonth() + 1).padStart(2, '0');
+
+  const {
+    availableSchedule = [],
+    isLoading,
+    error,
+  } = useActivityAvailableSchedule({
+    activityId,
+    year: currentMonth.getFullYear(),
+    month: twoDigitMonth,
+  });
 
   const price = 10000;
 
   INITIAL_DATE.setHours(0, 0, 0, 0);
+
   const availableDates = availableSchedule
     .map((schedule) => new Date(schedule.date))
     .filter((date) => date >= INITIAL_DATE);
@@ -49,6 +69,8 @@ const Desktop = () => {
 
   const handleSlotSelect = (slot: TimeSlot) => {
     setSelectedSlot(slot);
+    setFormSubmitScheduleId((prev) => ({ ...prev, scheduleId: slot.id }));
+    // 폼 데이터 업데이트 slot.id -> scheduleId
   };
 
   const updateMonthChange = (newMonth: Date) => {
@@ -70,6 +92,13 @@ const Desktop = () => {
       updateDateSelect(new Date(firstActivityDate));
     }
   }, []);
+
+  const { submitReservation, isPending } = useActivityReservationMutation();
+
+  const handleReservationFormSubmit = () => {
+    submitReservation(activityId, formSubmitScheduleId);
+  };
+
   return (
     <section className="sticky top-0 h-746 w-384 rounded-8 border border-gray-300 bg-white px-24 py-17 shadow-[0px_10px_30px_3px_rgba(5,16,55,0.15)]">
       <DesktopComponents.PriceInfo price={price} />
@@ -89,7 +118,9 @@ const Desktop = () => {
         getSelectedDateSlots={getSelectedDateSlots}
       />
       <DesktopComponents.ParticipantCounter />
-      <Button.Default className="h-56 w-336">예약하기</Button.Default>
+      <Button.Default className="h-56 w-336" onClick={handleReservationFormSubmit}>
+        예약하기
+      </Button.Default>
       <div className="mb-16 border-b border-gray-300 pb-24"></div>
       <DesktopComponents.TotalPrice price={price} />
     </section>

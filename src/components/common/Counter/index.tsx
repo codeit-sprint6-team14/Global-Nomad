@@ -1,17 +1,25 @@
 import AddNumberButton from '@/../public/assets/icons/add-button.svg';
 import SubtractNumberButton from '@/../public/assets/icons/subtract-button.svg';
-import { useState } from 'react';
+import { formSubmitDataAtom } from '@/store/activityReservationFormSubmitAtom';
+import { useAtomValue, useSetAtom } from 'jotai';
 
 const Counter = () => {
-  const [count, setCount] = useState(0);
+  const setFormSubmitHeadCount = useSetAtom(formSubmitDataAtom);
+  const formSubmitHeadCount = useAtomValue(formSubmitDataAtom);
 
   const increment = () => {
-    setCount((prev) => prev + 1);
+    setFormSubmitHeadCount((prev) => ({
+      ...prev,
+      headCount: prev.headCount + 1,
+    }));
   };
 
   const decrement = () => {
-    if (count > 0) {
-      setCount((prev) => prev - 1);
+    if (formSubmitHeadCount.headCount > 0) {
+      setFormSubmitHeadCount((prev) => ({
+        ...prev,
+        headCount: prev.headCount - 1,
+      }));
     }
   };
 
@@ -20,7 +28,7 @@ const Counter = () => {
       <button onClick={decrement} aria-label="감소 버튼">
         <SubtractNumberButton />
       </button>
-      <span className="text-md-regular text-gray-800">{count}</span>
+      <span className="text-md-regular text-gray-800">{formSubmitHeadCount.headCount}</span>
       <button onClick={increment} aria-label="증가 버튼">
         <AddNumberButton />
       </button>
