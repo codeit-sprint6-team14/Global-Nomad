@@ -6,7 +6,7 @@ import { formSubmitDataAtom } from '@/store/activityDetailsAtom';
 import { DaySchedule, TimeSlot } from '@/types/availableSchedulesTypes';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAtom } from 'jotai';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import Button from '../Button';
 import Calendar from '../Calendar';
@@ -35,27 +35,41 @@ const Desktop = ({ activityId }: { activityId: string }) => {
   const availableDates =
     availableSchedule?.map((schedule) => new Date(schedule.date)).filter((date) => date >= INITIAL_DATE) || [];
 
-  const getFirstActivityDateOfMonth = (year: number, month: number) => {
-    return (
-      availableSchedule?.find((schedule) => {
-        const scheduleDate = new Date(schedule.date);
-        return scheduleDate >= INITIAL_DATE && scheduleDate.getFullYear() === year && scheduleDate.getMonth() === month;
-      })?.date || null
-    );
-  };
+  const getFirstActivityDateOfMonth = useCallback(
+    (year: number, month: number) => {
+      return (
+        availableSchedule?.find((schedule) => {
+          const scheduleDate = new Date(schedule.date);
+          return (
+            scheduleDate >= INITIAL_DATE && scheduleDate.getFullYear() === year && scheduleDate.getMonth() === month
+          );
+        })?.date || null
+      );
+    },
+    [availableSchedule],
+  );
 
-  const getSelectedDateSlots = (selectedDate: Date | null, schedules?: DaySchedule[]) => {
+  const getSelectedDateSlots = useCallback((selectedDate: Date | null, schedules?: DaySchedule[]) => {
     const selectedSchedule = schedules?.find(
       (schedule) => new Date(schedule.date).toDateString() === selectedDate?.toDateString(),
     );
 
     return selectedSchedule ? selectedSchedule.times : [];
-  };
+  }, []);
 
-  const getFirstSlotOfDate = (date: Date | null) => {
-    const slots = getSelectedDateSlots(date, availableSchedule);
-    setSelectedSlot(slots.length > 0 ? slots[0] : null);
-  };
+  const getFirstSlotOfDate = useCallback(
+    (date: Date | null) => {
+      const slots = getSelectedDateSlots(date, availableSchedule);
+      if (slots.length > 0) {
+        const firstSlot = slots[0];
+        setSelectedSlot(firstSlot);
+        setFormSubmitScheduleId((prev) => ({ ...prev, scheduleId: firstSlot.id }));
+      } else {
+        setSelectedSlot(null);
+      }
+    },
+    [availableSchedule, getSelectedDateSlots],
+  );
 
   const updateDateSelect = (date: Date | null) => {
     setSelectedDate(date);
@@ -73,6 +87,7 @@ const Desktop = ({ activityId }: { activityId: string }) => {
   };
 
   useEffect(() => {
+    // 데이터가 없을 경우
     if (!availableSchedule) return;
 
     const firstActivityDate = getFirstActivityDateOfMonth(currentMonth.getFullYear(), currentMonth.getMonth());

@@ -10,12 +10,12 @@ const TimeSlotSelection = ({
   getSelectedDateSlots,
 }: TimeSlotSelectionProps) => {
   const [slots, setSlots] = useState<TimeSlot[]>([]);
-  console.log('selectedDate: ', selectedDate);
+
   useEffect(() => {
     if (!availableSchedule || !selectedDate) return;
 
     const newSlots = getSelectedDateSlots(selectedDate, availableSchedule);
-    console.log('newSlots: ', newSlots);
+
     setSlots(newSlots);
   }, [availableSchedule, selectedDate]);
 
