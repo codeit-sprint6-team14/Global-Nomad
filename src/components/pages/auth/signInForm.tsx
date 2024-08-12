@@ -3,7 +3,7 @@ import Input from '@/components/common/Input';
 import Modal from '@/components/common/Modal';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { useSignin } from '@/hooks/useSignin';
-import { SigninFormData } from '@/types/formTypes';
+import { SigninData } from '@/types/auth';
 import { signinValidationSchema } from '@/utils/schema';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
@@ -13,14 +13,14 @@ const SignInForm = () => {
     register,
     handleSubmit,
     formState: { errors, isValid },
-  } = useForm<SigninFormData>({
+  } = useForm<SigninData>({
     resolver: yupResolver(signinValidationSchema),
     mode: 'onChange',
   });
 
   const { handleSignin, isLoading, error, resetError } = useSignin();
 
-  const onSigninSubmit = (data: SigninFormData) => {
+  const onSigninSubmit = (data: SigninData) => {
     handleSignin(data);
   };
 

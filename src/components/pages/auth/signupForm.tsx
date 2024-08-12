@@ -4,7 +4,7 @@ import Modal from '@/components/common/Modal';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { useSignup } from '@/hooks/useSignup';
 import { useToggle } from '@/hooks/useToggle';
-import { SignupFormData } from '@/types/formTypes';
+import { SignupFormData } from '@/types/auth';
 import { signupValidationSchema } from '@/utils/schema';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/router';
