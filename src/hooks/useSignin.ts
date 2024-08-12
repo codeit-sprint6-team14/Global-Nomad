@@ -40,9 +40,14 @@ export const useSignin = () => {
     mutation.mutate(credentials);
   };
 
+  const resetError = () => {
+    setError(null);
+  };
+
   return {
     handleSignin,
     isLoading: mutation.isPending,
     error,
+    resetError,
   };
 };
