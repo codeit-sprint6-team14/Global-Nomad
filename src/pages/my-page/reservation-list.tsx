@@ -52,7 +52,7 @@ const ReservationList = () => {
   return (
     <>
       <NavBar />
-      <main className="mx-auto mt-94 w-375 md:w-696 lg:mt-142 lg:w-1200">
+      <main className="mx-auto mt-94 w-344 md:w-696 lg:mt-142 lg:w-1200">
         {isMobile && <ReservationContent isEmpty={isReservationEmpty} />}
         {(isTablet || isDesktop) && (
           <div className="flex justify-between">
