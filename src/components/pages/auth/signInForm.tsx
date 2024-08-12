@@ -1,5 +1,6 @@
 import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
+import { useSignin } from '@/hooks/useSignin';
 import { SigninFormData } from '@/types/formTypes';
 import { signinValidationSchema } from '@/utils/schema';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -16,12 +17,14 @@ const SignInForm = () => {
     mode: 'onChange',
   });
 
-  const onSubmit = () => {
-    // 로그인 로직 추가 예정
+  const { handleSignin, isLoading, error } = useSignin();
+
+  const onSigninSubmit = (data: SigninFormData) => {
+    handleSignin(data);
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8 sm:w-350 md:w-640">
+    <form onSubmit={handleSubmit(onSigninSubmit)} className="flex flex-col gap-8 sm:w-350 md:w-640">
       <label htmlFor="email">이메일</label>
       <Input
         id="email"
@@ -44,8 +47,10 @@ const SignInForm = () => {
       />
       {errors.password && <span className="block text-xs-regular text-red-200">{errors.password.message}</span>}
 
-      <Button.Default type="submit" className="mt-28 h-48 w-full" disabled={!isValid}>
-        로그인 하기
+      {error && <span className="block text-xs-regular text-red-200">{error}</span>}
+
+      <Button.Default type="submit" className="mt-28 h-48 w-full" disabled={!isValid || isLoading}>
+        {isLoading ? '로그인 중...' : '로그인 하기'}
       </Button.Default>
     </form>
   );

@@ -17,7 +17,7 @@ export const useSignup = () => {
         setError(result.message || '회원가입 중 오류가 발생했습니다.');
       }
     },
-    onError: (error: unknown) => {
+    onError: (error) => {
       if (error instanceof Error) {
         setError(error.message);
       } else {
