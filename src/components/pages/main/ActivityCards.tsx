@@ -2,16 +2,20 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import Star from '../../../../public/assets/icons/star.svg';
-import { Activity } from './mainPage.type';
+import { ActivityCardProps } from './mainPage.type';
 
-interface ActivityCardProps {
-  activity: Activity;
-}
-
-const RegularActivityCard: React.FC<ActivityCardProps> = ({ activity }) => {
+const ActivityCards: React.FC<ActivityCardProps> = ({ activity }) => {
   return (
-    <Link href={`/activities/${activity.id}`} className="flex h-414 w-283 flex-col gap-18">
-      <Image src={activity.bannerImageUrl} alt="banner" width={283} height={283} className="rounded-25" />
+    <Link href={`/activities/${activity.id}`} className="mb-48 flex h-414 w-283 flex-col gap-18">
+      <div className="relative h-283 w-283">
+        <Image
+          src={activity.bannerImageUrl}
+          alt="ActivityThumnail"
+          layout="fill"
+          objectFit="cover"
+          className="rounded-25"
+        />
+      </div>
       <div className="flex flex-col gap-15">
         <div className="flex flex-col gap-10">
           <div className="flex items-center gap-5">
@@ -22,23 +26,13 @@ const RegularActivityCard: React.FC<ActivityCardProps> = ({ activity }) => {
           <p className="w-282 truncate text-2xl-semibold text-black">{activity.title}</p>
         </div>
         <div className="flex gap-5">
-          <span className="text-2xl-bold text-black">\ {activity.price}</span>
+          <span className="text-2xl-bold text-black">\ {activity.price.toLocaleString()}</span>
           <span className="text-xl-regular text-gray-800">/</span>
           <span className="text-xl-regular text-gray-600">인</span>
         </div>
       </div>
     </Link>
   );
-};
-
-const PopularActivityCard: React.FC<ActivityCardProps> = ({ activity }) => {
-  return <Link href={`/activities/${activity.id}`}></Link>;
-};
-
-const ActivityCards: React.FC<ActivityCardProps> = ({ activity }) => {
-  const isPopular = activity.rating >= 4.5;
-
-  return isPopular ? <PopularActivityCard activity={activity} /> : <RegularActivityCard activity={activity} />;
 };
 
 export default ActivityCards;
