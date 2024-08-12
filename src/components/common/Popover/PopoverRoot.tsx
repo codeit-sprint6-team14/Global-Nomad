@@ -1,14 +1,8 @@
-import { ReactNode, createContext, useState } from 'react';
-
-type PopoverPosition = {
-  x: number;
-  y: number;
-};
+import { ReactNode, createContext, useCallback, useState } from 'react';
 
 type PopoverContextType = {
   isOpen: boolean;
-  toggle: () => void;
-  position: PopoverPosition;
+  toggle: (forceOpen?: boolean) => void;
   triggerRect: DOMRect | null;
   setTriggerRect: (rect: DOMRect) => void;
 };
@@ -17,19 +11,22 @@ export const PopoverContext = createContext<PopoverContextType | undefined>(unde
 
 type PopoverRootProps = {
   children: ReactNode;
-  position: PopoverPosition;
 };
 
-export const PopoverRoot = ({ children, position }: PopoverRootProps) => {
+export const PopoverRoot = ({ children }: PopoverRootProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [triggerRect, setTriggerRect] = useState<DOMRect | null>(null);
 
-  const toggle = () => {
-    setIsOpen((prev) => !prev);
-  };
+  const toggle = useCallback((forceOpen?: boolean) => {
+    if (typeof forceOpen === 'boolean') {
+      setIsOpen(forceOpen);
+    } else {
+      setIsOpen((prev) => !prev);
+    }
+  }, []);
 
   return (
-    <PopoverContext.Provider value={{ isOpen, toggle, position, triggerRect, setTriggerRect }}>
+    <PopoverContext.Provider value={{ isOpen, toggle, triggerRect, setTriggerRect }}>
       <div className="relative">{children}</div>
     </PopoverContext.Provider>
   );

@@ -12,14 +12,14 @@ export const PopoverTrigger = ({ children }: PopoverTriggerProps) => {
   if (!context) {
     throw new Error('PopoverTrigger must be used within a PopoverRoot');
   }
-  const { toggle, setTriggerRect } = context;
+  const { toggle, setTriggerRect, isOpen } = context;
 
   const handleClick = () => {
     if (triggerRef.current) {
       const rect = triggerRef.current.getBoundingClientRect();
       setTriggerRect(rect);
     }
-    toggle();
+    toggle(!isOpen); // 클릭 시 상태 반전
   };
 
   return (

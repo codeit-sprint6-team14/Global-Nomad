@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 import DropDown from '../Dropdown';
+import Notification from './Notification';
 
 // 테스트용 accessToken prop으로 로그인 상태, 로그아웃 상태 UI 테스트
 function NavBar({ accessToken = true }: { accessToken?: boolean }) {
@@ -25,7 +26,7 @@ function NavBar({ accessToken = true }: { accessToken?: boolean }) {
         </Link>
         {accessToken ? (
           <div className="flex items-center">
-            <Image src="/assets/icons/bell.svg" alt="네비바 알림 벨" width={20} height={20} />
+            <Notification />
             <div className="mx-12 h-22 border-l border-solid border-gray-300 md:mx-25" />
             <div className="relative flex items-center gap-10">
               <Image

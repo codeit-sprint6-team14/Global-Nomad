@@ -1,4 +1,4 @@
-import { type HTMLAttributes, type ReactNode, useContext, useEffect, useRef } from 'react';
+import { type HTMLAttributes, type ReactNode, useContext, useRef } from 'react';
 
 import { PopoverContext } from './PopoverRoot';
 
@@ -13,20 +13,7 @@ export const PopoverContent = ({ children, onClick, ...props }: PopoverContentPr
   if (!context) {
     throw new Error('PopoverContent must be used within a PopoverRoot');
   }
-  const { isOpen, position, triggerRect } = context;
-
-  useEffect(() => {
-    if (isOpen && contentRef.current && triggerRect) {
-      const { width, height, left, top } = triggerRect;
-
-      const xPos = left + (width * position.x) / 100;
-      const yPos = top + (height * position.y) / 100;
-
-      contentRef.current.style.position = 'fixed';
-      contentRef.current.style.left = `${xPos}px`;
-      contentRef.current.style.top = `${yPos}px`;
-    }
-  }, [isOpen, position, triggerRect]);
+  const { isOpen } = context;
 
   if (!isOpen) return null;
 

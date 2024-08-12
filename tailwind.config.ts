@@ -79,7 +79,10 @@ const config: Config = {
         'xs-medium': ['12px', { lineHeight: '18px', fontWeight: '500' }],
         'xs-regular': ['12px', { lineHeight: '18px', fontWeight: '400' }],
       },
-      spacing: PX0_200,
+      spacing: {
+        ...PX0_200,
+        '-30': '-50px',
+      },
       width: PX0_1920,
       height: PX0_1920,
       padding: PX0_1920,
