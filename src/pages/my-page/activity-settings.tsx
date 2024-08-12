@@ -17,7 +17,7 @@ const ActivitySettings = () => {
   const isDesktop = deviceState === Device.DESKTOP;
 
   return (
-    <>
+    <div>
       <NavBar />
       <main className="mx-auto mb-86 mt-86 w-344 md:mb-94 md:mt-94 md:w-696 lg:mb-142 lg:mt-142 lg:w-1200">
         {isMobile && <ActivitySettingsContent isEmpty={isActivityEmpty} />}
@@ -29,7 +29,7 @@ const ActivitySettings = () => {
         )}
       </main>
       <Footer />
-    </>
+    </div>
   );
 };
 
