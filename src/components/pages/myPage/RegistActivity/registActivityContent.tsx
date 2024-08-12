@@ -7,17 +7,15 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
 
 import AddActivityTimeSection from './addActivityTimeSection';
-import ImageUploadSection from './imageUploadSection';
+import ImageUploadSection, { ImageFile } from './imageUploadSection';
 
 const categoryOptions = [
   { value: 'option1', label: '문화예술' },
   { value: 'option2', label: '식음료' },
   { value: 'option3', label: '스포츠' },
   { value: 'option4', label: '관광' },
-  { value: 'option4', label: '투어' },
+  { value: 'option5', label: '투어' },
 ];
-
-const defaultCategoryOption = '카테고리를 선택해주세요';
 
 const RegistActivityContent = () => {
   const {
@@ -34,18 +32,22 @@ const RegistActivityContent = () => {
       price: '',
       address: '',
       timeSlots: [],
+      bannerImage: [],
+      introImages: [],
     },
   });
 
   const onSubmit = () => {
-    // TODO: 내 체험 등록 로직
+    if (isValid) {
+      // TODO: Form 제출 로직
+    }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-343 md:w-429 lg:w-792">
       <div className="mb-24 flex items-center justify-between">
         <h1 className="text-3xl-bold">내 체험 등록</h1>
-        <Button.Default disabled={!isValid} className="h-48 w-120 rounded-4">
+        <Button.Default type="submit" className="h-48 w-120 rounded-4">
           등록하기
         </Button.Default>
       </div>
@@ -70,7 +72,7 @@ const RegistActivityContent = () => {
             render={({ field: { onChange } }) => (
               <Input.Dropdown
                 options={categoryOptions}
-                defaultOption={defaultCategoryOption}
+                defaultOption="카테고리를 선택해주세요."
                 onSelect={(option) => onChange(option.value)}
                 error={!!errors.category}
                 className="h-56"
@@ -140,10 +142,40 @@ const RegistActivityContent = () => {
         </div>
 
         {/* 배너 이미지 */}
-        <ImageUploadSection title="배너 이미지" />
+        <div>
+          <Controller
+            name="bannerImage"
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <ImageUploadSection
+                title="배너 이미지"
+                onChange={onChange}
+                value={value as ImageFile[]}
+                error={!!errors.bannerImage}
+              />
+            )}
+          />
+          {errors.bannerImage && <span className="errorText">{errors.bannerImage.message}</span>}
+        </div>
 
         {/* 소개 이미지 */}
-        <ImageUploadSection title="소개 이미지" multiple={true} />
+        <div>
+          <Controller
+            name="introImages"
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <ImageUploadSection
+                title="소개 이미지"
+                multiple={true}
+                onChange={onChange}
+                value={value as ImageFile[]}
+                error={!!errors.introImages}
+              />
+            )}
+          />
+          {errors.introImages && <span className="errorText">{errors.introImages.message}</span>}
+        </div>
+
         <p className="text-2lg-regular text-gray-800">*이미지는 최대 4개까지 등록 가능합니다</p>
       </div>
     </form>

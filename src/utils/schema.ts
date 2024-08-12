@@ -43,4 +43,24 @@ export const registActivitySchema = yup.object().shape({
       }),
     )
     .min(1, REGIST_ACTIVITY_ERROR_MESSAGES.MIN_TIME_SLOTS),
+  bannerImage: yup
+    .array()
+    .of(
+      yup.object().shape({
+        file: yup.mixed().required(),
+        preview: yup.string().required(),
+      }),
+    )
+    .min(1, REGIST_ACTIVITY_ERROR_MESSAGES.BANNER_IMAGE_REQUIRED)
+    .required(REGIST_ACTIVITY_ERROR_MESSAGES.BANNER_IMAGE_REQUIRED),
+  introImages: yup
+    .array()
+    .of(
+      yup.object().shape({
+        file: yup.mixed().required(),
+        preview: yup.string().required(),
+      }),
+    )
+    .min(1, REGIST_ACTIVITY_ERROR_MESSAGES.INTRO_IMAGES_REQUIRED)
+    .required(REGIST_ACTIVITY_ERROR_MESSAGES.INTRO_IMAGES_REQUIRED),
 });
