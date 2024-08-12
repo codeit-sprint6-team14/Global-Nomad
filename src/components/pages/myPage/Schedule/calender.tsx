@@ -1,11 +1,11 @@
 import ReservationInfoModal from '@/components/common/ReservationInfoModal';
-import { DailyReservation } from '@/types/reservationTypes';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import React, { useState } from 'react';
 
 import DateCell from './dateCell';
 import reservations from './mockReservations';
+import { DailyReservation } from './reservation.types';
 
 const dayArr = ['SUN', 'MON', 'TUE', 'WED', 'THUR', 'FRI', 'SAT'];
 
