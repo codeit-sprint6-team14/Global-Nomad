@@ -1,5 +1,4 @@
 import Footer from '@/components/common/Footer';
-import NavBar from '@/components/common/NavBar';
 import ReservationList from '@/pages/my-page/reservation-list';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ComponentProps } from 'react';
@@ -11,8 +10,7 @@ const meta: Meta<typeof ReservationList> = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div className="pt-70">
-        <NavBar />
+      <div>
         <Story />
         <Footer />
       </div>

@@ -1,11 +1,11 @@
-import EmptyContent from '@/components/pages/myPage/ReservationList/emptyContent';
+import TextArea from '@/components/common/TextArea';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ComponentProps } from 'react';
 
-type StoryProps = ComponentProps<typeof EmptyContent>;
+type StoryProps = ComponentProps<typeof TextArea>;
 
-const meta: Meta<typeof EmptyContent> = {
-  component: EmptyContent,
+const meta: Meta<typeof TextArea> = {
+  component: TextArea,
   tags: ['autodocs'],
 };
 
