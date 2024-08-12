@@ -1,7 +1,7 @@
 import { getActivities } from '@/apis/activities';
 import React, { useEffect, useState } from 'react';
 
-import ActivityCard from './ActivityCard';
+import ActivityCards from './ActivityCards';
 import { Activity } from './mainPage.type';
 
 const MainPage = () => {
@@ -30,16 +30,22 @@ const MainPage = () => {
   };
 
   return (
-    <div className="main-page">
-      <h1>활동 목록</h1>
-      <div className="activities-grid">
+    <section className="flex flex-col gap-24">
+      <div className="flex justify-between">
+        <div>라디오</div>
+        <div>DropDown</div>
+      </div>
+      <h2>모든 체험</h2>
+      <div className="flex w-1204 flex-wrap gap-24">
         {activities.map((activity) => (
-          <ActivityCard key={activity.id} activity={activity} />
+          <ActivityCards key={activity.id} activity={activity} />
         ))}
       </div>
+      <div>pagination</div>
+
       {!loading && <button onClick={loadMore}>더 보기</button>}
       {loading && <p>로딩 중...</p>}
-    </div>
+    </section>
   );
 };
 
