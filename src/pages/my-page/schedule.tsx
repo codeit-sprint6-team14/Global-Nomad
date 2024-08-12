@@ -1,5 +1,5 @@
 import SideNavMenu from '@/components/common/SideNavMenu';
-import MySchedule from '@/components/pages/myPageSchedule/mySchedule';
+import MySchedule from '@/components/pages/myPage/Schedule/mySchedule';
 import useViewportSize from '@/hooks/useViewportSize';
 
 const Schedule = () => {
