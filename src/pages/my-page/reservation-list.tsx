@@ -1,3 +1,4 @@
+import Footer from '@/components/common/Footer';
 import Modal from '@/components/common/Modal';
 import NavBar from '@/components/common/NavBar';
 import SideNavMenu from '@/components/common/SideNavMenu';
@@ -52,7 +53,7 @@ const ReservationList = () => {
   return (
     <>
       <NavBar />
-      <main className="mx-auto mt-94 w-344 md:w-696 lg:mt-142 lg:w-1200">
+      <main className="mx-auto mb-94 mt-94 w-344 md:w-696 lg:mb-142 lg:mt-142 lg:w-1200">
         {isMobile && <ReservationContent isEmpty={isReservationEmpty} />}
         {(isTablet || isDesktop) && (
           <div className="flex justify-between">
@@ -83,6 +84,7 @@ const ReservationList = () => {
           </Modal.Overlay>
         )}
       </main>
+      <Footer />
     </>
   );
 };

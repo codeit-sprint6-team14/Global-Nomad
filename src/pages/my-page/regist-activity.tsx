@@ -1,3 +1,4 @@
+import Footer from '@/components/common/Footer';
 import NavBar from '@/components/common/NavBar';
 import SideNavMenu from '@/components/common/SideNavMenu';
 import RegistActivityContent from '@/components/pages/myPage/RegistActivity/registActivityContent';
@@ -15,7 +16,7 @@ const RegistActivity = () => {
   return (
     <>
       <NavBar />
-      <main className="mx-auto mt-94 w-343 md:w-696 lg:mt-142 lg:w-1200">
+      <main className="mx-auto mb-94 mt-94 w-343 md:w-696 lg:mb-142 lg:mt-142 lg:w-1200">
         {isMobile && <RegistActivityContent />}
         {(isTablet || isDesktop) && (
           <div className="flex justify-between">
@@ -24,6 +25,7 @@ const RegistActivity = () => {
           </div>
         )}
       </main>
+      <Footer />
     </>
   );
 };
