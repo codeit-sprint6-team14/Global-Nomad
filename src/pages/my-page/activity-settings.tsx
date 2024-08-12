@@ -1,5 +1,3 @@
-import Footer from '@/components/common/Footer';
-import NavBar from '@/components/common/NavBar';
 import SideNavMenu from '@/components/common/SideNavMenu';
 import ActivitySettingsContent from '@/components/pages/myPage/ActivitySettings/activitySettingsContent';
 import { useDeviceState } from '@/hooks/useDeviceState';
@@ -18,8 +16,7 @@ const ActivitySettings = () => {
 
   return (
     <>
-      <NavBar />
-      <main className="mx-auto mb-86 mt-86 w-344 md:mb-94 md:mt-94 md:w-696 lg:mb-142 lg:mt-142 lg:w-1200">
+      <main className="mx-auto mb-86 mt-16 w-344 md:mb-94 md:mt-24 md:w-696 lg:mb-142 lg:mt-72 lg:w-1200">
         {isMobile && <ActivitySettingsContent isEmpty={isActivityEmpty} />}
         {(isTablet || isDesktop) && (
           <div className="flex justify-between">
@@ -28,7 +25,6 @@ const ActivitySettings = () => {
           </div>
         )}
       </main>
-      <Footer />
     </>
   );
 };
