@@ -16,7 +16,7 @@ const DropdownItem = ({ option, isSelected, onClick }: DropdownItemProps) => {
     <li
       className={`m-5 flex cursor-pointer items-center rounded-4 p-8 ${
         isSelected ? 'bg-black-100 text-white' : 'hover:bg-black-100 hover:text-white'
-      } ${dropDownType === 'time' ? 'justify-center' : ''}`}
+      } ${dropDownType === 'time' && 'justify-center'}`}
       onClick={onClick}
     >
       {dropDownType === 'category' && (

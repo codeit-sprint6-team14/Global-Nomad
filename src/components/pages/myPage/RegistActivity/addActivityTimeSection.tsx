@@ -70,20 +70,20 @@ const AddActivityTimeSection = ({ timeSlots, onChange, error }: AddActivityTimeS
         </div>
         <div className="flex items-center gap-4 lg:gap-0">
           <Input.Date
-            className={`text-md-regular md:text-lg-regular lg:mr-20 lg:w-379 ${error ? 'errorBorder' : ''}`}
+            className={`text-md-regular md:text-lg-regular lg:mr-20 lg:w-379 ${error && 'errorBorder'}`}
             onChange={(newDate) => setDate(newDate ? formatDate(newDate) : '')}
           />
           {isDesktop ? (
             <div className="flex items-center gap-12">
               <Input.Dropdown
                 {...commonDropdownProps}
-                className={`h-44 w-79 text-md-regular md:h-56 md:w-104 md:text-lg-regular lg:w-140 ${error ? 'errorBorder' : ''}`}
+                className={`h-44 w-79 text-md-regular md:h-56 md:w-104 md:text-lg-regular lg:w-140 ${error && 'errorBorder'}`}
                 onSelect={(option) => setStartTime(option.value)}
               />
               <span className="text-xl-bold">~</span>
               <Input.Dropdown
                 {...commonDropdownProps}
-                className={`h-44 w-79 text-md-regular md:h-56 md:w-104 md:text-lg-regular lg:mr-20 lg:w-140 ${error ? 'errorBorder' : ''}`}
+                className={`h-44 w-79 text-md-regular md:h-56 md:w-104 md:text-lg-regular lg:mr-20 lg:w-140 ${error && 'errorBorder'}`}
                 onSelect={(option) => setEndTime(option.value)}
               />
             </div>
@@ -91,12 +91,12 @@ const AddActivityTimeSection = ({ timeSlots, onChange, error }: AddActivityTimeS
             <>
               <Input.Dropdown
                 {...commonDropdownProps}
-                className={`h-44 w-79 text-md-regular md:h-56 md:w-104 md:text-lg-regular lg:w-140 ${error ? 'errorBorder' : ''}`}
+                className={`h-44 w-79 text-md-regular md:h-56 md:w-104 md:text-lg-regular lg:w-140 ${error && 'errorBorder'}`}
                 onSelect={(option) => setStartTime(option.value)}
               />
               <Input.Dropdown
                 {...commonDropdownProps}
-                className={`h-44 w-79 text-md-regular md:h-56 md:w-104 md:text-lg-regular lg:mr-20 lg:w-140 ${error ? 'errorBorder' : ''}`}
+                className={`h-44 w-79 text-md-regular md:h-56 md:w-104 md:text-lg-regular lg:mr-20 lg:w-140 ${error && 'errorBorder'}`}
                 onSelect={(option) => setEndTime(option.value)}
               />
             </>

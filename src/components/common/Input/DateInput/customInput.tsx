@@ -20,7 +20,7 @@ const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>(
       <div className={`relative sm:w-130 md:w-149 lg:w-379 ${className}`}>
         <input
           type="text"
-          className={`h-full w-full cursor-pointer rounded-4 border border-gray-700 py-5 focus:outline-none sm:h-44 sm:px-12 md:h-56 md:px-16 ${className} ${isFocused ? 'border-green-300' : ''}`}
+          className={`h-full w-full cursor-pointer rounded-4 border border-gray-700 py-5 focus:outline-none sm:h-44 sm:px-12 md:h-56 md:px-16 ${className} ${isFocused && 'border-green-300'}`}
           onClick={handleFocus}
           onFocus={handleFocus}
           onBlur={handleBlur}
