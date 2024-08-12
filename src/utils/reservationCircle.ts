@@ -1,4 +1,4 @@
-import { DailyReservation } from '@/types/reservationTypes';
+import { DailyReservation } from '@/components/pages/myPage/Schedule/reservation.types';
 
 export const getCircleColor = (reservation?: DailyReservation['reservations']) => {
   if (reservation) {

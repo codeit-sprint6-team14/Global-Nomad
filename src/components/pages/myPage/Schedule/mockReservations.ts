@@ -1,4 +1,4 @@
-import { DailyReservation } from '@/types/reservationTypes';
+import { DailyReservation } from './reservation.types';
 
 export const mockReservations: DailyReservation[] = [
   {
