@@ -14,6 +14,7 @@ const categoryOptions = [
   { value: 'option2', label: '식음료' },
   { value: 'option3', label: '스포츠' },
   { value: 'option4', label: '관광' },
+  { value: 'option4', label: '투어' },
 ];
 
 const defaultCategoryOption = '카테고리를 선택해주세요';
