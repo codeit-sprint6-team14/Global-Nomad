@@ -31,7 +31,7 @@ export const Seat: Story = {
 };
 
 export const Reserved: Story = {
-  args: { type: 'reserved' },
+  args: { type: 'pending' },
   render: (args) => <Chip {...args}>예약 3</Chip>,
 };
 

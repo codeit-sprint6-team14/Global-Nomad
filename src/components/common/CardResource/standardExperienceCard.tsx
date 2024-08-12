@@ -1,6 +1,6 @@
-import ExperienceCardProps from '@/types/cardResourceTypes';
 import Image from 'next/image';
 
+import ExperienceCardProps from './cardResource.types';
 import Price from './price';
 import Rating from './rating';
 
