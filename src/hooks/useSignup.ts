@@ -1,23 +1,25 @@
 import { signUp } from '@/apis/auth';
 import { SignupData } from '@/types/auth';
 import { useMutation } from '@tanstack/react-query';
-import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 export const useSignup = () => {
-  const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const mutation = useMutation({
     mutationFn: (data: SignupData) => signUp(data),
     onSuccess: (result) => {
       if (result.success) {
-        router.push('/signin');
+        setIsSuccess(true);
+        setError(result.message || '회원가입 성공!');
       } else {
+        setIsSuccess(false);
         setError(result.message || '회원가입 중 오류가 발생했습니다.');
       }
     },
     onError: (error) => {
+      setIsSuccess(false);
       if (error instanceof Error) {
         setError(error.message);
       } else {
@@ -28,12 +30,19 @@ export const useSignup = () => {
 
   const handleSignup = (data: SignupData) => {
     setError(null);
+    setIsSuccess(false);
     mutation.mutate(data);
+  };
+
+  const resetError = () => {
+    setError(null);
   };
 
   return {
     handleSignup,
     isLoading: mutation.isPending,
     error,
+    resetError,
+    isSuccess,
   };
 };
