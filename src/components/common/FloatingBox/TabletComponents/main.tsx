@@ -7,11 +7,11 @@ import { useAtomValue } from 'jotai';
 import { useState } from 'react';
 
 const Main = () => {
-  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleDateSelectModal = () => {
     // TODO: 모달 여닫는 기능 구현
-    setIsOpenModal((prev) => !prev);
+    setIsModalOpen((prev) => !prev);
   };
 
   const { submitReservation } = useActivityReservationMutation();
@@ -29,7 +29,7 @@ const Main = () => {
         <button onClick={handleDateSelectModal} className="mb-27">
           날짜 선택하기
         </button>
-        {isOpenModal && <Modal.DateSelect setIsOpenModal={setIsOpenModal} />}
+        {isModalOpen && <Modal.DateSelect classNames="absolute right-0 top-0" setIsModalOpen={setIsModalOpen} />}
         <h2 className="mb-5 text-xl-bold">참여 인원 수</h2>
         <div className="mb-32">
           <Counter />

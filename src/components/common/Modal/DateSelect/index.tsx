@@ -11,7 +11,13 @@ import Footer from './footer';
 import Header from './header';
 import TimeSlotSelection from './timeSlotSelection';
 
-const DateSelectModal = ({ setIsOpenModal }: { setIsOpenModal: Dispatch<SetStateAction<boolean>> }) => {
+const DateSelectModal = ({
+  setIsModalOpen,
+  classNames,
+}: {
+  setIsModalOpen: Dispatch<SetStateAction<boolean>>;
+  classNames: string;
+}) => {
   const [currentMonth, setCurrentMonth] = useState<Date>(INITIAL_DATE);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null);
@@ -98,8 +104,8 @@ const DateSelectModal = ({ setIsOpenModal }: { setIsOpenModal: Dispatch<SetState
   const isReservationPossible = selectedDate !== null && selectedSlot !== null;
 
   return (
-    <div className="absolute right-0 top-0 z-50 w-480 rounded-24 bg-white px-24 py-32">
-      <Header setIsOpenModal={setIsOpenModal} />
+    <div className={`${classNames} z-50 w-480 rounded-24 bg-white px-24 py-32`}>
+      <Header setIsModalOpen={setIsModalOpen} />
       <main className="mb-64">
         <Calendar
           selectedDate={selectedDate}

@@ -8,7 +8,7 @@ const Footer = ({ isReservationPossible }: FooterProps) => {
   return (
     <div>
       <footer>
-        <Button.Default disabled={!isReservationPossible} className="h-56 w-432">
+        <Button.Default disabled={!isReservationPossible} className="h-56 w-full">
           확인
         </Button.Default>
       </footer>
