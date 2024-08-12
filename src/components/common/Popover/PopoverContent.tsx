@@ -18,7 +18,12 @@ export const PopoverContent = ({ children, onClick, ...props }: PopoverContentPr
   if (!isOpen) return null;
 
   return (
-    <div ref={contentRef} onClick={onClick} className="z-10 cursor-pointer rounded-md bg-white shadow-lg" {...props}>
+    <div
+      ref={contentRef}
+      onClick={onClick}
+      className="absolute z-50 cursor-pointer rounded-md bg-white shadow-lg"
+      {...props}
+    >
       {children}
     </div>
   );
