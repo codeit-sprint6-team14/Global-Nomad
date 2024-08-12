@@ -40,7 +40,7 @@ export default DateInput;
 
 const customStyles = `
 .react-datepicker-popper {
-  left: 61px !important; /* 기본적으로 오른쪽으로 이동 */
+  left: 61px !important;
 }
 .react-datepicker {
   font-size: 1rem;
@@ -66,13 +66,13 @@ const customStyles = `
 
 @media (min-width: 744px) {
   .react-datepicker-popper {
-    left: 76px !important; /* 태블릿에서 더 오른쪽으로 */
+    left: 76px !important;
   }
   .react-datepicker {
     font-size: 1.3rem;
   }
   .react-datepicker__month-container {
-    width: 300px; /* 태블릿 크기 */
+    width: 300px;
     height: 290px
   }
     
@@ -95,13 +95,13 @@ const customStyles = `
 
 @media (min-width: 1200px) {
   .react-datepicker-popper {
-    left: 0px !important; /* 데스크탑에서 더 오른쪽으로 */
+    left: 0px !important;
   }
   .react-datepicker {
     font-size: 1.3rem;
   }
   .react-datepicker__month-container {
-    width: 380px; /* 태블릿 크기 */
+    width: 380px;
     height: 385px
   }
     
