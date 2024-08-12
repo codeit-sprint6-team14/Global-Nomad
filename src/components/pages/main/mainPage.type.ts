@@ -18,3 +18,7 @@ export interface ActivitiesResponse {
   totalCount: number;
   cursorId: number | null;
 }
+
+export interface ActivityCardProps {
+  activity: Activity;
+}
