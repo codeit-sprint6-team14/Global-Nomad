@@ -1,4 +1,4 @@
-import { signUp } from '@/apis/auth';
+import { postUserSignup } from '@/apis/auth';
 import { SignupData } from '@/types/auth';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
@@ -8,7 +8,7 @@ export const useSignup = () => {
   const [isSuccess, setIsSuccess] = useState(false);
 
   const mutation = useMutation({
-    mutationFn: (data: SignupData) => signUp(data),
+    mutationFn: (data: SignupData) => postUserSignup(data),
     onSuccess: (result) => {
       if (result.success) {
         setIsSuccess(true);

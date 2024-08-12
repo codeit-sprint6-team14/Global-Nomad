@@ -4,7 +4,7 @@ import axios, { isAxiosError } from 'axios';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export const signUp = async (userData: SignupData) => {
+export const postUserSignup = async (userData: SignupData) => {
   try {
     const response = await axiosRequester({
       options: {
@@ -29,7 +29,7 @@ export const signUp = async (userData: SignupData) => {
   }
 };
 
-export const signIn = async (credentials: SigninData): Promise<LoginResult> => {
+export const postUserSignin = async (credentials: SigninData): Promise<LoginResult> => {
   try {
     const response = await axios.post<TokensResponse>(`${API_BASE_URL}/auth/login`, credentials);
     return { success: true, data: response.data };

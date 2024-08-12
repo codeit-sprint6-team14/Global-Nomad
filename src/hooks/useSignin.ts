@@ -1,4 +1,4 @@
-import { signIn } from '@/apis/auth';
+import { postUserSignin } from '@/apis/auth';
 import { userAtom } from '@/store/userAtom';
 import { SigninData } from '@/types/auth';
 import { useMutation } from '@tanstack/react-query';
@@ -12,7 +12,7 @@ export const useSignin = () => {
   const [error, setError] = useState<string | null>(null);
 
   const mutation = useMutation({
-    mutationFn: (credentials: SigninData) => signIn(credentials),
+    mutationFn: (credentials: SigninData) => postUserSignin(credentials),
     onSuccess: (result) => {
       if (result.success) {
         setUser({ accessToken: result.data.accessToken, refreshToken: result.data.refreshToken });
