@@ -98,7 +98,7 @@ const SignupForm = () => {
         <Modal.Overlay>
           <div ref={modalRef}>
             <Modal.RegisterConfirm onClose={handleModalClose}>
-              {isSuccess ? '회원가입에 성공했습니다!' : error}
+              {isSuccess ? '가입이 완료되었습니다!' : error}
             </Modal.RegisterConfirm>
           </div>
         </Modal.Overlay>

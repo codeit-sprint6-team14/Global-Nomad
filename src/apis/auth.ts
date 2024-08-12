@@ -37,9 +37,7 @@ export const signIn = async (credentials: SigninData): Promise<LoginResult> => {
     if (isAxiosError(error) && error.response) {
       switch (error.response.status) {
         case 400:
-          return { success: false, error: '이메일 또는 비밀번호 형식이 올바르지 않습니다.' };
-        case 401:
-          return { success: false, error: '이메일 또는 비밀번호가 일치하지 않습니다.' };
+          return { success: false, error: '비밀번호가 일치하지 않습니다.' };
         case 404:
           return { success: false, error: '존재하지 않는 사용자입니다.' };
         default:

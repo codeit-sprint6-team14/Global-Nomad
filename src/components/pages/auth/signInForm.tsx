@@ -30,8 +30,6 @@ const SignInForm = () => {
 
   const modalRef = useClickOutside(handleModalClose);
 
-  console.log(`에러는 ${error}`);
-
   return (
     <>
       <form onSubmit={handleSubmit(onSigninSubmit)} className="flex flex-col gap-8 sm:w-350 md:w-640">
