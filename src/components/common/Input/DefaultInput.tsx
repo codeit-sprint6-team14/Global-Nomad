@@ -1,5 +1,5 @@
 import { InputProps } from '@/types/defaultInputTypes';
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 
 const DefaultInput = forwardRef<HTMLInputElement, InputProps>(
   ({ type = 'text', className, error = false, placeholder = '입력', isAuth = false, ...props }, ref) => {
