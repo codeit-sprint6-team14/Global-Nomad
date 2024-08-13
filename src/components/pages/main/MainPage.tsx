@@ -3,6 +3,7 @@ import DropDownList from '@/components/common/Dropdown/dropDownList';
 import DropDownOption from '@/components/common/Dropdown/dropDownOption';
 import React, { useEffect, useState } from 'react';
 
+import DownArrow from '../../../../public/assets/icons/down-arrow.svg';
 import FilteredActivities from './FilteredActivities';
 import PopularActivityCard from './PopularActivityCard';
 import { RadioTab } from './RadioTab';
@@ -18,7 +19,7 @@ const MainPage = () => {
   const [activities, setActivities] = useState<Activity[]>([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [sortBy, setSortBy] = useState<string>('priceLow');
+  const [sortBy, setSortBy] = useState<string | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const popularActivities = activities.filter((activity) => activity.rating >= 4.5);
@@ -40,14 +41,16 @@ const MainPage = () => {
   }, [page]);
 
   useEffect(() => {
-    const sortedActivities = [...activities].sort((a, b) => {
-      if (sortBy === 'priceLow') {
-        return a.price - b.price;
-      } else {
-        return b.price - a.price;
-      }
-    });
-    setActivities(sortedActivities);
+    if (sortBy) {
+      const sortedActivities = [...activities].sort((a, b) => {
+        if (sortBy === 'priceLow') {
+          return a.price - b.price;
+        } else {
+          return b.price - a.price;
+        }
+      });
+      setActivities(sortedActivities);
+    }
   }, [sortBy]);
 
   const loadMore = () => {
@@ -85,10 +88,11 @@ const MainPage = () => {
                   {category}
                 </RadioTab.Item>
               ))}
-              <div className="relative h-53 w-127">
+              <div className="relative flex h-53 w-127 cursor-pointer items-center justify-between rounded-15 border border-black-100 px-20 py-16">
                 <button onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
-                  {dropdownOptions.find((option) => option.value === sortBy)?.label}
+                  {sortBy ? dropdownOptions.find((option) => option.value === sortBy)?.label : '가격'}
                 </button>
+                <DownArrow alt="down arrow" />
                 {isDropdownOpen && (
                   <DropDownList classNames="flex flex-col">
                     {dropdownOptions.map((option) => (
