@@ -1,5 +1,5 @@
 import Icon from '@/components/common/Icons';
-import { formSubmitDataAtom } from '@/store/activityReservationFormSubmitAtom';
+import { formSubmitDataAtom } from '@/store/activityDetailsAtom';
 import { useAtomValue, useSetAtom } from 'jotai';
 
 const Counter = () => {

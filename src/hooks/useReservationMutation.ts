@@ -1,5 +1,5 @@
 import { postActivityReservation } from '@/apis/activityDetails';
-import { formSubmitDataAtomType } from '@/store/activityReservationFormSubmitAtom';
+import { formSubmitDataAtomType } from '@/store/activityDetailsAtom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const useActivityReservationMutation = () => {

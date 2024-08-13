@@ -31,6 +31,8 @@ const ReviewList = ({ activityId }: { activityId: string }) => {
 
   const { averageRating, totalCount, reviews } = reviewListData;
 
+  const formattedRating = Number(averageRating.toFixed(1));
+
   const totalPages = Math.ceil(totalCount / REVIEWS_PER_PAGE);
 
   const handlePageChange = async (pageNumber: number) => {
@@ -42,10 +44,10 @@ const ReviewList = ({ activityId }: { activityId: string }) => {
     <div className="mx-24 flex flex-col gap-18 border-solid border-gray-300 pt-40 md:border-t lg:mx-0">
       <h1 className="text-xl-bold text-black-100">후기</h1>
       <div className="flex items-center gap-16">
-        <div className="text-50 font-semibold leading-[60px] text-black-100">{averageRating}</div>
+        <div className="text-50 font-semibold leading-[60px] text-black-100">{formattedRating}</div>
         <div className="flex flex-col gap-8">
           <span className="text-2lg-regular text-black-100">
-            {averageRating >= 4 ? '매우 만족' : averageRating >= 3 ? '보통' : '불만족'}
+            {formattedRating >= 4 ? '매우 만족' : formattedRating >= 3 ? '보통' : '불만족'}
           </span>
           <div className="flex gap-6">
             <div className="relative mt-2 h-16 w-16">
