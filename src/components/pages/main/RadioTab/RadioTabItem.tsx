@@ -15,7 +15,7 @@ export const RadioTabItem: React.FC<RadioTabItemProps> = ({ id, children }) => {
 
   return (
     <label
-      className={`flex h-58 w-127 cursor-pointer items-center justify-center rounded-15 border border-black-100 ${activeTab === id ? 'bg-black-100' : 'bg-white'}`}
+      className={`flex h-58 w-127 cursor-pointer items-center justify-center rounded-15 border border-black-100 text-black-100 hover:bg-black-100 hover:text-white ${activeTab === id ? 'bg-black-100' : 'bg-white'}`}
     >
       <input
         type="radio"
@@ -23,9 +23,9 @@ export const RadioTabItem: React.FC<RadioTabItemProps> = ({ id, children }) => {
         value={id}
         checked={activeTab === id}
         onChange={() => setActiveTab(id)}
-        className="sr-only"
+        className="sr-only text-white"
       />
-      <span className={`text-2lg-medium text-black-100 ${activeTab === id ? 'text-white' : ''}`}>{children}</span>
+      <span className={`text-2lg-medium ${activeTab === id ? 'text-white' : ''}`}>{children}</span>
     </label>
   );
 };
