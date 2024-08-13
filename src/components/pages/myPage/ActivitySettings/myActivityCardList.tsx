@@ -1,8 +1,7 @@
+import MyActivityCard from '@/components/common/Cards/myActivityCard';
 import ActivityCardsData from '@/mockData/myActivityCardsData';
 import { myActivityCardData } from '@/types/cardDataList';
 import { useState } from 'react';
-
-import MyActivityCard from './myActivityCard';
 
 const MyActivityCardList = () => {
   const [myActivityCardsData] = useState(ActivityCardsData);

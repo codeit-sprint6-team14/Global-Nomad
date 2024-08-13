@@ -1,5 +1,5 @@
-import { modalAtom } from '@/store/modalAtom';
 import Card from '@/components/common/Cards/components';
+import { modalAtom } from '@/store/modalAtom';
 import { reservationCard } from '@/types/cardDataList';
 import getCardStatus, { StatusType } from '@/utils/cardStatus';
 import { formatPrice } from '@/utils/formatPrice';

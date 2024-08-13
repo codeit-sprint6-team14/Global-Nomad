@@ -23,6 +23,7 @@ const ActivityInformation = ({ activityId = '2213' }: { activityId?: string }) =
 
   const { activityData, isLoading, error } = useActivityData(activityId);
 
+
   if (isLoading) return <div>체험 상세 데이터 로딩중입니다...</div>;
   if (error) return <div>체험 상세 데이터를 불러오는데 실패했습니다.</div>;
   if (!activityData) return null;

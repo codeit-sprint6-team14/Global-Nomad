@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 import DefaultInput from './DefaultInput';
 
-const PasswordInput = ({ placeholder, register, error, ...props }: InputProps) => {
+const PasswordInput = ({ placeholder, register, ...props }: InputProps) => {
   const { isVisible, toggleVisibility } = usePasswordVisibility();
 
   return (
@@ -13,8 +13,7 @@ const PasswordInput = ({ placeholder, register, error, ...props }: InputProps) =
         isAuth
         type={isVisible ? 'text' : 'password'}
         placeholder={placeholder}
-        {...register}
-        error={error}
+        register={register}
         {...props}
       />
       <Image

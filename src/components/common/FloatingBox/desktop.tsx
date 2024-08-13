@@ -7,7 +7,6 @@ import { DaySchedule, TimeSlot } from '@/types/availableSchedulesTypes';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAtom } from 'jotai';
 import { useCallback, useEffect, useState } from 'react';
-
 import Button from '../Button';
 import Calendar from '../Calendar';
 import DesktopComponents from './DesktopComponents';
