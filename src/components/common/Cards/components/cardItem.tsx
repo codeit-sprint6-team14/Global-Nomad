@@ -31,7 +31,7 @@ const CardItem = ({ contentsClassNames, children }: { contentsClassNames?: strin
   const cardFooter = getTypedChildren(CardFooterType, children);
 
   return (
-    <li className="flex w-344 rounded-24 bg-gray-100 md:w-429 lg:w-792">
+    <li className="flex w-344 rounded-24 bg-gray-100 shadow-modal md:w-429 lg:w-792">
       {cardImage}
       <div
         className={

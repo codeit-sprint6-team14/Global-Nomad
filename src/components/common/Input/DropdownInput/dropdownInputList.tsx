@@ -10,7 +10,7 @@ interface DropdownListProps {
 }
 
 const DropdownList = ({ options, selectedOption, onOptionClick }: DropdownListProps) => (
-  <ul className="absolute z-10 mt-8 w-full rounded-4 border bg-white text-black shadow-[0px_10px_30px_3px_rgba(5,16,55,0.15)]">
+  <ul className="absolute z-10 mt-8 h-230 w-full overflow-y-auto rounded-4 border bg-white text-black shadow-[0px_10px_30px_3px_rgba(5,16,55,0.15)] scrollbar-hide md:h-240">
     {options.map((option) => (
       <DropdownItem
         key={option.value}

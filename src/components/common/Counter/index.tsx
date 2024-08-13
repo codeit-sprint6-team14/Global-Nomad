@@ -1,5 +1,4 @@
-import AddNumberButton from '@/../public/assets/icons/add-button.svg';
-import SubtractNumberButton from '@/../public/assets/icons/subtract-button.svg';
+import Icon from '@/components/common/Icons';
 import { formSubmitDataAtom } from '@/store/activityReservationFormSubmitAtom';
 import { useAtomValue, useSetAtom } from 'jotai';
 
@@ -26,11 +25,11 @@ const Counter = () => {
   return (
     <div className="flex h-40 w-120 items-center justify-around rounded-6 border border-gray-300">
       <button onClick={decrement} aria-label="감소 버튼">
-        <SubtractNumberButton />
+        <Icon.Subtract />
       </button>
       <span className="text-md-regular text-gray-800">{formSubmitHeadCount.headCount}</span>
       <button onClick={increment} aria-label="증가 버튼">
-        <AddNumberButton />
+        <Icon.Plus />
       </button>
     </div>
   );

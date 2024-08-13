@@ -14,7 +14,13 @@ const SideNavMenuOptionList = () => {
 
   useEffect(() => {
     const currentPath = router.asPath;
-    const activeMenuOption = menuOptionList.find((option) => option.path === currentPath);
+    const activeMenuOption = menuOptionList.find((option) => {
+      if (currentPath === '/my-page/regist-activity') {
+        return option.path === '/my-page/activity-settings';
+      }
+
+      return option.path === currentPath;
+    });
 
     if (activeMenuOption) {
       setActiveOption(activeMenuOption.id);

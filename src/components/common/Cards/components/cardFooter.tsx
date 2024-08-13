@@ -1,4 +1,5 @@
 import Button from '@/components/common/Button';
+import { useClickOutside } from '@/hooks/useClickOutside';
 import Image from 'next/image';
 import { useState } from 'react';
 
@@ -30,6 +31,8 @@ const CardFooter = ({
     setIsOpenMenu(false);
   };
 
+  const modalRef = useClickOutside(handleDropdownVisible);
+
   return (
     <div className={`relative flex items-end justify-between ${additionalClassNames}`}>
       <div className="pt-7 text-lg-medium text-black md:pt-14 md:text-xl-medium lg:pt-21 lg:text-2xl-medium">
@@ -51,10 +54,14 @@ const CardFooter = ({
               <Image src={imgSrc} alt="케밥 버튼" fill />
             </div>
             {isOpenMenu && (
-              <DropDown classNames="h-max w-120">
-                <DropDown.Option className="" key="수정하기" handleOptionClick={handleOptionClick} label="수정하기" />
-                <DropDown.Option className="" key="삭제하기" handleOptionClick={handleOptionClick} label="삭제하기" />
-              </DropDown>
+              <div ref={modalRef}>
+                <div className="absolute left-[-80px] top-full">
+                  <DropDown classNames="h-max w-120">
+                    <DropDown.Option handleOptionClick={handleOptionClick} label="수정하기" />
+                    <DropDown.Option handleOptionClick={handleOptionClick} label="삭제하기" />
+                  </DropDown>
+                </div>
+              </div>
             )}
           </div>
         )}
