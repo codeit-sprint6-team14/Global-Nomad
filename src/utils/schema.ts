@@ -32,7 +32,11 @@ export const registActivitySchema = yup.object().shape({
   category: yup.string().required(REGIST_ACTIVITY_ERROR_MESSAGES.CATEGORY_REQUIRED),
   description: yup.string().required(REGIST_ACTIVITY_ERROR_MESSAGES.DESCRIPTION_REQUIRED),
   price: yup.string().required(REGIST_ACTIVITY_ERROR_MESSAGES.PRICE_REQUIRED),
-  address: yup.string().required(REGIST_ACTIVITY_ERROR_MESSAGES.ADDRESS_REQUIRED),
+  address: yup.object().shape({
+    postcode: yup.string(),
+    address: yup.string().required(REGIST_ACTIVITY_ERROR_MESSAGES.ADDRESS_REQUIRED),
+    detailAddress: yup.string(),
+  }),
   timeSlots: yup
     .array()
     .of(
