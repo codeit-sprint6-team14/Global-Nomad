@@ -6,6 +6,7 @@ import { createPortal } from 'react-dom';
 
 const Notification = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [portalRoot, setPortalRoot] = useState<HTMLElement | null>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
 
   const alarms = [
@@ -23,6 +24,9 @@ const Notification = () => {
   };
 
   useEffect(() => {
+    // 클라이언트 사이드에서만 실행됨
+    setPortalRoot(document.getElementById('notification-root'));
+
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     } else {
@@ -33,8 +37,6 @@ const Notification = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isOpen]);
-
-  const portalRoot = document.getElementById('notification-root');
 
   return (
     <div className="relative">
