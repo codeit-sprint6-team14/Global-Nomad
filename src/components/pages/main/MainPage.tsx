@@ -1,7 +1,7 @@
 import { getActivities } from '@/apis/activities';
 import DropDownList from '@/components/common/Dropdown/dropDownList';
 import DropDownOption from '@/components/common/Dropdown/dropDownOption';
-import React, { useEffect, useState } from 'react';
+import React, { MouseEvent, useEffect, useRef, useState } from 'react';
 
 import DownArrow from '../../../../public/assets/icons/down-arrow.svg';
 import FilteredActivities from './FilteredActivities';
@@ -9,7 +9,7 @@ import PopularActivityCard from './PopularActivityCard';
 import { RadioTab } from './RadioTab';
 import { Activity } from './mainPage.type';
 
-const categories = ['문화 · 예술', '식음료', '스포츠', '투어', '관광', '웰빙'];
+const categories = ['문화·예술', '식음료', '스포츠', '투어', '관광', '웰빙'];
 const dropdownOptions = [
   { value: 'priceLow', label: '가격 낮은 순' },
   { value: 'priceHigh', label: '가격 높은 순' },
@@ -21,6 +21,7 @@ const MainPage = () => {
   const [loading, setLoading] = useState(false);
   const [sortBy, setSortBy] = useState<string | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   const popularActivities = activities.filter((activity) => activity.rating >= 4.5);
 
@@ -52,6 +53,19 @@ const MainPage = () => {
       setActivities(sortedActivities);
     }
   }, [sortBy]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent | Event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const loadMore = () => {
     setPage((prevPage) => prevPage + 1);
@@ -88,18 +102,24 @@ const MainPage = () => {
                   {category}
                 </RadioTab.Item>
               ))}
-              <div className="relative flex h-53 w-127 cursor-pointer items-center justify-between rounded-15 border border-black-100 px-20 py-16">
-                <button onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
-                  {sortBy ? dropdownOptions.find((option) => option.value === sortBy)?.label : '가격'}
+              <div className="relative h-53 w-200 cursor-pointer rounded-15 border border-black-100" ref={dropdownRef}>
+                <button
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  className={`flex w-full items-center justify-center px-20 py-16 ${sortBy ? 'gap-5' : 'gap-40'}`}
+                >
+                  <span>{sortBy ? dropdownOptions.find((option) => option.value === sortBy)?.label : '가격'}</span>
+                  <div className={`transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`}>
+                    <DownArrow alt="down arrow" />
+                  </div>
                 </button>
-                <DownArrow alt="down arrow" />
                 {isDropdownOpen && (
-                  <DropDownList classNames="flex flex-col">
+                  <DropDownList classNames="shadow-[0px_4px_16px_0px_#1122110D] absolute top-full left-0 right-0 mt-6 flex flex-col border border-gray-300 rounded-tl-[6px] rounded-tr-[6px]">
                     {dropdownOptions.map((option) => (
                       <DropDownOption
                         key={option.value}
                         label={option.label}
                         handleOptionClick={() => handleSortChnage(option.value)}
+                        className="text-2lg-medium text-gray-800"
                       />
                     ))}
                   </DropDownList>
