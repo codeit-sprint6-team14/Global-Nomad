@@ -1,21 +1,21 @@
 import { postUserSignin } from '@/apis/auth';
-import { userAtom } from '@/store/userAtom';
+import { tokenAtom } from '@/store/tokenAtom';
 import { SigninData } from '@/types/auth';
 import { useMutation } from '@tanstack/react-query';
-import { useAtom } from 'jotai';
+import { useSetAtom } from 'jotai';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 export const useSignin = () => {
   const router = useRouter();
-  const [, setUser] = useAtom(userAtom);
+  const setToken = useSetAtom(tokenAtom);
   const [error, setError] = useState<string | null>(null);
 
   const mutation = useMutation({
     mutationFn: (credentials: SigninData) => postUserSignin(credentials),
     onSuccess: (result) => {
       if (result.success) {
-        setUser({ accessToken: result.data.accessToken, refreshToken: result.data.refreshToken });
+        setToken({ accessToken: result.data.accessToken, refreshToken: result.data.refreshToken });
 
         // 토큰을 로컬 스토리지에 저장
         localStorage.setItem('accessToken', result.data.accessToken);
