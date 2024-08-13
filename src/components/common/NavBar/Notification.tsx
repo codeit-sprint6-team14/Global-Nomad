@@ -2,6 +2,7 @@ import { Popover } from '@/components/common/Popover';
 import PopoverUI from '@/components/common/Popover/PopoverUI';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 const Notification = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,13 +16,13 @@ const Notification = () => {
 
   const handleClose = () => setIsOpen(false);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (popoverRef.current && !popoverRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
+  const handleClickOutside = (event: MouseEvent) => {
+    if (popoverRef.current && !popoverRef.current.contains(event.target as Node)) {
+      setIsOpen(false);
+    }
+  };
 
+  useEffect(() => {
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     } else {
@@ -33,8 +34,10 @@ const Notification = () => {
     };
   }, [isOpen]);
 
+  const portalRoot = document.getElementById('notification-root');
+
   return (
-    <div className="relative z-50" ref={popoverRef}>
+    <div className="relative">
       <Popover.Root>
         <Popover.Trigger>
           <Image
@@ -46,13 +49,16 @@ const Notification = () => {
             onClick={() => setIsOpen(true)} // 클릭 시 팝오버 열림
           />
         </Popover.Trigger>
-        <div className="relative right-200 top-30 z-50">
-          {isOpen && (
-            <Popover.Content>
-              <PopoverUI onClose={handleClose} alarmCount={alarms.length} alarms={alarms} />
-            </Popover.Content>
+        {isOpen &&
+          portalRoot &&
+          createPortal(
+            <div ref={popoverRef} className="fixed left-0 top-0 z-[9999] md:left-auto md:right-[450px] md:top-80">
+              <Popover.Content>
+                <PopoverUI onClose={handleClose} alarmCount={alarms.length} alarms={alarms} />
+              </Popover.Content>
+            </div>,
+            portalRoot,
           )}
-        </div>
       </Popover.Root>
     </div>
   );

@@ -26,6 +26,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <main className={`${pretendard.variable} ${showNavBarAndFooter ? 'pt-70' : ''}`}>
         <QueryClientProvider client={queryClient}>
           {showNavBarAndFooter && <NavBar />}
+          <div id="notification-root" />
           <Component {...pageProps} />
           {showNavBarAndFooter && <Footer />}
           <ReactQueryDevtools initialIsOpen={false} />

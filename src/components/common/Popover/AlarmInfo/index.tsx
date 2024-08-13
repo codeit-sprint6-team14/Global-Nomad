@@ -1,5 +1,4 @@
-import Close from '@/../public/assets/icons/close.svg';
-
+import Close from '../../Icons/close';
 import CirclePoint from '../Point';
 
 type AlarmInfoProps = {
@@ -29,7 +28,7 @@ const AlarmInfo = ({ onClose, title, dateTime, status, timeAgo }: AlarmInfoProps
   const [fillColor, textColor] = color.split(' ');
 
   return (
-    <div className="flex w-328 flex-col gap-8">
+    <div className="mx-auto flex w-328 flex-col gap-8">
       <div className="flex flex-col gap-4 rounded-5 border border-gray-400 bg-white px-12 py-16">
         <div className="flex w-304 flex-col">
           <div className="relative flex justify-end">
@@ -37,7 +36,7 @@ const AlarmInfo = ({ onClose, title, dateTime, status, timeAgo }: AlarmInfoProps
               <CirclePoint color={fillColor} />
             </p>
             <button onClick={onClose}>
-              <Close width={24} height={24} />
+              <Close width={24} height={24} color="black" />
             </button>
           </div>
           <p className="w-270 text-wrap text-md-regular text-black">

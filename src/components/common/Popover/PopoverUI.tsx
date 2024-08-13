@@ -24,8 +24,8 @@ const PopoverUI = <T extends { title: string; dateTime: string; status: string; 
   const { toggle } = context;
 
   return (
-    <div className="z-90 relative flex w-368 cursor-default flex-col gap-16 rounded-10 border border-gray-400 bg-green-100 px-20 py-24 shadow-popover">
-      <div className="flex h-32 w-328 justify-between">
+    <div className="relative flex h-screen w-screen cursor-default flex-col gap-16 overflow-auto rounded-10 border border-gray-400 bg-green-100 px-10 py-24 shadow-popover md:h-520 md:w-380">
+      <div className="mx-auto flex h-32 w-328 justify-between">
         <h2 className="text-xl-bold text-black-100">알림 {alarmCount}개</h2>
         <button onClick={() => toggle()}>
           <Close width={24} height={24} color="black" />
