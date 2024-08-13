@@ -1,19 +1,14 @@
 import { ReactNode, useState } from 'react';
 
-import RadioTabContext from './RadioTabContext';
+import { RadioTabContext } from './RadioTabContext';
 
 type RadioTabRootProps = {
   children: ReactNode;
-  defaultActiveTab: string;
+  defaultTab: string;
 };
 
-const RadioTabRoot: React.FC<RadioTabRootProps> = ({ children, defaultActiveTab }) => {
-  const [activeTab, setActiveTab] = useState(defaultActiveTab);
+export const RadioTabRoot: React.FC<RadioTabRootProps> = ({ children, defaultTab }) => {
+  const [activeTab, setActiveTab] = useState(defaultTab);
 
-  return (
-    <RadioTabContext.Provider value={{ activeTab, setActiveTab }}>
-      <div>{children}</div>
-    </RadioTabContext.Provider>
-  );
+  return <RadioTabContext.Provider value={{ activeTab, setActiveTab }}>{children}</RadioTabContext.Provider>;
 };
-export default RadioTabRoot;

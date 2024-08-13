@@ -1,15 +1,10 @@
-import RadioTabContent from './RadioTabContent';
-import RadioTabItem from './RadioTabItem';
-import RadioTabPandel from './RadioTabPandel';
-import RadioTabTrigger from './RadioTabTrigger';
-import RadioTabRoot from './RadtioTabRoot';
+import { useRadioTab } from '../useHooks/useRadioTab';
+import { RadioTabItem } from './RadioTabItem';
+import { RadioTabRoot } from './RadtioTabRoot';
 
-const RadioTab = {
-  RadioTabRoot,
-  RadioTabTrigger,
-  RadioTabItem,
-  RadioTabContent,
-  RadioTabPandel,
+export const RadioTab = {
+  Root: RadioTabRoot,
+  Item: RadioTabItem,
 };
 
-export default RadioTab;
+export { useRadioTab };
