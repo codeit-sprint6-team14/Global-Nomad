@@ -2,13 +2,14 @@ import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
 import Modal from '@/components/common/Modal';
 import { useClickOutside } from '@/hooks/useClickOutside';
-import { useSignup } from '@/hooks/useSignup';
 import { useToggle } from '@/hooks/useToggle';
 import { SignupFormData } from '@/types/auth';
 import { signupValidationSchema } from '@/utils/schema';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
+
+import { useSignup } from './useSignup';
 
 const SignupForm = () => {
   const router = useRouter();
@@ -33,7 +34,7 @@ const SignupForm = () => {
     resetError();
     toggleModal();
     if (isSuccess) {
-      router.push('/');
+      router.push('/signin');
     }
   };
 
