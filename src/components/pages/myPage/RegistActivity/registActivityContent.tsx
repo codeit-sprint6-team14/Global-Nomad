@@ -7,6 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
 
 import AddActivityTimeSection from './addActivityTimeSection';
+import AddressInputSection from './addressInputSection';
 import ImageUploadSection, { ImageFile } from './imageUploadSection';
 
 const categoryOptions = [
@@ -30,16 +31,27 @@ const RegistActivityContent = () => {
       category: '',
       description: '',
       price: '',
-      address: '',
+      address: {
+        postcode: '',
+        address: '',
+        detailAddress: '',
+      },
       timeSlots: [],
       bannerImage: [],
       introImages: [],
     },
   });
 
-  const onSubmit = () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onSubmit = (data: any) => {
     if (isValid) {
-      // TODO: Form 제출 로직
+      const fullAddress = `${data.address.address} ${data.address.detailAddress}`.trim();
+      const submissionData = {
+        ...data,
+        address: fullAddress,
+      };
+      console.log('제출 데이터:', submissionData);
+      // TODO: 나머지 Form 제출 로직
     }
   };
 
@@ -124,7 +136,9 @@ const RegistActivityContent = () => {
           <Controller
             name="address"
             control={control}
-            render={({ field }) => <Input placeholder="주소" error={!!errors.address} {...field} />}
+            render={({ field: { onChange, value } }) => (
+              <AddressInputSection onChange={onChange} value={value} error={!!errors.address} />
+            )}
           />
           {errors.address && <span className="errorText">{errors.address.message}</span>}
         </div>
