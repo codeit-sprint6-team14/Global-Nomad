@@ -1,13 +1,13 @@
 import { Popover } from '@/components/common/Popover';
 import PopoverUI from '@/components/common/Popover/PopoverUI';
+import { useClickOutside } from '@/hooks/useClickOutside';
 import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 const Notification = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [portalRoot, setPortalRoot] = useState<HTMLElement | null>(null);
-  const popoverRef = useRef<HTMLDivElement>(null);
 
   const alarms = [
     { title: '타입스크립트 강의', dateTime: '2024년 8월 2일 14:00', status: '승인', timeAgo: 5 },
@@ -17,26 +17,12 @@ const Notification = () => {
 
   const handleClose = () => setIsOpen(false);
 
-  const handleClickOutside = (event: MouseEvent) => {
-    if (popoverRef.current && !popoverRef.current.contains(event.target as Node)) {
-      setIsOpen(false);
-    }
-  };
+  const popoverRef = useClickOutside(handleClose);
 
   useEffect(() => {
     // 클라이언트 사이드에서만 실행됨
     setPortalRoot(document.getElementById('notification-root'));
-
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isOpen]);
+  }, []);
 
   return (
     <div className="relative">

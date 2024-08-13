@@ -1,4 +1,4 @@
-import Close from '../../Icons/close';
+import Icons from '../../Icons';
 import CirclePoint from '../Point';
 
 type AlarmInfoProps = {
@@ -36,7 +36,7 @@ const AlarmInfo = ({ onClose, title, dateTime, status, timeAgo }: AlarmInfoProps
               <CirclePoint color={fillColor} />
             </p>
             <button onClick={onClose}>
-              <Close width={24} height={24} color="black" />
+              <Icons.Close width={24} height={24} color="black" />
             </button>
           </div>
           <p className="w-270 text-wrap text-md-regular text-black">
