@@ -1,11 +1,15 @@
+import { userAtom } from '@/store/userAtom';
+import { useAtom } from 'jotai';
 import Image from 'next/image';
 
 const SideNavMenuProfile = () => {
+  const [user] = useAtom(userAtom);
+
   return (
     <div className="relative flex justify-center">
       <div className="relative h-160 w-160 overflow-hidden rounded-full">
         <Image
-          src="/assets/images/testImg/test-profile-img.png"
+          src={user.profileImage || '/assets/images/testImg/test-profile-img.png'}
           alt="프로필이미지"
           fill
           style={{ objectFit: 'cover' }}
