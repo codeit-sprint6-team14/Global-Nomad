@@ -1,4 +1,6 @@
 import { getActivities } from '@/apis/activities';
+import DropDownList from '@/components/common/Dropdown/dropDownList';
+import DropDownOption from '@/components/common/Dropdown/dropDownOption';
 import React, { useEffect, useState } from 'react';
 
 import FilteredActivities from './FilteredActivities';
@@ -7,11 +9,17 @@ import { RadioTab } from './RadioTab';
 import { Activity } from './mainPage.type';
 
 const categories = ['문화 · 예술', '식음료', '스포츠', '투어', '관광', '웰빙'];
+const dropdownOptions = [
+  { value: 'priceLow', label: '가격 낮은 순' },
+  { value: 'priceHigh', label: '가격 높은 순' },
+];
 
 const MainPage = () => {
   const [activities, setActivities] = useState<Activity[]>([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [sortBy, setSortBy] = useState<string>('priceLow');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const popularActivities = activities.filter((activity) => activity.rating >= 4.5);
 
@@ -31,8 +39,24 @@ const MainPage = () => {
     fetchActivities();
   }, [page]);
 
+  useEffect(() => {
+    const sortedActivities = [...activities].sort((a, b) => {
+      if (sortBy === 'priceLow') {
+        return a.price - b.price;
+      } else {
+        return b.price - a.price;
+      }
+    });
+    setActivities(sortedActivities);
+  }, [sortBy]);
+
   const loadMore = () => {
     setPage((prevPage) => prevPage + 1);
+  };
+
+  const handleSortChnage = (value: string) => {
+    setSortBy(value);
+    setIsDropdownOpen(false);
   };
 
   return (
@@ -61,7 +85,22 @@ const MainPage = () => {
                   {category}
                 </RadioTab.Item>
               ))}
-              <div>DropDown</div>
+              <div className="relative h-53 w-127">
+                <button onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+                  {dropdownOptions.find((option) => option.value === sortBy)?.label}
+                </button>
+                {isDropdownOpen && (
+                  <DropDownList classNames="flex flex-col">
+                    {dropdownOptions.map((option) => (
+                      <DropDownOption
+                        key={option.value}
+                        label={option.label}
+                        handleOptionClick={() => handleSortChnage(option.value)}
+                      />
+                    ))}
+                  </DropDownList>
+                )}
+              </div>
             </div>
             <div className="flex flex-col gap-24">
               <h2>모든 체험</h2>
