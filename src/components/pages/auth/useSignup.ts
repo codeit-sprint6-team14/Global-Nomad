@@ -1,4 +1,6 @@
 import { postUserSignup } from '@/apis/auth';
+import ErrorMessages from '@/constants/errorMessages';
+import SuccessMessages from '@/constants/successMessages';
 import { SignupData } from '@/types/auth';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
@@ -12,10 +14,10 @@ export const useSignup = () => {
     onSuccess: (result) => {
       if (result.success) {
         setIsSuccess(true);
-        setError(result.message || '회원가입 성공!');
+        setError(result.message || SuccessMessages.SIGNUP_SUCCESS);
       } else {
         setIsSuccess(false);
-        setError(result.message || '회원가입 중 오류가 발생했습니다.');
+        setError(result.message || ErrorMessages.SIGNUP_ERROR);
       }
     },
     onError: (error) => {
@@ -23,7 +25,7 @@ export const useSignup = () => {
       if (error instanceof Error) {
         setError(error.message);
       } else {
-        setError('알 수 없는 오류가 발생했습니다.');
+        setError(ErrorMessages.UNKOWN_ERROR);
       }
     },
   });

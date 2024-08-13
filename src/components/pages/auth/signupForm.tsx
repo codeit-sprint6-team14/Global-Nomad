@@ -1,6 +1,7 @@
 import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
 import Modal from '@/components/common/Modal';
+import SuccessMessages from '@/constants/successMessages';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { useToggle } from '@/hooks/useToggle';
 import { SignupFormData } from '@/types/auth';
@@ -99,7 +100,7 @@ const SignupForm = () => {
         <Modal.Overlay>
           <div ref={modalRef}>
             <Modal.RegisterConfirm onClose={handleModalClose}>
-              {isSuccess ? '가입이 완료되었습니다!' : error}
+              {isSuccess ? SuccessMessages.SIGNUP_SUCCESS : error}
             </Modal.RegisterConfirm>
           </div>
         </Modal.Overlay>

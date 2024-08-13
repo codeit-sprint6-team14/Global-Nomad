@@ -1,4 +1,5 @@
 import { postUserSignin } from '@/apis/auth';
+import ErrorMessages from '@/constants/errorMessages';
 import { tokenAtom } from '@/store/tokenAtom';
 import { SigninData } from '@/types/auth';
 import { useMutation } from '@tanstack/react-query';
@@ -23,14 +24,14 @@ export const useSignin = () => {
 
         router.push('/');
       } else {
-        setError(result.error || '로그인 중 오류가 발생했습니다.');
+        setError(result.error || ErrorMessages.SIGNIN_ERROR);
       }
     },
     onError: (error) => {
       if (error instanceof Error) {
         setError(error.message);
       } else {
-        setError('알 수 없는 오류가 발생했습니다.');
+        setError(ErrorMessages.UNKOWN_ERROR);
       }
     },
   });
