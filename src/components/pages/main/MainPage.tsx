@@ -1,9 +1,12 @@
 import { getActivities } from '@/apis/activities';
 import React, { useEffect, useState } from 'react';
 
-import ActivityCards from './ActivityCards';
+import FilteredActivities from './FilteredActivities';
 import PopularActivityCard from './PopularActivityCard';
+import { RadioTab } from './RadioTab';
 import { Activity } from './mainPage.type';
+
+const categories = ['문화 · 예술', '식음료', '스포츠', '투어', '관광', '웰빙'];
 
 const MainPage = () => {
   const [activities, setActivities] = useState<Activity[]>([]);
@@ -50,16 +53,23 @@ const MainPage = () => {
       </section>
 
       <section className="flex flex-col gap-24">
-        <div className="flex justify-between">
-          <div>라디오</div>
-          <div>DropDown</div>
+        <div className="flex flex-col">
+          <RadioTab.Root defaultTab="">
+            <div className="mb-24 flex w-882 gap-24">
+              {categories.map((category) => (
+                <RadioTab.Item key={category} id={category}>
+                  {category}
+                </RadioTab.Item>
+              ))}
+              <div>DropDown</div>
+            </div>
+            <div className="flex flex-col gap-24">
+              <h2>모든 체험</h2>
+              <FilteredActivities activities={activities} />
+            </div>
+          </RadioTab.Root>
         </div>
-        <h2>모든 체험</h2>
-        <div className="flex w-1204 flex-wrap gap-24">
-          {activities.map((activity) => (
-            <ActivityCards key={activity.id} activity={activity} />
-          ))}
-        </div>
+
         <div>pagination</div>
 
         {!loading && <button onClick={loadMore}>더 보기</button>}
