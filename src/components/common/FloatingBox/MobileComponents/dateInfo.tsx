@@ -20,14 +20,14 @@ const DateInfo = ({ handleOpenModal }: DateInfoProps) => {
       {dateString ? (
         <span
           onClick={handleOpenModal}
-          className="cursor-pointer border-b border-green-300 text-md-semibold text-green-300"
+          className="cursor-pointer border-b border-green-300 text-md-semibold text-green-300 hover:text-gray-700"
         >
           {dateString}
         </span>
       ) : (
         <span
           onClick={handleOpenModal}
-          className="cursor-pointer border-b border-green-300 text-md-semibold leading-[17px] text-green-300"
+          className="cursor-pointer border-b border-green-300 text-md-semibold leading-[17px] text-green-300 hover:text-gray-700"
         >
           날짜 선택하기
         </span>

@@ -1,3 +1,5 @@
+import { headCountAtom, selectedDateAtom, selectedSlotAtom } from '@/store/activityDetailsAtom';
+import { useAtomValue } from 'jotai';
 import { useState } from 'react';
 
 import Button from '../Button';
@@ -6,6 +8,9 @@ import MobileComponents from './MobileComponents';
 
 const Mobile = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const headCount = useAtomValue(headCountAtom);
+  const selectedDate = useAtomValue(selectedDateAtom);
+  const selectedSlot = useAtomValue(selectedSlotAtom);
 
   const handleReservation = () => {
     // TODO: 예약하기 기능 구현
@@ -14,6 +19,8 @@ const Mobile = () => {
   const handleOpenModal = () => {
     setIsModalOpen((prev) => !prev);
   };
+
+  const isReservationButtonActive = selectedDate && selectedSlot && headCount > 0 ? false : true;
 
   return (
     <>
@@ -25,7 +32,7 @@ const Mobile = () => {
             <MobileComponents.PriceInfo />
             <MobileComponents.DateInfo handleOpenModal={handleOpenModal} />
           </div>
-          <Button.Default onClick={handleReservation} className="h-54 w-106">
+          <Button.Default disabled={isReservationButtonActive} onClick={handleReservation} className="h-54 w-106">
             예약하기
           </Button.Default>
         </div>

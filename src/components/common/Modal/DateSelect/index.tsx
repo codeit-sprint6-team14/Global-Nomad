@@ -30,7 +30,7 @@ const DateSelectModal = ({
           </>
         )}
       </main>
-      <Footer setIsModalOpen={setIsModalOpen} /> {/*prop -> isReservationPossible={isReservationPossible}*/}
+      <Footer setIsModalOpen={setIsModalOpen} />
     </div>
   );
 };
