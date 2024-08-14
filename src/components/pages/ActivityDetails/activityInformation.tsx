@@ -1,5 +1,6 @@
+import { useMyInformation } from '@/apis/ActivityDetailsPage/activityDetails';
+import { useActivityData } from '@/apis/ActivityDetailsPage/useActivityData';
 import FloatingBox from '@/components/common/FloatingBox';
-import { useActivityData } from '@/hooks/useActivityData';
 import useViewportSize from '@/hooks/useViewportSize';
 import { activityIdAtom, reservationPriceAtom } from '@/store/activityDetailsAtom';
 import { useSetAtom } from 'jotai';
@@ -23,13 +24,17 @@ const ActivityInformation = ({ activityId = '2213' }: { activityId?: string }) =
   const setActivityId = useSetAtom(activityIdAtom);
   setActivityId(activityId);
 
+  const { userInformationData } = useMyInformation();
+  const myId = userInformationData?.id;
+
   const { activityData, isLoading, error } = useActivityData(activityId);
 
   if (isLoading) return <div>체험 상세 데이터 로딩중입니다...</div>;
   if (error) return <div>체험 상세 데이터를 불러오는데 실패했습니다.</div>;
   if (!activityData) return null;
 
-  const { category, title, rating, reviewCount, address, bannerImageUrl, description, subImages, price } = activityData;
+  const { category, title, rating, reviewCount, address, bannerImageUrl, description, subImages, price, userId } =
+    activityData;
 
   setPrice(price);
 
@@ -45,6 +50,7 @@ const ActivityInformation = ({ activityId = '2213' }: { activityId?: string }) =
             <KakaoMap address={address} />
           </div>
           {!isMobile &&
+            myId !== userId &&
             (isTablet ? (
               <FloatingBox.Tablet />
             ) : (
@@ -52,7 +58,7 @@ const ActivityInformation = ({ activityId = '2213' }: { activityId?: string }) =
             ))}
         </div>
         <ReviewList activityId={activityId} />
-        {isMobile && (
+        {isMobile && myId !== userId && (
           <div className="mt-89">
             <FloatingBox.Mobile />
           </div>
