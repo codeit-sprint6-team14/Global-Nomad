@@ -43,12 +43,13 @@ const ActivityInformation = ({ activityId = '2213' }: { activityId?: string }) =
       <div className="lg:mx-auto lg:max-w-[1200px] lg:pt-78">
         <Header
           myId={myId}
-          userId={userId}
-          category={category}
           title={title}
+          userId={userId}
           rating={rating}
-          reviewCount={reviewCount}
           address={address}
+          category={category}
+          activityId={activityId}
+          reviewCount={reviewCount}
         />
 
         <BannerImage bannerImageUrl={bannerImageUrl} subImages={subImages} />
