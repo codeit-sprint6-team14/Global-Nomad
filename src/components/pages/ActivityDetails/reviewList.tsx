@@ -1,4 +1,4 @@
-import { getActivityReviewList } from '@/apis/activityDetails';
+import { getActivityReviewList } from '@/apis/ActivityDetailsPage/activityDetails';
 import Pagination from '@/components/common/Pagination';
 import { ReviewData, ReviewType } from '@/types/activityReviews';
 import { useQuery } from '@tanstack/react-query';

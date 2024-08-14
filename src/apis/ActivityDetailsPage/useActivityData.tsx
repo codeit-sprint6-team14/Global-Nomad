@@ -1,4 +1,4 @@
-import { getActivity } from '@/apis/activityDetails';
+import { getActivity } from '@/apis/ActivityDetailsPage/activityDetails';
 import { Activity } from '@/types/activity';
 import { useQuery } from '@tanstack/react-query';
 

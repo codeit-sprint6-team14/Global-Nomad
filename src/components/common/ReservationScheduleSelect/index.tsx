@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { useActivityAvailableSchedule } from '@/apis/ActivityDetailsPage/useActivityAvailableSchedule';
 import { INITIAL_DATE } from '@/constants/date';
-import { useActivityAvailableSchedule } from '@/hooks/useActivityAvailableSchedule';
 import { activityIdAtom, scheduleIdAtom, selectedDateAtom, selectedSlotAtom } from '@/store/activityDetailsAtom';
 import { DaySchedule, TimeSlot } from '@/types/availableSchedulesTypes';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';

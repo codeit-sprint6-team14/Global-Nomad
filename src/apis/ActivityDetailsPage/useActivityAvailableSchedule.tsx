@@ -1,4 +1,4 @@
-import { getActivityAvailableSchedule } from '@/apis/activityDetails';
+import { getActivityAvailableSchedule } from '@/apis/ActivityDetailsPage/activityDetails';
 import { AvailableScheduleTypeProps, DaySchedule } from '@/types/availableSchedulesTypes';
 import { useQuery } from '@tanstack/react-query';
 

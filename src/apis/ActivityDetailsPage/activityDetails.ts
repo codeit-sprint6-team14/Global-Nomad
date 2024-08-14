@@ -1,8 +1,9 @@
 import { axiosRequester } from '@/libs/axios';
 import { formSubmitDataAtomType } from '@/store/activityDetailsAtom';
-import { Activity } from '@/types/activity';
+import { Activity, MyInformation } from '@/types/activity';
 import { AvailableScheduleTypeProps, DaySchedule } from '@/types/availableSchedulesTypes';
 import { ReviewListData } from '@/types/reviewList';
+import { useQuery } from '@tanstack/react-query';
 
 export const getActivity = async ({ activityId }: { activityId: string }) => {
   const { data } = await axiosRequester<Activity>({
@@ -52,7 +53,30 @@ export const postActivityReservation = async ({ activityId, scheduleId, headCoun
       url: `/activities/${activityId}/reservations`,
       data: { scheduleId, headCount },
     },
+    includeAuth: true,
   });
 
   return data;
+};
+
+export const getMyInformation = async () => {
+  const { data } = await axiosRequester<MyInformation>({
+    options: {
+      method: 'GET',
+      url: `/users/me`,
+    },
+    includeAuth: true,
+  });
+
+  return data;
+};
+
+export const useMyInformation = () => {
+  const {
+    data: userInformationData,
+    isLoading,
+    error,
+  } = useQuery<MyInformation>({ queryKey: ['userInformation'], queryFn: () => getMyInformation() });
+
+  return { userInformationData, isLoading, error };
 };

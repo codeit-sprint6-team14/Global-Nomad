@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useActivityReservationMutation } from '@/hooks/useReservationMutation';
+import { useActivityReservationMutation } from '@/apis/ActivityDetailsPage/useReservationMutation';
 import { headCountAtom, scheduleIdAtom, selectedDateAtom, selectedSlotAtom } from '@/store/activityDetailsAtom';
 import { useAtomValue } from 'jotai';
 

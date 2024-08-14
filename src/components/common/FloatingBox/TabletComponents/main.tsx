@@ -1,7 +1,7 @@
+import { useActivityReservationMutation } from '@/apis/ActivityDetailsPage/useReservationMutation';
 import Button from '@/components/common/Button';
 import Counter from '@/components/common/Counter';
 import Modal from '@/components/common/Modal';
-import { useActivityReservationMutation } from '@/hooks/useReservationMutation';
 import {
   activityIdAtom,
   headCountAtom,
