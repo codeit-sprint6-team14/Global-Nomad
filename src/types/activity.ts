@@ -34,12 +34,3 @@ export type HeaderProps = {
   reviewCount: number;
   address: string;
 };
-
-export interface MyInformation {
-  id: number;
-  email: string;
-  nickname: string;
-  profileImageUrl: null;
-  createdAt: string;
-  updatedAt: string;
-}

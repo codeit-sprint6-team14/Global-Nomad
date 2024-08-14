@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useActivityAvailableSchedule } from '@/apis/ActivityDetailsPage/useActivityAvailableSchedule';
+import { useActivityAvailableSchedule } from '@/apis/ActivityDetailsPage/getActivityAvailableSchedule';
 import { INITIAL_DATE } from '@/constants/date';
 import { activityIdAtom, scheduleIdAtom, selectedDateAtom, selectedSlotAtom } from '@/store/activityDetailsAtom';
 import { DaySchedule, TimeSlot } from '@/types/availableSchedulesTypes';

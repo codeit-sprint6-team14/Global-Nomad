@@ -1,4 +1,4 @@
-import { useActivityReservationMutation } from '@/apis/ActivityDetailsPage/useReservationMutation';
+import { useActivityReservationMutation } from '@/apis/ActivityDetailsPage/postActivityReservation';
 import Button from '@/components/common/Button';
 import Counter from '@/components/common/Counter';
 import Modal from '@/components/common/Modal';

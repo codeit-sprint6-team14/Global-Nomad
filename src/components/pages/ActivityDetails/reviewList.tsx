@@ -1,7 +1,6 @@
-import { getActivityReviewList } from '@/apis/ActivityDetailsPage/activityDetails';
+import { useActivityReviewList } from '@/apis/ActivityDetailsPage/getActivityReviewList';
 import Pagination from '@/components/common/Pagination';
-import { ReviewData, ReviewType } from '@/types/activityReviews';
-import { useQuery } from '@tanstack/react-query';
+import { ReviewType } from '@/types/activityReviews';
 import Image from 'next/image';
 import { useState } from 'react';
 
@@ -12,17 +11,10 @@ const REVIEWS_PER_PAGE = 1;
 const ReviewList = ({ activityId }: { activityId: string }) => {
   const [currentPage, setCurrentPage] = useState(1);
 
-  const {
-    data: reviewListData,
-    isLoading,
-    error,
-    refetch,
-    isPlaceholderData,
-  } = useQuery<ReviewData>({
-    queryKey: ['review', activityId, currentPage],
-    queryFn: () => getActivityReviewList({ activityId, page: currentPage, size: REVIEWS_PER_PAGE }),
-    placeholderData: (prevData) => prevData,
-    staleTime: 5000,
+  const { reviewListData, error, isLoading, isPlaceholderData, refetch } = useActivityReviewList({
+    activityId,
+    page: currentPage,
+    size: REVIEWS_PER_PAGE,
   });
 
   if (isLoading) return <div>댓글 로딩중입니다...</div>;

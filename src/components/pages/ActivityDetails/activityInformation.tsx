@@ -1,5 +1,5 @@
-import { useMyInformation } from '@/apis/ActivityDetailsPage/activityDetails';
-import { useActivityData } from '@/apis/ActivityDetailsPage/useActivityData';
+import { useActivityData } from '@/apis/ActivityDetailsPage/getActivityDetailsData';
+import { useMyInformation } from '@/apis/ActivityDetailsPage/getMyInformation';
 import FloatingBox from '@/components/common/FloatingBox';
 import useViewportSize from '@/hooks/useViewportSize';
 import { activityIdAtom, reservationPriceAtom } from '@/store/activityDetailsAtom';
