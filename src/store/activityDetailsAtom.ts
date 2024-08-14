@@ -9,7 +9,7 @@ export const headCountAtom = atom(0);
 
 export const activityIdAtom = atom('');
 
-export const ReservationPriceAtom = atom(0);
+export const reservationPriceAtom = atom(0);
 
 export const selectedDateAtom = atom<Date | null>(null);
 
