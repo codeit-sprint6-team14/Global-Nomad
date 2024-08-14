@@ -1,4 +1,4 @@
-import { ActivitiesResponse } from '@/components/pages/main/mainPage.type';
+import { ActivitiesResponse, GetActivitiesParams } from '@/components/pages/main/mainPage.type';
 import { Activity } from '@/types/activity';
 import axios from 'axios';
 
@@ -8,13 +8,28 @@ const axiosRequester = axios.create({
   baseURL: BASE_URL,
 });
 
-export const getActivities = async (page: number = 1, size: number = 20) => {
+export const getActivities = async (
+  page: number = 1,
+  size: number = 20,
+  category: string | null = null,
+  sortBy: string | null = null,
+) => {
+  const params: GetActivitiesParams = {
+    method: 'cursor',
+    page,
+    size,
+  };
+
+  if (category && category !== '') {
+    params.category = category;
+  }
+
+  if (sortBy) {
+    params.sortBy = sortBy;
+  }
+
   const { data } = await axiosRequester.get<ActivitiesResponse>('/activities', {
-    params: {
-      method: 'cursor',
-      page,
-      size,
-    },
+    params,
   });
 
   return data;

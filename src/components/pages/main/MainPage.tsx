@@ -1,12 +1,14 @@
 import { getActivities } from '@/apis/activities';
 import DropDownList from '@/components/common/Dropdown/dropDownList';
 import DropDownOption from '@/components/common/Dropdown/dropDownOption';
-import React, { MouseEvent, useEffect, useRef, useState } from 'react';
+import Pagination from '@/components/common/Pagination';
+import React, { MouseEvent, useContext, useEffect, useRef, useState } from 'react';
 
 import DownArrow from '../../../../public/assets/icons/down-arrow.svg';
 import FilteredActivities from './FilteredActivities';
 import PopularActivityCard from './PopularActivityCard';
 import { RadioTab } from './RadioTab';
+import { RadioTabContext } from './RadioTab/RadioTabContext';
 import { Activity } from './mainPage.type';
 
 const categories = ['문화·예술', '식음료', '스포츠', '투어', '관광', '웰빙'];
@@ -23,14 +25,17 @@ const MainPage = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
+  const context = useContext(RadioTabContext);
+  const activeTab = context?.activeTab || '';
+
   const popularActivities = activities.filter((activity) => activity.rating >= 4.5);
 
   useEffect(() => {
     const fetchActivities = async () => {
       setLoading(true);
       try {
-        const response = await getActivities(page);
-        setActivities((prevActivities) => [...prevActivities, ...response.activities]);
+        const response = await getActivities(page, 8, activeTab, sortBy);
+        setActivities(response.activities);
       } catch (error) {
         console.error('활동 목록을 불러오는 데 실패했습니다:', error);
       } finally {
@@ -39,20 +44,17 @@ const MainPage = () => {
     };
 
     fetchActivities();
-  }, [page]);
+  }, [page, activeTab, sortBy]);
 
-  useEffect(() => {
-    if (sortBy) {
-      const sortedActivities = [...activities].sort((a, b) => {
-        if (sortBy === 'priceLow') {
-          return a.price - b.price;
-        } else {
-          return b.price - a.price;
-        }
-      });
-      setActivities(sortedActivities);
-    }
-  }, [sortBy]);
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleSortChange = (value: string) => {
+    setSortBy(value);
+    setIsDropdownOpen(false);
+    setPage(1);
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent | Event) => {
@@ -67,14 +69,11 @@ const MainPage = () => {
     };
   }, []);
 
-  const loadMore = () => {
-    setPage((prevPage) => prevPage + 1);
-  };
+  const filteredActivities = activities.filter((activity) =>
+    activeTab === '' ? true : activity.category === activeTab,
+  );
 
-  const handleSortChnage = (value: string) => {
-    setSortBy(value);
-    setIsDropdownOpen(false);
-  };
+  const totalFilteredPages = Math.ceil(filteredActivities.length / 8);
 
   return (
     <>
@@ -118,7 +117,7 @@ const MainPage = () => {
                       <DropDownOption
                         key={option.value}
                         label={option.label}
-                        handleOptionClick={() => handleSortChnage(option.value)}
+                        handleOptionClick={() => handleSortChange(option.value)}
                         className="text-2lg-medium text-gray-800"
                       />
                     ))}
@@ -128,16 +127,18 @@ const MainPage = () => {
             </div>
             <div className="flex flex-col gap-24">
               <h2>모든 체험</h2>
-              <FilteredActivities activities={activities} />
+              <FilteredActivities activities={activities} currentPage={page} pageSize={8} />
             </div>
           </RadioTab.Root>
         </div>
-
-        <div>pagination</div>
-
-        {!loading && <button onClick={loadMore}>더 보기</button>}
-        {loading && <p>로딩 중...</p>}
+        <Pagination
+          currentPage={page}
+          totalPages={totalFilteredPages}
+          onPageChange={handlePageChange}
+          isPlaceholderData={loading}
+        />
       </section>
+      {loading && <p>로딩 중...</p>}
     </>
   );
 };

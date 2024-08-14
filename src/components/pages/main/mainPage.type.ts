@@ -22,3 +22,17 @@ export interface ActivitiesResponse {
 export interface ActivityCardProps {
   activity: Activity;
 }
+
+export interface FilteredActivitiesProps {
+  activities: Activity[];
+  currentPage: number;
+  pageSize: number;
+}
+
+export interface GetActivitiesParams {
+  method: 'cursor';
+  page: number;
+  size: number;
+  category?: string;
+  sortBy?: string;
+}
