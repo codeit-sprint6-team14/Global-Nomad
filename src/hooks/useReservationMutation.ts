@@ -6,15 +6,15 @@ export const useActivityReservationMutation = () => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: ({ activityId, formSubmitData }: { activityId: string; formSubmitData: formSubmitDataAtomType }) =>
-      postActivityReservation({ activityId, formSubmitData }),
+    mutationFn: ({ activityId, scheduleId, headCount }: formSubmitDataAtomType) =>
+      postActivityReservation({ activityId, scheduleId, headCount }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['reservation'] });
     },
   });
 
-  const submitReservation = (activityId: string, formSubmitData: formSubmitDataAtomType) => {
-    mutation.mutate({ activityId, formSubmitData });
+  const submitReservation = ({ activityId, scheduleId, headCount }: formSubmitDataAtomType) => {
+    mutation.mutate({ activityId, scheduleId, headCount });
   };
 
   return { submitReservation, ...mutation };

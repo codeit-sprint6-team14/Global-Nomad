@@ -1,5 +1,8 @@
+import { reservationPriceAtom } from '@/store/activityDetailsAtom';
+import { useAtomValue } from 'jotai';
+
 const Header = () => {
-  const price = 10000;
+  const price = useAtomValue(reservationPriceAtom);
   return (
     <div>
       <header className="flex items-center border-b border-gray-300 px-24 pb-16 pt-24">

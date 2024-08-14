@@ -1,15 +1,20 @@
+import { TimeSlot } from '@/types/availableSchedulesTypes';
 import { atom } from 'jotai';
 
-export type formSubmitDataAtomType = { scheduleId: number; headCount: number };
+export type formSubmitDataAtomType = { activityId: string; scheduleId: number; headCount: number };
 
-export const formSubmitDataAtom = atom({ scheduleId: 0, headCount: 0 });
+export const scheduleIdAtom = atom(0);
+
+export const headCountAtom = atom(0);
 
 export const activityIdAtom = atom('');
 
-const INITIAL_DATE = new Date();
+export const reservationPriceAtom = atom(0);
 
-const year = INITIAL_DATE.getFullYear();
-const twoDigitMonth = String(INITIAL_DATE.getMonth() + 1).padStart(2, '0');
+export const selectedDateAtom = atom<Date | null>(null);
 
-export const yearAtom = atom(year);
-export const monthAtom = atom(twoDigitMonth);
+export const selectedSlotAtom = atom<TimeSlot | null>(null);
+
+export const selectedScheduleStateAtom = atom(false);
+
+export const isModalOpenAtom = atom(false);

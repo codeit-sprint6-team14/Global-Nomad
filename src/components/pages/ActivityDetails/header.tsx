@@ -1,17 +1,25 @@
 import DropDown from '@/components/common/Dropdown';
 import { HeaderProps } from '@/types/activity';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 const Header = ({ category, title, rating, reviewCount, address }: HeaderProps) => {
   const [isOpenDropdown, setIsOpenDropdown] = useState(false);
 
+  const router = useRouter();
+
   const handleDropdownVisible = () => {
     setIsOpenDropdown((prev) => !prev);
   };
 
-  const handleOptionClick = (label: string) => {
-    console.log(label); // 여기에 드롭다운 메뉴 클릭 시 실행할 로직을 추가하세요
+  const handleOptionClick = (option: string) => {
+    if (option === '수정하기') {
+      router.push(`/my-page/activity-settings`);
+    }
+    if (option === '삭제하기') {
+      console.log('삭제하기'); // TODO: 삭제하기 기능 추가 예정
+    }
     setIsOpenDropdown(false);
   };
 
@@ -31,8 +39,18 @@ const Header = ({ category, title, rating, reviewCount, address }: HeaderProps) 
         />
         {isOpenDropdown && (
           <DropDown classNames="h-max w-120 right-0 top-48 z-50 ">
-            <DropDown.Option className="" key="수정하기" handleOptionClick={handleOptionClick} label="수정하기" />
-            <DropDown.Option className="" key="삭제하기" handleOptionClick={handleOptionClick} label="삭제하기" />
+            <DropDown.Option
+              className=""
+              key="수정하기"
+              handleOptionClick={() => handleOptionClick('수정하기')}
+              label="수정하기"
+            />
+            <DropDown.Option
+              className=""
+              key="삭제하기"
+              handleOptionClick={() => handleOptionClick('삭제하기')}
+              label="삭제하기"
+            />
           </DropDown>
         )}
       </div>
