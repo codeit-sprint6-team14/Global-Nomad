@@ -7,7 +7,7 @@ import useViewportSize from '@/hooks/useViewportSize';
 import { confirmPasswordAtom, isChangedAtom, passwordAtom, userAtom } from '@/store/userAtom';
 import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import InputSection from './inputSection';
 import PasswordInputSection from './passwordInputSection';
@@ -21,6 +21,8 @@ const MyProfile = () => {
   const [confirmPassword, setConfirmPassword] = useAtom(confirmPasswordAtom);
   const [isChanged, setIsChanged] = useAtom(isChangedAtom);
 
+  const [initialNickname, setInitialNickname] = useState<string>('');
+
   useEffect(() => {
     const loadUserProfile = async () => {
       try {
@@ -30,6 +32,7 @@ const MyProfile = () => {
           nickname: data.nickname,
           profileImage: data.profileImageUrl,
         });
+        setInitialNickname(data.nickname);
       } catch (error) {
         console.error('Failed to load user profile:', error);
       }
@@ -39,10 +42,17 @@ const MyProfile = () => {
   }, [setUser]);
 
   useEffect(() => {
-    const hasChanges =
-      Boolean(user.nickname) || (Boolean(password) && Boolean(confirmPassword) && password === confirmPassword);
-    setIsChanged(hasChanges);
-  }, [user.nickname, password, confirmPassword, setIsChanged]);
+    const hasNicknameChanged = user.nickname !== initialNickname;
+    const isPasswordLongEnough = password.length >= 8;
+    const isPasswordValid = Boolean(password) && isPasswordLongEnough && password === confirmPassword;
+    const isPasswordAttempted = Boolean(password) || Boolean(confirmPassword);
+
+    const shouldEnableButton =
+      (hasNicknameChanged && !isPasswordAttempted) || // 닉네임만 변경되고 비밀번호 변경 시도 없음
+      (isPasswordValid && (hasNicknameChanged || !hasNicknameChanged)); // 비밀번호가 유효하고 (닉네임 변경 여부 상관없음)
+
+    setIsChanged(shouldEnableButton);
+  }, [user.nickname, initialNickname, password, confirmPassword, setIsChanged]);
 
   const handleSave = async () => {
     try {
@@ -83,9 +93,9 @@ const MyProfile = () => {
               <h2 className="ml-10 mt-5 text-3xl-bold md:ml-0">내 정보</h2>
             </div>
             <Button.Default
-              className={`ml-auto h-48 w-120 ${isChanged && password === confirmPassword ? '' : 'cursor-not-allowed bg-gray-400'}`}
+              className={`ml-auto h-48 w-120 ${isChanged ? '' : 'cursor-not-allowed bg-gray-400'}`}
               onClick={handleSave}
-              disabled={!isChanged || password !== confirmPassword}
+              disabled={!isChanged}
             >
               저장하기
             </Button.Default>
@@ -97,7 +107,7 @@ const MyProfile = () => {
           />
           <InputSection title="이메일" value={user.email} readonly={true} />
           <PasswordInputSection
-            title="비밀번호"
+            title="새 비밀번호"
             placeholder="8자 이상 입력해 주세요"
             value={password}
             onChange={(e) => setPassword(e.target.value)}

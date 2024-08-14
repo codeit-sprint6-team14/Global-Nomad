@@ -1,9 +1,35 @@
+import { updateProfile } from '@/apis/updateProfile';
+import { uploadImage } from '@/apis/uploadImage';
 import { userAtom } from '@/store/userAtom';
 import { useAtom } from 'jotai';
 import Image from 'next/image';
 
 const SideNavMenuProfile = () => {
-  const [user] = useAtom(userAtom);
+  const [user, setUser] = useAtom(userAtom);
+
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.target.files?.[0];
+    if (selectedFile) {
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+
+      try {
+        // 이미지 업로드 API 호출
+        const imageUrl = await uploadImage(formData);
+
+        // 프로필 업데이트 API 호출 (이미지 URL만 업데이트)
+        await updateProfile({ profileImageUrl: imageUrl });
+
+        // 상태 업데이트
+        setUser((prev) => ({
+          ...prev,
+          profileImage: imageUrl,
+        }));
+      } catch (error) {
+        console.error('프로필 이미지 업데이트 실패:', error);
+      }
+    }
+  };
 
   return (
     <div className="relative flex justify-center">
@@ -23,7 +49,7 @@ const SideNavMenuProfile = () => {
       >
         <Image src="/assets/icons/pencil.svg" alt="연필이미지" width={24} height={24} />
       </label>
-      <input id="FileInput" className="hidden" type="file" placeholder="이미지 등록" />
+      <input id="FileInput" className="hidden" type="file" onChange={handleFileChange} />
     </div>
   );
 };
