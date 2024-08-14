@@ -45,18 +45,12 @@ export const getActivityReviewList = async ({
   return data;
 };
 
-export const postActivityReservation = async ({
-  activityId,
-  formSubmitData,
-}: {
-  activityId: string;
-  formSubmitData: formSubmitDataAtomType;
-}) => {
+export const postActivityReservation = async ({ activityId, scheduleId, headCount }: formSubmitDataAtomType) => {
   const { data } = await axiosRequester({
     options: {
       method: 'POST',
       url: `/activities/${activityId}/reservations`,
-      data: formSubmitData,
+      data: { scheduleId, headCount },
     },
   });
 

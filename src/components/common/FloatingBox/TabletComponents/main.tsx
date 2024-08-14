@@ -2,7 +2,7 @@ import Button from '@/components/common/Button';
 import Counter from '@/components/common/Counter';
 import Modal from '@/components/common/Modal';
 import { useActivityReservationMutation } from '@/hooks/useReservationMutation';
-import { activityIdAtom, formSubmitDataAtom } from '@/store/activityDetailsAtom';
+import { activityIdAtom, headCountAtom, scheduleIdAtom } from '@/store/activityDetailsAtom';
 import { useAtomValue } from 'jotai';
 import { useState } from 'react';
 
@@ -16,10 +16,11 @@ const Main = () => {
 
   const { submitReservation } = useActivityReservationMutation();
   const activityId = useAtomValue(activityIdAtom);
-  const submitFormData = useAtomValue(formSubmitDataAtom);
+  const headCount = useAtomValue(headCountAtom);
+  const scheduleId = useAtomValue(scheduleIdAtom);
 
   const handleReservationFormSubmit = () => {
-    submitReservation(activityId, submitFormData);
+    submitReservation({ activityId, scheduleId, headCount });
   };
 
   return (
@@ -29,7 +30,7 @@ const Main = () => {
         <button onClick={handleDateSelectModal} className="mb-27">
           날짜 선택하기
         </button>
-        {isModalOpen && <Modal.DateSelect classNames="absolute right-0 top-0" setIsModalOpen={setIsModalOpen} />}
+        {isModalOpen && <Modal.DateSelect classNames="absolute right-0 top-0 z-50" setIsModalOpen={setIsModalOpen} />}
         <h2 className="mb-5 text-xl-bold">참여 인원 수</h2>
         <div className="mb-32">
           <Counter />
