@@ -15,6 +15,11 @@ import { useState } from 'react';
 
 const Main = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const activityId = useAtomValue(activityIdAtom);
+  const headCount = useAtomValue(headCountAtom);
+  const scheduleId = useAtomValue(scheduleIdAtom);
+  const selectedDate = useAtomValue(selectedDateAtom);
+  const selectedSlot = useAtomValue(selectedSlotAtom);
 
   const handleDateSelectModal = () => {
     // TODO: 모달 여닫는 기능 구현
@@ -22,22 +27,17 @@ const Main = () => {
   };
 
   const { submitReservation } = useActivityReservationMutation();
-  const activityId = useAtomValue(activityIdAtom);
-  const headCount = useAtomValue(headCountAtom);
-  const scheduleId = useAtomValue(scheduleIdAtom);
-  const selectedDate = useAtomValue(selectedDateAtom);
-  const selectedSlot = useAtomValue(selectedSlotAtom);
+
+  const handleReservationSubmit = () => {
+    submitReservation({ activityId, scheduleId, headCount });
+  };
+
+  const isReservationButtonActive = selectedDate && selectedSlot && headCount > 0 ? false : true;
 
   const dateString =
     selectedDate && selectedSlot
       ? format(selectedDate, 'yy/MM/dd') + ' ' + selectedSlot.startTime + ' ~ ' + selectedSlot.endTime
       : '';
-
-  const handleReservationFormSubmit = () => {
-    submitReservation({ activityId, scheduleId, headCount });
-  };
-
-  const isReservationButtonActive = selectedDate && selectedSlot && headCount > 0 ? false : true;
 
   return (
     <div>
@@ -64,8 +64,8 @@ const Main = () => {
           <Counter />
         </div>
         <Button.Default
-          className="h-56 w-203"
-          onClick={handleReservationFormSubmit}
+          className="h-56 w-203 hover:bg-gray-800"
+          onClick={handleReservationSubmit}
           disabled={isReservationButtonActive}
         >
           예약하기

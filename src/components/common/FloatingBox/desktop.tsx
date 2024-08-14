@@ -23,7 +23,7 @@ const Desktop = ({
 
   const { submitReservation, isPending } = useActivityReservationMutation();
 
-  const handleReservationFormSubmit = () => {
+  const handleReservationSubmit = () => {
     submitReservation({ activityId, scheduleId, headCount });
   };
 
@@ -39,8 +39,8 @@ const Desktop = ({
       <DesktopComponents.ParticipantCounter />
       <Button.Default
         disabled={isReservationButtonActive}
-        className="h-56 w-full"
-        onClick={handleReservationFormSubmit}
+        className="h-56 w-full hover:bg-gray-800"
+        onClick={handleReservationSubmit}
       >
         {buttonLabel}
       </Button.Default>
