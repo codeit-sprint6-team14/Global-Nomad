@@ -5,3 +5,7 @@ export const userAtom = atom({
   nickname: '',
   profileImage: '',
 });
+
+export const passwordAtom = atom<string>('');
+export const confirmPasswordAtom = atom<string>('');
+export const isChangedAtom = atom<boolean>(false);
