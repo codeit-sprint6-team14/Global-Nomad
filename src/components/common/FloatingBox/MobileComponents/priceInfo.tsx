@@ -1,8 +1,8 @@
-import { ReservationPriceAtom, headCountAtom } from '@/store/activityDetailsAtom';
+import { headCountAtom, reservationPriceAtom } from '@/store/activityDetailsAtom';
 import { useAtomValue } from 'jotai';
 
 const PriceInfo = () => {
-  const price = useAtomValue(ReservationPriceAtom);
+  const price = useAtomValue(reservationPriceAtom);
   const headCount = useAtomValue(headCountAtom);
 
   return (

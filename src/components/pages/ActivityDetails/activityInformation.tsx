@@ -1,7 +1,7 @@
 import FloatingBox from '@/components/common/FloatingBox';
 import { useActivityData } from '@/hooks/useActivityData';
 import useViewportSize from '@/hooks/useViewportSize';
-import { ReservationPriceAtom, activityIdAtom } from '@/store/activityDetailsAtom';
+import { activityIdAtom, reservationPriceAtom } from '@/store/activityDetailsAtom';
 import { useSetAtom } from 'jotai';
 
 import BannerImage from './bannerImage';
@@ -18,7 +18,7 @@ const ActivityInformation = ({ activityId = '2213' }: { activityId?: string }) =
   const isMobile = viewportSize === 'mobile';
   const isTablet = viewportSize === 'tablet';
 
-  const setPrice = useSetAtom(ReservationPriceAtom);
+  const setPrice = useSetAtom(reservationPriceAtom);
 
   const setActivityId = useSetAtom(activityIdAtom);
   setActivityId(activityId);
