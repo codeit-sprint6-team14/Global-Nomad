@@ -1,7 +1,7 @@
 import FloatingBox from '@/components/common/FloatingBox';
 import { useActivityData } from '@/hooks/useActivityData';
 import useViewportSize from '@/hooks/useViewportSize';
-import { activityIdAtom } from '@/store/activityDetailsAtom';
+import { ReservationPriceAtom, activityIdAtom } from '@/store/activityDetailsAtom';
 import { useSetAtom } from 'jotai';
 
 import BannerImage from './bannerImage';
@@ -18,17 +18,20 @@ const ActivityInformation = ({ activityId = '2213' }: { activityId?: string }) =
   const isMobile = viewportSize === 'mobile';
   const isTablet = viewportSize === 'tablet';
 
+  const setPrice = useSetAtom(ReservationPriceAtom);
+
   const setActivityId = useSetAtom(activityIdAtom);
   setActivityId(activityId);
 
   const { activityData, isLoading, error } = useActivityData(activityId);
 
-
   if (isLoading) return <div>체험 상세 데이터 로딩중입니다...</div>;
   if (error) return <div>체험 상세 데이터를 불러오는데 실패했습니다.</div>;
   if (!activityData) return null;
 
-  const { category, title, rating, reviewCount, address, bannerImageUrl, description, subImages } = activityData;
+  const { category, title, rating, reviewCount, address, bannerImageUrl, description, subImages, price } = activityData;
+
+  setPrice(price);
 
   return (
     <>
@@ -41,7 +44,12 @@ const ActivityInformation = ({ activityId = '2213' }: { activityId?: string }) =
             <ActivityDescription description={description} />
             <KakaoMap address={address} />
           </div>
-          {!isMobile && (isTablet ? <FloatingBox.Tablet /> : <FloatingBox.Desktop activityId={activityId} />)}
+          {!isMobile &&
+            (isTablet ? (
+              <FloatingBox.Tablet />
+            ) : (
+              <FloatingBox.Desktop activityId={activityId} classNames="sticky top-0 w-[384px]" buttonLabel="예약하기" />
+            ))}
         </div>
         <ReviewList activityId={activityId} />
         {isMobile && (

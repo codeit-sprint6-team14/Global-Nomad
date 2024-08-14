@@ -1,9 +1,9 @@
 import Icon from '@/components/common/Icons';
 import { Dispatch, SetStateAction } from 'react';
 
-const Header = ({ setIsModalOpen }: { setIsModalOpen: Dispatch<SetStateAction<boolean>> }) => {
+const Header = ({ setIsModalOpen }: { setIsModalOpen?: Dispatch<SetStateAction<boolean>> }) => {
   const handleCloseModal = () => {
-    setIsModalOpen(false);
+    setIsModalOpen?.(false);
   };
 
   return (
