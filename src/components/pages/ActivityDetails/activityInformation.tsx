@@ -24,24 +24,32 @@ const ActivityInformation = ({ activityId = '2213' }: { activityId?: string }) =
   const setActivityId = useSetAtom(activityIdAtom);
   setActivityId(activityId);
 
-  const { userInformationData } = useMyInformation();
-  const myId = userInformationData?.id;
+  const { userInformationData, isLoading: isLoadingUserData } = useMyInformation();
+  const { activityData, isLoading: isLoadingActivityData, error } = useActivityData(activityId);
 
-  const { activityData, isLoading, error } = useActivityData(activityId);
-
-  if (isLoading) return <div>체험 상세 데이터 로딩중입니다...</div>;
+  if (isLoadingUserData || isLoadingActivityData) return <div>데이터 로딩중입니다...</div>;
   if (error) return <div>체험 상세 데이터를 불러오는데 실패했습니다.</div>;
-  if (!activityData) return null;
+  if (!activityData || !userInformationData) return <div>데이터를 불러오는데 실패했습니다.</div>;
 
   const { category, title, rating, reviewCount, address, bannerImageUrl, description, subImages, price, userId } =
     activityData;
 
   setPrice(price);
 
+  const myId = userInformationData.id;
+
   return (
     <>
       <div className="lg:mx-auto lg:max-w-[1200px] lg:pt-78">
-        <Header category={category} title={title} rating={rating} reviewCount={reviewCount} address={address} />
+        <Header
+          myId={myId}
+          userId={userId}
+          category={category}
+          title={title}
+          rating={rating}
+          reviewCount={reviewCount}
+          address={address}
+        />
 
         <BannerImage bannerImageUrl={bannerImageUrl} subImages={subImages} />
         <div className="mx-24 flex justify-between md:pb-40 lg:mx-auto lg:max-w-[1200px]">
