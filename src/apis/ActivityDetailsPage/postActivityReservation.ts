@@ -1,6 +1,7 @@
 import { axiosRequester } from '@/libs/axios';
 import { formSubmitDataAtomType } from '@/store/activityDetailsAtom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 
 export const postActivityReservation = async ({ activityId, scheduleId, headCount }: formSubmitDataAtomType) => {
   const { data } = await axiosRequester({
@@ -26,9 +27,26 @@ export const useActivityReservationMutation = () => {
     },
   });
 
-  const submitReservation = ({ activityId, scheduleId, headCount }: formSubmitDataAtomType) => {
-    mutation.mutate({ activityId, scheduleId, headCount });
+  interface ErrorResponse {
+    message: string;
+  }
+
+  const getErrorMessage = (error: unknown) => {
+    if (error instanceof AxiosError) {
+      const axiosError = error as AxiosError<ErrorResponse>;
+      switch (axiosError.response?.status) {
+        case 401:
+          return '로그인 하지 않은 사용자입니다.';
+        case 404:
+          return '존재하지 않는 체험입니다.';
+        case 409:
+          return axiosError.response.data.message;
+        default:
+          return axiosError.response?.data.message || '예약 중 오류가 발생했습니다.';
+      }
+    }
+    return '예약 중 오류가 발생했습니다.';
   };
 
-  return { submitReservation, ...mutation };
+  return { getErrorMessage, ...mutation };
 };

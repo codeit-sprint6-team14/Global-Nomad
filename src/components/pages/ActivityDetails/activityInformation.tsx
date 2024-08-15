@@ -60,11 +60,7 @@ const ActivityInformation = ({ activityId = '2213' }: { activityId?: string }) =
           </div>
           {!isMobile &&
             myId !== userId &&
-            (isTablet ? (
-              <FloatingBox.Tablet />
-            ) : (
-              <FloatingBox.Desktop activityId={activityId} classNames="sticky top-0 w-[384px]" buttonLabel="예약하기" />
-            ))}
+            (isTablet ? <FloatingBox.Tablet /> : <FloatingBox.Desktop classNames="sticky top-0 w-[384px]" />)}
         </div>
         <ReviewList activityId={activityId} />
         {isMobile && myId !== userId && (
