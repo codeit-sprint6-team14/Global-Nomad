@@ -1,14 +1,17 @@
 import { useReservationSubmit } from '@/hooks/useReservationSubmit';
 
 import Button from '../Button';
-import Modal from '../Modal';
-import ModalOverlay from '../Modal/Overlay';
 import ReservationScheduleSelect from '../ReservationScheduleSelect';
 import DesktopComponents from './DesktopComponents';
 
-const Desktop = ({ classNames }: { classNames: string }) => {
-  const { handleReservationSubmit, handleCloseModal, isReservationButtonActive, isPending, isModalOpen, modalMessage } =
-    useReservationSubmit();
+const Desktop = ({
+  classNames,
+  handleReservationSubmit,
+}: {
+  classNames: string;
+  handleReservationSubmit: () => void;
+}) => {
+  const { isReservationButtonActive, isPending } = useReservationSubmit();
 
   return (
     <section
@@ -25,11 +28,7 @@ const Desktop = ({ classNames }: { classNames: string }) => {
       >
         {isPending ? '예약 중...' : '예약하기'}
       </Button.Default>
-      {isModalOpen && (
-        <ModalOverlay>
-          <Modal.RegisterConfirm onClose={handleCloseModal}>{modalMessage}</Modal.RegisterConfirm>
-        </ModalOverlay>
-      )}
+
       <div className="mb-16 border-b border-gray-300 pb-24"></div>
       <DesktopComponents.TotalPrice />
     </section>

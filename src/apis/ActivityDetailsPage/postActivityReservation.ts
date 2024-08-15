@@ -37,10 +37,6 @@ export const useActivityReservationMutation = () => {
       switch (axiosError.response?.status) {
         case 401:
           return '로그인 하지 않은 사용자입니다.';
-        case 404:
-          return '존재하지 않는 체험입니다.';
-        case 409:
-          return axiosError.response.data.message;
         default:
           return axiosError.response?.data.message || '예약 중 오류가 발생했습니다.';
       }

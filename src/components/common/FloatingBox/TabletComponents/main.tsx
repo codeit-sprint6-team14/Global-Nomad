@@ -5,20 +5,9 @@ import { useReservationSubmit } from '@/hooks/useReservationSubmit';
 import { format } from 'date-fns';
 import { useState } from 'react';
 
-import ModalOverlay from '../../Modal/Overlay';
-
-const Main = () => {
+const Main = ({ handleReservationSubmit }: { handleReservationSubmit: () => void }) => {
   const [isCalendarModalOpen, setIsCalendarModalOpen] = useState(false);
-  const {
-    isPending,
-    isModalOpen,
-    isReservationButtonActive,
-    handleReservationSubmit,
-    handleCloseModal,
-    modalMessage,
-    selectedDate,
-    selectedSlot,
-  } = useReservationSubmit();
+  const { isPending, isReservationButtonActive, selectedDate, selectedSlot } = useReservationSubmit();
 
   const handleDateSelectModal = () => {
     setIsCalendarModalOpen((prev) => !prev);
@@ -62,11 +51,6 @@ const Main = () => {
         >
           {isPending ? '예약 중...' : '예약하기'}
         </Button.Default>
-        {isModalOpen && (
-          <ModalOverlay>
-            <Modal.RegisterConfirm onClose={handleCloseModal}>{modalMessage}</Modal.RegisterConfirm>
-          </ModalOverlay>
-        )}
       </main>
     </div>
   );

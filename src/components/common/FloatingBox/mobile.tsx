@@ -2,15 +2,12 @@ import { useReservationSubmit } from '@/hooks/useReservationSubmit';
 import { useState } from 'react';
 
 import Button from '../Button';
-import Modal from '../Modal';
 import DateSelectModal from '../Modal/DateSelect';
-import ModalOverlay from '../Modal/Overlay';
 import MobileComponents from './MobileComponents';
 
-const Mobile = () => {
+const Mobile = ({ handleReservationSubmit }: { handleReservationSubmit: () => void }) => {
   const [isDateModalOpen, setIsDateModalOpen] = useState(false);
-  const { handleReservationSubmit, isReservationButtonActive, handleCloseModal, modalMessage, isModalOpen, isPending } =
-    useReservationSubmit();
+  const { isReservationButtonActive, isPending } = useReservationSubmit();
 
   const handleOpenModal = () => {
     setIsDateModalOpen((prev) => !prev);
@@ -35,11 +32,6 @@ const Mobile = () => {
           >
             {isPending ? '예약 중...' : '예약하기'}
           </Button.Default>
-          {isModalOpen && (
-            <ModalOverlay>
-              <Modal.RegisterConfirm onClose={handleCloseModal}>{modalMessage}</Modal.RegisterConfirm>
-            </ModalOverlay>
-          )}
         </div>
       </div>
     </>

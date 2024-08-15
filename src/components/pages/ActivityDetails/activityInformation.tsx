@@ -1,6 +1,9 @@
 import { useActivityData } from '@/apis/ActivityDetailsPage/getActivityDetailsData';
 import { useMyInformation } from '@/apis/ActivityDetailsPage/getMyInformation';
 import FloatingBox from '@/components/common/FloatingBox';
+import Modal from '@/components/common/Modal';
+import ModalOverlay from '@/components/common/Modal/Overlay';
+import { useReservationSubmit } from '@/hooks/useReservationSubmit';
 import useViewportSize from '@/hooks/useViewportSize';
 import { activityIdAtom, reservationPriceAtom } from '@/store/activityDetailsAtom';
 import { useSetAtom } from 'jotai';
@@ -24,6 +27,7 @@ const ActivityInformation = ({ activityId = '2213' }: { activityId?: string }) =
   const setActivityId = useSetAtom(activityIdAtom);
   setActivityId(activityId);
 
+  const { handleReservationSubmit, handleCloseModal, isModalOpen, modalMessage } = useReservationSubmit();
   const { userInformationData, isLoading: isLoadingUserData } = useMyInformation();
   const { activityData, isLoading: isLoadingActivityData, error } = useActivityData(activityId);
 
@@ -60,13 +64,25 @@ const ActivityInformation = ({ activityId = '2213' }: { activityId?: string }) =
           </div>
           {!isMobile &&
             myId !== userId &&
-            (isTablet ? <FloatingBox.Tablet /> : <FloatingBox.Desktop classNames="sticky top-0 w-[384px]" />)}
+            (isTablet ? (
+              <FloatingBox.Tablet handleReservationSubmit={handleReservationSubmit} />
+            ) : (
+              <FloatingBox.Desktop
+                classNames="sticky top-0 w-[384px]"
+                handleReservationSubmit={handleReservationSubmit}
+              />
+            ))}
         </div>
         <ReviewList activityId={activityId} />
         {isMobile && myId !== userId && (
           <div className="mt-89">
-            <FloatingBox.Mobile />
+            <FloatingBox.Mobile handleReservationSubmit={handleReservationSubmit} />
           </div>
+        )}
+        {isModalOpen && (
+          <ModalOverlay>
+            <Modal.RegisterConfirm onClose={handleCloseModal}>{modalMessage}</Modal.RegisterConfirm>
+          </ModalOverlay>
         )}
       </div>
     </>
