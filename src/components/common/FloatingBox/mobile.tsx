@@ -1,4 +1,4 @@
-import { useActivityReservationMutation } from '@/hooks/useReservationMutation';
+import { useActivityReservationMutation } from '@/apis/ActivityDetailsPage/postActivityReservation';
 import {
   activityIdAtom,
   headCountAtom,

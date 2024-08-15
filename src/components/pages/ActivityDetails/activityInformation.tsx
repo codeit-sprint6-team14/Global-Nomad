@@ -1,5 +1,6 @@
+import { useActivityData } from '@/apis/ActivityDetailsPage/getActivityDetailsData';
+import { useMyInformation } from '@/apis/ActivityDetailsPage/getMyInformation';
 import FloatingBox from '@/components/common/FloatingBox';
-import { useActivityData } from '@/hooks/useActivityData';
 import useViewportSize from '@/hooks/useViewportSize';
 import { activityIdAtom, reservationPriceAtom } from '@/store/activityDetailsAtom';
 import { useSetAtom } from 'jotai';
@@ -23,20 +24,33 @@ const ActivityInformation = ({ activityId = '2213' }: { activityId?: string }) =
   const setActivityId = useSetAtom(activityIdAtom);
   setActivityId(activityId);
 
-  const { activityData, isLoading, error } = useActivityData(activityId);
+  const { userInformationData, isLoading: isLoadingUserData } = useMyInformation();
+  const { activityData, isLoading: isLoadingActivityData, error } = useActivityData(activityId);
 
-  if (isLoading) return <div>체험 상세 데이터 로딩중입니다...</div>;
+  if (isLoadingUserData || isLoadingActivityData) return <div>데이터 로딩중입니다...</div>;
   if (error) return <div>체험 상세 데이터를 불러오는데 실패했습니다.</div>;
-  if (!activityData) return null;
+  if (!activityData || !userInformationData) return <div>데이터를 불러오는데 실패했습니다.</div>;
 
-  const { category, title, rating, reviewCount, address, bannerImageUrl, description, subImages, price } = activityData;
+  const { category, title, rating, reviewCount, address, bannerImageUrl, description, subImages, price, userId } =
+    activityData;
 
   setPrice(price);
+
+  const myId = userInformationData.id;
 
   return (
     <>
       <div className="lg:mx-auto lg:max-w-[1200px] lg:pt-78">
-        <Header category={category} title={title} rating={rating} reviewCount={reviewCount} address={address} />
+        <Header
+          myId={myId}
+          title={title}
+          userId={userId}
+          rating={rating}
+          address={address}
+          category={category}
+          activityId={activityId}
+          reviewCount={reviewCount}
+        />
 
         <BannerImage bannerImageUrl={bannerImageUrl} subImages={subImages} />
         <div className="mx-24 flex justify-between md:pb-40 lg:mx-auto lg:max-w-[1200px]">
@@ -45,6 +59,7 @@ const ActivityInformation = ({ activityId = '2213' }: { activityId?: string }) =
             <KakaoMap address={address} />
           </div>
           {!isMobile &&
+            myId !== userId &&
             (isTablet ? (
               <FloatingBox.Tablet />
             ) : (
@@ -52,7 +67,7 @@ const ActivityInformation = ({ activityId = '2213' }: { activityId?: string }) =
             ))}
         </div>
         <ReviewList activityId={activityId} />
-        {isMobile && (
+        {isMobile && myId !== userId && (
           <div className="mt-89">
             <FloatingBox.Mobile />
           </div>
