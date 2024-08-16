@@ -6,7 +6,7 @@ import { ActivityCardProps } from './mainPage.type';
 
 const PopularActivityCard: React.FC<ActivityCardProps> = ({ activity }) => {
   return (
-    <Link href={`/activities/${activity.id}`} className="group relative h-384 w-384 overflow-hidden rounded-25">
+    <Link href={`/activities/${activity.id}`} className="group relative mb-48 h-384 w-384 overflow-hidden rounded-25">
       <Image
         src={activity.bannerImageUrl}
         alt="PopularActivityThumnail"
