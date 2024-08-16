@@ -18,7 +18,7 @@ const DefaultButton = ({ variant = 'primary', disabled, className = '', ...props
     return `${baseStyle} ${disabled ? disabledStyle : variantStyles[variant]} ${className}`;
   };
 
-  return <BaseButton className={`${getVariantStyles(variant, disabled, className)}`} {...props} />;
+  return <BaseButton className={`${getVariantStyles(variant, disabled, className)}`} {...props} disabled={disabled} />;
 };
 
 export default DefaultButton;

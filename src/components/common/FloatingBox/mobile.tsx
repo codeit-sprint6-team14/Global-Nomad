@@ -7,7 +7,7 @@ import MobileComponents from './MobileComponents';
 
 const Mobile = ({ handleReservationSubmit }: { handleReservationSubmit: () => void }) => {
   const [isDateModalOpen, setIsDateModalOpen] = useState(false);
-  const { isReservationButtonActive, isPending } = useReservationSubmit();
+  const { isReservationButtonDisabled, isPending } = useReservationSubmit();
 
   const handleOpenModal = () => {
     setIsDateModalOpen((prev) => !prev);
@@ -26,9 +26,9 @@ const Mobile = ({ handleReservationSubmit }: { handleReservationSubmit: () => vo
             <MobileComponents.DateInfo handleOpenModal={handleOpenModal} />
           </div>
           <Button.Default
-            disabled={isReservationButtonActive || isPending}
+            disabled={isReservationButtonDisabled || isPending}
             onClick={handleReservationSubmit}
-            className="h-54 w-106 hover:bg-gray-800"
+            className={`h-56 w-106 ${!(isReservationButtonDisabled || isPending) && 'hover:bg-gray-800'} `}
           >
             {isPending ? '예약 중...' : '예약하기'}
           </Button.Default>
