@@ -11,7 +11,7 @@ const Review = ({ review }: { review: ReviewType }) => {
   };
 
   return (
-    <div className="flex gap-16 border-b border-solid border-gray-300 pb-24">
+    <div className="flex gap-16 border-b border-solid border-gray-300 py-24">
       <div className="relative h-45 w-45 flex-shrink-0">
         {profileImageUrl ? (
           <Image

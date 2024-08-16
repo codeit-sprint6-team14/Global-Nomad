@@ -59,9 +59,11 @@ const ReviewList = ({ activityId }: { activityId: string }) => {
               </div>
             </div>
           </div>
-          {reviews.map((review: ReviewType) => (
-            <Review key={review.id} review={review} />
-          ))}
+          <div className="h-400 overflow-y-auto">
+            {reviews.map((review: ReviewType) => (
+              <Review key={review.id} review={review} />
+            ))}
+          </div>
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
