@@ -4,9 +4,6 @@ import { isAxiosError } from 'axios';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-const LoadingSpinner = () => <div>회원가입 중...</div>;
-const ErrorMessage = ({ message }: { message: string }) => <div>{message}</div>;
-
 const GoogleAuthPage = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
@@ -21,7 +18,7 @@ const GoogleAuthPage = () => {
 
       try {
         setIsLoading(true);
-        const idToken = await getGoogleToken(code); //구글 토큰 받아오기
+        const idToken = await getGoogleToken(code); // 구글 토큰 받아오기
 
         const authBody = {
           nickname: '구글 계정',
@@ -30,21 +27,18 @@ const GoogleAuthPage = () => {
         };
 
         try {
-          const data = await SocialAuth.postSignup('google', authBody); //회원가입
-          console.log('회원가입 성공', data);
+          await SocialAuth.postSignup('google', authBody); // 회원가입
           router.push('/signin');
         } catch (error) {
           if (isAxiosError(error) && error.response?.status === 400) {
             // 존재하는 유저라면(error:400)이면 로그인 시도
-            const signinData = await SocialAuth.postSignin('google', authBody);
-            console.log('로그인 성공', signinData);
+            await SocialAuth.postSignin('google', authBody);
             router.push('/');
           } else {
             throw error;
           }
         }
       } catch (error) {
-        console.error('에러 발생: ', error);
         setError(error instanceof Error ? error : new Error('회원가입 중 알 수 없는 에러 발생'));
       } finally {
         setIsLoading(false);
@@ -56,8 +50,8 @@ const GoogleAuthPage = () => {
     }
   }, [router]);
 
-  if (isLoading) return <LoadingSpinner />;
-  if (error) return <ErrorMessage message={error.message} />;
+  if (isLoading) return <div>처리 중...</div>;
+  if (error) return <div>{error.message}</div>;
 
   return null;
 };
