@@ -7,18 +7,23 @@ type UpdateProfileParams = {
 };
 
 export const updateProfile = async ({ nickname, profileImageUrl, newPassword }: UpdateProfileParams) => {
-  const { data } = await axiosRequester({
-    options: {
-      method: 'PATCH',
-      url: '/users/me',
-      data: {
-        ...(nickname && { nickname }),
-        ...(profileImageUrl && { profileImageUrl }),
-        ...(newPassword && { newPassword }),
+  try {
+    const { data } = await axiosRequester({
+      options: {
+        method: 'PATCH',
+        url: '/users/me',
+        data: {
+          ...(nickname && { nickname }),
+          ...(profileImageUrl && { profileImageUrl }),
+          ...(newPassword && { newPassword }),
+        },
       },
-    },
-    includeAuth: true, // 만약 인증이 필요하다면 includeAuth를 true로 설정
-  });
+      includeAuth: true, // 만약 인증이 필요하다면 includeAuth를 true로 설정
+    });
 
-  return data;
+    return data;
+  } catch (error) {
+    console.error('프로필 업데이트 실패:', error);
+    throw error;
+  }
 };

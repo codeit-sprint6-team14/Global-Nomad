@@ -23,6 +23,9 @@ const MyProfile = () => {
 
   const [initialNickname, setInitialNickname] = useState<string>('');
 
+  const passwordMismatch = password && password !== confirmPassword;
+  const passwordLength = password.length < 8;
+
   useEffect(() => {
     const loadUserProfile = async () => {
       try {
@@ -112,12 +115,14 @@ const MyProfile = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+          {passwordLength && <p className="mt-4 text-sm text-red-500">8자 이상 입력해 주세요</p>}
           <PasswordInputSection
             title="비밀번호 재입력"
             placeholder="비밀번호를 한 번 더 입력해 주세요"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
+          {passwordMismatch && <p className="mt-4 text-sm text-red-500">비밀번호가 일치하지 않습니다</p>}
         </div>
       </div>
     </div>

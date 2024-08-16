@@ -2,7 +2,7 @@ import { axiosRequester } from '@/libs/axios';
 import { AxiosRequestConfig } from 'axios';
 
 type UploadImageResponse = {
-  imageUrl: string;
+  profileImageUrl: string;
 };
 
 export const uploadImage = async (formData: FormData): Promise<string> => {
@@ -17,7 +17,8 @@ export const uploadImage = async (formData: FormData): Promise<string> => {
 
   try {
     const response = await axiosRequester<UploadImageResponse>({ options, includeAuth: true });
-    return response.data.imageUrl;
+    console.log('Upload response:', response);
+    return response.data.profileImageUrl;
   } catch (error) {
     console.error('이미지 업로드 실패:', error);
     throw error;
