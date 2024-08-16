@@ -1,38 +1,17 @@
-import { useActivityReservationMutation } from '@/apis/ActivityDetailsPage/postActivityReservation';
 import Button from '@/components/common/Button';
 import Counter from '@/components/common/Counter';
 import Modal from '@/components/common/Modal';
-import {
-  activityIdAtom,
-  headCountAtom,
-  scheduleIdAtom,
-  selectedDateAtom,
-  selectedSlotAtom,
-} from '@/store/activityDetailsAtom';
+import { useReservationSubmit } from '@/components/pages/ActivityDetails/useReservationSubmit';
 import { format } from 'date-fns';
-import { useAtomValue } from 'jotai';
 import { useState } from 'react';
 
-const Main = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const activityId = useAtomValue(activityIdAtom);
-  const headCount = useAtomValue(headCountAtom);
-  const scheduleId = useAtomValue(scheduleIdAtom);
-  const selectedDate = useAtomValue(selectedDateAtom);
-  const selectedSlot = useAtomValue(selectedSlotAtom);
+const Main = ({ handleReservationSubmit }: { handleReservationSubmit: () => void }) => {
+  const [isCalendarModalOpen, setIsCalendarModalOpen] = useState(false);
+  const { isPending, isReservationButtonActive, selectedDate, selectedSlot } = useReservationSubmit();
 
   const handleDateSelectModal = () => {
-    // TODO: 모달 여닫는 기능 구현
-    setIsModalOpen((prev) => !prev);
+    setIsCalendarModalOpen((prev) => !prev);
   };
-
-  const { submitReservation } = useActivityReservationMutation();
-
-  const handleReservationSubmit = () => {
-    submitReservation({ activityId, scheduleId, headCount });
-  };
-
-  const isReservationButtonActive = selectedDate && selectedSlot && headCount > 0 ? false : true;
 
   const dateString =
     selectedDate && selectedSlot
@@ -58,7 +37,9 @@ const Main = () => {
             날짜 선택하기
           </span>
         )}
-        {isModalOpen && <Modal.DateSelect classNames="absolute right-0 top-0 z-50" setIsModalOpen={setIsModalOpen} />}
+        {isCalendarModalOpen && (
+          <Modal.DateSelect classNames="absolute right-0 top-0 z-50" setIsModalOpen={setIsCalendarModalOpen} />
+        )}
         <h2 className="mt-27 text-xl-bold">참여 인원 수</h2>
         <div className="mb-32 mt-5">
           <Counter />
@@ -66,9 +47,9 @@ const Main = () => {
         <Button.Default
           className="h-56 w-203 hover:bg-gray-800"
           onClick={handleReservationSubmit}
-          disabled={isReservationButtonActive}
+          disabled={isReservationButtonActive || isPending}
         >
-          예약하기
+          {isPending ? '예약 중...' : '예약하기'}
         </Button.Default>
       </main>
     </div>

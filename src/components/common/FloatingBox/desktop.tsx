@@ -1,33 +1,17 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { useActivityReservationMutation } from '@/apis/ActivityDetailsPage/postActivityReservation';
-import { headCountAtom, scheduleIdAtom, selectedDateAtom, selectedSlotAtom } from '@/store/activityDetailsAtom';
-import { useAtomValue } from 'jotai';
+import { useReservationSubmit } from '@/components/pages/ActivityDetails/useReservationSubmit';
 
 import Button from '../Button';
 import ReservationScheduleSelect from '../ReservationScheduleSelect';
 import DesktopComponents from './DesktopComponents';
 
 const Desktop = ({
-  activityId,
   classNames,
-  buttonLabel,
+  handleReservationSubmit,
 }: {
-  activityId: string;
   classNames: string;
-  buttonLabel: string;
+  handleReservationSubmit: () => void;
 }) => {
-  const selectedDate = useAtomValue(selectedDateAtom);
-  const selectedSlot = useAtomValue(selectedSlotAtom);
-  const scheduleId = useAtomValue(scheduleIdAtom);
-  const headCount = useAtomValue(headCountAtom);
-
-  const { submitReservation, isPending } = useActivityReservationMutation();
-
-  const handleReservationSubmit = () => {
-    submitReservation({ activityId, scheduleId, headCount });
-  };
-
-  const isReservationButtonActive = selectedDate && selectedSlot && headCount > 0 ? false : true;
+  const { isReservationButtonActive, isPending } = useReservationSubmit();
 
   return (
     <section
@@ -38,12 +22,13 @@ const Desktop = ({
       <ReservationScheduleSelect />
       <DesktopComponents.ParticipantCounter />
       <Button.Default
-        disabled={isReservationButtonActive}
+        disabled={isReservationButtonActive || isPending}
         className="h-56 w-full hover:bg-gray-800"
         onClick={handleReservationSubmit}
       >
-        {buttonLabel}
+        {isPending ? '예약 중...' : '예약하기'}
       </Button.Default>
+
       <div className="mb-16 border-b border-gray-300 pb-24"></div>
       <DesktopComponents.TotalPrice />
     </section>

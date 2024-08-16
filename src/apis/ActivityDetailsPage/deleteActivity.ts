@@ -1,5 +1,6 @@
+import { DELETE_ACTIVITY_ERROR_MESSAGES } from '@/constants/errorMessages';
 import { axiosRequester } from '@/libs/axios';
-import axios, { AxiosError } from 'axios';
+import { AxiosError, isAxiosError } from 'axios';
 
 interface ErrorResponse {
   message: string;
@@ -15,18 +16,32 @@ export const deleteActivity = async (activityId: string): Promise<void> => {
       includeAuth: true,
     });
   } catch (error) {
-    if (axios.isAxiosError(error)) {
+    console.error('Activity deletion error:', error);
+
+    if (isAxiosError(error)) {
       const axiosError = error as AxiosError<ErrorResponse>;
-      if (axiosError.response?.status === 400) {
-        const errorMessage = axiosError.response.data.message;
-        if (errorMessage.includes('신청 예약')) {
-          throw new Error('신청 예약이 있는 체험은 삭제할 수 없습니다.');
-        } else if (errorMessage.includes('확정 예약')) {
-          throw new Error('확정 예약이 있는 체험은 삭제할 수 없습니다.');
-        }
+
+      switch (axiosError.response?.status) {
+        case 400:
+          {
+            const errorMessage = axiosError.response.data.message;
+            if (errorMessage.includes('신청 예약')) {
+              throw new Error(DELETE_ACTIVITY_ERROR_MESSAGES.PENDING_RESERVATION);
+            }
+            if (errorMessage.includes('확정 예약')) {
+              throw new Error(DELETE_ACTIVITY_ERROR_MESSAGES.CONFIRMED_RESERVATION);
+            }
+          }
+          break;
+        case 401:
+          throw new Error(DELETE_ACTIVITY_ERROR_MESSAGES.UNAUTHORIZED);
+        case 403:
+          throw new Error(DELETE_ACTIVITY_ERROR_MESSAGES.FORBIDDEN);
+        case 404:
+          throw new Error(DELETE_ACTIVITY_ERROR_MESSAGES.NOT_FOUND);
+        default:
+          throw new Error(DELETE_ACTIVITY_ERROR_MESSAGES.DEFAULT);
       }
-      throw new Error('체험 삭제 중 오류가 발생했습니다.');
     }
-    throw new Error('알 수 없는 오류가 발생했습니다.');
   }
 };
