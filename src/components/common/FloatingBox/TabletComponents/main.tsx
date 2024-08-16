@@ -1,7 +1,7 @@
 import Button from '@/components/common/Button';
 import Counter from '@/components/common/Counter';
 import Modal from '@/components/common/Modal';
-import { useReservationSubmit } from '@/hooks/useReservationSubmit';
+import { useReservationSubmit } from '@/components/pages/ActivityDetails/useReservationSubmit';
 import { format } from 'date-fns';
 import { useState } from 'react';
 

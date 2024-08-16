@@ -3,7 +3,7 @@ import { useMyInformation } from '@/apis/ActivityDetailsPage/getMyInformation';
 import FloatingBox from '@/components/common/FloatingBox';
 import Modal from '@/components/common/Modal';
 import ModalOverlay from '@/components/common/Modal/Overlay';
-import { useReservationSubmit } from '@/hooks/useReservationSubmit';
+import { useReservationSubmit } from '@/components/pages/ActivityDetails/useReservationSubmit';
 import useViewportSize from '@/hooks/useViewportSize';
 import { activityIdAtom, reservationPriceAtom } from '@/store/activityDetailsAtom';
 import { useSetAtom } from 'jotai';

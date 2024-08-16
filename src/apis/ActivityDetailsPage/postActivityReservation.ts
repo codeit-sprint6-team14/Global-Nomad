@@ -36,7 +36,7 @@ export const useActivityReservationMutation = () => {
       const axiosError = error as AxiosError<ErrorResponse>;
       switch (axiosError.response?.status) {
         case 401:
-          return '로그인 하지 않은 사용자입니다.';
+          return '로그인 만료 시간이 지났습니다.';
         default:
           return axiosError.response?.data.message || '예약 중 오류가 발생했습니다.';
       }

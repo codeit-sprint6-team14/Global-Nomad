@@ -1,4 +1,4 @@
-import { useReservationSubmit } from '@/hooks/useReservationSubmit';
+import { useReservationSubmit } from '@/components/pages/ActivityDetails/useReservationSubmit';
 
 import Button from '../Button';
 import ReservationScheduleSelect from '../ReservationScheduleSelect';

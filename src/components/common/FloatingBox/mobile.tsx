@@ -1,4 +1,4 @@
-import { useReservationSubmit } from '@/hooks/useReservationSubmit';
+import { useReservationSubmit } from '@/components/pages/ActivityDetails/useReservationSubmit';
 import { useState } from 'react';
 
 import Button from '../Button';
