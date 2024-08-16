@@ -1,11 +1,19 @@
-import { deleteActivity } from '@/apis/ActivityDetailsPage/deleteActivity';
 import DropDown from '@/components/common/Dropdown';
 import { HeaderProps } from '@/types/activity';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-const Header = ({ myId, userId, category, title, rating, reviewCount, address, activityId }: HeaderProps) => {
+const Header = ({
+  myId,
+  userId,
+  category,
+  title,
+  rating,
+  reviewCount,
+  address,
+  handleDeleteConfirmation,
+}: HeaderProps) => {
   const [isOpenDropdown, setIsOpenDropdown] = useState(false);
 
   const router = useRouter();
@@ -19,7 +27,7 @@ const Header = ({ myId, userId, category, title, rating, reviewCount, address, a
       router.push(`/my-page/activity-settings`);
     }
     if (option === '삭제하기') {
-      await deleteActivity(activityId);
+      handleDeleteConfirmation();
     }
     setIsOpenDropdown(false);
   };

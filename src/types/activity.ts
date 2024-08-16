@@ -34,4 +34,5 @@ export type HeaderProps = {
   category: string;
   activityId: string;
   reviewCount: number;
+  handleDeleteConfirmation: () => void;
 };

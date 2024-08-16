@@ -27,7 +27,16 @@ const ActivityInformation = ({ activityId = '2213' }: { activityId?: string }) =
   const setActivityId = useSetAtom(activityIdAtom);
   setActivityId(activityId);
 
-  const { handleReservationSubmit, handleCloseModal, isModalOpen, modalMessage } = useReservationSubmit();
+  const {
+    handleReservationSubmit,
+    handleCloseModal,
+    isModalOpen,
+    modalMessage,
+    handleDeleteConfirmation,
+    handleDeleteActivity,
+    isDeleteConfirmation,
+  } = useReservationSubmit();
+
   const { userInformationData, isLoading: isLoadingUserData } = useMyInformation();
   const { activityData, isLoading: isLoadingActivityData, error } = useActivityData(activityId);
 
@@ -54,6 +63,7 @@ const ActivityInformation = ({ activityId = '2213' }: { activityId?: string }) =
           category={category}
           activityId={activityId}
           reviewCount={reviewCount}
+          handleDeleteConfirmation={handleDeleteConfirmation}
         />
 
         <BannerImage bannerImageUrl={bannerImageUrl} subImages={subImages} />
@@ -81,7 +91,13 @@ const ActivityInformation = ({ activityId = '2213' }: { activityId?: string }) =
         )}
         {isModalOpen && (
           <ModalOverlay>
-            <Modal.RegisterConfirm onClose={handleCloseModal}>{modalMessage}</Modal.RegisterConfirm>
+            <Modal.RegisterConfirm
+              onClose={isDeleteConfirmation ? handleDeleteActivity : handleCloseModal}
+              onCancel={handleCloseModal}
+              showCancelButton={isDeleteConfirmation}
+            >
+              {modalMessage}
+            </Modal.RegisterConfirm>
           </ModalOverlay>
         )}
       </div>
