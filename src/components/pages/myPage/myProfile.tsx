@@ -24,7 +24,7 @@ const MyProfile = () => {
   const [initialNickname, setInitialNickname] = useState<string>('');
 
   const passwordMismatch = password && password !== confirmPassword;
-  const passwordLength = password.length < 8;
+  const passwordLength = password.length < 8 && password.length > 0;
 
   useEffect(() => {
     const loadUserProfile = async () => {

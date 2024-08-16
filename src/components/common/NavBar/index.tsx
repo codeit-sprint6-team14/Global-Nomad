@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import DropDown from '../Dropdown';
@@ -13,8 +14,19 @@ function NavBar({ accessToken = true }: { accessToken?: boolean }) {
     setIsOpenMenu(!isOpenMenu);
   };
 
+  const router = useRouter();
+
   const handleOptionClick = (label: string) => {
-    console.log(label); // 드롭다운 메뉴 클릭 시 실행할 로직을 추가
+    switch (label) {
+      case '로그아웃':
+        // 로그아웃 로직 추가
+        break;
+      case '마이페이지':
+        router.push('/my-page'); // 마이페이지로 이동
+        break;
+      default:
+        break;
+    }
     setIsOpenMenu(false);
   };
 

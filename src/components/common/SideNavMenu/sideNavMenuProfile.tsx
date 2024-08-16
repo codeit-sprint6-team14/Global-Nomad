@@ -42,7 +42,7 @@ const SideNavMenuProfile = () => {
     <div className="relative flex justify-center">
       <div className="relative h-160 w-160 overflow-hidden rounded-full">
         <Image
-          src={user.profileImage || '/assets/images/testImg/test-profile-img.png'}
+          src={user.profileImage || '/assets/images/profile-image.png'}
           alt="프로필이미지"
           fill
           style={{ objectFit: 'cover' }}
