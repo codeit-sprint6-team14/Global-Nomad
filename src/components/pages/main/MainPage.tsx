@@ -2,6 +2,8 @@ import { getActivities } from '@/apis/activities';
 import DropDownList from '@/components/common/Dropdown/dropDownList';
 import DropDownOption from '@/components/common/Dropdown/dropDownOption';
 import Pagination from '@/components/common/Pagination';
+import Image from 'next/image';
+import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import DownArrow from '../../../../public/assets/icons/down-arrow.svg';
@@ -16,7 +18,7 @@ const dropdownOptions = [
   { value: 'priceHigh', label: '가격 높은순' },
 ];
 
-const MainPage2 = () => {
+const MainPage = () => {
   const [activities, setActivities] = useState<Activity[]>([]);
   const [popularActivities, setPopularActivities] = useState<Activity[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -27,6 +29,7 @@ const MainPage2 = () => {
   const [sortBy, setSortBy] = useState<string | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
 
   const sortActivities = useCallback((activitiesToSort: Activity[], sortType: string | null) => {
     if (!sortType) return activitiesToSort;
@@ -87,6 +90,14 @@ const MainPage2 = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentBannerIndex((prevIndex) => (prevIndex === popularActivities.length - 1 ? 0 : prevIndex + 1));
+    }, 5000);
+
+    return () => clearInterval(timer);
+  }, [popularActivities]);
+
   const handlePageChange = useCallback((newPage: number) => {
     setPage(newPage);
   }, []);
@@ -109,6 +120,28 @@ const MainPage2 = () => {
 
   return (
     <main className="flex flex-col items-center gap-24">
+      {popularActivities.length > 0 && (
+        <div className="relative h-550 w-1920">
+          <Link href={`/activities/${popularActivities[currentBannerIndex].id}`} className="block h-full w-full">
+            <Image
+              src={popularActivities[currentBannerIndex].bannerImageUrl}
+              alt={`Featured Activity Banner`}
+              layout="fill"
+              objectFit="contain"
+            />
+          </Link>
+          <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 transform space-x-2">
+            {popularActivities.map((_, index) => (
+              <button
+                key={index}
+                className={`h-3 w-3 rounded-full ${index === currentBannerIndex ? 'bg-black' : 'bg-gray-400'}`}
+                onClick={() => setCurrentBannerIndex(index)}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
       <section className="flex flex-col gap-24">
         {popularActivities.length > 0 && (
           <div className="flex justify-between">
@@ -120,8 +153,8 @@ const MainPage2 = () => {
           </div>
         )}
         <div className="flex w-1200 gap-24">
-          {popularActivities.map((activity) => (
-            <PopularActivityCard key={activity.id} activity={activity} />
+          {popularActivities.map((activity, index) => (
+            <PopularActivityCard key={activity.id} activity={activity} isHighlighted={index === currentBannerIndex} />
           ))}
         </div>
       </section>
@@ -184,4 +217,4 @@ const MainPage2 = () => {
   );
 };
 
-export default MainPage2;
+export default MainPage;
