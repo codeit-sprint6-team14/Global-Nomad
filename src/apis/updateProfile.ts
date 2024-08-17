@@ -18,7 +18,7 @@ export const updateProfile = async ({ nickname, profileImageUrl, newPassword }: 
           ...(newPassword && { newPassword }),
         },
       },
-      includeAuth: true, // 만약 인증이 필요하다면 includeAuth를 true로 설정
+      includeAuth: true,
     });
 
     return data;
