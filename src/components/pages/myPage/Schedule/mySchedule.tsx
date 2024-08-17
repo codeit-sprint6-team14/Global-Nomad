@@ -43,7 +43,12 @@ const MySchedule = () => {
             <div className="absolute z-10 ml-10 h-24 w-45 -translate-y-2.5 transform bg-white text-center text-md-regular">
               체험명
             </div>
-            <Input.Dropdown options={mockOptions} defaultOption={selectedOption} onSelect={handleOptionSelect} />
+            <Input.Dropdown
+              options={mockOptions}
+              defaultOption={selectedOption}
+              onSelect={handleOptionSelect}
+              className="h-56"
+            />
           </div>
         ) : (
           <div className="mb-50 mt-100 flex justify-center">

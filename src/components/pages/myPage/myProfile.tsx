@@ -2,6 +2,7 @@ import LeftArrow from '@/../public/assets/icons/left-arrow.svg';
 import { getUserProfile } from '@/apis/getUserProfile';
 import { updateProfile } from '@/apis/updateProfile';
 import Button from '@/components/common/Button';
+import Modal from '@/components/common/Modal';
 import SideNavMenu from '@/components/common/SideNavMenu';
 import useViewportSize from '@/hooks/useViewportSize';
 import { confirmPasswordAtom, isChangedAtom, passwordAtom, userAtom } from '@/store/userAtom';
@@ -22,6 +23,8 @@ const MyProfile = () => {
   const [isChanged, setIsChanged] = useAtom(isChangedAtom);
 
   const [initialNickname, setInitialNickname] = useState<string>('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
 
   const passwordMismatch = password && password !== confirmPassword;
   const passwordLength = password.length < 8 && password.length > 0;
@@ -57,6 +60,10 @@ const MyProfile = () => {
     setIsChanged(shouldEnableButton);
   }, [user.nickname, initialNickname, password, confirmPassword, setIsChanged]);
 
+  const handleModalClose = () => {
+    setIsModalOpen(false); // 모달 닫기
+  };
+
   const handleSave = async () => {
     try {
       await updateProfile({
@@ -64,10 +71,12 @@ const MyProfile = () => {
         profileImageUrl: user.profileImage,
         newPassword: password || undefined,
       });
-      alert('변경 사항이 저장되었습니다.');
+      setModalMessage('변경 사항이 저장되었습니다');
+      setIsModalOpen(true);
     } catch (error) {
       console.error('Failed to update profile:', error);
-      alert('프로필 업데이트에 실패했습니다.');
+      setModalMessage('프로필 업데이트에 실패했습니다');
+      setIsModalOpen(true);
     }
   };
 
@@ -125,6 +134,13 @@ const MyProfile = () => {
           {passwordMismatch && <p className="mt-4 text-sm text-red-500">비밀번호가 일치하지 않습니다</p>}
         </div>
       </div>
+
+      {/* 모달 조건부 렌더링 */}
+      {isModalOpen && (
+        <Modal.Overlay>
+          <Modal.RegisterConfirm onClose={handleModalClose}>{modalMessage}</Modal.RegisterConfirm>
+        </Modal.Overlay>
+      )}
     </div>
   );
 };
