@@ -7,6 +7,8 @@ import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import DownArrow from '../../../../public/assets/icons/down-arrow.svg';
+import PrevButton from '../../../../public/assets/icons/left-arrow.svg';
+import NextButton from '../../../../public/assets/icons/right-arrow.svg';
 import ActivityCards from './ActivityCards';
 import PopularActivityCard from './PopularActivityCard';
 import { RadioTab } from './RadioTab';
@@ -17,6 +19,7 @@ const dropdownOptions = [
   { value: 'priceLow', label: '가격 낮은순' },
   { value: 'priceHigh', label: '가격 높은순' },
 ];
+const visibleCards = 3;
 
 const MainPage = () => {
   const [activities, setActivities] = useState<Activity[]>([]);
@@ -30,6 +33,7 @@ const MainPage = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
+  const [startIndex, setStartIndex] = useState(0);
 
   const sortActivities = useCallback((activitiesToSort: Activity[], sortType: string | null) => {
     if (!sortType) return activitiesToSort;
@@ -115,6 +119,14 @@ const MainPage = () => {
     [sortActivities],
   );
 
+  const handlePrevClick = () => {
+    setStartIndex((prevIndex) => Math.max(0, prevIndex - 1));
+  };
+
+  const handleNextClick = () => {
+    setStartIndex((prevIndex) => Math.min(popularActivities.length - visibleCards, prevIndex + 1));
+  };
+
   if (loading) return <div>loading...</div>;
   if (error) return <div>{error}</div>;
 
@@ -147,8 +159,16 @@ const MainPage = () => {
           <div className="flex justify-between">
             <h2 className="text-2xl font-bold">인기 체험</h2>
             <div className="flex gap-12">
-              <button></button>
-              <button></button>
+              <button onClick={handlePrevClick} disabled={startIndex === 0} className="cursor-pointer">
+                <PrevButton />
+              </button>
+              <button
+                onClick={handleNextClick}
+                disabled={startIndex >= popularActivities.length - visibleCards}
+                className="cursor-pointer"
+              >
+                <NextButton />
+              </button>
             </div>
           </div>
         )}
