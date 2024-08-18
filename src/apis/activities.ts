@@ -15,7 +15,7 @@ export const getActivities = async (
   sortBy: string | null = null,
 ) => {
   const params: GetActivitiesParams = {
-    method: 'cursor',
+    method: 'offset',
     page,
     size,
   };

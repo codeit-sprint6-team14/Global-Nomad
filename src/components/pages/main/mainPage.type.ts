@@ -30,7 +30,7 @@ export interface FilteredActivitiesProps {
 }
 
 export interface GetActivitiesParams {
-  method: 'cursor';
+  method: 'offset';
   page: number;
   size: number;
   category?: string;
