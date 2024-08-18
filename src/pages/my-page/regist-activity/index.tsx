@@ -8,7 +8,6 @@ import { Device } from '@/types/deviceTypes';
 const RegistActivity = () => {
   const deviceState = useDeviceState();
 
-  // 디바이스 크기
   const isMobile = deviceState === Device.MOBILE;
   const isTablet = deviceState === Device.TABLET;
   const isDesktop = deviceState === Device.DESKTOP;
