@@ -275,24 +275,30 @@ const MainPage = () => {
             </div>
           </div>
         )}
+
         <div className="flex flex-col gap-24">
           <div className="flex flex-col">
             <h2>{isSearching ? `'${searchTerm}'(으)로 검색한 결과입니다.` : '모든 체험'}</h2>
             {isSearching && <span>총 {displayedActivities.length}개의 결과</span>}
           </div>
-          <div className="flex w-1204 flex-wrap gap-24">
-            {paginatedResults.map((activity) => (
-              <ActivityCards key={activity.id} activity={activity} />
-            ))}
-          </div>
+          {displayedActivities.length > 0 ? (
+            <>
+              <div className="flex w-1204 flex-wrap gap-24">
+                {paginatedResults.map((activity) => (
+                  <ActivityCards key={activity.id} activity={activity} />
+                ))}
+              </div>
+              <Pagination
+                currentPage={page}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+                isPlaceholderData={loading}
+              />
+            </>
+          ) : (
+            <p>검색 결과가 없습니다.</p>
+          )}
         </div>
-
-        <Pagination
-          currentPage={page}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-          isPlaceholderData={loading}
-        />
       </section>
     </main>
   );
