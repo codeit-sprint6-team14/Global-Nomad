@@ -6,6 +6,8 @@ interface Props {
 }
 const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&scope=openid%20email&client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI}`;
 
+const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}`;
+
 const SocialForm = ({ text }: Props) => {
   return (
     <>
@@ -26,14 +28,17 @@ const SocialForm = ({ text }: Props) => {
             className="absolute sm:p-14 sm:hover:p-12 md:p-22 md:hover:p-20"
           />
         </Link>
-        <div className="relative flex items-center justify-center rounded-full border border-gray-300 hover:border-green-300 sm:h-48 sm:w-48 md:h-72 md:w-72">
+        <Link
+          href={KAKAO_AUTH_URL}
+          className="relative flex items-center justify-center rounded-full border border-gray-300 hover:border-green-300 sm:h-48 sm:w-48 md:h-72 md:w-72"
+        >
           <Image
             src="/assets/icons/kakaotalk.svg"
             alt="kakao talk"
             fill
             className="absolute sm:p-14 sm:hover:p-12 md:p-22 md:hover:p-20"
           />
-        </div>
+        </Link>
       </div>
     </>
   );

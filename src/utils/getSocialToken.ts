@@ -18,3 +18,10 @@ export const getGoogleToken = async (code: string): Promise<string> => {
 
   return data.id_token;
 };
+
+export const getKakaoToken = async () => {
+  const url = new URL(window.location.href);
+  const code = url.searchParams.get('code');
+
+  return code;
+};
