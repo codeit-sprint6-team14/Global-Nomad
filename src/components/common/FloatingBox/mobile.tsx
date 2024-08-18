@@ -1,23 +1,40 @@
+import { useReservationSubmit } from '@/components/pages/ActivityDetails/useReservationSubmit';
+import { useState } from 'react';
+
 import Button from '../Button';
+import DateSelectModal from '../Modal/DateSelect';
 import MobileComponents from './MobileComponents';
 
-const Mobile = () => {
-  const handleReservation = () => {
-    // TODO: 예약하기 기능 구현
+const Mobile = ({ handleReservationSubmit }: { handleReservationSubmit: () => void }) => {
+  const [isDateModalOpen, setIsDateModalOpen] = useState(false);
+  const { isReservationButtonActive, isPending } = useReservationSubmit();
+
+  const handleOpenModal = () => {
+    setIsDateModalOpen((prev) => !prev);
   };
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 h-83 w-full max-w-[743px] border-t border-gray-300 bg-white">
-      <div className="flex items-center justify-between px-16 py-16">
-        <div className="flex flex-col">
-          <MobileComponents.PriceInfo price={10000} capacity={10} />
-          <MobileComponents.DateInfo date="22/11/14" startTime="14:00" endTime="15:00" />
+    <>
+      {isDateModalOpen && (
+        <DateSelectModal setIsModalOpen={setIsDateModalOpen} classNames="fixed bottom-0 w-full z-[9999]" />
+      )}
+
+      <div className="fixed bottom-0 left-0 right-0 z-50 h-83 w-full max-w-[743px] border-y border-gray-300 bg-white">
+        <div className="flex items-center justify-between px-16 py-16">
+          <div className="flex flex-col">
+            <MobileComponents.PriceInfo />
+            <MobileComponents.DateInfo handleOpenModal={handleOpenModal} />
+          </div>
+          <Button.Default
+            disabled={isReservationButtonActive || isPending}
+            onClick={handleReservationSubmit}
+            className="h-54 w-106 hover:bg-gray-800"
+          >
+            {isPending ? '예약 중...' : '예약하기'}
+          </Button.Default>
         </div>
-        <Button.Default onClick={handleReservation} className="h-54 w-106">
-          예약하기
-        </Button.Default>
       </div>
-    </div>
+    </>
   );
 };
 

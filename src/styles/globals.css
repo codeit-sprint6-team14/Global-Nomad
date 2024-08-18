@@ -6,3 +6,15 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.errorBorder {
+  @apply border-red-500 focus:border-red-200;
+}
+
+.normalBorder {
+  @apply focus:border-green-300;
+}
+
+.errorText {
+  @apply mt-5 block text-red-500;
+}

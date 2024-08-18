@@ -19,6 +19,6 @@ export interface TimeSlotSelectionProps {
   selectedDate: Date | null;
   selectedSlot: TimeSlot | null;
   handleSlotSelect: (slot: TimeSlot) => void;
-  availableSchedule: DaySchedule[];
+  availableSchedule?: DaySchedule[];
   getSelectedDateSlots: (selectedDate: Date | null, schedules: DaySchedule[]) => TimeSlot[];
 }

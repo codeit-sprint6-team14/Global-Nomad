@@ -6,7 +6,7 @@ import Body from './body';
 import Header from './header';
 
 const Calendar = ({ selectedDate, updateDateSelect, availableDates, updateMonthChange, className }: CalendarProps) => {
-  const [viewingMonth, setViewingMonth] = useState<Date>(INITIAL_DATE);
+  const [viewingMonth, setViewingMonth] = useState<Date>(selectedDate || INITIAL_DATE);
   const today = new Date(INITIAL_DATE);
   today.setHours(0, 0, 0, 0);
 

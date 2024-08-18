@@ -1,8 +1,10 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import DropDown from '../Dropdown';
+import Notification from './Notification';
 
 // 테스트용 accessToken prop으로 로그인 상태, 로그아웃 상태 UI 테스트
 function NavBar({ accessToken = true }: { accessToken?: boolean }) {
@@ -12,8 +14,19 @@ function NavBar({ accessToken = true }: { accessToken?: boolean }) {
     setIsOpenMenu(!isOpenMenu);
   };
 
+  const router = useRouter();
+
   const handleOptionClick = (label: string) => {
-    console.log(label); // 드롭다운 메뉴 클릭 시 실행할 로직을 추가
+    switch (label) {
+      case '로그아웃':
+        // 로그아웃 로직 추가
+        break;
+      case '마이페이지':
+        router.push('/my-page'); // 마이페이지로 이동
+        break;
+      default:
+        break;
+    }
     setIsOpenMenu(false);
   };
 
@@ -25,7 +38,7 @@ function NavBar({ accessToken = true }: { accessToken?: boolean }) {
         </Link>
         {accessToken ? (
           <div className="flex items-center">
-            <Image src="/assets/icons/bell.svg" alt="네비바 알림 벨" width={20} height={20} />
+            <Notification />
             <div className="mx-12 h-22 border-l border-solid border-gray-300 md:mx-25" />
             <div className="relative flex items-center gap-10">
               <Image

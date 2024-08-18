@@ -10,6 +10,7 @@ export default function Document() {
           src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.KAKAO_KEY}&libraries=services,clusterer&autoload=false`}
           strategy="beforeInteractive"
         />
+        <Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" strategy="beforeInteractive" />
         <Main />
         <NextScript />
       </body>
