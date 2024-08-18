@@ -1,9 +1,22 @@
 import Button from '@/components/common/Button';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import DropDown from '../../Dropdown';
+
+interface CardFooterProps {
+  text: string;
+  status?: string;
+  imgSrc?: string;
+  buttonName?: string;
+  additionalClassNames?: string;
+  onButtonClick?: () => void;
+  onDelete?: () => void;
+  onModify?: () => void;
+  activityId?: string | string[] | undefined;
+}
 
 const CardFooter = ({
   text,
@@ -12,26 +25,28 @@ const CardFooter = ({
   buttonName,
   additionalClassNames,
   onButtonClick,
-}: {
-  text: string;
-  status?: string;
-  imgSrc?: string;
-  buttonName?: string;
-  additionalClassNames?: string;
-  onButtonClick?: () => void;
-}) => {
+  onDelete,
+  onModify,
+  activityId,
+}: CardFooterProps) => {
+  const router = useRouter();
   const [isOpenMenu, setIsOpenMenu] = useState(false);
 
   const handleDropdownVisible = () => {
     setIsOpenMenu((prev) => !prev);
   };
+  const modalRef = useClickOutside(handleDropdownVisible);
 
-  const handleOptionClick = (label: string) => {
-    console.log(label); // 여기에 드롭다운 메뉴 클릭 시 실행할 로직을 추가하세요
+  const handleDeleteBUtton = () => {
+    onDelete?.();
     setIsOpenMenu(false);
   };
 
-  const modalRef = useClickOutside(handleDropdownVisible);
+  const handleModificationButton = () => {
+    onModify?.();
+    router.push(`regist-activity/${activityId}`);
+    setIsOpenMenu(false);
+  };
 
   return (
     <div className={`relative flex items-end justify-between ${additionalClassNames}`}>
@@ -57,8 +72,8 @@ const CardFooter = ({
               <div ref={modalRef}>
                 <div className="absolute left-[-80px] top-full">
                   <DropDown classNames="h-max w-120">
-                    <DropDown.Option handleOptionClick={handleOptionClick} label="수정하기" />
-                    <DropDown.Option handleOptionClick={handleOptionClick} label="삭제하기" />
+                    <DropDown.Option handleOptionClick={handleModificationButton} label="수정하기" />
+                    <DropDown.Option handleOptionClick={handleDeleteBUtton} label="삭제하기" />
                   </DropDown>
                 </div>
               </div>
@@ -70,6 +85,17 @@ const CardFooter = ({
   );
 };
 
-export const CardFooterType = (<CardFooter text="" />).type;
+export const CardFooterType = (
+  <CardFooter
+    text=""
+    onDelete={function (): void {
+      throw new Error('Function not implemented.');
+    }}
+    onModify={function (): void {
+      throw new Error('Function not implemented.');
+    }}
+    activityId={undefined}
+  />
+).type;
 
 export default CardFooter;
