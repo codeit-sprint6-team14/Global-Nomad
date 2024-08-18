@@ -163,52 +163,56 @@ const MainPage = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <main className="flex flex-col items-center gap-24">
-      {popularActivities.length > 0 && (
-        <div className="relative h-[550px] w-full max-w-[1920px]">
-          {popularActivities.map((activity, index) => (
-            <Link
-              key={activity.id}
-              href={`/activities/${activity.id}`}
-              className={`absolute inset-0 overflow-hidden transition-opacity duration-500 ${
-                index === currentBannerIndex ? 'z-10 opacity-100' : 'z-0 opacity-0'
-              }`}
-            >
-              <div className="relative h-full w-full">
-                <Image
-                  src={activity.bannerImageUrl}
-                  alt={`Featured Activity Banner ${index + 1}`}
-                  layout="fill"
-                  objectFit="cover"
-                  priority={index === currentBannerIndex}
-                  className="transition-transform duration-300"
-                />
-                <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-black/40"></div>
-              </div>
-              <div className="absolute bottom-6 left-6 right-6 text-white">
-                <h2 className="mb-2 text-3xl font-bold">{activity.title}</h2>
-                <p className="text-xl">\ {activity.price.toLocaleString()} /인</p>
-              </div>
-            </Link>
-          ))}
-          <div className="absolute bottom-4 left-1/2 z-20 flex -translate-x-1/2 transform space-x-2">
-            {popularActivities.map((_, index) => (
-              <button
-                key={index}
-                className={`h-3 w-3 rounded-full transition-colors ${
-                  index === currentBannerIndex ? 'bg-white' : 'bg-gray-400 hover:bg-gray-300'
+    <main className="flex flex-col items-center">
+      <div className="relative w-full">
+        {popularActivities.length > 0 && (
+          <div className="relative h-[550px] w-full max-w-[1920px]">
+            {popularActivities.map((activity, index) => (
+              <Link
+                key={activity.id}
+                href={`/activities/${activity.id}`}
+                className={`absolute inset-0 overflow-hidden transition-opacity duration-500 ${
+                  index === currentBannerIndex ? 'z-10 opacity-100' : 'z-0 opacity-0'
                 }`}
-                onClick={() => setCurrentBannerIndex(index)}
-              />
+              >
+                <div className="relative h-full w-full">
+                  <Image
+                    src={activity.bannerImageUrl}
+                    alt={`Featured Activity Banner ${index + 1}`}
+                    layout="fill"
+                    objectFit="cover"
+                    priority={index === currentBannerIndex}
+                    className="transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50"></div>
+                </div>
+                <div className="absolute bottom-32 left-6 right-6 text-white">
+                  <h2 className="mb-2 text-3xl font-bold">{activity.title}</h2>
+                  <p className="text-xl">\ {activity.price.toLocaleString()} /인</p>
+                </div>
+              </Link>
             ))}
+            <div className="absolute bottom-4 left-1/2 z-20 flex -translate-x-1/2 transform space-x-2">
+              {popularActivities.map((_, index) => (
+                <button
+                  key={index}
+                  className={`h-3 w-3 rounded-full transition-colors ${
+                    index === currentBannerIndex ? 'bg-white' : 'bg-gray-400 hover:bg-gray-300'
+                  }`}
+                  onClick={() => setCurrentBannerIndex(index)}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
-      <Search onSearch={handleSearch} />
+      <div className="relative z-30 -mt-60">
+        <Search onSearch={handleSearch} />
+      </div>
 
       {!isSearching && (
-        <section className="flex flex-col gap-24">
+        <section className="mt-50 flex flex-col gap-24">
           {popularActivities.length > 0 && (
             <div className="flex justify-between">
               <h2 className="text-2xl font-bold">인기 체험</h2>
