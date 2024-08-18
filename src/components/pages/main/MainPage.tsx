@@ -2,6 +2,7 @@ import { getActivities } from '@/apis/activities';
 import DropDownList from '@/components/common/Dropdown/dropDownList';
 import DropDownOption from '@/components/common/Dropdown/dropDownOption';
 import Pagination from '@/components/common/Pagination';
+import Search from '@/components/common/Search';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -176,6 +177,8 @@ const MainPage = () => {
           </div>
         </div>
       )}
+
+      <Search />
 
       <section className="flex flex-col gap-24">
         {popularActivities.length > 0 && (
