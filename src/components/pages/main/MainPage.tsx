@@ -106,10 +106,14 @@ const MainPage = () => {
     setPage(newPage);
   }, []);
 
-  const handleCategoryChange = useCallback((category: string) => {
-    setActiveCategory(category);
-    setPage(1);
-  }, []);
+  const handleCategoryChange = useCallback(
+    (category: string) => {
+      if (category === activeCategory) return;
+      setActiveCategory(category);
+      setPage(1);
+    },
+    [activeCategory],
+  );
 
   const handleSortChange = useCallback(
     (option: string) => {
