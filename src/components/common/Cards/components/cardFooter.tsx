@@ -14,7 +14,6 @@ interface CardFooterProps {
   additionalClassNames?: string;
   onButtonClick?: () => void;
   onDelete?: () => void;
-  onModify?: () => void;
   activityId?: string | string[] | undefined;
 }
 
@@ -26,7 +25,6 @@ const CardFooter = ({
   additionalClassNames,
   onButtonClick,
   onDelete,
-  onModify,
   activityId,
 }: CardFooterProps) => {
   const router = useRouter();
@@ -43,7 +41,6 @@ const CardFooter = ({
   };
 
   const handleModificationButton = () => {
-    onModify?.();
     router.push(`regist-activity/${activityId}`);
     setIsOpenMenu(false);
   };
@@ -89,9 +86,6 @@ export const CardFooterType = (
   <CardFooter
     text=""
     onDelete={function (): void {
-      throw new Error('Function not implemented.');
-    }}
-    onModify={function (): void {
       throw new Error('Function not implemented.');
     }}
     activityId={undefined}

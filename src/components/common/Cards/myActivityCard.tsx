@@ -13,8 +13,6 @@ const MyActivityCard = ({ myActivityCard }: { myActivityCard: myActivityCardData
     deleteActivityData(id);
   };
 
-  const handleModify = () => {};
-
   return (
     <>
       {deleteActivityError && <div className="mb-4 text-red-500">{deleteActivityError.message}</div>}
@@ -25,7 +23,6 @@ const MyActivityCard = ({ myActivityCard }: { myActivityCard: myActivityCardData
         <Card.Footer
           activityId={id}
           onDelete={handleDelete}
-          onModify={handleModify}
           text={formatPrice(price)}
           imgSrc="/assets/icons/kebab.svg"
           additionalClassNames="mt-auto"
