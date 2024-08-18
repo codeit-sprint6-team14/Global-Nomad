@@ -5,7 +5,7 @@ type PopupProps = {
   onClose: () => void;
 };
 
-const RegisterConfirmPopup = ({ onClose, children }: PopupProps) => {
+const RegisterConfirmPopup = ({ children, onClose }: PopupProps) => {
   return (
     <div className="relative flex h-220 w-327 flex-col items-center rounded-8 border bg-white md:h-250 md:w-540">
       <span className="absolute top-[35%] text-lg-medium text-black-100 md:top-[40%] md:text-2lg-medium">

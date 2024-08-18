@@ -1,15 +1,25 @@
 import Button from '@/components/common/Button';
+import { selectedScheduleStateAtom } from '@/store/activityDetailsAtom';
+import { SetStateAction, useSetAtom } from 'jotai';
+import { Dispatch } from 'react';
 
 interface FooterProps {
-  isReservationPossible: boolean;
+  setIsModalOpen?: Dispatch<SetStateAction<boolean>>;
 }
 
-const Footer = ({ isReservationPossible }: FooterProps) => {
+const Footer = ({ setIsModalOpen }: FooterProps) => {
+  const setIsSelectedSchedule = useSetAtom(selectedScheduleStateAtom);
+
+  const handleScheduleSelect = () => {
+    setIsModalOpen?.(false);
+    setIsSelectedSchedule(true);
+  };
+
   return (
     <div>
       <footer>
-        <Button.Default disabled={!isReservationPossible} className="h-56 w-432">
-          예약하기
+        <Button.Default onClick={handleScheduleSelect} className="h-56 w-full">
+          확인
         </Button.Default>
       </footer>
     </div>

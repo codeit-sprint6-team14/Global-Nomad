@@ -2,7 +2,10 @@ import { InputProps } from '@/types/defaultInputTypes';
 import { forwardRef } from 'react';
 
 const DefaultInput = forwardRef<HTMLInputElement, InputProps>(
-  ({ type = 'text', className, error = false, placeholder = '입력', isAuth = false, value, ...props }, ref) => {
+  (
+    { type = 'text', className, error = false, placeholder = '입력', isAuth = false, value, register, ...props },
+    ref,
+  ) => {
     const baseStyle = `
       block w-full outline-none placeholder:text-gray-600 text-lg-regular md:text-16 focus:border-[1.5px]
       ${isAuth ? 'rounded-6 h-58 border-gray-600' : 'border-gray-700 rounded-4 h-56'}
@@ -13,10 +16,11 @@ const DefaultInput = forwardRef<HTMLInputElement, InputProps>(
     return (
       <input
         ref={ref}
-        value={value ?? ''}
         className={`${styleClass} ${className}`}
+        value={value ?? ''}
         type={type}
         placeholder={placeholder}
+        {...register}
         {...props}
       />
     );
