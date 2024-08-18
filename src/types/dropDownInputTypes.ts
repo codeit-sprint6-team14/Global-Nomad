@@ -6,6 +6,7 @@ export interface Option {
 export interface DropdownProps {
   options: Option[];
   defaultOption: string;
+  value: string;
   onSelect?: (option: Option) => void;
   onFocus?: () => void;
   className?: string;

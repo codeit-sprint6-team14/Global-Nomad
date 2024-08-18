@@ -31,7 +31,7 @@ export interface myActivitiesCardData {
   activities: Array<myActivityCardData>;
 }
 export interface myActivityCardData {
-  id: number;
+  id: string | string[] | undefined;
   userId?: number;
   title: string;
   description?: string;
