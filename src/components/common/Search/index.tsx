@@ -22,7 +22,7 @@ const Search: React.FC<SearchProps> = ({ onSearch }) => {
   return (
     <form
       onSubmit={handlesubmit}
-      className="box-shadow: 0px 4px 16px 0px #1122110D flex h-129 w-343 flex-col gap-15 rounded-16 border px-24 py-16 md:h-166 md:w-696 md:gap-20 md:py-32 lg:h-178 lg:w-1200 lg:gap-32"
+      className="box-shadow: 0px 4px 16px 0px #1122110D flex h-129 w-343 flex-col gap-15 rounded-16 border bg-white px-24 py-16 md:h-166 md:w-696 md:gap-20 md:py-32 lg:h-178 lg:w-1200 lg:gap-32"
     >
       <label htmlFor="search" className="text-lg-bold md:text-xl-bold">
         무엇을 체험하고 싶으신가요?
