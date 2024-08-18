@@ -3,8 +3,9 @@ import { useRouter } from 'next/router';
 
 import EmptyContent from '../ReservationList/emptyContent';
 import MyActivityCardList from './myActivityCardList';
+import { ActivitySettingsContentProps } from './types/activitySettingsContent.types';
 
-const ActivitySettingsContent = ({ isEmpty = false }) => {
+const ActivitySettingsContent = ({ activitiesData, isEmpty = false }: ActivitySettingsContentProps) => {
   const router = useRouter();
 
   const handleRegistActivity = () => {
@@ -24,7 +25,7 @@ const ActivitySettingsContent = ({ isEmpty = false }) => {
           <EmptyContent />
         </div>
       ) : (
-        <MyActivityCardList />
+        <MyActivityCardList activitiesData={activitiesData} />
       )}
     </div>
   );
