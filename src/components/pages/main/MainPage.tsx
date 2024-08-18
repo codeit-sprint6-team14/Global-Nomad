@@ -20,10 +20,13 @@ const dropdownOptions = [
   { value: 'priceLow', label: '가격 낮은순' },
   { value: 'priceHigh', label: '가격 높은순' },
 ];
+
 const visibleCards = 3;
+const ITEMS_PER_PAGE = 16;
 
 const MainPage = () => {
-  const [activities, setActivities] = useState<Activity[]>([]);
+  const [allActivities, setAllActivities] = useState<Activity[]>([]);
+  const [displayedActivities, setDisplayedActivities] = useState<Activity[]>([]);
   const [popularActivities, setPopularActivities] = useState<Activity[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -32,9 +35,11 @@ const MainPage = () => {
   const [activeCategory, setActiveCategory] = useState(categories[0]);
   const [sortBy, setSortBy] = useState<string | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement | null>(null);
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
   const [startIndex, setStartIndex] = useState(0);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   const sortActivities = useCallback((activitiesToSort: Activity[], sortType: string | null) => {
     if (!sortType) return activitiesToSort;
@@ -48,6 +53,22 @@ const MainPage = () => {
     });
   }, []);
 
+  const fetchAllActivities = useCallback(async () => {
+    setLoading(true);
+    try {
+      const data: ActivitiesResponse = await getActivities(1, 1000, null);
+      setAllActivities(data.activities);
+      const initialDisplayed = data.activities.filter((activity) => activity.category === categories[0]);
+      setDisplayedActivities(initialDisplayed);
+      setTotalPages(Math.ceil(initialDisplayed.length / ITEMS_PER_PAGE));
+    } catch (error) {
+      console.error('Errorfetching all activities:', error);
+      setError('활동 정보를 불러오는 데 실패했습니다.');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   const fetchPopularActivities = useCallback(async () => {
     try {
       const data: ActivitiesResponse = await getActivities(1, 100, null);
@@ -58,29 +79,10 @@ const MainPage = () => {
     }
   }, []);
 
-  const fetchActivities = useCallback(async () => {
-    setLoading(true);
-    try {
-      const data: ActivitiesResponse = await getActivities(page, 8, activeCategory);
-
-      const sortedActivities = sortActivities(data.activities || [], sortBy);
-      setActivities(sortedActivities);
-      setTotalPages(Math.ceil(data.totalCount / 8));
-    } catch (error) {
-      console.error('Error fetching activities:', error);
-      setError('활동 정보를 불러오는 데 실패했습니다.');
-    } finally {
-      setLoading(false);
-    }
-  }, [page, activeCategory, sortBy, sortActivities]);
-
   useEffect(() => {
-    fetchActivities();
-  }, [fetchActivities]);
-
-  useEffect(() => {
+    fetchAllActivities();
     fetchPopularActivities();
-  }, [fetchPopularActivities]);
+  }, [fetchAllActivities, fetchPopularActivities]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent | Event) => {
@@ -103,23 +105,23 @@ const MainPage = () => {
     return () => clearInterval(timer);
   }, [popularActivities]);
 
-  const handlePageChange = useCallback((newPage: number) => {
-    setPage(newPage);
-  }, []);
-
   const handleCategoryChange = useCallback(
     (category: string) => {
-      if (category === activeCategory) return;
       setActiveCategory(category);
       setPage(1);
+      setIsSearching(false);
+      setSearchTerm('');
+      const filteredActivities = allActivities.filter((activity) => activity.category === category);
+      setDisplayedActivities(filteredActivities);
+      setTotalPages(Math.ceil(filteredActivities.length / ITEMS_PER_PAGE));
     },
-    [activeCategory],
+    [allActivities],
   );
 
   const handleSortChange = useCallback(
     (option: string) => {
       setSortBy(option);
-      setActivities((prevActivities) => sortActivities(prevActivities, option));
+      setDisplayedActivities((prevActivities) => sortActivities(prevActivities, option));
     },
     [sortActivities],
   );
@@ -131,6 +133,31 @@ const MainPage = () => {
   const handleNextClick = () => {
     setStartIndex((prevIndex) => Math.min(popularActivities.length - visibleCards, prevIndex + 1));
   };
+
+  const handleSearch = useCallback(
+    (term: string) => {
+      setSearchTerm(term);
+      setPage(1);
+      if (term) {
+        setIsSearching(true);
+        const results = allActivities.filter((activity) => activity.title.toLowerCase().includes(term.toLowerCase()));
+        setDisplayedActivities(results);
+        setTotalPages(Math.ceil(results.length / ITEMS_PER_PAGE));
+      } else {
+        setIsSearching(false);
+        const categoryActivities = allActivities.filter((activity) => activity.category === activeCategory);
+        setDisplayedActivities(categoryActivities);
+        setTotalPages(Math.ceil(categoryActivities.length / ITEMS_PER_PAGE));
+      }
+    },
+    [allActivities, activeCategory],
+  );
+
+  const handlePageChange = useCallback((newPage: number) => {
+    setPage(newPage);
+  }, []);
+
+  const paginatedResults = displayedActivities.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
 
   if (loading) return <div>loading...</div>;
   if (error) return <div>{error}</div>;
@@ -178,86 +205,94 @@ const MainPage = () => {
         </div>
       )}
 
-      <Search />
+      <Search onSearch={handleSearch} />
+
+      {!isSearching && (
+        <section className="flex flex-col gap-24">
+          {popularActivities.length > 0 && (
+            <div className="flex justify-between">
+              <h2 className="text-2xl font-bold">인기 체험</h2>
+              <div className="flex gap-12">
+                <button onClick={handlePrevClick} disabled={startIndex === 0} className="cursor-pointer">
+                  <PrevButton />
+                </button>
+                <button
+                  onClick={handleNextClick}
+                  disabled={startIndex >= popularActivities.length - visibleCards}
+                  className="cursor-pointer"
+                >
+                  <NextButton />
+                </button>
+              </div>
+            </div>
+          )}
+          <div className="flex w-1200 gap-24">
+            {popularActivities.map((activity) => (
+              <PopularActivityCard key={activity.id} activity={activity} />
+            ))}
+          </div>
+        </section>
+      )}
 
       <section className="flex flex-col gap-24">
-        {popularActivities.length > 0 && (
-          <div className="flex justify-between">
-            <h2 className="text-2xl font-bold">인기 체험</h2>
-            <div className="flex gap-12">
-              <button onClick={handlePrevClick} disabled={startIndex === 0} className="cursor-pointer">
-                <PrevButton />
-              </button>
+        {!isSearching && (
+          <div className="mb-24 flex items-center justify-between">
+            <RadioTab.Root defaultTab={activeCategory} onTabChange={handleCategoryChange}>
+              <div className="flex w-882 gap-24">
+                {categories.map((category) => (
+                  <RadioTab.Item key={category} id={category}>
+                    {category}
+                  </RadioTab.Item>
+                ))}
+              </div>
+            </RadioTab.Root>
+
+            <div className="relative h-53 w-150 cursor-pointer rounded-15 border border-black-100" ref={dropdownRef}>
               <button
-                onClick={handleNextClick}
-                disabled={startIndex >= popularActivities.length - visibleCards}
-                className="cursor-pointer"
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className={`flex w-full items-center justify-center px-20 py-16 ${sortBy ? 'gap-5' : 'gap-40'}`}
               >
-                <NextButton />
+                <span>{sortBy ? dropdownOptions.find((option) => option.value === sortBy)?.label : '가격'}</span>
+                <div className={`transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`}>
+                  <DownArrow alt="down arrow" />
+                </div>
               </button>
+              {isDropdownOpen && (
+                <DropDownList classNames="shadow-[0px_4px_16px_0px_#1122110D] absolute top-full left-0 right-0 mt-6 flex flex-col border border-gray-300 rounded-tl-[6px] rounded-tr-[6px]">
+                  {dropdownOptions.map((option) => (
+                    <DropDownOption
+                      key={option.value}
+                      label={option.label}
+                      handleOptionClick={() => {
+                        handleSortChange(option.value);
+                        setIsDropdownOpen(false);
+                      }}
+                      className="text-2lg-medium text-gray-800"
+                    />
+                  ))}
+                </DropDownList>
+              )}
             </div>
           </div>
         )}
-        <div className="flex w-1200 gap-24">
-          {popularActivities.map((activity, index) => (
-            <PopularActivityCard key={activity.id} activity={activity} isHighlighted={index === currentBannerIndex} />
-          ))}
-        </div>
-      </section>
-
-      <section className="flex flex-col gap-24">
-        <div className="mb-24 flex items-center justify-between">
-          <RadioTab.Root defaultTab={activeCategory} onTabChange={handleCategoryChange}>
-            <div className="flex w-882 gap-24">
-              {categories.map((category) => (
-                <RadioTab.Item key={category} id={category}>
-                  {category}
-                </RadioTab.Item>
-              ))}
-            </div>
-          </RadioTab.Root>
-
-          <div className="relative h-53 w-150 cursor-pointer rounded-15 border border-black-100" ref={dropdownRef}>
-            <button
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className={`flex w-full items-center justify-center px-20 py-16 ${sortBy ? 'gap-5' : 'gap-40'}`}
-            >
-              <span>{sortBy ? dropdownOptions.find((option) => option.value === sortBy)?.label : '가격'}</span>
-              <div className={`transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`}>
-                <DownArrow alt="down arrow" />
-              </div>
-            </button>
-            {isDropdownOpen && (
-              <DropDownList classNames="shadow-[0px_4px_16px_0px_#1122110D] absolute top-full left-0 right-0 mt-6 flex flex-col border border-gray-300 rounded-tl-[6px] rounded-tr-[6px]">
-                {dropdownOptions.map((option) => (
-                  <DropDownOption
-                    key={option.value}
-                    label={option.label}
-                    handleOptionClick={() => {
-                      handleSortChange(option.value);
-                      setIsDropdownOpen(false);
-                    }}
-                    className="text-2lg-medium text-gray-800"
-                  />
-                ))}
-              </DropDownList>
-            )}
-          </div>
-        </div>
         <div className="flex flex-col gap-24">
-          <h2>모든 체험</h2>
+          <h2>{isSearching ? `'${searchTerm}'(으)로 검색한 결과입니다.` : '모든 체험'}</h2>
           <div className="flex w-1204 flex-wrap gap-24">
-            {activities.map((activity) => (
+            {paginatedResults.map((activity) => (
               <ActivityCards key={activity.id} activity={activity} />
             ))}
           </div>
         </div>
-        <Pagination
-          currentPage={page}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-          isPlaceholderData={loading}
-        />
+        {paginatedResults.length > 0 ? (
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+            isPlaceholderData={loading}
+          />
+        ) : (
+          <p>검색 결과가 없습니다.</p>
+        )}
       </section>
     </main>
   );

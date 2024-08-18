@@ -36,3 +36,7 @@ export interface GetActivitiesParams {
   category?: string;
   sortBy?: string;
 }
+
+export interface SearchProps {
+  onSearch: (searchTerm: string) => void;
+}
