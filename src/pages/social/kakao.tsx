@@ -29,9 +29,7 @@ const KakaoAuthPage = () => {
           <div ref={modalRef}>
             <Modal.RegisterConfirm onClose={handleModalClose}>
               {isLoading ? (
-                <div className="flex flex-col items-center">
-                  <p>카카오 계정으로 로그인 중...</p>
-                </div>
+                <p>카카오 계정으로 로그인 중...</p>
               ) : isSuccess ? (
                 SuccessMessages.SIGNIN_SUCCESS
               ) : error ? (

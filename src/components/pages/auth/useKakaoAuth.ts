@@ -25,7 +25,6 @@ export const useKakaoAuth = () => {
         redirectToKakaoAuth();
       } else {
         setError(error instanceof Error ? error : new Error('회원가입 중 알 수 없는 에러 발생'));
-        logError('Signup error', error);
       }
     } finally {
       setIsLoading(false);
@@ -41,7 +40,6 @@ export const useKakaoAuth = () => {
       }
     } catch (error) {
       setError(error instanceof Error ? error : new Error('로그인 중 알 수 없는 에러 발생'));
-      logError('Signin error', error);
     } finally {
       setIsLoading(false);
       localStorage.removeItem('existUser');
@@ -51,10 +49,6 @@ export const useKakaoAuth = () => {
   const redirectToKakaoAuth = () => {
     const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}`;
     router.push(kakaoAuthUrl);
-  };
-
-  const logError = (message: string, error: unknown) => {
-    console.error(message, error);
   };
 
   const resetError = useCallback(() => {
@@ -79,7 +73,6 @@ export const useKakaoAuth = () => {
         }
       } catch (error) {
         setError(error instanceof Error ? error : new Error('카카오 인증 중 알 수 없는 에러 발생'));
-        logError('Kakao redirect error', error);
       } finally {
         setIsLoading(false);
       }

@@ -29,9 +29,7 @@ const GoogleAuthPage = () => {
           <div ref={modalRef}>
             <Modal.RegisterConfirm onClose={handleModalClose}>
               {isLoading ? (
-                <div className="flex flex-col items-center">
-                  <p>Google 계정으로 로그인 중...</p>
-                </div>
+                <p>Google 계정으로 로그인 중...</p>
               ) : isSuccess ? (
                 SuccessMessages.SIGNIN_SUCCESS
               ) : error ? (
