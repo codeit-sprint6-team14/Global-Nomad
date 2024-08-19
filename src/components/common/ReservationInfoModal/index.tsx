@@ -66,6 +66,13 @@ const ReservationInfoModal = ({ activityId, schedules, onClose }: ReservationInf
     [schedules],
   );
 
+  // 가장 첫 번째 옵션을 기본 선택값으로 설정
+  useEffect(() => {
+    if (dropdownOptions.length > 0) {
+      setSelectedScheduleId(parseInt(dropdownOptions[0].value));
+    }
+  }, [dropdownOptions]);
+
   const tabData = useMemo(
     () => [
       { type: '신청' as const, count: schedules.reduce((sum, schedule) => sum + schedule.count.pending, 0) },
@@ -119,7 +126,7 @@ const ReservationInfoModal = ({ activityId, schedules, onClose }: ReservationInf
             <div className="flex flex-col gap-2">
               <Input.Dropdown
                 options={dropdownOptions}
-                defaultOption="시간 선택"
+                defaultOption={dropdownOptions.length > 0 ? dropdownOptions[0].label : '시간 선택'}
                 onSelect={handleDropdownSelect}
                 className="h-56"
               />

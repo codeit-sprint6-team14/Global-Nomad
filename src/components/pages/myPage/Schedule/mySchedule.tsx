@@ -27,7 +27,13 @@ const MySchedule = () => {
           label: activity.title,
           value: String(activity.id), // id를 문자열로 변환
         }));
-        setActivities(activitiesData);
+
+        // 최신 액티비티를 선택값으로 설정
+        const sortedActivities = activitiesData.sort((a, b) => parseInt(b.value, 10) - parseInt(a.value, 10));
+        setActivities(sortedActivities);
+        if (sortedActivities.length > 0) {
+          setSelectedOption(sortedActivities[0]); // 가장 최근 액티비티를 기본 선택값으로 설정
+        }
       } catch (error) {
         console.error('Failed to fetch activities:', error);
       }
