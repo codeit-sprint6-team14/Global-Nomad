@@ -1,6 +1,8 @@
 import { getReservations } from '@/apis/myPage/schedule';
 import { ReservationScheduleArray } from '@/apis/myPage/schedule.types';
+import { reservationsAtom } from '@/components/pages/myPage/Schedule/reservationsAtom';
 import { Option } from '@/types/dropDownInputTypes';
+import { useAtom } from 'jotai';
 import { useEffect, useMemo, useState } from 'react';
 
 import Close from '../Icons/close';
@@ -8,29 +10,16 @@ import Input from '../Input';
 import ReservationCard from './components/reservationCard';
 import TabButtons, { TabType } from './components/tabButton';
 
-type ReservationData = {
-  name: string;
-  count: number;
-};
-
 type ReservationInfoModalProps = {
-  date: string;
   activityId: number;
   schedules: ReservationScheduleArray;
   onClose: () => void;
 };
-const ReservationInfoModal = ({ date, activityId, schedules, onClose }: ReservationInfoModalProps) => {
+
+const ReservationInfoModal = ({ activityId, schedules, onClose }: ReservationInfoModalProps) => {
   const [selectedTab, setSelectedTab] = useState<TabType>('신청');
   const [selectedScheduleId, setSelectedScheduleId] = useState<number | null>(null);
-  const [reservations, setReservations] = useState<{
-    신청: ReservationData[];
-    승인: ReservationData[];
-    거절: ReservationData[];
-  }>({
-    신청: [],
-    승인: [],
-    거절: [],
-  });
+  const [reservations, setReservations] = useAtom(reservationsAtom);
 
   useEffect(() => {
     if (selectedScheduleId) {
@@ -41,9 +30,24 @@ const ReservationInfoModal = ({ date, activityId, schedules, onClose }: Reservat
           const 거절 = await getReservations(activityId, selectedScheduleId, 'declined');
 
           setReservations({
-            신청: 신청.reservations.map((res) => ({ name: res.nickname, count: res.headCount })),
-            승인: 승인.reservations.map((res) => ({ name: res.nickname, count: res.headCount })),
-            거절: 거절.reservations.map((res) => ({ name: res.nickname, count: res.headCount })),
+            신청: 신청.reservations.map((res) => ({
+              id: res.id,
+              activityId: res.activityId,
+              name: res.nickname,
+              count: res.headCount,
+            })),
+            승인: 승인.reservations.map((res) => ({
+              id: res.id,
+              activityId: res.activityId,
+              name: res.nickname,
+              count: res.headCount,
+            })),
+            거절: 거절.reservations.map((res) => ({
+              id: res.id,
+              activityId: res.activityId,
+              name: res.nickname,
+              count: res.headCount,
+            })),
           });
         } catch (error) {
           console.error('Failed to fetch reservations:', error);
@@ -51,7 +55,7 @@ const ReservationInfoModal = ({ date, activityId, schedules, onClose }: Reservat
       };
       fetchReservations();
     }
-  }, [selectedScheduleId, activityId]);
+  }, [selectedScheduleId, activityId, setReservations]);
 
   const dropdownOptions = useMemo<Option[]>(
     () =>
@@ -79,6 +83,20 @@ const ReservationInfoModal = ({ date, activityId, schedules, onClose }: Reservat
     setSelectedScheduleId(parseInt(option.value));
   };
 
+  const handleUpdateReservation = (reservationId: number, status: 'confirmed' | 'declined') => {
+    setReservations((prevReservations) => {
+      const updatedReservations = { ...prevReservations };
+      const targetReservation = updatedReservations[selectedTab].find((res) => res.id === reservationId);
+
+      if (targetReservation) {
+        updatedReservations[selectedTab] = updatedReservations[selectedTab].filter((res) => res.id !== reservationId);
+        updatedReservations[status === 'confirmed' ? '승인' : '거절'].push(targetReservation);
+      }
+
+      return updatedReservations;
+    });
+  };
+
   const currentReservations = useMemo(() => reservations[selectedTab], [reservations, selectedTab]);
   const totalReservationCount = useMemo(() => tabData.find((tab) => tab.type === '신청')?.count || 0, [tabData]);
 
@@ -92,45 +110,35 @@ const ReservationInfoModal = ({ date, activityId, schedules, onClose }: Reservat
               <Close width={40} height={40} />
             </button>
           </div>
-          <TabButtons tabData={tabData} selectedTab={selectedTab} onTabClick={handleTabClick} />
+          <TabButtons selectedTab={selectedTab} onTabClick={handleTabClick} />
         </div>
         <div className="mt-4 border border-gray-300"></div>
-        <div className="flex flex-col gap-24 overflow-auto px-24 py-24 md:h-410">
+        <div className="flex flex-col gap-24 px-24 py-24">
           <div className="flex flex-col gap-16">
             <h2 className="text-xl-semibold">예약 날짜</h2>
             <div className="flex flex-col gap-2">
-              <span className="text-xl-regular text-black">{date}</span>
               <Input.Dropdown
                 options={dropdownOptions}
-                defaultOption="시간을 선택하세요"
+                defaultOption="시간 선택"
                 onSelect={handleDropdownSelect}
                 className="h-56"
               />
             </div>
           </div>
           <div className="flex flex-col gap-16">
-            <h2 className="text-xl-semibold">예약 내역</h2>
-            <div className="flex flex-col gap-14">
-              {currentReservations.length > 0 ? (
-                currentReservations.map((reservation, index) => (
-                  <ReservationCard
-                    key={index}
-                    selectedTab={selectedTab}
-                    reservationName={reservation.name}
-                    reservationCount={reservation.count}
-                  />
-                ))
-              ) : (
-                <p className="text-lg-medium text-black">예약 내역이 없습니다</p>
-              )}
-            </div>
+            <h2 className="text-xl-semibold">총 예약 {totalReservationCount}건</h2>
+            {currentReservations.map((reservation) => (
+              <ReservationCard
+                key={reservation.id}
+                selectedTab={selectedTab}
+                reservationId={reservation.id}
+                activityId={reservation.activityId}
+                reservationName={reservation.name}
+                reservationCount={reservation.count}
+                onUpdate={(status) => handleUpdateReservation(reservation.id, status)}
+              />
+            ))}
           </div>
-        </div>
-        <div className="mt-10 flex justify-between px-24">
-          <h2 className="text-xl-semibold">예약 현황</h2>
-          <p className="text-xl-semibold">
-            <span className="text-xl-semibold text-blue-200">{totalReservationCount}</span>/10
-          </p>
         </div>
       </div>
     </div>

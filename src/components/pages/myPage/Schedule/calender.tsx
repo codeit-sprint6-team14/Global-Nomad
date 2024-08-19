@@ -112,12 +112,7 @@ const Calendar: React.FC<CalendarProps> = ({ activityId, reservations }) => {
       </div>
       {isModalOpen && selectedDate && activityId && (
         <div className="fixed inset-0 z-20 md:absolute md:z-0 md:mt-50 lg:ml-auto lg:mr-0 lg:w-429">
-          <ReservationInfoModal
-            date={selectedDate}
-            onClose={handleCloseModal}
-            activityId={activityId}
-            schedules={selectedSchedules}
-          />
+          <ReservationInfoModal onClose={handleCloseModal} activityId={activityId} schedules={selectedSchedules} />
         </div>
       )}
     </div>

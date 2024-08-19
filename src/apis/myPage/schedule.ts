@@ -5,6 +5,7 @@ import {
   ReservationDashboardResponse,
   ReservationScheduleArray,
   ReservationsResponse,
+  UpdateReservationsParams,
 } from './schedule.types';
 
 export const getMyActivities = async (): Promise<ActivitiesResponse> => {
@@ -91,6 +92,27 @@ export const getReservations = async (
     return response.data;
   } catch (error) {
     console.error('Failed to fetch reservations:', error);
+    throw error;
+  }
+};
+
+export const updateReservations = async (
+  activityId: number,
+  reservationId: number,
+  status: 'pending' | 'confirmed' | 'declined',
+): Promise<UpdateReservationsParams> => {
+  try {
+    const response = await axiosRequester({
+      options: {
+        method: 'PATCH',
+        url: `/my-activities/${activityId}/reservations/${reservationId}`,
+        data: { status },
+      },
+      includeAuth: true,
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Failed to update reservations:', error);
     throw error;
   }
 };

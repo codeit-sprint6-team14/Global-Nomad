@@ -64,3 +64,22 @@ export type ReservationsResponse = {
   totalCount: number;
   reservations: Reservation[];
 };
+export type UpdateReservationsParams = {
+  status: 'pending' | 'confirmed' | 'declined'; // 예약 상태
+};
+export type UpdateReservationsResponse = {
+  id: number;
+  teamId: string;
+  userId: number;
+  activityId: number;
+  scheduleId: number;
+  status: 'pending' | 'confirmed' | 'declined';
+  reviewSubmitted: boolean;
+  totalPrice: number;
+  headCount: number;
+  date: string;
+  startTime: string;
+  endTime: string;
+  createdAt: string;
+  updatedAt: string;
+};
