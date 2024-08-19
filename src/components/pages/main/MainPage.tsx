@@ -168,7 +168,7 @@ const MainPage = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <main className="flex flex-col items-center">
+    <main className="flex flex-col items-center bg-gray-100">
       <div className="relative w-full">
         {popularActivities.length > 0 && (
           <div className="relative h-[550px] w-full max-w-[1920px]">
@@ -177,7 +177,7 @@ const MainPage = () => {
                 key={activity.id}
                 href={`/activities/${activity.id}`}
                 className={`absolute inset-0 overflow-hidden transition-opacity duration-500 ${
-                  index === currentBannerIndex ? 'z-10 opacity-100' : 'z-0 opacity-0'
+                  index === currentBannerIndex ? 'z-1 opacity-100' : 'z-0 opacity-0'
                 }`}
               >
                 <div className="relative h-full w-full">
@@ -214,7 +214,7 @@ const MainPage = () => {
         )}
       </div>
 
-      <div className="relative z-30 -mt-60">
+      <div className="z-1 relative -mt-60">
         <Search onSearch={handleSearch} />
       </div>
 
@@ -222,7 +222,7 @@ const MainPage = () => {
         <section className="mt-50 flex flex-col gap-24">
           {popularActivities.length > 0 && (
             <div className="flex justify-between">
-              <h2 className="text-2xl font-bold">인기 체험</h2>
+              <h2 className="leading-43 text-36 font-bold">🔥인기 체험</h2>
               <div className="flex gap-12">
                 <button onClick={handlePrevClick} disabled={startIndex === 0} className="cursor-pointer">
                   <PrevButton />
@@ -287,27 +287,36 @@ const MainPage = () => {
           </div>
         )}
 
-        <div className="flex flex-col gap-24">
-          <div className="flex flex-col">
-            <h2>{isSearching ? `'${searchTerm}'(으)로 검색한 결과입니다.` : '모든 체험'}</h2>
-            {isSearching && <span>총 {displayedActivities.length}개의 결과</span>}
-          </div>
-          {displayedActivities.length > 0 ? (
-            <>
+        <div className="m-auto flex w-1200 flex-col gap-24">
+          {isSearching ? (
+            <h2 className="leading-42 mt-50 text-32 font-normal">
+              <span className="text-3xl-bold text-black-100">{searchTerm}</span>(으)로 검색한 결과입니다.
+            </h2>
+          ) : (
+            <h2 className="leading-43 text-36 font-bold">🥾모든 체험</h2>
+          )}
+
+          {isSearching && <span className="mb-24 text-lg-regular">총 {displayedActivities.length}개의 결과</span>}
+
+          <div className="min-h-600">
+            {displayedActivities.length > 0 ? (
               <div className="flex w-1204 flex-wrap gap-24">
                 {paginatedResults.map((activity) => (
                   <ActivityCards key={activity.id} activity={activity} />
                 ))}
               </div>
-              <Pagination
-                currentPage={page}
-                totalPages={totalPages}
-                onPageChange={handlePageChange}
-                isPlaceholderData={loading}
-              />
-            </>
-          ) : (
-            <p>검색 결과가 없습니다.</p>
+            ) : (
+              <p className="h-600 text-xl text-gray-500">검색 결과가 없습니다.</p>
+            )}
+          </div>
+
+          {displayedActivities.length > 0 && (
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+              isPlaceholderData={loading}
+            />
           )}
         </div>
       </section>
