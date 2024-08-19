@@ -1,33 +1,65 @@
 import LeftArrow from '@/../public/assets/icons/left-arrow.svg';
 import Paper from '@/../public/assets/icons/paper.svg';
+import { getMyActivities, getReservationDashboard } from '@/apis/myPage/schedule';
+import { ReservationDashboardResponse } from '@/apis/myPage/schedule.types';
 import Input from '@/components/common/Input/index';
 import { Option } from '@/types/dropDownInputTypes';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Calendar from './calender';
 
-const mockOptions: Option[] = [
-  { label: '옵션 1', value: 'value1' },
-  { label: '옵션 2', value: 'value2' },
-  { label: '옵션 3', value: 'value3' },
-];
-
 const MySchedule = () => {
   const router = useRouter();
+  const [activities, setActivities] = useState<Option[]>([]);
+  const [selectedOption, setSelectedOption] = useState<Option | null>(null);
+  const [reservations, setReservations] = useState<ReservationDashboardResponse | null>(null);
+
   const handleGoMyPage = () => {
     router.push('/my-page');
   };
 
-  const [selectedOption, setSelectedOption] = useState<string>('옵션을 선택하세요');
+  useEffect(() => {
+    const fetchActivities = async () => {
+      try {
+        const data = await getMyActivities();
+        const activitiesData = data.activities.map((activity) => ({
+          label: activity.title,
+          value: String(activity.id),
+        }));
+        setActivities(activitiesData);
+      } catch (error) {
+        console.error('Failed to fetch activities:', error);
+      }
+    };
+
+    fetchActivities();
+  }, []);
+
+  useEffect(() => {
+    if (selectedOption) {
+      const fetchReservations = async () => {
+        try {
+          const year = new Date().getFullYear();
+          const month = new Date().getMonth() + 1;
+          const data = await getReservationDashboard(selectedOption.value, year, month);
+          setReservations(data);
+        } catch (error) {
+          console.error('Failed to fetch reservations:', error);
+        }
+      };
+
+      fetchReservations();
+    }
+  }, [selectedOption]);
 
   const handleOptionSelect = (option: Option) => {
     console.log(`선택한 옵션: ${option.label}`);
-    setSelectedOption(option.label);
+    setSelectedOption(option);
   };
 
   // 옵션이 비어있는지 체크
-  const hasExperiences = mockOptions.length > 0;
+  const hasExperiences = activities.length > 0;
 
   return (
     <div>
@@ -44,8 +76,8 @@ const MySchedule = () => {
               체험명
             </div>
             <Input.Dropdown
-              options={mockOptions}
-              defaultOption={selectedOption}
+              options={activities}
+              defaultOption={selectedOption ? selectedOption.label : '내 체험을 선택하세요'}
               onSelect={handleOptionSelect}
               className="h-56"
             />
@@ -56,7 +88,7 @@ const MySchedule = () => {
           </div>
         )}
         {hasExperiences ? (
-          <Calendar />
+          <Calendar reservations={reservations} />
         ) : (
           <div className="mb-200 text-center text-2xl-medium text-gray-700">아직 등록한 체험이 없어요</div>
         )}

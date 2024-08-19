@@ -1,15 +1,19 @@
+import { ReservationDashboardResponse } from '@/apis/myPage/schedule.types';
 import ReservationInfoModal from '@/components/common/ReservationInfoModal';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import React, { useState } from 'react';
 
 import DateCell from './dateCell';
-import reservations from './mockReservations';
 import { DailyReservation } from './reservation.types';
 
 const dayArr = ['SUN', 'MON', 'TUE', 'WED', 'THUR', 'FRI', 'SAT'];
 
-const Calendar: React.FC = () => {
+type CalendarProps = {
+  reservations: ReservationDashboardResponse | null;
+};
+
+const Calendar: React.FC<CalendarProps> = ({ reservations }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<DailyReservation | null>(null);
@@ -51,7 +55,7 @@ const Calendar: React.FC = () => {
   const handleDateClick = (day: number) => {
     const clickedDate = new Date(currentYear, currentMonth, day);
     const formattedDate = format(clickedDate, 'yyyy-MM-dd');
-    const reservation = reservations.find((res) => res.date === formattedDate);
+    const reservation = reservations?.find((res) => res.date === formattedDate);
 
     if (reservation) {
       setSelectedDate(reservation);
@@ -105,7 +109,7 @@ const Calendar: React.FC = () => {
                   }
 
                   const reservationDate = new Date(currentYear, currentMonth, day);
-                  const reservation = reservations.find((res) => res.date === format(reservationDate, 'yyyy-MM-dd'));
+                  const reservation = reservations?.find((res) => res.date === format(reservationDate, 'yyyy-MM-dd'));
 
                   return (
                     <DateCell
