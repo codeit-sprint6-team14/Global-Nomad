@@ -3,6 +3,7 @@ export type DateInputProps = {
   initialDate?: Date;
   placeholder?: string;
   className?: string;
+  value?: string;
 };
 
 export type CustomInputProps = React.HTMLProps<HTMLInputElement> & {

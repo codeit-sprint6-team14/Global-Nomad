@@ -1,29 +1,39 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Button from '@/components/common/Button';
 import Icon from '@/components/common/Icons';
 import Input from '@/components/common/Input';
 import { useDeviceState } from '@/hooks/useDeviceState';
 import { dropdownTypeAtom } from '@/store/dropdownAtom';
 import { Device } from '@/types/deviceTypes';
-import { TimeSlot } from '@/types/regisActivity';
-import formatDate from '@/utils/formatDate';
+import { Schedule } from '@/types/regisActivity';
+import { formatDateLocal } from '@/utils/formatDate';
 import { useSetAtom } from 'jotai';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import TimeSlotItem from './timeSlotItem';
+import ScheduleItem from './scheduleItem';
+import { AddActivityTimeSectionProps } from './types/addActivityTimeSection.types';
 
-interface AddActivityTimeSectionProps {
-  timeSlots: TimeSlot[];
-  onChange: (newTimeSlots: TimeSlot[]) => void;
-  error: boolean;
-}
+const AddActivityTimeSection = ({ onChange, error, initialSchedules }: AddActivityTimeSectionProps) => {
+  const [currentSchedules, setCurrentSchedules] = useState<Schedule[]>([]);
+  const [scheduleIdsToRemove, setScheduleIdsToRemove] = useState<number[]>([]);
+  const [schedulesToAdd, setSchedulesToAdd] = useState<Schedule[]>([]);
+  const [newSchedule, setNewSchedule] = useState<Schedule>({
+    date: '',
+    startTime: '',
+    endTime: '',
+  });
 
-const AddActivityTimeSection = ({ timeSlots, onChange, error }: AddActivityTimeSectionProps) => {
-  const setDropdownType = useSetAtom(dropdownTypeAtom);
-  const [date, setDate] = useState('');
-  const [startTime, setStartTime] = useState('');
-  const [endTime, setEndTime] = useState('');
   const deviceState = useDeviceState();
+  const setDropdownType = useSetAtom(dropdownTypeAtom);
   const isDesktop = deviceState === Device.DESKTOP;
+
+  const updateParent = () => {
+    onChange({
+      currentSchedules,
+      scheduleIdsToRemove,
+      schedulesToAdd,
+    });
+  };
 
   const timeOptions = Array.from({ length: 24 }, (_, i) => {
     const hour = i.toString().padStart(2, '0');
@@ -35,23 +45,37 @@ const AddActivityTimeSection = ({ timeSlots, onChange, error }: AddActivityTimeS
     options: timeOptions,
     defaultOption: '00:00',
     onFocus: () => setDropdownType('time'),
-    error: error && timeSlots.length === 0,
+    error: error && currentSchedules.length === 0,
   };
 
   const handleAddTimeSlot = () => {
-    if (date && startTime && endTime) {
-      const newTimeSlots = [...timeSlots, { date, startTime, endTime }];
-      onChange(newTimeSlots);
-      setDate('');
-      setStartTime('');
-      setEndTime('');
+    if (newSchedule.date && newSchedule.startTime && newSchedule.endTime) {
+      setCurrentSchedules((prev) => [...prev, { ...newSchedule }]);
+      setSchedulesToAdd((prev) => [...prev, { ...newSchedule }]);
+      setNewSchedule({ date: '', startTime: '', endTime: '' });
+      updateParent();
     }
   };
 
   const handleDeleteTimeSlot = (index: number) => {
-    const newTimeSlots = timeSlots.filter((_, i: number) => i !== index);
-    onChange(newTimeSlots);
+    const scheduleToDelete = currentSchedules[index];
+
+    if (scheduleToDelete.id) {
+      setScheduleIdsToRemove((prev) => [...prev, scheduleToDelete.id as number]);
+    } else {
+      setSchedulesToAdd((prev) => prev.filter((schedule) => schedule !== scheduleToDelete));
+    }
+    setCurrentSchedules((prev) => prev.filter((_, i) => i !== index));
+    updateParent();
   };
+
+  useEffect(() => {
+    updateParent();
+  }, [currentSchedules, scheduleIdsToRemove, schedulesToAdd]);
+
+  useEffect(() => {
+    setCurrentSchedules(initialSchedules);
+  }, [initialSchedules]);
 
   return (
     <div>
@@ -71,20 +95,25 @@ const AddActivityTimeSection = ({ timeSlots, onChange, error }: AddActivityTimeS
         <div className="flex items-center gap-4 lg:gap-0">
           <Input.Date
             className={`text-md-regular md:text-lg-regular lg:mr-20 lg:w-379 ${error && 'errorBorder'}`}
-            onChange={(newDate) => setDate(newDate ? formatDate(newDate) : '')}
+            onChange={(newDate) =>
+              setNewSchedule((prev) => ({ ...prev, date: newDate ? formatDateLocal(newDate) : '' }))
+            }
+            value={newSchedule.date}
           />
           {isDesktop ? (
             <div className="flex items-center gap-12">
               <Input.Dropdown
                 {...commonDropdownProps}
                 className={`h-44 w-79 text-md-regular md:h-56 md:w-104 md:text-lg-regular lg:w-140 ${error && 'errorBorder'}`}
-                onSelect={(option) => setStartTime(option.value)}
+                onSelect={(option) => setNewSchedule((prev) => ({ ...prev, startTime: option.value }))}
+                value={newSchedule.startTime}
               />
               <span className="text-xl-bold">~</span>
               <Input.Dropdown
                 {...commonDropdownProps}
                 className={`h-44 w-79 text-md-regular md:h-56 md:w-104 md:text-lg-regular lg:mr-20 lg:w-140 ${error && 'errorBorder'}`}
-                onSelect={(option) => setEndTime(option.value)}
+                onSelect={(option) => setNewSchedule((prev) => ({ ...prev, endTime: option.value }))}
+                value={newSchedule.endTime}
               />
             </div>
           ) : (
@@ -92,12 +121,14 @@ const AddActivityTimeSection = ({ timeSlots, onChange, error }: AddActivityTimeS
               <Input.Dropdown
                 {...commonDropdownProps}
                 className={`h-44 w-79 text-md-regular md:h-56 md:w-104 md:text-lg-regular lg:w-140 ${error && 'errorBorder'}`}
-                onSelect={(option) => setStartTime(option.value)}
+                onSelect={(option) => setNewSchedule((prev) => ({ ...prev, startTime: option.value }))}
+                value={newSchedule.startTime}
               />
               <Input.Dropdown
                 {...commonDropdownProps}
                 className={`h-44 w-79 text-md-regular md:h-56 md:w-104 md:text-lg-regular lg:mr-20 lg:w-140 ${error && 'errorBorder'}`}
-                onSelect={(option) => setEndTime(option.value)}
+                onSelect={(option) => setNewSchedule((prev) => ({ ...prev, endTime: option.value }))}
+                value={newSchedule.endTime}
               />
             </>
           )}
@@ -110,8 +141,8 @@ const AddActivityTimeSection = ({ timeSlots, onChange, error }: AddActivityTimeS
         </div>
       </div>
       <div className="mb-16 w-full border border-gray-300 lg:mb-21" />
-      {timeSlots.map((slot, index) => (
-        <TimeSlotItem key={index} slot={slot} onDelete={() => handleDeleteTimeSlot(index)} />
+      {currentSchedules.map((schedule, index) => (
+        <ScheduleItem key={schedule?.id} slot={schedule} onDelete={() => handleDeleteTimeSlot(index)} />
       ))}
     </div>
   );

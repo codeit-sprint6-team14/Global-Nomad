@@ -14,11 +14,12 @@ const SideNavMenuOptionList = () => {
 
   useEffect(() => {
     const currentPath = router.asPath;
+    const isRegistActivityPath = currentPath.startsWith('/my-page/regist-activity');
+
     const activeMenuOption = menuOptionList.find((option) => {
-      if (currentPath === '/my-page/regist-activity') {
+      if (isRegistActivityPath) {
         return option.path === '/my-page/activity-settings';
       }
-
       return option.path === currentPath;
     });
 

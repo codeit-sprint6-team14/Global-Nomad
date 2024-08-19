@@ -1,30 +1,10 @@
 import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 
-declare global {
-  interface Window {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    daum: any;
-  }
-}
+import { AddressCode, AddressInputSectionProps } from './types/addressInputSection.types';
 
-interface AddressInputSectionProps {
-  error: boolean;
-  value: {
-    postcode?: string;
-    address: string;
-    detailAddress?: string;
-  };
-  onChange: (value: { postcode?: string; address: string; detailAddress?: string }) => void;
-}
-
-interface AddressCode {
-  address: string;
-  zonecode: string;
-}
-
-const AddressInputSection = ({ error, onChange, value }: AddressInputSectionProps) => {
+const AddressInputSection = ({ error, onChange, value, isEditMode = false }: AddressInputSectionProps) => {
   const detailAddressRef = useRef<HTMLInputElement>(null);
 
   const handlePostcodeSearch = () => {
@@ -48,7 +28,7 @@ const AddressInputSection = ({ error, onChange, value }: AddressInputSectionProp
       <div className="flex gap-4">
         <Input
           placeholder="우편번호"
-          className="h-[44px]"
+          className={`h-[44px] ${isEditMode ? 'cursor-not-allowed bg-gray-300' : ''}`}
           error={error}
           readOnly
           value={value.postcode}
@@ -60,7 +40,7 @@ const AddressInputSection = ({ error, onChange, value }: AddressInputSectionProp
       </div>
       <Input
         placeholder="주소"
-        className="h-[44px]"
+        className="h-[44px] cursor-not-allowed"
         readOnly
         value={value.address}
         onChange={(e) => onChange({ ...value, address: e.target.value })}

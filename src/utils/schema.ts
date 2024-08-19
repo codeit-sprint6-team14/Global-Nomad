@@ -31,38 +31,34 @@ export const registActivitySchema = yup.object().shape({
   title: yup.string().required(REGIST_ACTIVITY_ERROR_MESSAGES.TITLE_REQUIRED),
   category: yup.string().required(REGIST_ACTIVITY_ERROR_MESSAGES.CATEGORY_REQUIRED),
   description: yup.string().required(REGIST_ACTIVITY_ERROR_MESSAGES.DESCRIPTION_REQUIRED),
-  price: yup.string().required(REGIST_ACTIVITY_ERROR_MESSAGES.PRICE_REQUIRED),
+  price: yup
+    .number()
+    .transform((value) => (isNaN(value) ? null : value))
+    .test(
+      'is-greater-than-zero',
+      REGIST_ACTIVITY_ERROR_MESSAGES.MIN_PRICE,
+      (value) => value === null || value === undefined || value > 0,
+    )
+    .required(REGIST_ACTIVITY_ERROR_MESSAGES.PRICE_REQUIRED) as yup.NumberSchema<number | null | undefined>,
   address: yup.object().shape({
     postcode: yup.string(),
     address: yup.string().required(REGIST_ACTIVITY_ERROR_MESSAGES.ADDRESS_REQUIRED),
     detailAddress: yup.string(),
   }),
-  timeSlots: yup
+  schedules: yup.array().min(1, REGIST_ACTIVITY_ERROR_MESSAGES.MIN_TIME_SLOTS),
+  bannerImageUrl: yup
+    .string()
+    .required(REGIST_ACTIVITY_ERROR_MESSAGES.BANNER_IMAGE_REQUIRED)
+    .test('is-image-url', REGIST_ACTIVITY_ERROR_MESSAGES.BANNER_IMAGE_REQUIRED, (value) => {
+      if (!value) return false;
+      return value.startsWith('data:image/') || value.startsWith('blob:') || /\.(jpg|jpeg|png|gif)$/i.test(value);
+    }),
+  subImageUrls: yup
     .array()
     .of(
-      yup.object().shape({
-        date: yup.string().required(REGIST_ACTIVITY_ERROR_MESSAGES.DATE_REQUIRED),
-        startTime: yup.string().required(REGIST_ACTIVITY_ERROR_MESSAGES.START_TIME_REQUIRED),
-        endTime: yup.string().required(REGIST_ACTIVITY_ERROR_MESSAGES.END_TIME_REQUIRED),
-      }),
-    )
-    .min(1, REGIST_ACTIVITY_ERROR_MESSAGES.MIN_TIME_SLOTS),
-  bannerImage: yup
-    .array()
-    .of(
-      yup.object().shape({
-        file: yup.mixed().required(),
-        preview: yup.string().required(),
-      }),
-    )
-    .min(1, REGIST_ACTIVITY_ERROR_MESSAGES.BANNER_IMAGE_REQUIRED)
-    .required(REGIST_ACTIVITY_ERROR_MESSAGES.BANNER_IMAGE_REQUIRED),
-  introImages: yup
-    .array()
-    .of(
-      yup.object().shape({
-        file: yup.mixed().required(),
-        preview: yup.string().required(),
+      yup.string().test('is-valid-image-url', REGIST_ACTIVITY_ERROR_MESSAGES.INTRO_IMAGES_REQUIRED, (value) => {
+        if (!value) return false;
+        return value.startsWith('data:image/') || value.startsWith('blob:') || /\.(jpg|jpeg|png|gif)$/i.test(value);
       }),
     )
     .min(1, REGIST_ACTIVITY_ERROR_MESSAGES.INTRO_IMAGES_REQUIRED)

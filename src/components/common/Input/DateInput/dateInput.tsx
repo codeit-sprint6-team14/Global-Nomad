@@ -1,12 +1,12 @@
 import { DateInputProps } from '@/types/dateInput';
 import { ko } from 'date-fns/locale/ko';
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 import CustomInput from './customInput';
 
-const DateInput = ({ onChange, initialDate, placeholder = 'yyyy-mm-dd', className }: DateInputProps) => {
+const DateInput = ({ onChange, initialDate, placeholder = 'yyyy-mm-dd', value, className }: DateInputProps) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(initialDate || null);
 
   const handleChange = (date: Date | null) => {
@@ -16,6 +16,14 @@ const DateInput = ({ onChange, initialDate, placeholder = 'yyyy-mm-dd', classNam
       onChange(date);
     }
   };
+
+  useEffect(() => {
+    if (value) {
+      setSelectedDate(new Date(value));
+    } else {
+      setSelectedDate(null);
+    }
+  }, [value]);
 
   return (
     <div className="relative">
@@ -27,7 +35,9 @@ const DateInput = ({ onChange, initialDate, placeholder = 'yyyy-mm-dd', classNam
         minDate={new Date()}
         dateFormat="yyyy-MM-dd"
         showPopperArrow={false}
-        customInput={<CustomInput className={className} />}
+        customInput={
+          <CustomInput value={selectedDate ? selectedDate.toISOString().split('T')[0] : ''} className={className} />
+        }
         wrapperClassName={`${className}`}
         shouldCloseOnSelect={false}
       />
