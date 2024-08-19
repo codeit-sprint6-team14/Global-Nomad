@@ -2,21 +2,21 @@ import Button from '@/components/common/Button';
 import Icon from '@/components/common/Icons';
 import { useDeviceState } from '@/hooks/useDeviceState';
 import { Device } from '@/types/deviceTypes';
-import { TimeSlotItemProps } from '@/types/regisActivity';
+import { SchedulesItemProps } from '@/types/regisActivity';
 
-const renderSlotItem = (content: string, width: string) => {
-  const commonStyles = 'flex h-44 items-center rounded-4 border border-gray-700 pl-12 md:pl-16 md:h-56';
-
-  return (
-    <div className={`${commonStyles} ${width}`}>
-      <span className="text-md-regular md:text-lg-regular">{content}</span>
-    </div>
-  );
-};
-
-const TimeSlotItem = ({ slot, onDelete }: TimeSlotItemProps) => {
+const ScheduleItem = ({ slot, onDelete }: SchedulesItemProps) => {
   const deviceState = useDeviceState();
   const isDesktop = deviceState === Device.DESKTOP;
+
+  const renderSlotItem = (content: string, width: string) => {
+    const commonStyles = 'flex h-44 items-center rounded-4 border border-gray-700 pl-12 md:pl-16 md:h-56';
+
+    return (
+      <div className={`${commonStyles} ${width}`}>
+        <span className="text-md-regular md:text-lg-regular">{content}</span>
+      </div>
+    );
+  };
 
   const dateSlot = renderSlotItem(slot.date, 'w-130 md:w-149 lg:w-379 lg:mr-20');
   const startTimeSlot = renderSlotItem(slot.startTime, 'w-79 md:w-104 lg:w-140');
@@ -47,4 +47,4 @@ const TimeSlotItem = ({ slot, onDelete }: TimeSlotItemProps) => {
   );
 };
 
-export default TimeSlotItem;
+export default ScheduleItem;

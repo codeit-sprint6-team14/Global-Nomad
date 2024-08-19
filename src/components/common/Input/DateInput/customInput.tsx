@@ -8,7 +8,6 @@ const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>(
 
     const handleFocus = () => {
       setIsFocused(true);
-
       if (onClick) onClick();
     };
 
@@ -24,7 +23,7 @@ const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>(
           onClick={handleFocus}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          value={value}
+          value={value ?? ''}
           ref={ref}
           placeholder={placeholder}
           readOnly
