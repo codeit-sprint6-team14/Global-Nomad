@@ -15,3 +15,4 @@ export const reservationsAtom = atom<{
   승인: [],
   거절: [],
 });
+export const reservationsUpdatedAtom = atom<boolean>(false);

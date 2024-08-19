@@ -4,16 +4,19 @@ import { getMyActivities, getReservationDashboard } from '@/apis/myPage/schedule
 import { ReservationDashboardResponse } from '@/apis/myPage/schedule.types';
 import Input from '@/components/common/Input/index';
 import { Option } from '@/types/dropDownInputTypes';
+import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 import Calendar from './calender';
+import { reservationsUpdatedAtom } from './reservationsAtom';
 
 const MySchedule = () => {
   const router = useRouter();
   const [activities, setActivities] = useState<Option[]>([]);
   const [selectedOption, setSelectedOption] = useState<Option | null>(null);
   const [reservations, setReservations] = useState<ReservationDashboardResponse | null>(null);
+  const reservationsUpdated = useAtom(reservationsUpdatedAtom)[0];
 
   const handleGoMyPage = () => {
     router.push('/my-page');
@@ -57,7 +60,7 @@ const MySchedule = () => {
 
       fetchReservations();
     }
-  }, [selectedOption]);
+  }, [selectedOption, reservationsUpdated]);
 
   const handleOptionSelect = (option: Option) => {
     console.log(`선택한 옵션: ${option.label}`);

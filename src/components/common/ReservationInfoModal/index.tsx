@@ -1,6 +1,7 @@
 import { getReservations } from '@/apis/myPage/schedule';
 import { ReservationScheduleArray } from '@/apis/myPage/schedule.types';
 import { reservationsAtom } from '@/components/pages/myPage/Schedule/reservationsAtom';
+import { useClickOutside } from '@/hooks/useClickOutside';
 import { Option } from '@/types/dropDownInputTypes';
 import { useAtom } from 'jotai';
 import { useEffect, useMemo, useState } from 'react';
@@ -20,6 +21,7 @@ const ReservationInfoModal = ({ activityId, schedules, onClose }: ReservationInf
   const [selectedTab, setSelectedTab] = useState<TabType>('신청');
   const [selectedScheduleId, setSelectedScheduleId] = useState<number | null>(null);
   const [reservations, setReservations] = useAtom(reservationsAtom);
+  const modalRef = useClickOutside(onClose); // 외부 클릭 시 onClose 호출
 
   useEffect(() => {
     if (selectedScheduleId) {
@@ -66,7 +68,6 @@ const ReservationInfoModal = ({ activityId, schedules, onClose }: ReservationInf
     [schedules],
   );
 
-  // 가장 첫 번째 옵션을 기본 선택값으로 설정
   useEffect(() => {
     if (dropdownOptions.length > 0) {
       setSelectedScheduleId(parseInt(dropdownOptions[0].value));
@@ -108,7 +109,10 @@ const ReservationInfoModal = ({ activityId, schedules, onClose }: ReservationInf
   const totalReservationCount = useMemo(() => tabData.find((tab) => tab.type === '신청')?.count || 0, [tabData]);
 
   return (
-    <div className="flex h-full min-h-80 w-full flex-col justify-between border bg-white px-1 pb-24 pt-12 md:h-582 md:w-429 md:rounded-24">
+    <div
+      ref={modalRef}
+      className="flex h-full min-h-80 w-full flex-col justify-between border bg-white px-1 pb-24 pt-12 md:h-582 md:w-429 md:rounded-24"
+    >
       <div className="mx-auto w-400 flex-col">
         <div className="flex h-98 flex-col gap-16 px-24 py-12">
           <div className="flex items-center justify-between">

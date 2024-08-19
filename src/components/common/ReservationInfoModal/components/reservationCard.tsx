@@ -1,5 +1,7 @@
 import { updateReservations } from '@/apis/myPage/schedule';
 import Button from '@/components/common/Button';
+import { reservationsUpdatedAtom } from '@/components/pages/myPage/Schedule/reservationsAtom';
+import { useAtom } from 'jotai';
 import { useState } from 'react';
 
 import { TabType } from './tabButton';
@@ -22,12 +24,14 @@ const ReservationCard = ({
   onUpdate,
 }: ReservationCardProps) => {
   const [loading, setLoading] = useState(false);
+  const [, setReservationsUpdated] = useAtom(reservationsUpdatedAtom);
 
   const handleUpdateReservation = async (status: 'confirmed' | 'declined') => {
     try {
       setLoading(true);
       await updateReservations(activityId, reservationId, status);
-      onUpdate(status); // 상태 변경 후 콜백 호출
+      onUpdate(status);
+      setReservationsUpdated((prev) => !prev);
     } catch (error) {
       console.error('Failed to update reservation:', error);
     } finally {
