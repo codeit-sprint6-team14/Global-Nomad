@@ -1,4 +1,3 @@
-import Button from '@/components/common/Button';
 import Modal from '@/components/common/Modal';
 import { useGoogleAuth } from '@/components/pages/auth/useGoogleAuth';
 import ErrorMessages from '@/constants/errorMessages';
@@ -17,6 +16,8 @@ const GoogleAuthPage = () => {
     toggleModal();
     if (isSuccess) {
       router.push('/');
+    } else {
+      router.push('/signin');
     }
   };
 
@@ -35,7 +36,7 @@ const GoogleAuthPage = () => {
               ) : error ? (
                 <div className="flex flex-col items-center">
                   <p className="mb-4 text-red-200">{ErrorMessages.SIGNIN_ERROR}</p>
-                  <Button.Default onClick={() => router.push('/signin')}>로그인 다시 시도하기</Button.Default>
+                  <p>로그인을 다시 시도해주세요.</p>
                 </div>
               ) : null}
             </Modal.RegisterConfirm>
