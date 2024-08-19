@@ -159,6 +159,11 @@ const MainPage = () => {
 
   const paginatedResults = displayedActivities.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
 
+  const getCurrentMonth = () => {
+    const months = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
+    return months[new Date().getMonth()];
+  };
+
   if (loading) return <div>loading...</div>;
   if (error) return <div>{error}</div>;
 
@@ -186,9 +191,11 @@ const MainPage = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50"></div>
                 </div>
-                <div className="absolute bottom-32 left-6 right-6 text-white">
-                  <h2 className="mb-2 text-3xl font-bold">{activity.title}</h2>
-                  <p className="text-xl">\ {activity.price.toLocaleString()} /인</p>
+                <div className="absolute bottom-200 left-150 flex w-1200 flex-col gap-24 text-white">
+                  <h2 className="line-clamp-2 w-600 text-wrap break-words text-68 font-bold leading-[81.15px]">
+                    {activity.title}
+                  </h2>
+                  <p className="text-2xl-bold">{getCurrentMonth()}의 인기 체험 BEST🔥</p>
                 </div>
               </Link>
             ))}
