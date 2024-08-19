@@ -68,7 +68,7 @@ const ActivityInformation = ({ activityId = '2213' }: { activityId?: string }) =
 
         <BannerImage bannerImageUrl={bannerImageUrl} subImages={subImages} />
         <div className="mx-24 flex justify-between md:pb-40 lg:mx-auto lg:max-w-[1200px]">
-          <div className="flex flex-col md:mr-24 md:pt-0">
+          <div className="flex w-full flex-col md:mr-24 md:pt-0">
             <ActivityDescription description={description} />
             <KakaoMap address={address} />
           </div>
