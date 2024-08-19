@@ -23,8 +23,6 @@ export default function App({ Component, pageProps }: AppProps) {
     !['/signup', '/signin', '/my-page/reservation-list'].includes(router.pathname) &&
     !router.pathname.startsWith('/my-page/regist-activity');
 
-  const isActivitieDetailsPage = router.pathname.startsWith('/activities');
-
   return (
     <Provider>
       <main className={`${pretendard.variable} ${showNavBarAndFooter ? 'pt-70' : ''}`}>
@@ -32,7 +30,7 @@ export default function App({ Component, pageProps }: AppProps) {
           {showNavBarAndFooter && <NavBar />}
           <div id="notification-root" />
           <Component {...pageProps} />
-          {showNavBarAndFooter && <Footer classNames={isActivitieDetailsPage ? 'mb-82' : ''} />}
+          {showNavBarAndFooter && <Footer />}
           <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
       </main>

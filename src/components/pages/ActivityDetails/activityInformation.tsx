@@ -53,6 +53,7 @@ const ActivityInformation = ({ activityId = '2213' }: { activityId?: string }) =
   setPrice(price);
 
   const myId = userInformationData.id;
+  const isCreateByMe = myId === userId;
 
   return (
     <>
@@ -76,7 +77,7 @@ const ActivityInformation = ({ activityId = '2213' }: { activityId?: string }) =
             <KakaoMap address={address} />
           </div>
           {!isMobile &&
-            myId !== userId &&
+            !isCreateByMe &&
             (isTablet ? (
               <FloatingBox.Tablet handleReservationSubmit={handleReservationSubmit} />
             ) : (
@@ -87,7 +88,7 @@ const ActivityInformation = ({ activityId = '2213' }: { activityId?: string }) =
             ))}
         </div>
         <ReviewList activityId={activityId} />
-        {isMobile && myId !== userId && (
+        {isMobile && !isCreateByMe && (
           <div className="mt-89">
             <FloatingBox.Mobile handleReservationSubmit={handleReservationSubmit} />
           </div>
