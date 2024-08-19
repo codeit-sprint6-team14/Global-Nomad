@@ -199,7 +199,7 @@ const MainPage = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50"></div>
                 </div>
-                <div className="absolute bottom-200 left-150 flex w-1200 flex-col gap-24 text-white">
+                <div className="absolute bottom-200 left-[250px] flex flex-col gap-24 text-white">
                   <h2 className="line-clamp-2 w-600 text-wrap break-words text-68 font-bold leading-[81.15px]">
                     {activity.title}
                   </h2>
