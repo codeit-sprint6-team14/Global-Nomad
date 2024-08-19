@@ -6,12 +6,13 @@ import { useState } from 'react';
 
 const Header = ({
   myId,
-  userId,
-  category,
   title,
   rating,
-  reviewCount,
+  userId,
   address,
+  category,
+  activityId,
+  reviewCount,
   handleDeleteConfirmation,
 }: HeaderProps) => {
   const [isOpenDropdown, setIsOpenDropdown] = useState(false);
@@ -24,7 +25,7 @@ const Header = ({
 
   const handleOptionClick = async (option: string) => {
     if (option === '수정하기') {
-      router.push(`/my-page/activity-settings`);
+      router.push(`my-page/regist-activity/${activityId}`);
     }
     if (option === '삭제하기') {
       handleDeleteConfirmation();
