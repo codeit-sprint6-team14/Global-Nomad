@@ -27,3 +27,16 @@ export type ReservationDashboardResponse = {
     pending: number;
   };
 }[];
+
+export type ReservationSchedule = {
+  scheduleId: number;
+  startTime: string;
+  endTime: string;
+  count: {
+    declined: number;
+    confirmed: number;
+    pending: number;
+  };
+};
+
+export type ReservationScheduleArray = ReservationSchedule[];

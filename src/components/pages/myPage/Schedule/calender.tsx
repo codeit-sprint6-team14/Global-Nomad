@@ -1,4 +1,5 @@
-import { ReservationDashboardResponse } from '@/apis/myPage/schedule.types';
+import { getReservationSchedule } from '@/apis/myPage/schedule';
+import { ReservationDashboardResponse, ReservationSchedule } from '@/apis/myPage/schedule.types';
 import ReservationInfoModal from '@/components/common/ReservationInfoModal';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
@@ -10,13 +11,15 @@ import { DailyReservation } from './reservation.types';
 const dayArr = ['SUN', 'MON', 'TUE', 'WED', 'THUR', 'FRI', 'SAT'];
 
 type CalendarProps = {
+  activityId?: string;
   reservations: ReservationDashboardResponse | null;
 };
 
-const Calendar: React.FC<CalendarProps> = ({ reservations }) => {
+const Calendar: React.FC<CalendarProps> = ({ activityId, reservations }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<DailyReservation | null>(null);
+  const [scheduleData, setScheduleData] = useState<ReservationSchedule[]>([]);
 
   const currentYear = currentDate.getFullYear();
   const currentMonth = currentDate.getMonth();
@@ -52,14 +55,27 @@ const Calendar: React.FC<CalendarProps> = ({ reservations }) => {
     setCurrentDate(new Date(currentYear, currentMonth + 1, 1));
   };
 
-  const handleDateClick = (day: number) => {
+  const handleDateClick = async (day: number) => {
+    if (!activityId) {
+      console.error('Activity ID is undefined');
+      return;
+    }
+
     const clickedDate = new Date(currentYear, currentMonth, day);
     const formattedDate = format(clickedDate, 'yyyy-MM-dd');
     const reservation = reservations?.find((res) => res.date === formattedDate);
 
     if (reservation) {
       setSelectedDate(reservation);
-      setModalOpen(true); // 모달 열기
+      setModalOpen(true);
+
+      try {
+        const data = await getReservationSchedule(activityId, formattedDate); // API 호출
+        console.log('Fetched schedule data:', data); // 응답 데이터 로그
+        setScheduleData(data); // 받아온 데이터 설정
+      } catch (error) {
+        console.error('Failed to fetch schedule data:', error);
+      }
     }
   };
 
@@ -126,25 +142,40 @@ const Calendar: React.FC<CalendarProps> = ({ reservations }) => {
           </tbody>
         </table>
       </div>
-      {isModalOpen && selectedDate && (
+      {isModalOpen && selectedDate && scheduleData.length > 0 && (
         <div className="fixed inset-0 z-20 md:absolute md:z-0 md:mt-50 lg:ml-auto lg:mr-0 lg:w-429">
           <ReservationInfoModal
             tabData={[
-              { type: '신청', count: selectedDate.reservations.pending },
-              { type: '승인', count: selectedDate.reservations.confirmed },
-              { type: '거절', count: selectedDate.reservations.completed },
+              {
+                type: '신청',
+                count: scheduleData.reduce((acc, schedule) => acc + schedule.count.pending, 0),
+              },
+              {
+                type: '승인',
+                count: scheduleData.reduce((acc, schedule) => acc + schedule.count.confirmed, 0),
+              },
+              {
+                type: '거절',
+                count: scheduleData.reduce((acc, schedule) => acc + schedule.count.declined, 0),
+              },
             ]}
-            dropdownOptions={[
-              { value: 'option1', label: '옵션 1' },
-              { value: 'option2', label: '옵션 2' },
-            ]}
+            dropdownOptions={scheduleData.map((schedule) => ({
+              value: schedule.scheduleId.toString(),
+              label: `${schedule.startTime} - ${schedule.endTime}`,
+            }))}
             reservationDate={selectedDate.date}
             reservations={{
-              신청: Array(selectedDate.reservations.pending).fill({ name: '신청자', count: 1 }),
-              승인: Array(selectedDate.reservations.confirmed).fill({ name: '승인자', count: 1 }),
-              거절: Array(selectedDate.reservations.completed).fill({ name: '거절자', count: 1 }),
+              신청: scheduleData.flatMap((schedule) =>
+                Array(schedule.count.pending).fill({ name: '신청자', count: 1 }),
+              ),
+              승인: scheduleData.flatMap((schedule) =>
+                Array(schedule.count.confirmed).fill({ name: '승인자', count: 1 }),
+              ),
+              거절: scheduleData.flatMap((schedule) =>
+                Array(schedule.count.declined).fill({ name: '거절자', count: 1 }),
+              ),
             }}
-            onClose={handleCloseModal} // 모달 닫기 핸들러
+            onClose={handleCloseModal}
           />
         </div>
       )}
