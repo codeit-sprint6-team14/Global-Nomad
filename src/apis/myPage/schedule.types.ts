@@ -40,3 +40,27 @@ export type ReservationSchedule = {
 };
 
 export type ReservationScheduleArray = ReservationSchedule[];
+
+export type Reservation = {
+  id: number;
+  nickname: string;
+  userId: number;
+  teamId: string;
+  activityId: number;
+  scheduleId: number;
+  status: string;
+  reviewSubmitted: boolean;
+  totalPrice: number;
+  headCount: number;
+  date: string;
+  startTime: string;
+  endTime: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type ReservationsResponse = {
+  cursorId: number;
+  totalCount: number;
+  reservations: Reservation[];
+};

@@ -1,6 +1,11 @@
 import { axiosRequester } from '@/libs/axios';
 
-import { ActivitiesResponse, ReservationDashboardResponse, ReservationScheduleArray } from './schedule.types';
+import {
+  ActivitiesResponse,
+  ReservationDashboardResponse,
+  ReservationScheduleArray,
+  ReservationsResponse,
+} from './schedule.types';
 
 export const getMyActivities = async (): Promise<ActivitiesResponse> => {
   try {
@@ -19,7 +24,7 @@ export const getMyActivities = async (): Promise<ActivitiesResponse> => {
 };
 
 export const getReservationDashboard = async (
-  activityId: string,
+  activityId: number,
   year: number,
   month: number,
 ): Promise<ReservationDashboardResponse> => {
@@ -43,7 +48,7 @@ export const getReservationDashboard = async (
   }
 };
 
-export const getReservationSchedule = async (activityId: string, date: string): Promise<ReservationScheduleArray> => {
+export const getReservationSchedule = async (activityId: number, date: string): Promise<ReservationScheduleArray> => {
   try {
     const response = await axiosRequester<ReservationScheduleArray>({
       options: {
@@ -58,6 +63,34 @@ export const getReservationSchedule = async (activityId: string, date: string): 
     return response.data;
   } catch (error) {
     console.error('Failed to fetch reservation schedule:', error);
+    throw error;
+  }
+};
+
+export const getReservations = async (
+  activityId: number,
+  scheduleId: number,
+  status: 'declined' | 'pending' | 'confirmed',
+  cursorId?: number,
+  size?: number,
+): Promise<ReservationsResponse> => {
+  try {
+    const response = await axiosRequester<ReservationsResponse>({
+      options: {
+        method: 'GET',
+        url: `/my-activities/${activityId}/reservations`,
+        params: {
+          scheduleId,
+          status,
+          cursorId,
+          size,
+        },
+      },
+      includeAuth: true,
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Failed to fetch reservations:', error);
     throw error;
   }
 };

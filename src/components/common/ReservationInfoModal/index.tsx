@@ -1,9 +1,12 @@
-import { useMemo, useState } from 'react';
+import { getReservations } from '@/apis/myPage/schedule';
+import { ReservationScheduleArray } from '@/apis/myPage/schedule.types';
+import { Option } from '@/types/dropDownInputTypes';
+import { useEffect, useMemo, useState } from 'react';
 
 import Close from '../Icons/close';
 import Input from '../Input';
 import ReservationCard from './components/reservationCard';
-import TabButtons, { TabItem, TabType } from './components/tabButton';
+import TabButtons, { TabType } from './components/tabButton';
 
 type ReservationData = {
   name: string;
@@ -11,28 +14,69 @@ type ReservationData = {
 };
 
 type ReservationInfoModalProps = {
-  dropdownOptions: { value: string; label: string }[];
-  tabData: TabItem[];
-  reservationDate: string;
-  reservations: {
+  date: string;
+  activityId: number;
+  schedules: ReservationScheduleArray;
+  onClose: () => void;
+};
+const ReservationInfoModal = ({ date, activityId, schedules, onClose }: ReservationInfoModalProps) => {
+  const [selectedTab, setSelectedTab] = useState<TabType>('신청');
+  const [selectedScheduleId, setSelectedScheduleId] = useState<number | null>(null);
+  const [reservations, setReservations] = useState<{
     신청: ReservationData[];
     승인: ReservationData[];
     거절: ReservationData[];
-  };
-  onClose: () => void;
-};
+  }>({
+    신청: [],
+    승인: [],
+    거절: [],
+  });
 
-const ReservationInfoModal = ({
-  tabData,
-  dropdownOptions,
-  reservationDate,
-  reservations = { 신청: [], 승인: [], 거절: [] },
-  onClose,
-}: ReservationInfoModalProps) => {
-  const [selectedTab, setSelectedTab] = useState<TabType>('신청');
+  useEffect(() => {
+    if (selectedScheduleId) {
+      const fetchReservations = async () => {
+        try {
+          const 신청 = await getReservations(activityId, selectedScheduleId, 'pending');
+          const 승인 = await getReservations(activityId, selectedScheduleId, 'confirmed');
+          const 거절 = await getReservations(activityId, selectedScheduleId, 'declined');
+
+          setReservations({
+            신청: 신청.reservations.map((res) => ({ name: res.nickname, count: res.headCount })),
+            승인: 승인.reservations.map((res) => ({ name: res.nickname, count: res.headCount })),
+            거절: 거절.reservations.map((res) => ({ name: res.nickname, count: res.headCount })),
+          });
+        } catch (error) {
+          console.error('Failed to fetch reservations:', error);
+        }
+      };
+      fetchReservations();
+    }
+  }, [selectedScheduleId, activityId]);
+
+  const dropdownOptions = useMemo<Option[]>(
+    () =>
+      schedules.map((schedule) => ({
+        value: schedule.scheduleId.toString(),
+        label: `${schedule.startTime} - ${schedule.endTime}`,
+      })),
+    [schedules],
+  );
+
+  const tabData = useMemo(
+    () => [
+      { type: '신청' as const, count: schedules.reduce((sum, schedule) => sum + schedule.count.pending, 0) },
+      { type: '승인' as const, count: schedules.reduce((sum, schedule) => sum + schedule.count.confirmed, 0) },
+      { type: '거절' as const, count: schedules.reduce((sum, schedule) => sum + schedule.count.declined, 0) },
+    ],
+    [schedules],
+  );
 
   const handleTabClick = (tab: TabType) => {
     setSelectedTab(tab);
+  };
+
+  const handleDropdownSelect = (option: Option) => {
+    setSelectedScheduleId(parseInt(option.value));
   };
 
   const currentReservations = useMemo(() => reservations[selectedTab], [reservations, selectedTab]);
@@ -55,8 +99,13 @@ const ReservationInfoModal = ({
           <div className="flex flex-col gap-16">
             <h2 className="text-xl-semibold">예약 날짜</h2>
             <div className="flex flex-col gap-2">
-              <span className="text-xl-regular text-black">{reservationDate}</span>
-              <Input.Dropdown options={dropdownOptions} defaultOption="시간을 선택하세요" />
+              <span className="text-xl-regular text-black">{date}</span>
+              <Input.Dropdown
+                options={dropdownOptions}
+                defaultOption="시간을 선택하세요"
+                onSelect={handleDropdownSelect}
+                className="h-56"
+              />
             </div>
           </div>
           <div className="flex flex-col gap-16">
