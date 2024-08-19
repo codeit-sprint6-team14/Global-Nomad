@@ -32,7 +32,7 @@ const MainPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [activeCategory, setActiveCategory] = useState(categories[0]);
+  const [activeCategory, setActiveCategory] = useState('');
   const [sortBy, setSortBy] = useState<string | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
@@ -111,7 +111,9 @@ const MainPage = () => {
       setPage(1);
       setIsSearching(false);
       setSearchTerm('');
-      const filteredActivities = allActivities.filter((activity) => activity.category === category);
+      const filteredActivities = category
+        ? allActivities.filter((activity) => activity.category === category)
+        : allActivities;
       setDisplayedActivities(filteredActivities);
       setTotalPages(Math.ceil(filteredActivities.length / ITEMS_PER_PAGE));
     },
@@ -293,7 +295,7 @@ const MainPage = () => {
               <span className="text-3xl-bold text-black-100">{searchTerm}</span>(으)로 검색한 결과입니다.
             </h2>
           ) : (
-            <h2 className="leading-43 text-36 font-bold">🥾모든 체험</h2>
+            <h2 className="leading-43 text-36 font-bold">{activeCategory || '🥾모든 체험'}</h2>
           )}
 
           {isSearching && <span className="mb-24 text-lg-regular">총 {displayedActivities.length}개의 결과</span>}
