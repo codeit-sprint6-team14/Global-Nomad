@@ -4,6 +4,7 @@ import FloatingBox from '@/components/common/FloatingBox';
 import Modal from '@/components/common/Modal';
 import ModalOverlay from '@/components/common/Modal/Overlay';
 import { useReservationSubmit } from '@/components/pages/ActivityDetails/useReservationSubmit';
+import { useClickOutside } from '@/hooks/useClickOutside';
 import useViewportSize from '@/hooks/useViewportSize';
 import { activityIdAtom, reservationPriceAtom } from '@/store/activityDetailsAtom';
 import { useSetAtom } from 'jotai';
@@ -36,6 +37,8 @@ const ActivityInformation = ({ activityId = '2213' }: { activityId?: string }) =
     handleDeleteActivity,
     isDeleteConfirmation,
   } = useReservationSubmit();
+
+  const modalRef = useClickOutside(handleCloseModal);
 
   const { userInformationData, isLoading: isLoadingUserData } = useMyInformation();
   const { activityData, isLoading: isLoadingActivityData, error } = useActivityData(activityId);
@@ -91,13 +94,15 @@ const ActivityInformation = ({ activityId = '2213' }: { activityId?: string }) =
         )}
         {isModalOpen && (
           <ModalOverlay>
-            <Modal.RegisterConfirm
-              onClose={isDeleteConfirmation ? handleDeleteActivity : handleCloseModal}
-              onCancel={handleCloseModal}
-              showCancelButton={isDeleteConfirmation}
-            >
-              {modalMessage}
-            </Modal.RegisterConfirm>
+            <div ref={modalRef}>
+              <Modal.RegisterConfirm
+                onClose={isDeleteConfirmation ? handleDeleteActivity : handleCloseModal}
+                onCancel={handleCloseModal}
+                showCancelButton={isDeleteConfirmation}
+              >
+                {modalMessage}
+              </Modal.RegisterConfirm>
+            </div>
           </ModalOverlay>
         )}
       </div>
