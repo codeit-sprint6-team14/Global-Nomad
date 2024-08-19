@@ -22,7 +22,8 @@ const dropdownOptions = [
 ];
 
 const visibleCards = 3;
-const ITEMS_PER_PAGE = 16;
+const INITIAL_ITEMS_PER_PAGE = 8;
+const SEARCH_ITEMS_PER_PAGE = 16;
 
 const MainPage = () => {
   const [allActivities, setAllActivities] = useState<Activity[]>([]);
@@ -39,6 +40,7 @@ const MainPage = () => {
   const [startIndex, setStartIndex] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
   const [isSearching, setIsSearching] = useState(false);
+  const [itemsPerPage, setItemsPerPage] = useState(INITIAL_ITEMS_PER_PAGE);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   const sortActivities = useCallback((activitiesToSort: Activity[], sortType: string | null) => {
@@ -60,7 +62,8 @@ const MainPage = () => {
       setAllActivities(data.activities);
       const initialDisplayed = data.activities.filter((activity) => activity.category === categories[0]);
       setDisplayedActivities(initialDisplayed);
-      setTotalPages(Math.ceil(initialDisplayed.length / ITEMS_PER_PAGE));
+      setTotalPages(Math.ceil(initialDisplayed.length / INITIAL_ITEMS_PER_PAGE));
+      setItemsPerPage(INITIAL_ITEMS_PER_PAGE);
     } catch (error) {
       console.error('Errorfetching all activities:', error);
       setError('활동 정보를 불러오는 데 실패했습니다.');
@@ -115,7 +118,8 @@ const MainPage = () => {
         ? allActivities.filter((activity) => activity.category === category)
         : allActivities;
       setDisplayedActivities(filteredActivities);
-      setTotalPages(Math.ceil(filteredActivities.length / ITEMS_PER_PAGE));
+      setTotalPages(Math.ceil(filteredActivities.length / INITIAL_ITEMS_PER_PAGE));
+      setItemsPerPage(INITIAL_ITEMS_PER_PAGE);
     },
     [allActivities],
   );
@@ -144,12 +148,14 @@ const MainPage = () => {
         setIsSearching(true);
         const results = allActivities.filter((activity) => activity.title.toLowerCase().includes(term.toLowerCase()));
         setDisplayedActivities(results);
-        setTotalPages(Math.ceil(results.length / ITEMS_PER_PAGE));
+        setTotalPages(Math.ceil(results.length / SEARCH_ITEMS_PER_PAGE));
+        setItemsPerPage(SEARCH_ITEMS_PER_PAGE);
       } else {
         setIsSearching(false);
         const categoryActivities = allActivities.filter((activity) => activity.category === activeCategory);
         setDisplayedActivities(categoryActivities);
-        setTotalPages(Math.ceil(categoryActivities.length / ITEMS_PER_PAGE));
+        setTotalPages(Math.ceil(categoryActivities.length / INITIAL_ITEMS_PER_PAGE));
+        setItemsPerPage(INITIAL_ITEMS_PER_PAGE);
       }
     },
     [allActivities, activeCategory],
@@ -159,7 +165,7 @@ const MainPage = () => {
     setPage(newPage);
   }, []);
 
-  const paginatedResults = displayedActivities.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
+  const paginatedResults = displayedActivities.slice((page - 1) * itemsPerPage, page * itemsPerPage);
 
   const getCurrentMonth = () => {
     const months = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
