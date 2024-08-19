@@ -23,6 +23,8 @@ export default function App({ Component, pageProps }: AppProps) {
     router.pathname,
   );
 
+  const isActivitieDetailsPage = router.pathname.startsWith('/activities');
+
   return (
     <Provider>
       <main className={`${pretendard.variable} ${showNavBarAndFooter ? 'pt-70' : ''}`}>
@@ -30,7 +32,7 @@ export default function App({ Component, pageProps }: AppProps) {
           {showNavBarAndFooter && <NavBar />}
           <div id="notification-root" />
           <Component {...pageProps} />
-          {showNavBarAndFooter && <Footer />}
+          {showNavBarAndFooter && <Footer classNames={isActivitieDetailsPage ? 'mb-82' : ''} />}
           <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
       </main>
