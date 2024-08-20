@@ -17,7 +17,7 @@ const DefaultInput = forwardRef<HTMLInputElement, InputProps>(
       <input
         ref={ref}
         className={`${styleClass} ${className}`}
-        value={value ?? ''}
+        value={value}
         type={type}
         placeholder={placeholder}
         {...register}
