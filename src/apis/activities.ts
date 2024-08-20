@@ -1,5 +1,6 @@
 import { ActivitiesResponse, GetActivitiesParams } from '@/components/pages/main/mainPage.type';
 import { Activity } from '@/types/activity';
+import { UseQueryResult, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
 const BASE_URL = 'https://sp-globalnomad-api.vercel.app/6-14';
@@ -13,7 +14,7 @@ export const getActivities = async (
   size: number = 20,
   category: string | null = null,
   sortBy: string | null = null,
-) => {
+): Promise<ActivitiesResponse> => {
   const params: GetActivitiesParams = {
     method: 'offset',
     page,
@@ -35,8 +36,27 @@ export const getActivities = async (
   return data;
 };
 
-export const getActivity = async ({ activityId }: { activityId: string }) => {
-  const { data } = await axiosRequester.get<Activity>(`/activities/${activityId}`);
+export const useActivities = (
+  page: number,
+  size: number,
+  category: string | null,
+  sortBy: string | null,
+): UseQueryResult<ActivitiesResponse, Error> => {
+  return useQuery({
+    queryKey: ['activities', page, size, category, sortBy],
+    queryFn: () => getActivities(page, size, category, sortBy),
+    placeholderData: (previousData) => previousData,
+  });
+};
 
+export const getActivity = async ({ activityId }: { activityId: string }): Promise<Activity> => {
+  const { data } = await axiosRequester.get<Activity>(`/activities/${activityId}`);
   return data;
+};
+
+export const useActivity = (activityId: string): UseQueryResult<Activity, Error> => {
+  return useQuery({
+    queryKey: ['activity', activityId],
+    queryFn: () => getActivity({ activityId }),
+  });
 };

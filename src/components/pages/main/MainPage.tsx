@@ -1,8 +1,9 @@
-import { getActivities } from '@/apis/activities';
+import { getActivities, useActivities } from '@/apis/activities';
 import DropDownList from '@/components/common/Dropdown/dropDownList';
 import DropDownOption from '@/components/common/Dropdown/dropDownOption';
 import Pagination from '@/components/common/Pagination';
 import Search from '@/components/common/Search';
+import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -13,7 +14,6 @@ import NextButton from '../../../../public/assets/icons/right-arrow.svg';
 import ActivityCards from './ActivityCards';
 import PopularActivityCard from './PopularActivityCard';
 import { RadioTab } from './RadioTab';
-import { ActivitiesResponse, Activity } from './mainPage.type';
 
 const categories = ['문화 · 예술', '식음료', '스포츠', '투어', '관광', '웰빙'];
 const dropdownOptions = [
@@ -26,13 +26,7 @@ const INITIAL_ITEMS_PER_PAGE = 8;
 const SEARCH_ITEMS_PER_PAGE = 16;
 
 const MainPage = () => {
-  const [allActivities, setAllActivities] = useState<Activity[]>([]);
-  const [displayedActivities, setDisplayedActivities] = useState<Activity[]>([]);
-  const [popularActivities, setPopularActivities] = useState<Activity[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const [activeCategory, setActiveCategory] = useState('');
   const [sortBy, setSortBy] = useState<string | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -43,49 +37,23 @@ const MainPage = () => {
   const [itemsPerPage, setItemsPerPage] = useState(INITIAL_ITEMS_PER_PAGE);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
-  const sortActivities = useCallback((activitiesToSort: Activity[], sortType: string | null) => {
-    if (!sortType) return activitiesToSort;
-    return [...activitiesToSort].sort((a, b) => {
-      if (sortType === 'priceLow') {
-        return a.price - b.price;
-      } else if (sortType === 'priceHigh') {
-        return b.price - a.price;
-      }
-      return 0;
-    });
-  }, []);
+  const {
+    data: activitiesData,
+    isLoading: isActivitiesLoading,
+    error: activitiesError,
+  } = useActivities(page, itemsPerPage, activeCategory, sortBy);
+  const { data: popularActivitiesData, isLoading: isPopularActivitiesLoading } = useQuery({
+    queryKey: ['popularActivities'],
+    queryFn: async () => {
+      const data = await getActivities(1, 100, null, null);
+      return data.activities.filter((activity) => activity.rating >= 2.0);
+    },
+    placeholderData: [],
+  });
 
-  const fetchAllActivities = useCallback(async () => {
-    setLoading(true);
-    try {
-      const data: ActivitiesResponse = await getActivities(1, 1000, null);
-      setAllActivities(data.activities);
-      const initialDisplayed = data.activities.filter((activity) => activity.category === categories[0]);
-      setDisplayedActivities(initialDisplayed);
-      setTotalPages(Math.ceil(initialDisplayed.length / INITIAL_ITEMS_PER_PAGE));
-      setItemsPerPage(INITIAL_ITEMS_PER_PAGE);
-    } catch (error) {
-      console.error('Errorfetching all activities:', error);
-      setError('활동 정보를 불러오는 데 실패했습니다.');
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  const fetchPopularActivities = useCallback(async () => {
-    try {
-      const data: ActivitiesResponse = await getActivities(1, 100, null);
-      const popular = data.activities.filter((activity) => activity.rating >= 2.0);
-      setPopularActivities(popular);
-    } catch (error) {
-      console.error('Error fetching popular activities:', error);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchAllActivities();
-    fetchPopularActivities();
-  }, [fetchAllActivities, fetchPopularActivities]);
+  const displayedActivities = activitiesData?.activities || [];
+  const popularActivities = popularActivitiesData || [];
+  const totalPages = Math.ceil((activitiesData?.activities?.length ?? 0) / itemsPerPage);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent | Event) => {
@@ -108,29 +76,17 @@ const MainPage = () => {
     return () => clearInterval(timer);
   }, [popularActivities]);
 
-  const handleCategoryChange = useCallback(
-    (category: string) => {
-      setActiveCategory(category);
-      setPage(1);
-      setIsSearching(false);
-      setSearchTerm('');
-      const filteredActivities = category
-        ? allActivities.filter((activity) => activity.category === category)
-        : allActivities;
-      setDisplayedActivities(filteredActivities);
-      setTotalPages(Math.ceil(filteredActivities.length / INITIAL_ITEMS_PER_PAGE));
-      setItemsPerPage(INITIAL_ITEMS_PER_PAGE);
-    },
-    [allActivities],
-  );
+  const handleCategoryChange = useCallback((category: string) => {
+    setActiveCategory(category);
+    setPage(1);
+    setIsSearching(false);
+    setSearchTerm('');
+    setItemsPerPage(INITIAL_ITEMS_PER_PAGE);
+  }, []);
 
-  const handleSortChange = useCallback(
-    (option: string) => {
-      setSortBy(option);
-      setDisplayedActivities((prevActivities) => sortActivities(prevActivities, option));
-    },
-    [sortActivities],
-  );
+  const handleSortChange = useCallback((option: string) => {
+    setSortBy(option);
+  }, []);
 
   const handlePrevClick = () => {
     setStartIndex((prevIndex) => Math.max(0, prevIndex - 1));
@@ -140,41 +96,29 @@ const MainPage = () => {
     setStartIndex((prevIndex) => Math.min(popularActivities.length - visibleCards, prevIndex + 1));
   };
 
-  const handleSearch = useCallback(
-    (term: string) => {
-      setSearchTerm(term);
-      setPage(1);
-      if (term) {
-        setIsSearching(true);
-        const results = allActivities.filter((activity) => activity.title.toLowerCase().includes(term.toLowerCase()));
-        setDisplayedActivities(results);
-        setTotalPages(Math.ceil(results.length / SEARCH_ITEMS_PER_PAGE));
-        setItemsPerPage(SEARCH_ITEMS_PER_PAGE);
-      } else {
-        setIsSearching(false);
-        const categoryActivities = allActivities.filter((activity) => activity.category === activeCategory);
-        setDisplayedActivities(categoryActivities);
-        setTotalPages(Math.ceil(categoryActivities.length / INITIAL_ITEMS_PER_PAGE));
-        setItemsPerPage(INITIAL_ITEMS_PER_PAGE);
-      }
-    },
-    [allActivities, activeCategory],
-  );
+  const handleSearch = useCallback((term: string) => {
+    setSearchTerm(term);
+    setPage(1);
+    if (term) {
+      setIsSearching(true);
+      setItemsPerPage(SEARCH_ITEMS_PER_PAGE);
+    } else {
+      setIsSearching(false);
+      setItemsPerPage(INITIAL_ITEMS_PER_PAGE);
+    }
+  }, []);
 
   const handlePageChange = useCallback((newPage: number) => {
     setPage(newPage);
   }, []);
-
-  const paginatedResults = displayedActivities.slice((page - 1) * itemsPerPage, page * itemsPerPage);
 
   const getCurrentMonth = () => {
     const months = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
     return months[new Date().getMonth()];
   };
 
-  if (loading) return <div>loading...</div>;
-  if (error) return <div>{error}</div>;
-
+  if (isActivitiesLoading || isPopularActivitiesLoading) return <div>loading...</div>;
+  if (activitiesError) return <div>{activitiesError.message}</div>;
   return (
     <main className="flex flex-col items-center bg-gray-100">
       <div className="relative w-full">
@@ -309,7 +253,7 @@ const MainPage = () => {
           <div className="min-h-600">
             {displayedActivities.length > 0 ? (
               <div className="flex w-1204 flex-wrap gap-24">
-                {paginatedResults.map((activity) => (
+                {displayedActivities.map((activity) => (
                   <ActivityCards key={activity.id} activity={activity} />
                 ))}
               </div>
@@ -323,7 +267,7 @@ const MainPage = () => {
               currentPage={page}
               totalPages={totalPages}
               onPageChange={handlePageChange}
-              isPlaceholderData={loading}
+              isPlaceholderData={isActivitiesLoading}
             />
           )}
         </div>
