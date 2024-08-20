@@ -4,19 +4,23 @@ import FloatingBox from '@/components/common/FloatingBox';
 import Modal from '@/components/common/Modal';
 import ModalOverlay from '@/components/common/Modal/Overlay';
 import { useReservationSubmit } from '@/components/pages/ActivityDetails/useReservationSubmit';
+import { useClickOutside } from '@/hooks/useClickOutside';
 import useViewportSize from '@/hooks/useViewportSize';
 import { activityIdAtom, reservationPriceAtom } from '@/store/activityDetailsAtom';
 import { useSetAtom } from 'jotai';
+import dynamic from 'next/dynamic';
 
 import BannerImage from './bannerImage';
 import ActivityDescription from './description';
 import Header from './header';
-import KakaoMap from './kakaoMap';
 import ReviewList from './reviewList';
 
-// 리뷰 페이지네이션 테스트 activityId => 2192
-// 캘린더 예약 가능 스케줄 테스트 activityId => 2213
-const ActivityInformation = ({ activityId = '2213' }: { activityId?: string }) => {
+const DynamicKakaoMap = dynamic(() => import('./kakaoMap'), {
+  ssr: false,
+  loading: () => <p>지도 로딩중...</p>,
+});
+
+const ActivityInformation = ({ activityId, kakaoKey }: { activityId: string; kakaoKey: string }) => {
   const viewportSize = useViewportSize();
 
   const isMobile = viewportSize === 'mobile';
@@ -27,7 +31,18 @@ const ActivityInformation = ({ activityId = '2213' }: { activityId?: string }) =
   const setActivityId = useSetAtom(activityIdAtom);
   setActivityId(activityId);
 
-  const { handleReservationSubmit, handleCloseModal, isModalOpen, modalMessage } = useReservationSubmit();
+  const {
+    handleReservationSubmit,
+    handleCloseModal,
+    isModalOpen,
+    modalMessage,
+    handleDeleteConfirmation,
+    handleDeleteActivity,
+    isDeleteConfirmation,
+  } = useReservationSubmit();
+
+  const modalRef = useClickOutside(handleCloseModal);
+
   const { userInformationData, isLoading: isLoadingUserData } = useMyInformation();
   const { activityData, isLoading: isLoadingActivityData, error } = useActivityData(activityId);
 
@@ -41,6 +56,7 @@ const ActivityInformation = ({ activityId = '2213' }: { activityId?: string }) =
   setPrice(price);
 
   const myId = userInformationData.id;
+  const isCreateByMe = myId === userId;
 
   return (
     <>
@@ -54,16 +70,17 @@ const ActivityInformation = ({ activityId = '2213' }: { activityId?: string }) =
           category={category}
           activityId={activityId}
           reviewCount={reviewCount}
+          handleDeleteConfirmation={handleDeleteConfirmation}
         />
 
         <BannerImage bannerImageUrl={bannerImageUrl} subImages={subImages} />
         <div className="mx-24 flex justify-between md:pb-40 lg:mx-auto lg:max-w-[1200px]">
-          <div className="flex flex-col md:mr-24 md:pt-0">
+          <div className="flex w-full flex-col md:mr-24 md:pt-0">
             <ActivityDescription description={description} />
-            <KakaoMap address={address} />
+            <DynamicKakaoMap address={address} kakaoKey={kakaoKey} />
           </div>
           {!isMobile &&
-            myId !== userId &&
+            !isCreateByMe &&
             (isTablet ? (
               <FloatingBox.Tablet handleReservationSubmit={handleReservationSubmit} />
             ) : (
@@ -74,14 +91,22 @@ const ActivityInformation = ({ activityId = '2213' }: { activityId?: string }) =
             ))}
         </div>
         <ReviewList activityId={activityId} />
-        {isMobile && myId !== userId && (
+        {isMobile && !isCreateByMe && (
           <div className="mt-89">
             <FloatingBox.Mobile handleReservationSubmit={handleReservationSubmit} />
           </div>
         )}
         {isModalOpen && (
           <ModalOverlay>
-            <Modal.RegisterConfirm onClose={handleCloseModal}>{modalMessage}</Modal.RegisterConfirm>
+            <div ref={modalRef}>
+              <Modal.RegisterConfirm
+                onClose={isDeleteConfirmation ? handleDeleteActivity : handleCloseModal}
+                onCancel={handleCloseModal}
+                showCancelButton={isDeleteConfirmation}
+              >
+                {modalMessage}
+              </Modal.RegisterConfirm>
+            </div>
           </ModalOverlay>
         )}
       </div>
