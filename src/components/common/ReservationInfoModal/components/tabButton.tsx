@@ -1,3 +1,6 @@
+import { reservationsAtom } from '@/store/reservationsAtom';
+import { useAtomValue } from 'jotai';
+
 export type TabType = '신청' | '승인' | '거절';
 
 export type TabItem = {
@@ -34,7 +37,15 @@ const TabButton = ({
 
 const defaultTabs: TabType[] = ['신청', '승인', '거절'];
 
-const TabButtons = ({ tabData, selectedTab, onTabClick }: TabButtonsProps) => {
+const TabButtons = ({ selectedTab, onTabClick }: Omit<TabButtonsProps, 'tabData'>) => {
+  const reservations = useAtomValue(reservationsAtom);
+
+  const tabData: TabItem[] = [
+    { type: '신청', count: reservations.신청.length },
+    { type: '승인', count: reservations.승인.length },
+    { type: '거절', count: reservations.거절.length },
+  ];
+
   const tabMap = new Map(tabData.map((tab) => [tab.type, tab]));
 
   return (
