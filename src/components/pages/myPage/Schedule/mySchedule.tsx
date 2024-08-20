@@ -3,13 +3,13 @@ import Paper from '@/../public/assets/icons/paper.svg';
 import { getMyActivities, getReservationDashboard } from '@/apis/myPage/schedule';
 import { ReservationDashboardResponse } from '@/apis/myPage/schedule.types';
 import Input from '@/components/common/Input/index';
+import { reservationsUpdatedAtom } from '@/store/reservationsAtom';
 import { Option } from '@/types/dropDownInputTypes';
 import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 import Calendar from './calender';
-import { reservationsUpdatedAtom } from './reservationsAtom';
 
 const MySchedule = () => {
   const router = useRouter();
@@ -17,6 +17,8 @@ const MySchedule = () => {
   const [selectedOption, setSelectedOption] = useState<Option | null>(null);
   const [reservations, setReservations] = useState<ReservationDashboardResponse | null>(null);
   const reservationsUpdated = useAtom(reservationsUpdatedAtom)[0];
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
 
   const handleGoMyPage = () => {
     router.push('/my-page');
@@ -28,14 +30,13 @@ const MySchedule = () => {
         const data = await getMyActivities();
         const activitiesData = data.activities.map((activity) => ({
           label: activity.title,
-          value: String(activity.id), // id를 문자열로 변환
+          value: String(activity.id),
         }));
 
-        // 최신 액티비티를 선택값으로 설정
         const sortedActivities = activitiesData.sort((a, b) => parseInt(b.value, 10) - parseInt(a.value, 10));
         setActivities(sortedActivities);
         if (sortedActivities.length > 0) {
-          setSelectedOption(sortedActivities[0]); // 가장 최근 액티비티를 기본 선택값으로 설정
+          setSelectedOption(sortedActivities[0]);
         }
       } catch (error) {
         console.error('Failed to fetch activities:', error);
@@ -49,9 +50,7 @@ const MySchedule = () => {
     if (selectedOption) {
       const fetchReservations = async () => {
         try {
-          const year = new Date().getFullYear();
-          const month = new Date().getMonth() + 1;
-          const data = await getReservationDashboard(parseInt(selectedOption?.value ?? '0', 10), year, month);
+          const data = await getReservationDashboard(parseInt(selectedOption.value, 10), currentYear, currentMonth);
           setReservations(data);
         } catch (error) {
           console.error('Failed to fetch reservations:', error);
@@ -60,14 +59,18 @@ const MySchedule = () => {
 
       fetchReservations();
     }
-  }, [selectedOption, reservationsUpdated]);
+  }, [selectedOption, reservationsUpdated, currentYear, currentMonth]);
 
   const handleOptionSelect = (option: Option) => {
     console.log(`선택한 옵션: ${option.label}`);
     setSelectedOption(option);
   };
 
-  // 옵션이 비어있는지 체크
+  const handleMonthChange = (year: number, month: number) => {
+    setCurrentYear(year);
+    setCurrentMonth(month);
+  };
+
   const hasExperiences = activities.length > 0;
 
   return (
@@ -97,7 +100,11 @@ const MySchedule = () => {
           </div>
         )}
         {hasExperiences ? (
-          <Calendar activityId={parseInt(selectedOption?.value ?? '0', 10)} reservations={reservations} />
+          <Calendar
+            activityId={parseInt(selectedOption?.value ?? '0', 10)}
+            reservations={reservations}
+            onMonthChange={handleMonthChange}
+          />
         ) : (
           <div className="mb-200 text-center text-2xl-medium text-gray-700">아직 등록한 체험이 없어요</div>
         )}

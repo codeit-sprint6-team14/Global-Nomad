@@ -1,4 +1,4 @@
-import { reservationsAtom } from '@/components/pages/myPage/Schedule/reservationsAtom';
+import { reservationsAtom } from '@/store/reservationsAtom';
 import { useAtomValue } from 'jotai';
 
 export type TabType = '신청' | '승인' | '거절';

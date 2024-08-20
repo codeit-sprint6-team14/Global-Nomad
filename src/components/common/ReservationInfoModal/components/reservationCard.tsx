@@ -1,6 +1,6 @@
 import { updateReservations } from '@/apis/myPage/schedule';
 import Button from '@/components/common/Button';
-import { reservationsUpdatedAtom } from '@/components/pages/myPage/Schedule/reservationsAtom';
+import { reservationsUpdatedAtom } from '@/store/reservationsAtom';
 import { useAtom } from 'jotai';
 import { useState } from 'react';
 

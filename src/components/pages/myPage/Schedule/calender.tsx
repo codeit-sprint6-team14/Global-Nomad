@@ -3,7 +3,7 @@ import { ReservationDashboardResponse, ReservationScheduleArray } from '@/apis/m
 import ReservationInfoModal from '@/components/common/ReservationInfoModal';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import DateCell from './dateCell';
 
@@ -12,9 +12,10 @@ const dayArr = ['SUN', 'MON', 'TUE', 'WED', 'THUR', 'FRI', 'SAT'];
 type CalendarProps = {
   activityId?: number;
   reservations: ReservationDashboardResponse | null;
+  onMonthChange: (year: number, month: number) => void;
 };
 
-const Calendar: React.FC<CalendarProps> = ({ activityId, reservations }) => {
+const Calendar: React.FC<CalendarProps> = ({ activityId, reservations, onMonthChange }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string | null>(null); // selectedDate는 이제 날짜 문자열만 사용
@@ -35,6 +36,10 @@ const Calendar: React.FC<CalendarProps> = ({ activityId, reservations }) => {
   const remainingDates = 6 - nextMonthStartDay;
   const nextMonthDates = Array.from({ length: remainingDates }, (_, i) => i + 1);
   const days = [...prevMonthDates, ...currentMonthDates, ...nextMonthDates];
+
+  useEffect(() => {
+    onMonthChange(currentYear, currentMonth + 1);
+  }, [currentYear, currentMonth, onMonthChange]);
 
   const handlePrevClick = () => {
     setCurrentDate(new Date(currentYear, currentMonth - 1, 1));

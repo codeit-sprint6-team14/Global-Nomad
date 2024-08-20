@@ -1,7 +1,7 @@
 import { getReservations } from '@/apis/myPage/schedule';
 import { ReservationScheduleArray } from '@/apis/myPage/schedule.types';
-import { reservationsAtom } from '@/components/pages/myPage/Schedule/reservationsAtom';
 import { useClickOutside } from '@/hooks/useClickOutside';
+import { reservationsAtom } from '@/store/reservationsAtom';
 import { Option } from '@/types/dropDownInputTypes';
 import { useAtom } from 'jotai';
 import { useEffect, useMemo, useState } from 'react';
