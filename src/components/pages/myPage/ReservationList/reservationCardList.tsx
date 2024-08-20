@@ -1,17 +1,11 @@
+import { MyReservation } from '@/apis/myPage/myReservations.types';
 import ReservationCard from '@/components/common/Cards/reservationCard';
-import reservationCardsData from '@/mockData/reservationCardsData';
-import { reservationCard } from '@/types/cardDataList';
-import { useState } from 'react';
 
-const ReservationCardList = () => {
-  const [cardListData] = useState(reservationCardsData);
-
-  if (!cardListData) return null;
-
+const ReservationCardList = ({ myReservationsData }: { myReservationsData: MyReservation[] }) => {
   return (
     <ul className="flex flex-col gap-8">
-      {cardListData.map((card: reservationCard) => (
-        <ReservationCard key={card.id} card={card} />
+      {myReservationsData.map((myReservationData) => (
+        <ReservationCard key={myReservationData.id} myReservationData={myReservationData} />
       ))}
     </ul>
   );
