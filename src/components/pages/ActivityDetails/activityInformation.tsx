@@ -40,13 +40,15 @@ const ActivityInformation = ({
   setActivityId(activityId);
 
   const {
-    handleReservationSubmit,
-    handleCloseModal,
     isModalOpen,
-    modalMessage,
-    handleDeleteConfirmation,
-    handleDeleteActivity,
     isDeleteConfirmation,
+    countdown,
+    showCountdown,
+    handleCloseModal,
+    handleReservationSubmit,
+    handleDeleteActivity,
+    handleDeleteConfirmation,
+    modalMessage,
   } = useReservationSubmit();
 
   const modalRef = useClickOutside(handleCloseModal);
@@ -109,6 +111,8 @@ const ActivityInformation = ({
               <Modal.RegisterConfirm
                 onClose={isDeleteConfirmation ? handleDeleteActivity : handleCloseModal}
                 onCancel={handleCloseModal}
+                countdown={countdown}
+                showCountdown={showCountdown}
                 showCancelButton={isDeleteConfirmation}
               >
                 {modalMessage}

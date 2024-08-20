@@ -5,14 +5,26 @@ type PopupProps = {
   onClose: () => void;
   onCancel?: () => void;
   showCancelButton?: boolean;
+  countdown?: number;
+  showCountdown?: boolean;
 };
 
-const RegisterConfirmPopup = ({ children, onClose, onCancel, showCancelButton }: PopupProps) => {
+const RegisterConfirmPopup = ({
+  children,
+  onClose,
+  onCancel,
+  showCancelButton,
+  countdown,
+  showCountdown,
+}: PopupProps) => {
   return (
     <div className="relative flex h-220 w-327 flex-col items-center rounded-8 border bg-white md:h-250 md:w-540">
       <span className="absolute top-[35%] text-lg-medium text-black-100 md:top-[40%] md:text-2lg-medium">
         {children}
       </span>
+      {showCountdown && (
+        <span className="absolute top-[60%] text-md-medium text-gray-500">페이지는 {countdown}초 뒤에 사라집니다.</span>
+      )}
       {showCancelButton && (
         <Button.Default
           variant="secondary"
