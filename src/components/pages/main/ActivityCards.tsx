@@ -6,8 +6,11 @@ import { ActivityCardProps } from './mainPage.type';
 
 const ActivityCards: React.FC<ActivityCardProps> = ({ activity }) => {
   return (
-    <Link href={`/activities/${activity.id}`} className="mb-48 flex h-414 w-283 flex-col gap-18">
-      <div className="relative h-283 w-283">
+    <Link
+      href={`/activities/${activity.id}`}
+      className="mb-48 flex h-293 w-168 flex-col gap-18 md:h-344 md:w-221 lg:h-414 lg:w-283"
+    >
+      <div className="relative h-168 w-168 md:h-221 md:w-221 lg:h-283 lg:w-283">
         <Image
           src={activity.bannerImageUrl}
           alt="ActivityThumnail"
@@ -23,12 +26,14 @@ const ActivityCards: React.FC<ActivityCardProps> = ({ activity }) => {
             <span className="text-lg-medium text-black">{activity.rating}</span>
             <span className="text-lg-medium text-gray-600">({activity.reviewCount})</span>
           </div>
-          <p className="w-282 truncate text-2xl-semibold text-black">{activity.title}</p>
+          <p className="truncate text-black sm:w-168 sm:text-2lg-semibold md:w-220 md:text-2xl-semibold lg:w-282">
+            {activity.title}
+          </p>
         </div>
-        <div className="flex gap-5">
-          <span className="text-2xl-bold text-black">\ {activity.price.toLocaleString()}</span>
-          <span className="text-xl-regular text-gray-800">/</span>
-          <span className="text-xl-regular text-gray-600">인</span>
+        <div className="flex items-center gap-5">
+          <span className="text-black sm:text-xl-bold md:text-2xl-bold">\ {activity.price.toLocaleString()}</span>
+          <span className="text-gray-800 sm:text-lg-regular md:text-xl-regular">/</span>
+          <span className="text-gray-600 sm:text-lg-regular md:text-xl-regular">인</span>
         </div>
       </div>
     </Link>
