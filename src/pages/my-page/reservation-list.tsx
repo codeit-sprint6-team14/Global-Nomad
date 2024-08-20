@@ -61,23 +61,27 @@ const ReservationList = () => {
       {queryError && <div className="mb-4 text-red-500">{queryError.message}</div>}
       <main className="mx-auto mb-94 mt-94 w-344 md:w-696 lg:mb-142 lg:mt-142 lg:w-1200">
         {isMobile && (
-          <ReservationContent
-            myReservationsData={myReservationsData}
-            isEmpty={isMyReservationsEmpty}
-            onStatusChange={handleStatusChange}
-            selectedStatus={selectedStatus}
-          />
+          <div>
+            <ReservationContent
+              myReservationsData={myReservationsData}
+              isEmptyMyReservationData={isMyReservationsEmpty}
+              onStatusChange={handleStatusChange}
+              selectedStatus={selectedStatus}
+            />
+          </div>
         )}
         {(isTablet || isDesktop) && (
           <div className="flex justify-between">
             <SideNavMenu />
-            <ReservationContent
-              myReservationsData={myReservationsData}
-              showFilter={isDesktop}
-              isEmpty={isMyReservationsEmpty}
-              onStatusChange={handleStatusChange}
-              selectedStatus={selectedStatus}
-            />
+            <div>
+              <ReservationContent
+                myReservationsData={myReservationsData}
+                showFilter={isDesktop}
+                isEmptyMyReservationData={isMyReservationsEmpty}
+                onStatusChange={handleStatusChange}
+                selectedStatus={selectedStatus}
+              />
+            </div>
           </div>
         )}
         {modalType === 'cancel' && (
