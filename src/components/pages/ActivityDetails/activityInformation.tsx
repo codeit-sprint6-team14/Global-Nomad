@@ -14,6 +14,7 @@ import BannerImage from './bannerImage';
 import ActivityDescription from './description';
 import Header from './header';
 import ReviewList from './reviewList';
+import ScrollToTopButton from './scrollToTopButton';
 
 const DynamicKakaoMap = dynamic(() => import('./kakaoMap'), {
   ssr: false,
@@ -120,6 +121,7 @@ const ActivityInformation = ({
             </div>
           </ModalOverlay>
         )}
+        <ScrollToTopButton />
       </div>
     </>
   );
