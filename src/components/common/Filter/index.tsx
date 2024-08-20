@@ -1,7 +1,6 @@
 import DownArrow from '@/../public/assets/icons/down-arrow.svg';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { useToggle } from '@/hooks/useToggle';
-import React from 'react';
 
 import DropDown from '../Dropdown';
 
