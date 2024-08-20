@@ -1,10 +1,11 @@
-export interface TimeSlot {
+export interface Schedule {
+  id?: number;
   date: string;
   startTime: string;
   endTime: string;
 }
 
-export interface TimeSlotItemProps {
-  slot: TimeSlot;
+export interface SchedulesItemProps {
+  slot: Schedule;
   onDelete: () => void;
 }

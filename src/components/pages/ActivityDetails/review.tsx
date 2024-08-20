@@ -1,5 +1,5 @@
 import { ReviewType } from '@/types/activityReviews';
-import formatDate from '@/utils/formatDate';
+import { formatDateUTC } from '@/utils/formatDate';
 import Image from 'next/image';
 
 const Review = ({ review }: { review: ReviewType }) => {
@@ -33,7 +33,7 @@ const Review = ({ review }: { review: ReviewType }) => {
         <div className="flex items-center">
           <h1 className="text-lg-bold">{nickname}</h1>
           <span className="px-8 text-md-regular text-black-100">|</span>
-          <span className="text-lg-regular text-gray-600">{formatDate(createdAt)}</span>
+          <span className="text-lg-regular text-gray-600">{formatDateUTC(createdAt)}</span>
         </div>
         <p className="mt-8 text-lg-regular text-black-100">{content}</p>
       </div>

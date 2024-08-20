@@ -1,16 +1,12 @@
+import { Activity } from '@/apis/myPage/myActivitySettings.types';
 import MyActivityCard from '@/components/common/Cards/myActivityCard';
-import ActivityCardsData from '@/mockData/myActivityCardsData';
-import { myActivityCardData } from '@/types/cardDataList';
-import { useState } from 'react';
 
-const MyActivityCardList = () => {
-  const [myActivityCardsData] = useState(ActivityCardsData);
+import { MyActivityCardListProps } from './types/myActivityCardList.types';
 
-  if (!myActivityCardsData) return null;
-
+const MyActivityCardList = ({ activitiesData }: MyActivityCardListProps) => {
   return (
     <ul className="flex flex-col gap-16 lg:gap-24">
-      {myActivityCardsData.map((myActivityCard: myActivityCardData) => (
+      {activitiesData?.map((myActivityCard: Activity) => (
         <MyActivityCard key={myActivityCard.id} myActivityCard={myActivityCard} />
       ))}
     </ul>

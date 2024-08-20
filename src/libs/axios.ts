@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 export const axiosInstance = axios.create({
@@ -8,12 +11,12 @@ export const axiosInstance = axios.create({
   },
 });
 
-type AxiosRequesterParams<T> = {
-  options: AxiosRequestConfig<T>;
+type AxiosRequesterParams<T, D = any> = {
+  options: AxiosRequestConfig<D>;
   includeAuth?: boolean;
 };
 
-type AxiosRequester = <T>(params: AxiosRequesterParams<T>) => Promise<AxiosResponse<T>>;
+type AxiosRequester = <T, D = any>(params: AxiosRequesterParams<T, D>) => Promise<AxiosResponse<T>>;
 
 export const axiosRequester: AxiosRequester = async ({ options, includeAuth = false }) => {
   if (includeAuth) {

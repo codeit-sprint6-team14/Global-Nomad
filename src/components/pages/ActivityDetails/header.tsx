@@ -1,10 +1,11 @@
+import { deleteActivity } from '@/apis/ActivityDetailsPage/deleteActivity';
 import DropDown from '@/components/common/Dropdown';
 import { HeaderProps } from '@/types/activity';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-const Header = ({ category, title, rating, reviewCount, address }: HeaderProps) => {
+const Header = ({ myId, userId, category, title, rating, reviewCount, address, activityId }: HeaderProps) => {
   const [isOpenDropdown, setIsOpenDropdown] = useState(false);
 
   const router = useRouter();
@@ -13,12 +14,12 @@ const Header = ({ category, title, rating, reviewCount, address }: HeaderProps) 
     setIsOpenDropdown((prev) => !prev);
   };
 
-  const handleOptionClick = (option: string) => {
+  const handleOptionClick = async (option: string) => {
     if (option === '수정하기') {
       router.push(`/my-page/activity-settings`);
     }
     if (option === '삭제하기') {
-      console.log('삭제하기'); // TODO: 삭제하기 기능 추가 예정
+      await deleteActivity(activityId);
     }
     setIsOpenDropdown(false);
   };
@@ -28,15 +29,17 @@ const Header = ({ category, title, rating, reviewCount, address }: HeaderProps) 
       <div className="text-md-regular text-black-100">{category}</div>
       <div className="relative mt-10 flex items-center justify-between">
         <h1 className="text-2xl-bold text-black-100 md:text-3xl-bold">{title}</h1>
-        <Image
-          width={40}
-          height={40}
-          style={{ width: 'auto' }}
-          src="/assets/icons/kebab.svg"
-          alt="케밥 아이콘"
-          className="cursor-pointer"
-          onClick={handleDropdownVisible}
-        />
+        {myId === userId && (
+          <Image
+            width={40}
+            height={40}
+            style={{ width: 'auto' }}
+            src="/assets/icons/kebab.svg"
+            alt="케밥 아이콘"
+            className="cursor-pointer"
+            onClick={handleDropdownVisible}
+          />
+        )}
         {isOpenDropdown && (
           <DropDown classNames="h-max w-120 right-0 top-48 z-50 ">
             <DropDown.Option

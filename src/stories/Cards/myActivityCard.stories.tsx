@@ -54,7 +54,7 @@ type Story = StoryObj<typeof MyActivityCardWrapper>;
 
 export const WithControls: Story = {
   args: {
-    id: 1,
+    id: '1',
     title: '샘플 액티비티',
     price: 50000,
     bannerImageUrl: imageOptions[0],

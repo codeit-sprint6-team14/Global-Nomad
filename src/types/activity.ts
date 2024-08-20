@@ -26,9 +26,12 @@ export type Schedules = {
 };
 
 export type HeaderProps = {
-  category: string;
+  myId: number;
   title: string;
   rating: number;
-  reviewCount: number;
+  userId: number;
   address: string;
+  category: string;
+  activityId: string;
+  reviewCount: number;
 };
