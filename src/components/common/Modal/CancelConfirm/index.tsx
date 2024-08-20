@@ -1,14 +1,13 @@
 import Button from '@/components/common/Button';
+import { usePatchMyReservationMutation } from '@/components/common/Cards/hooks/usePatchMyReservationMutation';
 import { modalAtom } from '@/store/modalAtom';
 import { reservationIdAtom } from '@/store/reservationIdAtom';
 import { useAtomValue, useSetAtom } from 'jotai';
 import Image from 'next/image';
 
-import { usePatchMyReservationMutation } from '../../Cards/hooks/usePatchMyReservationMutation';
-
 const CancelConfirmPopup = () => {
   const setModalType = useSetAtom(modalAtom);
-  const activityId = useAtomValue(reservationIdAtom);
+  const reservationId = useAtomValue(reservationIdAtom);
 
   const { mutate: patchMyReservations, error: patchMyReservationError } = usePatchMyReservationMutation();
 
@@ -17,8 +16,8 @@ const CancelConfirmPopup = () => {
   };
 
   const handleSubmit = () => {
-    if (activityId) {
-      patchMyReservations(activityId);
+    if (reservationId) {
+      patchMyReservations(reservationId);
     }
     setModalType(null);
   };
