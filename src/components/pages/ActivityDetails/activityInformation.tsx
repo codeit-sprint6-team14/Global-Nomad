@@ -1,4 +1,3 @@
-import { useActivityData } from '@/apis/ActivityDetailsPage/getActivityDetailsData';
 import { useMyInformation } from '@/apis/ActivityDetailsPage/getMyInformation';
 import FloatingBox from '@/components/common/FloatingBox';
 import Modal from '@/components/common/Modal';
@@ -7,6 +6,7 @@ import { useReservationSubmit } from '@/components/pages/ActivityDetails/useRese
 import { useClickOutside } from '@/hooks/useClickOutside';
 import useViewportSize from '@/hooks/useViewportSize';
 import { activityIdAtom, reservationPriceAtom } from '@/store/activityDetailsAtom';
+import { Activity } from '@/types/activity';
 import { useSetAtom } from 'jotai';
 import dynamic from 'next/dynamic';
 
@@ -20,7 +20,15 @@ const DynamicKakaoMap = dynamic(() => import('./kakaoMap'), {
   loading: () => <p>지도 로딩중...</p>,
 });
 
-const ActivityInformation = ({ activityId, kakaoKey }: { activityId: string; kakaoKey: string }) => {
+const ActivityInformation = ({
+  activityData,
+  activityId,
+  kakaoKey,
+}: {
+  activityData: Activity;
+  activityId: string;
+  kakaoKey: string;
+}) => {
   const viewportSize = useViewportSize();
 
   const isMobile = viewportSize === 'mobile';
@@ -43,12 +51,11 @@ const ActivityInformation = ({ activityId, kakaoKey }: { activityId: string; kak
 
   const modalRef = useClickOutside(handleCloseModal);
 
-  const { userInformationData, isLoading: isLoadingUserData } = useMyInformation();
-  const { activityData, isLoading: isLoadingActivityData, error } = useActivityData(activityId);
+  const { userInformationData, isLoading: isLoadingUserData, error } = useMyInformation();
 
-  if (isLoadingUserData || isLoadingActivityData) return <div>데이터 로딩중입니다...</div>;
-  if (error) return <div>체험 상세 데이터를 불러오는데 실패했습니다.</div>;
-  if (!activityData || !userInformationData) return <div>데이터를 불러오는데 실패했습니다.</div>;
+  if (isLoadingUserData) return <div>유저 데이터 로딩중입니다...</div>;
+  if (error) return <div>유저 데이터를 불러오는데 실패했습니다.</div>;
+  if (!userInformationData) return null;
 
   const { category, title, rating, reviewCount, address, bannerImageUrl, description, subImages, price, userId } =
     activityData;
