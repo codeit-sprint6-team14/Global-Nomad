@@ -23,6 +23,49 @@ const ReservationInfoModal = ({ activityId, schedules, onClose }: ReservationInf
   const [reservations, setReservations] = useAtom(reservationsAtom);
   const modalRef = useClickOutside(onClose); // 외부 클릭 시 onClose 호출
 
+  const dropdownOptions = useMemo<Option[]>(
+    () =>
+      schedules.map((schedule) => ({
+        value: schedule.scheduleId.toString(),
+        label: `${schedule.startTime} - ${schedule.endTime}`,
+      })),
+    [schedules],
+  );
+
+  const tabData = useMemo(
+    () => [
+      { type: '신청' as const, count: schedules.reduce((sum, schedule) => sum + schedule.count.pending, 0) },
+      { type: '승인' as const, count: schedules.reduce((sum, schedule) => sum + schedule.count.confirmed, 0) },
+      { type: '거절' as const, count: schedules.reduce((sum, schedule) => sum + schedule.count.declined, 0) },
+    ],
+    [schedules],
+  );
+
+  const handleTabClick = (tab: TabType) => {
+    setSelectedTab(tab);
+  };
+
+  const handleDropdownSelect = (option: Option) => {
+    setSelectedScheduleId(parseInt(option.value));
+  };
+
+  const handleUpdateReservation = (reservationId: number, status: 'confirmed' | 'declined') => {
+    setReservations((prevReservations) => {
+      const updatedReservations = { ...prevReservations };
+      const targetReservation = updatedReservations[selectedTab].find((res) => res.id === reservationId);
+
+      if (targetReservation) {
+        updatedReservations[selectedTab] = updatedReservations[selectedTab].filter((res) => res.id !== reservationId);
+        updatedReservations[status === 'confirmed' ? '승인' : '거절'].push(targetReservation);
+      }
+
+      return updatedReservations;
+    });
+  };
+
+  const currentReservations = useMemo(() => reservations[selectedTab], [reservations, selectedTab]);
+  const totalReservationCount = useMemo(() => tabData.find((tab) => tab.type === '신청')?.count || 0, [tabData]);
+
   useEffect(() => {
     if (selectedScheduleId) {
       const fetchReservations = async () => {
@@ -59,54 +102,11 @@ const ReservationInfoModal = ({ activityId, schedules, onClose }: ReservationInf
     }
   }, [selectedScheduleId, activityId, setReservations]);
 
-  const dropdownOptions = useMemo<Option[]>(
-    () =>
-      schedules.map((schedule) => ({
-        value: schedule.scheduleId.toString(),
-        label: `${schedule.startTime} - ${schedule.endTime}`,
-      })),
-    [schedules],
-  );
-
   useEffect(() => {
     if (dropdownOptions.length > 0) {
       setSelectedScheduleId(parseInt(dropdownOptions[0].value));
     }
   }, [dropdownOptions]);
-
-  const tabData = useMemo(
-    () => [
-      { type: '신청' as const, count: schedules.reduce((sum, schedule) => sum + schedule.count.pending, 0) },
-      { type: '승인' as const, count: schedules.reduce((sum, schedule) => sum + schedule.count.confirmed, 0) },
-      { type: '거절' as const, count: schedules.reduce((sum, schedule) => sum + schedule.count.declined, 0) },
-    ],
-    [schedules],
-  );
-
-  const handleTabClick = (tab: TabType) => {
-    setSelectedTab(tab);
-  };
-
-  const handleDropdownSelect = (option: Option) => {
-    setSelectedScheduleId(parseInt(option.value));
-  };
-
-  const handleUpdateReservation = (reservationId: number, status: 'confirmed' | 'declined') => {
-    setReservations((prevReservations) => {
-      const updatedReservations = { ...prevReservations };
-      const targetReservation = updatedReservations[selectedTab].find((res) => res.id === reservationId);
-
-      if (targetReservation) {
-        updatedReservations[selectedTab] = updatedReservations[selectedTab].filter((res) => res.id !== reservationId);
-        updatedReservations[status === 'confirmed' ? '승인' : '거절'].push(targetReservation);
-      }
-
-      return updatedReservations;
-    });
-  };
-
-  const currentReservations = useMemo(() => reservations[selectedTab], [reservations, selectedTab]);
-  const totalReservationCount = useMemo(() => tabData.find((tab) => tab.type === '신청')?.count || 0, [tabData]);
 
   return (
     <div
