@@ -119,11 +119,12 @@ const MainPage = () => {
 
   if (isActivitiesLoading || isPopularActivitiesLoading) return <div>loading...</div>;
   if (activitiesError) return <div>{activitiesError.message}</div>;
+
   return (
     <main className="flex flex-col items-center bg-gray-100">
       <div className="relative w-full">
         {popularActivities.length > 0 && (
-          <div className="relative h-[550px] w-full max-w-[1920px]">
+          <div className="lg:max-w-1920 sm:h-240 sm:w-375 md:h-550 md:w-1440">
             {popularActivities.map((activity, index) => (
               <Link
                 key={activity.id}
@@ -143,11 +144,13 @@ const MainPage = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50"></div>
                 </div>
-                <div className="absolute bottom-200 left-[250px] flex flex-col gap-24 text-white">
-                  <h2 className="line-clamp-2 w-600 text-wrap break-words text-68 font-bold leading-[81.15px]">
+                <div className="absolute flex flex-col text-white sm:bottom-[30%] sm:left-[18%] sm:w-200 sm:gap-8 md:bottom-200 md:left-[4%] md:w-450 lg:left-[1%] lg:w-600 lg:gap-24">
+                  <h2 className="line-clamp-2 text-wrap break-words font-bold sm:text-24 sm:leading-[28.64px] md:text-54 md:leading-[64.44px] lg:text-68 lg:leading-[81.15px]">
                     {activity.title}
                   </h2>
-                  <p className="text-2xl-bold">{getCurrentMonth()}의 인기 체험 BEST🔥</p>
+                  <p className="sm:text-md-bold md:text-xl-bold lg:text-2xl-bold">
+                    {getCurrentMonth()}의 인기 체험 BEST🔥
+                  </p>
                 </div>
               </Link>
             ))}
@@ -174,7 +177,7 @@ const MainPage = () => {
         <section className="mt-50 flex flex-col gap-24">
           {popularActivities.length > 0 && (
             <div className="flex justify-between">
-              <h2 className="leading-43 text-36 font-bold">🔥인기 체험</h2>
+              <h2 className="md:leading-43 font-bold sm:text-18 md:text-36 md:leading-[21.48px]">🔥인기 체험</h2>
               <div className="flex gap-12">
                 <button onClick={handlePrevClick} disabled={startIndex === 0} className="cursor-pointer">
                   <PrevButton />
@@ -189,7 +192,7 @@ const MainPage = () => {
               </div>
             </div>
           )}
-          <div className="flex w-1200 gap-24">
+          <div className="flex gap-24 sm:w-340 md:w-695 lg:w-1200">
             {popularActivities.map((activity) => (
               <PopularActivityCard key={activity.id} activity={activity} />
             ))}
@@ -199,9 +202,9 @@ const MainPage = () => {
 
       <section className="flex flex-col gap-24">
         {!isSearching && (
-          <div className="mb-24 flex items-center justify-between">
+          <div className="mb-24 flex items-center justify-between sm:w-340 md:w-695 lg:w-1204">
             <RadioTab.Root defaultTab={activeCategory} onTabChange={handleCategoryChange}>
-              <div className="flex w-882 gap-24">
+              <div className="flex sm:w-200 sm:gap-8 md:w-515 md:gap-14 lg:w-882 lg:gap-24">
                 {categories.map((category) => (
                   <RadioTab.Item key={category} id={category}>
                     {category}
@@ -210,12 +213,17 @@ const MainPage = () => {
               </div>
             </RadioTab.Root>
 
-            <div className="relative h-53 w-150 cursor-pointer rounded-15 border border-black-100" ref={dropdownRef}>
+            <div
+              className="relative h-53 cursor-pointer rounded-15 border border-black-100 md:w-120 lg:w-150"
+              ref={dropdownRef}
+            >
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className={`flex w-full items-center justify-center px-20 py-16 ${sortBy ? 'gap-5' : 'gap-40'}`}
+                className={`flex w-full items-center justify-center px-20 py-14 ${sortBy ? 'gap-5' : 'md:20 sm:gap-10 lg:gap-40'}`}
               >
-                <span>{sortBy ? dropdownOptions.find((option) => option.value === sortBy)?.label : '가격'}</span>
+                <span className="text-black-100 sm:text-md-medium md:text-lg-medium">
+                  {sortBy ? dropdownOptions.find((option) => option.value === sortBy)?.label : '가격'}
+                </span>
                 <div className={`transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`}>
                   <DownArrow alt="down arrow" />
                 </div>
@@ -239,20 +247,22 @@ const MainPage = () => {
           </div>
         )}
 
-        <div className="m-auto flex w-1200 flex-col gap-24">
+        <div className="m-auto flex flex-col gap-24 sm:w-340 md:w-695 lg:w-1200">
           {isSearching ? (
             <h2 className="leading-42 mt-50 text-32 font-normal">
               <span className="text-3xl-bold text-black-100">{searchTerm}</span>(으)로 검색한 결과입니다.
             </h2>
           ) : (
-            <h2 className="leading-43 text-36 font-bold">{activeCategory || '🥾모든 체험'}</h2>
+            <h2 className="md:leading-43 font-bold sm:text-18 md:text-36 md:leading-[21.48px]">
+              {activeCategory || '🥾모든 체험'}
+            </h2>
           )}
 
           {isSearching && <span className="mb-24 text-lg-regular">총 {displayedActivities.length}개의 결과</span>}
 
           <div className="min-h-600">
             {displayedActivities.length > 0 ? (
-              <div className="flex w-1204 flex-wrap gap-24">
+              <div className="flex flex-wrap sm:w-340 sm:gap-4 md:w-695 md:gap-16 lg:w-1204 lg:gap-24">
                 {displayedActivities.map((activity) => (
                   <ActivityCards key={activity.id} activity={activity} />
                 ))}
