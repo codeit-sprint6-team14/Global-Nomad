@@ -1,11 +1,18 @@
 import { getMyActivities } from '@/apis/myPage/myActivitySettings';
+import { MyActivitiesResponse } from '@/apis/myPage/myActivitySettings.types';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { InfiniteData, useInfiniteQuery } from '@tanstack/react-query';
 
 export const useActivitiesQuery = () => {
-  const { fetchNextPage, hasNextPage, status, error, data } = useInfiniteQuery({
+  const { fetchNextPage, hasNextPage, error, data } = useInfiniteQuery<
+    MyActivitiesResponse,
+    Error,
+    InfiniteData<MyActivitiesResponse>,
+    ['myActivities'],
+    number | null
+  >({
     queryKey: ['myActivities'],
-    queryFn: getMyActivities,
+    queryFn: ({ pageParam = null }) => getMyActivities({ pageParam }),
     initialPageParam: null,
     getNextPageParam: (lastPage) => lastPage.cursorId,
   });
@@ -21,7 +28,6 @@ export const useActivitiesQuery = () => {
   return {
     activitiesData,
     isActivityEmpty,
-    status,
     error,
     setTarget,
   };
