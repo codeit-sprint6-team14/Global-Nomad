@@ -1,6 +1,6 @@
 import DropDown from '@/components/common/Dropdown';
 import { HeaderProps } from '@/types/activity';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -39,6 +39,24 @@ const Header = ({
     tap: { scale: 0.95 },
   };
 
+  const dropdownVariants = {
+    hidden: {
+      opacity: 0,
+      scale: 0.95,
+      transition: {
+        duration: 0.1,
+      },
+    },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        type: 'spring',
+        duration: 0.3,
+      },
+    },
+  };
+
   return (
     <div className="px-16 pt-16 md:px-24 md:pt-24 lg:p-0">
       <div className="text-md-regular text-black-100">{category}</div>
@@ -64,22 +82,32 @@ const Header = ({
             <circle cx="16.0001" cy="25.2999" r="2.4" fill="#79747E" />
           </motion.svg>
         )}
-        {isOpenDropdown && (
-          <DropDown classNames="h-max w-120 right-0 top-48 z-50">
-            <DropDown.Option
-              className="hover:rounded-t-6"
-              key="수정하기"
-              handleOptionClick={() => handleOptionClick('수정하기')}
-              label="수정하기"
-            />
-            <DropDown.Option
-              className="hover:rounded-b-6"
-              key="삭제하기"
-              handleOptionClick={() => handleOptionClick('삭제하기')}
-              label="삭제하기"
-            />
-          </DropDown>
-        )}
+        <AnimatePresence>
+          {isOpenDropdown && (
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              variants={dropdownVariants}
+              className="absolute right-120 top-48 z-50"
+            >
+              <DropDown classNames="h-max w-120">
+                <DropDown.Option
+                  className="hover:rounded-t-6"
+                  key="수정하기"
+                  handleOptionClick={() => handleOptionClick('수정하기')}
+                  label="수정하기"
+                />
+                <DropDown.Option
+                  className="hover:rounded-b-6"
+                  key="삭제하기"
+                  handleOptionClick={() => handleOptionClick('삭제하기')}
+                  label="삭제하기"
+                />
+              </DropDown>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
       <div className="mt-16 flex">
         <div className="relative mt-2 h-16 w-16">
