@@ -93,7 +93,7 @@ const ReservationList = () => {
         )}
         {modalType === 'review' && (
           <Modal.Overlay>
-            <div ref={modalRef} className="h-full md:h-auto md:w-auto">
+            <div ref={modalRef} className="h-full w-full md:h-auto md:w-auto">
               <Modal.Review
                 title="함께 배우면 즐거운 스트릿 댄스"
                 bannerImageUrl="/images/test-profile-img.png"
