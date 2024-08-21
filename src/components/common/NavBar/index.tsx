@@ -63,7 +63,13 @@ function NavBar({ accessToken }: { accessToken?: boolean }) {
             <Notification />
             <div className="mx-12 h-22 border-l border-solid border-gray-300 md:mx-25" />
             <div className="relative flex items-center gap-10">
-              <Image src={user.profileImage} alt="프로필 이미지" className="rounded-full" width={32} height={32} />
+              <Image
+                src={user.profileImage || '/assets/images/profile-image.png'}
+                alt="프로필 이미지"
+                className="rounded-full"
+                width={32}
+                height={32}
+              />
               <div className="cursor-pointer text-md-medium text-black" onClick={handleDropdownVisible}>
                 {user.nickname}
               </div>
