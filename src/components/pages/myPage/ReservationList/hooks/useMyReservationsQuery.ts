@@ -1,12 +1,13 @@
 import { getMyReservations } from '@/apis/myPage/myReservations';
 import { MyReservationResponse } from '@/apis/myPage/myReservations.types';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
-import { InfiniteData, useInfiniteQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { InfiniteData, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 
 export const useMyReservationsQuery = () => {
+  const queryClient = useQueryClient();
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
-  const { fetchNextPage, hasNextPage, error, data } = useInfiniteQuery<
+  const { fetchNextPage, hasNextPage, error, data, refetch } = useInfiniteQuery<
     MyReservationResponse,
     Error,
     InfiniteData<MyReservationResponse>,
@@ -30,6 +31,14 @@ export const useMyReservationsQuery = () => {
 
   const myReservationsData = data?.pages.flatMap((page) => page.reservations) || [];
   const isMyReservationsEmpty = myReservationsData.length === 0;
+
+  useEffect(() => {
+    refetch();
+
+    return () => {
+      queryClient.removeQueries({ queryKey: ['myReservations'] });
+    };
+  }, [refetch, queryClient]);
 
   return {
     myReservationsData,
