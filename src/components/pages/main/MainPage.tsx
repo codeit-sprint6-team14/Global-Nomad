@@ -24,6 +24,7 @@ const dropdownOptions = [
 const visibleCards = 3;
 const INITIAL_ITEMS_PER_PAGE = 8;
 const SEARCH_ITEMS_PER_PAGE = 16;
+const VISIBLE_TABS = 4;
 
 const MainPage = () => {
   const [page, setPage] = useState(1);
@@ -35,6 +36,9 @@ const MainPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [itemsPerPage, setItemsPerPage] = useState(INITIAL_ITEMS_PER_PAGE);
+  const [categoryStartIndex, setCategoryStartIndex] = useState(0);
+  const [isTablet, setIsTablet] = useState(false);
+  const tabsContainerRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   const {
@@ -54,6 +58,22 @@ const MainPage = () => {
   const displayedActivities = activitiesData?.activities || [];
   const popularActivities = popularActivitiesData || [];
   const totalPages = Math.ceil((activitiesData?.activities?.length ?? 0) / itemsPerPage);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsTablet(window.innerWidth >= 744 && window.innerWidth < 1200);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (tabsContainerRef.current && isTablet) {
+      const tabWidth = tabsContainerRef.current.scrollWidth / categories.length;
+      tabsContainerRef.current.style.transform = `translateX(-${categoryStartIndex * tabWidth}px)`;
+    }
+  }, [categoryStartIndex, isTablet]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent | Event) => {
@@ -83,6 +103,18 @@ const MainPage = () => {
     setSearchTerm('');
     setItemsPerPage(INITIAL_ITEMS_PER_PAGE);
   }, []);
+
+  const handleCategoryNextClick = () => {
+    if (categoryStartIndex + VISIBLE_TABS < categories.length) {
+      setCategoryStartIndex((prev) => Math.min(prev + 1, categories.length - VISIBLE_TABS));
+    }
+  };
+
+  const handleCategoryPrevClick = () => {
+    if (categoryStartIndex > 0) {
+      setCategoryStartIndex((prev) => Math.max(prev - 1, 0));
+    }
+  };
 
   const handleSortChange = useCallback((option: string) => {
     setSortBy(option);
@@ -202,24 +234,67 @@ const MainPage = () => {
 
       <section className="flex flex-col gap-24">
         {!isSearching && (
-          <div className="mb-24 flex items-center justify-between sm:w-340 md:w-695 lg:w-1204">
-            <RadioTab.Root defaultTab={activeCategory} onTabChange={handleCategoryChange}>
-              <div className="flex sm:w-200 sm:gap-8 md:w-515 md:gap-14 lg:w-882 lg:gap-24">
-                {categories.map((category) => (
-                  <RadioTab.Item key={category} id={category}>
-                    {category}
-                  </RadioTab.Item>
-                ))}
+          <div className="mb-24 flex items-center justify-between sm:w-340 md:w-695 md:gap-14 lg:w-1204">
+            <div className="relative flex items-center overflow-hidden md:w-640">
+              <div className="flex-shrink-0">
+                {isTablet && categoryStartIndex > 0 ? (
+                  <button
+                    onClick={handleCategoryPrevClick}
+                    className="z-1 flex h-32 w-32 items-center justify-center rounded-full border border-gray-600"
+                  >
+                    <PrevButton />
+                  </button>
+                ) : (
+                  <div className="" />
+                )}
               </div>
-            </RadioTab.Root>
 
+              <div className="mx-10 w-[calc(100%-5rem)] overflow-hidden pr-60">
+                <RadioTab.Root defaultTab={activeCategory} onTabChange={handleCategoryChange}>
+                  <div
+                    ref={tabsContainerRef}
+                    className={`flex gap-10 ${isTablet ? 'transition-transform duration-300 ease-in-out' : ''}`}
+                    style={isTablet ? { width: `${(categories.length / VISIBLE_TABS) * 105}%` } : {}}
+                  >
+                    {categories.map((category, index) => (
+                      <div
+                        key={category}
+                        className={`${isTablet ? 'flex-shrink-0' : ''} ${
+                          isTablet && index === categoryStartIndex + VISIBLE_TABS - 1 && index !== categories.length - 1
+                            ? ''
+                            : ''
+                        }`}
+                        style={isTablet ? { width: `${100 / categories.length}%` } : {}}
+                      >
+                        <RadioTab.Item id={category}>{category}</RadioTab.Item>
+                      </div>
+                    ))}
+                  </div>
+                </RadioTab.Root>
+              </div>
+
+              <div className="w-32 flex-shrink-0">
+                {isTablet && categoryStartIndex + VISIBLE_TABS < categories.length ? (
+                  <button
+                    onClick={handleCategoryNextClick}
+                    className="z-1 flex h-32 w-32 items-center justify-center rounded-full border border-gray-600"
+                  >
+                    <div className="flex h-20 w-35 items-center justify-center">
+                      <NextButton />
+                    </div>
+                  </button>
+                ) : (
+                  <div />
+                )}
+              </div>
+            </div>
             <div
-              className="relative h-53 cursor-pointer rounded-15 border border-black-100 md:w-120 lg:w-150"
+              className="relative cursor-pointer rounded-15 border border-black-100 sm:h-41 sm:w-90 md:h-53 md:w-120 lg:w-150"
               ref={dropdownRef}
             >
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className={`flex w-full items-center justify-center px-20 py-14 ${sortBy ? 'gap-5' : 'md:20 sm:gap-10 lg:gap-40'}`}
+                className={`flex w-full items-center justify-center sm:py-9 md:px-20 md:py-14 ${sortBy ? 'gap-5' : 'md:20 sm:gap-10 lg:gap-40'}`}
               >
                 <span className="text-black-100 sm:text-md-medium md:text-lg-medium">
                   {sortBy ? dropdownOptions.find((option) => option.value === sortBy)?.label : '가격'}
