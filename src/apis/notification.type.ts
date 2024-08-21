@@ -1,4 +1,4 @@
-export type Notification = {
+export type NotificationType = {
   id: number;
   teamId: string;
   userId: number;
@@ -10,7 +10,7 @@ export type Notification = {
 
 export type GetNotificationsResponse = {
   cursorId: number;
-  notifications: Notification[];
+  notifications: NotificationType[];
   totalCount: number;
 };
 

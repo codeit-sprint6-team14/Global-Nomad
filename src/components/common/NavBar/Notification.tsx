@@ -1,3 +1,5 @@
+import { getNotifications } from '@/apis/notification';
+import { NotificationType } from '@/apis/notification.type';
 import { Popover } from '@/components/common/Popover';
 import PopoverUI from '@/components/common/Popover/PopoverUI';
 import { useClickOutside } from '@/hooks/useClickOutside';
@@ -8,21 +10,49 @@ import { createPortal } from 'react-dom';
 const Notification = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [portalRoot, setPortalRoot] = useState<HTMLElement | null>(null);
-
-  const alarms = [
-    { title: '타입스크립트 강의', dateTime: '2024년 8월 2일 14:00', status: '승인', timeAgo: 5 },
-    { title: '프로젝트 강의', dateTime: '2024년 8월 1일 09:30', status: '거절', timeAgo: 10 },
-    { title: '커리어 강의', dateTime: '2024년 8월 2일 11:00', status: '새로 들어왔어요', timeAgo: 15 },
-  ];
+  const [alarms, setAlarms] = useState<NotificationType[]>([]);
+  const [cursorId, setCursorId] = useState<number | null>(0);
+  const [totalCount, setTotalCount] = useState(0);
 
   const handleClose = () => setIsOpen(false);
-
   const popoverRef = useClickOutside(handleClose);
 
   useEffect(() => {
-    // 클라이언트 사이드에서만 실행됨
     setPortalRoot(document.getElementById('notification-root'));
   }, []);
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const response = await getNotifications();
+        setAlarms(response.notifications);
+        setCursorId(response.cursorId);
+        setTotalCount(response.totalCount);
+      } catch (error) {
+        console.error('Failed to fetch notifications:', error);
+      }
+    };
+
+    if (isOpen) {
+      fetchNotifications();
+    }
+  }, [isOpen, cursorId]);
+
+  const transformedAlarms = alarms.map((alarm) => {
+    // content에서 "승인" 또는 "거절" 추출
+    const status = alarm.content.includes('승인')
+      ? '승인'
+      : alarm.content.includes('거절')
+        ? '거절'
+        : '새로 들어왔어요';
+
+    return {
+      content: alarm.content,
+      dateTime: new Date(alarm.createdAt).toLocaleString(),
+      status, // 추출한 상태를 추가
+      timeAgo: Math.floor((Date.now() - new Date(alarm.createdAt).getTime()) / 60000),
+    };
+  });
 
   return (
     <div className="relative">
@@ -34,7 +64,7 @@ const Notification = () => {
             width={20}
             height={20}
             className="cursor-pointer"
-            onClick={() => setIsOpen(true)} // 클릭 시 팝오버 열림
+            onClick={() => setIsOpen(true)}
           />
         </Popover.Trigger>
         {isOpen &&
@@ -42,7 +72,7 @@ const Notification = () => {
           createPortal(
             <div ref={popoverRef} className="fixed left-0 top-0 z-[9999] md:left-auto md:right-[450px] md:top-80">
               <Popover.Content>
-                <PopoverUI onClose={handleClose} alarmCount={alarms.length} alarms={alarms} />
+                <PopoverUI onClose={handleClose} alarmCount={totalCount} alarms={transformedAlarms} />
               </Popover.Content>
             </div>,
             portalRoot,

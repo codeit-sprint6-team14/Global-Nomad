@@ -3,29 +3,32 @@ import CirclePoint from '../Point';
 
 type AlarmInfoProps = {
   onClose: () => void;
-  title: string;
+  content: string;
   dateTime: string;
   status: '승인' | '거절' | '새로 들어왔어요';
   timeAgo: number;
 };
 
-const AlarmInfo = ({ onClose, title, dateTime, status, timeAgo }: AlarmInfoProps) => {
+const AlarmInfo = ({ onClose, content, status, timeAgo }: AlarmInfoProps) => {
+  // "승인" 또는 "거절"을 포함한 부분만 스타일을 변경
+  const highlightedContent = content
+    .replace(/승인/g, '<span class="text-blue-400">승인</span>')
+    .replace(/거절/g, '<span class="text-red-200">거절</span>');
+
   const getStatusStyle = (status: '승인' | '거절' | '새로 들어왔어요') => {
     switch (status) {
       case '승인':
-        return { color: 'fill-blue-400 text-blue-400', suffix: '되었어요' };
+        return 'fill-blue-400';
       case '거절':
-        return { color: 'fill-red-200 text-red-200', suffix: '되었어요' };
+        return 'fill-red-200';
       case '새로 들어왔어요':
-        return { color: 'fill-green-200 text-green-200', suffix: '' };
+        return 'fill-green-200';
       default:
-        return { color: 'fill-black text-black', suffix: '' };
+        return 'fill-black';
     }
   };
 
-  const { color, suffix } = getStatusStyle(status);
-
-  const [fillColor, textColor] = color.split(' ');
+  const fillColor = getStatusStyle(status);
 
   return (
     <div className="mx-auto flex w-328 flex-col gap-8">
@@ -39,10 +42,10 @@ const AlarmInfo = ({ onClose, title, dateTime, status, timeAgo }: AlarmInfoProps
               <Icons.Close width={24} height={24} color="black" />
             </button>
           </div>
-          <p className="w-270 text-wrap text-md-regular text-black">
-            {title}({dateTime}) 예약이 <span className={textColor}>{status}</span>
-            {suffix}.
-          </p>
+          <p
+            className="w-270 text-wrap text-md-regular text-black"
+            dangerouslySetInnerHTML={{ __html: highlightedContent }} // 특수 HTML을 사용하여 텍스트에 스타일 적용
+          />
         </div>
         <span className="text-xs-regular text-gray-600">{timeAgo}분 전</span>
       </div>

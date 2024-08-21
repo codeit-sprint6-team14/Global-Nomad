@@ -10,7 +10,7 @@ type PopoverUIProps<T> = {
   alarms: T[];
 };
 
-const PopoverUI = <T extends { title: string; dateTime: string; status: string; timeAgo: number }>({
+const PopoverUI = <T extends { content: string; dateTime: string; status: string; timeAgo: number }>({
   onClose,
   alarmCount,
   alarms,
@@ -18,7 +18,7 @@ const PopoverUI = <T extends { title: string; dateTime: string; status: string; 
   const context = useContext(PopoverContext);
 
   if (!context) {
-    throw new Error('ExampleUI must be used within a PopoverRoot');
+    throw new Error('PopoverUI must be used within a PopoverRoot');
   }
 
   const { toggle } = context;
@@ -35,9 +35,9 @@ const PopoverUI = <T extends { title: string; dateTime: string; status: string; 
         <AlarmInfo
           key={index}
           onClose={onClose}
-          title={alarm.title}
+          content={alarm.content}
           dateTime={alarm.dateTime}
-          status={alarm.status as '승인' | '거절' | '새로 들어왔어요'} // 타입 단언을 사용하지 않고 런타임 시 타입 보장
+          status={alarm.status as '승인' | '거절' | '새로 들어왔어요'}
           timeAgo={alarm.timeAgo}
         />
       ))}
