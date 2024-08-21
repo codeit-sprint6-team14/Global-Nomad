@@ -1,4 +1,7 @@
 import { getUserProfile } from '@/apis/getUserProfile';
+import Modal from '@/components/common/Modal';
+import { useSignout } from '@/components/pages/auth/useSignout';
+import { useClickOutside } from '@/hooks/useClickOutside';
 import { userAtom } from '@/store/userAtom';
 import { useAtom } from 'jotai';
 import Image from 'next/image';
@@ -12,6 +15,9 @@ import Notification from './Notification';
 function NavBar({ accessToken }: { accessToken?: boolean }) {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
   const [user, setUser] = useAtom(userAtom);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const router = useRouter();
+  const signout = useSignout();
 
   useEffect(() => {
     const loadUserProfile = async () => {
@@ -34,23 +40,31 @@ function NavBar({ accessToken }: { accessToken?: boolean }) {
     setIsOpenMenu(!isOpenMenu);
   };
 
-  const router = useRouter();
+  const handleSignout = () => {
+    setShowLogoutModal(true);
+    setIsOpenMenu(false);
+  };
 
   const handleOptionClick = (label: string) => {
     switch (label) {
       case '로그아웃':
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
-        router.push('/');
+        handleSignout();
         break;
       case '마이페이지':
-        router.push('/my-page'); // 마이페이지로 이동
+        router.push('/my-page');
         break;
       default:
         break;
     }
     setIsOpenMenu(false);
   };
+
+  const handleModalClose = () => {
+    setShowLogoutModal(false);
+    signout();
+  };
+
+  const modalRef = useClickOutside(handleModalClose);
 
   return (
     <div className="fixed left-0 right-0 top-0 z-10 border-b border-solid border-gray-300 bg-white">
@@ -97,6 +111,14 @@ function NavBar({ accessToken }: { accessToken?: boolean }) {
           </div>
         )}
       </div>
+
+      {showLogoutModal && (
+        <Modal.Overlay>
+          <div ref={modalRef}>
+            <Modal.RegisterConfirm onClose={handleModalClose}>로그아웃 되었습니다!</Modal.RegisterConfirm>
+          </div>
+        </Modal.Overlay>
+      )}
     </div>
   );
 }
