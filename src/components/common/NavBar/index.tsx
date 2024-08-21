@@ -19,7 +19,9 @@ function NavBar({ accessToken = true }: { accessToken?: boolean }) {
   const handleOptionClick = (label: string) => {
     switch (label) {
       case '로그아웃':
-        // 로그아웃 로직 추가
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        router.push('/');
         break;
       case '마이페이지':
         router.push('/my-page'); // 마이페이지로 이동
