@@ -9,8 +9,8 @@ export interface reviewDataProps {
 }
 
 export interface TextareaWithSubmitProps {
-  text: string;
-  onTextChange: (text: string) => void;
+  content: string;
+  onContentChange: (content: string) => void;
   onSubmit: () => void;
   isSubmitDisabled: boolean;
 }

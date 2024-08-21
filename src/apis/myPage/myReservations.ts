@@ -44,3 +44,20 @@ export const patchMyReservation = async (reservationId: number) => {
 
   return data;
 };
+
+interface ReviewData {
+  rating: number;
+  content: string;
+}
+
+export const postReview = async (reservationId: number | null, reviewData: ReviewData) => {
+  const { data } = await axiosRequester({
+    options: {
+      method: 'POST',
+      url: `my-reservations/${reservationId}/reviews`,
+      data: reviewData,
+    },
+    includeAuth: true,
+  });
+  return data;
+};
