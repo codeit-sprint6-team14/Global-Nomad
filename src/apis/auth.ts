@@ -1,8 +1,7 @@
+import ErrorMessages from '@/constants/errorMessages';
 import { axiosRequester } from '@/libs/axios';
-import { LoginResult, SigninData, SignupData, TokensResponse } from '@/types/auth';
-import axios, { isAxiosError } from 'axios';
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+import { SigninData, SignupData } from '@/types/auth';
+import { isAxiosError } from 'axios';
 
 export const postUserSignup = async (userData: SignupData) => {
   try {
@@ -18,32 +17,38 @@ export const postUserSignup = async (userData: SignupData) => {
     if (isAxiosError(error) && error.response) {
       switch (error.response.status) {
         case 409:
-          return { success: false, message: '중복된 이메일입니다.' };
+          return { success: false, message: ErrorMessages.EMAIL_ALREADY_REGISTERED };
         case 400:
-          return { success: false, message: '이메일 형식으로 작성해주세요.' };
+          return { success: false, message: ErrorMessages.INVALID_EMAIL };
         default:
-          return { success: false, message: '회원가입 중 오류가 발생했습니다.' };
+          return { success: false, message: ErrorMessages.SIGNUP_ERROR };
       }
     }
-    return { success: false, message: '알 수 없는 오류가 발생했습니다.' };
+    return { success: false, message: ErrorMessages.UNKOWN_ERROR };
   }
 };
 
-export const postUserSignin = async (credentials: SigninData): Promise<LoginResult> => {
+export const postUserSignin = async (credentials: SigninData) => {
   try {
-    const response = await axios.post<TokensResponse>(`${API_BASE_URL}/auth/login`, credentials);
+    const response = await axiosRequester({
+      options: {
+        method: 'POST',
+        url: '/auth/login',
+        data: credentials,
+      },
+    });
     return { success: true, data: response.data };
   } catch (error) {
     if (isAxiosError(error) && error.response) {
       switch (error.response.status) {
         case 400:
-          return { success: false, error: '비밀번호가 일치하지 않습니다.' };
+          return { success: false, error: ErrorMessages.PASSWORD_CONFIRMATION_MISMATCH };
         case 404:
-          return { success: false, error: '존재하지 않는 사용자입니다.' };
+          return { success: false, error: ErrorMessages.USER_NOT_FOUND };
         default:
-          return { success: false, error: '로그인 중 오류가 발생했습니다.' };
+          return { success: false, error: ErrorMessages.SIGNIN_ERROR };
       }
     }
-    return { success: false, error: '알 수 없는 오류가 발생했습니다.' };
+    return { success: false, error: ErrorMessages.UNKOWN_ERROR };
   }
 };
