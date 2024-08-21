@@ -1,6 +1,6 @@
 import ErrorMessages from '@/constants/errorMessages';
 import { axiosRequester } from '@/libs/axios';
-import { SigninData, SignupData } from '@/types/auth';
+import { SigninData, SigninResult, SignupData } from '@/types/auth';
 import { isAxiosError } from 'axios';
 
 export const postUserSignup = async (userData: SignupData) => {
@@ -28,7 +28,7 @@ export const postUserSignup = async (userData: SignupData) => {
   }
 };
 
-export const postUserSignin = async (credentials: SigninData) => {
+export const postUserSignin = async (credentials: SigninData): Promise<SigninResult> => {
   try {
     const response = await axiosRequester({
       options: {
@@ -37,18 +37,18 @@ export const postUserSignin = async (credentials: SigninData) => {
         data: credentials,
       },
     });
-    return { success: true, data: response.data };
+    return response.data as SigninResult;
   } catch (error) {
     if (isAxiosError(error) && error.response) {
       switch (error.response.status) {
         case 400:
-          return { success: false, error: ErrorMessages.PASSWORD_CONFIRMATION_MISMATCH };
+          return { error: ErrorMessages.PASSWORD_CONFIRMATION_MISMATCH };
         case 404:
-          return { success: false, error: ErrorMessages.USER_NOT_FOUND };
+          return { error: ErrorMessages.USER_NOT_FOUND };
         default:
-          return { success: false, error: ErrorMessages.SIGNIN_ERROR };
+          return { error: ErrorMessages.SIGNIN_ERROR };
       }
     }
-    return { success: false, error: ErrorMessages.UNKOWN_ERROR };
+    return { error: ErrorMessages.UNKOWN_ERROR };
   }
 };

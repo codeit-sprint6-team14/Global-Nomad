@@ -1,7 +1,7 @@
 import { postUserSignin } from '@/apis/auth';
 import ErrorMessages from '@/constants/errorMessages';
 import { tokenAtom } from '@/store/tokenAtom';
-import { SigninData } from '@/types/auth';
+import { SigninData, SigninResult } from '@/types/auth';
 import { useMutation } from '@tanstack/react-query';
 import { useSetAtom } from 'jotai';
 import { useRouter } from 'next/router';
@@ -12,27 +12,23 @@ export const useSignin = () => {
   const setToken = useSetAtom(tokenAtom);
   const [error, setError] = useState<string | null>(null);
 
-  const mutation = useMutation({
-    mutationFn: (credentials: SigninData) => postUserSignin(credentials),
+  const mutation = useMutation<SigninResult, Error, SigninData>({
+    mutationFn: postUserSignin,
     onSuccess: (result) => {
-      if (result.success) {
-        setToken({ accessToken: result.data.accessToken, refreshToken: result.data.refreshToken });
+      if ('user' in result) {
+        setToken({ accessToken: result.accessToken, refreshToken: result.refreshToken });
 
         // 토큰을 로컬 스토리지에 저장
-        localStorage.setItem('accessToken', result.data.accessToken);
-        localStorage.setItem('refreshToken', result.data.refreshToken);
+        localStorage.setItem('accessToken', result.accessToken);
+        localStorage.setItem('refreshToken', result.refreshToken);
 
         router.push('/');
       } else {
-        setError(result.error || ErrorMessages.SIGNIN_ERROR);
+        setError(result.error);
       }
     },
     onError: (error) => {
-      if (error instanceof Error) {
-        setError(error.message);
-      } else {
-        setError(ErrorMessages.UNKOWN_ERROR);
-      }
+      setError(error.message || ErrorMessages.SIGNIN_ERROR);
     },
   });
 
