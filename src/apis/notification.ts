@@ -4,11 +4,13 @@ import { GetNotificationsParams, GetNotificationsResponse } from './notification
 
 export const getNotifications = async (params?: GetNotificationsParams): Promise<GetNotificationsResponse> => {
   try {
+    // cursorId가 존재하지 않으면 params에서 제거
+    const { cursorId, ...rest } = params || {};
     const response = await axiosRequester<GetNotificationsResponse>({
       options: {
         method: 'GET',
         url: '/my-notifications',
-        params,
+        params: cursorId ? { cursorId, ...rest } : rest, // cursorId가 있을 때만 추가
       },
       includeAuth: true,
     });

@@ -15,6 +15,6 @@ export type GetNotificationsResponse = {
 };
 
 export type GetNotificationsParams = {
-  cursorId?: number;
+  cursorId?: number | undefined;
   size?: number;
 };
