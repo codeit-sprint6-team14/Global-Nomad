@@ -1,4 +1,3 @@
-import { completedReviewsAtom } from '@/store/completedReviewAtom';
 import { modalAtom } from '@/store/modalAtom';
 import { reservationIdAtom } from '@/store/reservationIdAtom';
 import { reviewDataProps } from '@/types/reviewModalTypes';
@@ -15,23 +14,22 @@ const Review = ({ title, bannerImageUrl, date, startTime, endTime, totalPrice, h
   const [content, setContent] = useState('');
   const [, setModalType] = useAtom(modalAtom);
   const reservationId = useAtomValue(reservationIdAtom);
-  const [, setCompletedReviews] = useAtom(completedReviewsAtom);
   const { mutate: postReviewData, error: postReviewError } = usePostReviewMutation();
 
   const handleSubmit = () => {
-    if (rating > 0 && content.trim() && reservationId !== null) {
+    if (rating > 0 && content.trim()) {
       postReviewData(
         { reservationId, reviewData: { rating, content } },
         {
           onSuccess: () => {
             setModalType(null);
-            setCompletedReviews((prev) => [...prev, reservationId]);
           },
         },
       );
     }
   };
 
+  console.log(reservationId);
   return (
     <>
       {postReviewError && <div className="mb-4 text-red-500">{postReviewError.message}</div>}
