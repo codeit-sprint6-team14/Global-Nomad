@@ -7,6 +7,7 @@ import { Provider } from 'jotai';
 import type { AppProps } from 'next/app';
 import localFont from 'next/font/local';
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
 const queryClient = new QueryClient();
 
@@ -22,12 +23,17 @@ export default function App({ Component, pageProps }: AppProps) {
   const showNavBarAndFooter =
     !['/signup', '/signin', '/my-page/reservation-list'].includes(router.pathname) &&
     !router.pathname.startsWith('/my-page/regist-activity');
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    setIsLoggedIn(!!token);
+  }, []);
 
   return (
     <Provider>
       <main className={`${pretendard.variable} ${showNavBarAndFooter ? 'pt-70' : ''}`}>
         <QueryClientProvider client={queryClient}>
-          {showNavBarAndFooter && <NavBar />}
+          {showNavBarAndFooter && <NavBar accessToken={isLoggedIn} />}
           <div id="notification-root" />
           <Component {...pageProps} />
           {showNavBarAndFooter && <Footer />}

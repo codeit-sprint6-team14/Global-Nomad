@@ -1,14 +1,34 @@
+import { getUserProfile } from '@/apis/getUserProfile';
+import { userAtom } from '@/store/userAtom';
+import { useAtom } from 'jotai';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import DropDown from '../Dropdown';
 import Notification from './Notification';
 
-// 테스트용 accessToken prop으로 로그인 상태, 로그아웃 상태 UI 테스트
-function NavBar({ accessToken = true }: { accessToken?: boolean }) {
+function NavBar({ accessToken }: { accessToken?: boolean }) {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
+  const [user, setUser] = useAtom(userAtom);
+
+  useEffect(() => {
+    const loadUserProfile = async () => {
+      try {
+        const data = await getUserProfile();
+        setUser({
+          email: data.email,
+          nickname: data.nickname,
+          profileImage: data.profileImageUrl,
+        });
+      } catch (error) {
+        console.error('유저 정보 불러오기 실패: ', error);
+      }
+    };
+
+    loadUserProfile();
+  }, [user]);
 
   const handleDropdownVisible = () => {
     setIsOpenMenu(!isOpenMenu);
@@ -43,15 +63,9 @@ function NavBar({ accessToken = true }: { accessToken?: boolean }) {
             <Notification />
             <div className="mx-12 h-22 border-l border-solid border-gray-300 md:mx-25" />
             <div className="relative flex items-center gap-10">
-              <Image
-                src="/assets/images/testImg/test-profile.svg"
-                alt="프로필 이미지"
-                className="rounded-full"
-                width={32}
-                height={32}
-              />
+              <Image src={user.profileImage} alt="프로필 이미지" className="rounded-full" width={32} height={32} />
               <div className="cursor-pointer text-md-medium text-black" onClick={handleDropdownVisible}>
-                이영훈
+                {user.nickname}
               </div>
               {isOpenMenu && (
                 <DropDown classNames="h-max w-120 top-40 right-0 z-50">
@@ -68,8 +82,12 @@ function NavBar({ accessToken = true }: { accessToken?: boolean }) {
           </div>
         ) : (
           <div className="flex gap-24">
-            <div className="cursor-pointer text-md-medium text-black">로그인</div>
-            <div className="cursor-pointer text-md-medium text-black">회원가입</div>
+            <Link href="/signin">
+              <div className="cursor-pointer text-md-medium text-black">로그인</div>
+            </Link>
+            <Link href="/signup">
+              <div className="cursor-pointer text-md-medium text-black">회원가입</div>
+            </Link>
           </div>
         )}
       </div>
