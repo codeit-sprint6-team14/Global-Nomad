@@ -38,6 +38,7 @@ const MainPage = () => {
   const [itemsPerPage, setItemsPerPage] = useState(INITIAL_ITEMS_PER_PAGE);
   const [categoryStartIndex, setCategoryStartIndex] = useState(0);
   const [isTablet, setIsTablet] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
   const tabsContainerRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
@@ -61,8 +62,15 @@ const MainPage = () => {
 
   useEffect(() => {
     const handleResize = () => {
+      const newIsDesktop = window.innerWidth >= 1200;
+      setIsDesktop(newIsDesktop);
       setIsTablet(window.innerWidth >= 744 && window.innerWidth < 1200);
+
+      if (newIsDesktop) {
+        setCategoryStartIndex(0);
+      }
     };
+
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
@@ -72,8 +80,10 @@ const MainPage = () => {
     if (tabsContainerRef.current && isTablet) {
       const tabWidth = tabsContainerRef.current.scrollWidth / categories.length;
       tabsContainerRef.current.style.transform = `translateX(-${categoryStartIndex * tabWidth}px)`;
+    } else if (tabsContainerRef.current && isDesktop) {
+      tabsContainerRef.current.style.transform = 'translateX(0)';
     }
-  }, [categoryStartIndex, isTablet]);
+  }, [categoryStartIndex, isTablet, isDesktop]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent | Event) => {
@@ -96,13 +106,19 @@ const MainPage = () => {
     return () => clearInterval(timer);
   }, [popularActivities]);
 
-  const handleCategoryChange = useCallback((category: string) => {
-    setActiveCategory(category);
-    setPage(1);
-    setIsSearching(false);
-    setSearchTerm('');
-    setItemsPerPage(INITIAL_ITEMS_PER_PAGE);
-  }, []);
+  const handleCategoryChange = useCallback(
+    (category: string) => {
+      setActiveCategory(category);
+      setPage(1);
+      setIsSearching(false);
+      setSearchTerm('');
+      setItemsPerPage(INITIAL_ITEMS_PER_PAGE);
+      if (isDesktop) {
+        setCategoryStartIndex(0);
+      }
+    },
+    [isDesktop],
+  );
 
   const handleCategoryNextClick = () => {
     if (categoryStartIndex + VISIBLE_TABS < categories.length) {
@@ -186,17 +202,6 @@ const MainPage = () => {
                 </div>
               </Link>
             ))}
-            <div className="absolute bottom-4 left-1/2 z-20 flex -translate-x-1/2 transform space-x-2">
-              {popularActivities.map((_, index) => (
-                <button
-                  key={index}
-                  className={`h-3 w-3 rounded-full transition-colors ${
-                    index === currentBannerIndex ? 'bg-white' : 'bg-gray-400 hover:bg-gray-300'
-                  }`}
-                  onClick={() => setCurrentBannerIndex(index)}
-                />
-              ))}
-            </div>
           </div>
         )}
       </div>
@@ -224,7 +229,7 @@ const MainPage = () => {
               </div>
             </div>
           )}
-          <div className="flex gap-24 sm:w-340 md:w-695 lg:w-1200">
+          <div className="flex sm:w-340 md:w-695 md:gap-32 lg:w-1200 lg:gap-24">
             {popularActivities.map((activity) => (
               <PopularActivityCard key={activity.id} activity={activity} />
             ))}
@@ -235,59 +240,62 @@ const MainPage = () => {
       <section className="flex flex-col gap-24">
         {!isSearching && (
           <div className="mb-24 flex items-center justify-between sm:w-340 md:w-695 md:gap-14 lg:w-1204">
-            <div className="relative flex items-center overflow-hidden md:w-640">
-              <div className="flex-shrink-0">
-                {isTablet && categoryStartIndex > 0 ? (
-                  <button
-                    onClick={handleCategoryPrevClick}
-                    className="z-1 flex h-32 w-32 items-center justify-center rounded-full border border-gray-600"
-                  >
-                    <PrevButton />
-                  </button>
-                ) : (
-                  <div className="" />
-                )}
-              </div>
+            <div className="relative flex items-center overflow-hidden md:w-640 lg:w-full">
+              {isTablet && !isDesktop && (
+                <div className="flex-shrink-0">
+                  {categoryStartIndex > 0 && (
+                    <button
+                      onClick={handleCategoryPrevClick}
+                      className="z-1 flex h-32 w-32 items-center justify-center rounded-full border border-gray-600"
+                    >
+                      <PrevButton />
+                    </button>
+                  )}
+                </div>
+              )}
 
-              <div className="mx-10 w-[calc(100%-5rem)] overflow-hidden pr-60">
+              <div
+                className={`${isTablet && !isDesktop ? 'mx-10 w-[calc(100%-5rem)] overflow-hidden pr-60' : 'w-full'}`}
+              >
                 <RadioTab.Root defaultTab={activeCategory} onTabChange={handleCategoryChange}>
                   <div
                     ref={tabsContainerRef}
-                    className={`flex gap-10 ${isTablet ? 'transition-transform duration-300 ease-in-out' : ''}`}
-                    style={isTablet ? { width: `${(categories.length / VISIBLE_TABS) * 105}%` } : {}}
+                    className={`flex ${
+                      isTablet && !isDesktop ? 'gap-10 transition-transform duration-300 ease-in-out' : 'lg:gap-24'
+                    }`}
+                    style={isTablet && !isDesktop ? { width: `${(categories.length / VISIBLE_TABS) * 105}%` } : {}}
                   >
-                    {categories.map((category, index) => (
+                    {categories.map((category) => (
                       <div
                         key={category}
-                        className={`${isTablet ? 'flex-shrink-0' : ''} ${
-                          isTablet && index === categoryStartIndex + VISIBLE_TABS - 1 && index !== categories.length - 1
-                            ? ''
-                            : ''
-                        }`}
-                        style={isTablet ? { width: `${100 / categories.length}%` } : {}}
+                        className={`${isTablet && !isDesktop ? 'flex-shrink-0' : 'group lg:mb-2'}`}
+                        style={isTablet && !isDesktop ? { width: `${100 / categories.length}%` } : {}}
                       >
-                        <RadioTab.Item id={category}>{category}</RadioTab.Item>
+                        <RadioTab.Item id={category}>
+                          <span>{category}</span>
+                        </RadioTab.Item>
                       </div>
                     ))}
                   </div>
                 </RadioTab.Root>
               </div>
 
-              <div className="w-32 flex-shrink-0">
-                {isTablet && categoryStartIndex + VISIBLE_TABS < categories.length ? (
-                  <button
-                    onClick={handleCategoryNextClick}
-                    className="z-1 flex h-32 w-32 items-center justify-center rounded-full border border-gray-600"
-                  >
-                    <div className="flex h-20 w-35 items-center justify-center">
-                      <NextButton />
-                    </div>
-                  </button>
-                ) : (
-                  <div />
-                )}
-              </div>
+              {isTablet && !isDesktop && (
+                <div className="w-32 flex-shrink-0">
+                  {categoryStartIndex + VISIBLE_TABS < categories.length && (
+                    <button
+                      onClick={handleCategoryNextClick}
+                      className="z-1 flex h-32 w-32 items-center justify-center rounded-full border border-gray-600"
+                    >
+                      <div className="flex h-20 w-35 items-center justify-center">
+                        <NextButton />
+                      </div>
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
+
             <div
               className="relative cursor-pointer rounded-15 border border-black-100 sm:h-41 sm:w-90 md:h-53 md:w-120 lg:w-150"
               ref={dropdownRef}
