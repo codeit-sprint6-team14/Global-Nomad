@@ -11,6 +11,7 @@ export default function Document() {
           strategy="beforeInteractive"
         />
         <Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" strategy="beforeInteractive" />
+        <div id="modal-root" />
         <Main />
         <NextScript />
       </body>
