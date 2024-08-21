@@ -102,7 +102,7 @@ export const updateReservations = async (
   status: 'pending' | 'confirmed' | 'declined',
 ): Promise<UpdateReservationsParams> => {
   try {
-    const response = await axiosRequester({
+    const response = await axiosRequester<UpdateReservationsParams>({
       options: {
         method: 'PATCH',
         url: `/my-activities/${activityId}/reservations/${reservationId}`,

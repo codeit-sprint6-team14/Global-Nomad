@@ -7,16 +7,29 @@ type StoryProps = ComponentProps<typeof Filter>;
 const meta: Meta<typeof Filter> = {
   component: Filter,
   tags: ['autodocs'],
+  argTypes: {
+    content: { control: 'text' },
+    selectedOption: {
+      control: 'select',
+      options: [null, 'pending', 'canceled', 'confirmed', 'declined', 'completed'],
+    },
+    onOptionSelect: { action: 'optionSelected' },
+  },
 };
 
 export default meta;
-
 type Story = StoryObj<StoryProps>;
-
-const sortOptions = ['예약 신청', '예약 취소', '예약 승인', '예약 거절', '체험 완료'];
 
 export const Default: Story = {
   args: {
-    sortOptions,
+    content: '필터',
+    selectedOption: null,
+  },
+};
+
+export const WithSelectedOption: Story = {
+  args: {
+    content: '필터',
+    selectedOption: 'pending',
   },
 };
