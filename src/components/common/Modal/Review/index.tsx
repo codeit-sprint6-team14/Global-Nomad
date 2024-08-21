@@ -29,7 +29,6 @@ const Review = ({ title, bannerImageUrl, date, startTime, endTime, totalPrice, h
     }
   };
 
-  console.log(reservationId);
   return (
     <>
       {postReviewError && <div className="mb-4 text-red-500">{postReviewError.message}</div>}
