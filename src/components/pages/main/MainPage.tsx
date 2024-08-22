@@ -6,7 +6,7 @@ import Search from '@/components/common/Search';
 import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import DownArrow from '../../../../public/assets/icons/down-arrow.svg';
 import PrevButton from '../../../../public/assets/icons/left-arrow.svg';
@@ -40,6 +40,9 @@ const MainPage = () => {
   const [isTablet, setIsTablet] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
   const tabsContainerRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   const {
@@ -60,14 +63,22 @@ const MainPage = () => {
   const popularActivities = popularActivitiesData || [];
   const totalPages = Math.ceil((activitiesData?.activities?.length ?? 0) / itemsPerPage);
 
+  const filteredPopularActivities = useMemo(() => {
+    return popularActivities.filter((activity) => activity.rating >= 4);
+  }, [popularActivities]);
+
   useEffect(() => {
     const handleResize = () => {
       const newIsDesktop = window.innerWidth >= 1200;
+      const newIsTablet = window.innerWidth >= 744 && window.innerWidth < 1200;
       setIsDesktop(newIsDesktop);
-      setIsTablet(window.innerWidth >= 744 && window.innerWidth < 1200);
+      setIsTablet(newIsTablet);
 
-      if (newIsDesktop) {
+      if (newIsDesktop || newIsTablet) {
         setCategoryStartIndex(0);
+        if (tabsContainerRef.current) {
+          tabsContainerRef.current.scrollLeft = 0;
+        }
       }
     };
 
@@ -77,13 +88,13 @@ const MainPage = () => {
   }, []);
 
   useEffect(() => {
-    if (tabsContainerRef.current && isTablet) {
+    if (tabsContainerRef.current && (isTablet || !isDesktop)) {
       const tabWidth = tabsContainerRef.current.scrollWidth / categories.length;
       tabsContainerRef.current.style.transform = `translateX(-${categoryStartIndex * tabWidth}px)`;
     } else if (tabsContainerRef.current && isDesktop) {
       tabsContainerRef.current.style.transform = 'translateX(0)';
     }
-  }, [categoryStartIndex, isTablet, isDesktop]);
+  }, [categoryStartIndex, isTablet, isDesktop, categories.length]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent | Event) => {
@@ -120,15 +131,26 @@ const MainPage = () => {
     [isDesktop],
   );
 
+  const handleCategoryPrevClick = () => {
+    if (categoryStartIndex > 0) {
+      setCategoryStartIndex((prev) => Math.max(prev - 1, 0));
+    }
+    if (tabsContainerRef.current) {
+      const tabWidth = tabsContainerRef.current.scrollWidth / categories.length;
+      tabsContainerRef.current.scrollLeft = Math.max(0, tabsContainerRef.current.scrollLeft - tabWidth);
+    }
+  };
+
   const handleCategoryNextClick = () => {
     if (categoryStartIndex + VISIBLE_TABS < categories.length) {
       setCategoryStartIndex((prev) => Math.min(prev + 1, categories.length - VISIBLE_TABS));
     }
-  };
-
-  const handleCategoryPrevClick = () => {
-    if (categoryStartIndex > 0) {
-      setCategoryStartIndex((prev) => Math.max(prev - 1, 0));
+    if (tabsContainerRef.current) {
+      const tabWidth = tabsContainerRef.current.scrollWidth / categories.length;
+      tabsContainerRef.current.scrollLeft = Math.min(
+        tabsContainerRef.current.scrollWidth - tabsContainerRef.current.clientWidth,
+        tabsContainerRef.current.scrollLeft + tabWidth,
+      );
     }
   };
 
@@ -163,6 +185,29 @@ const MainPage = () => {
   const getCurrentMonth = () => {
     const months = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
     return months[new Date().getMonth()];
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (isDesktop || isTablet || !tabsContainerRef.current) return;
+    setIsDragging(true);
+    setStartX(e.pageX - tabsContainerRef.current.offsetLeft);
+    setScrollLeft(tabsContainerRef.current.scrollLeft);
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (isDesktop || isTablet || !isDragging || !tabsContainerRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - tabsContainerRef.current.offsetLeft;
+    const walk = (x - startX) * 2;
+    if (!isDesktop && !isTablet) {
+      tabsContainerRef.current.scrollLeft = scrollLeft + walk * -1;
+    } else {
+      tabsContainerRef.current.scrollLeft = scrollLeft - walk;
+    }
   };
 
   if (isActivitiesLoading || isPopularActivitiesLoading) return <div>loading...</div>;
@@ -202,6 +247,17 @@ const MainPage = () => {
                 </div>
               </Link>
             ))}
+            <div className="absolute bottom-4 left-1/2 z-20 flex -translate-x-1/2 transform space-x-2">
+              {popularActivities.map((_, index) => (
+                <button
+                  key={index}
+                  className={`h-3 w-3 rounded-full transition-colors ${
+                    index === currentBannerIndex ? 'bg-white' : 'bg-gray-400 hover:bg-gray-300'
+                  }`}
+                  onClick={() => setCurrentBannerIndex(index)}
+                />
+              ))}
+            </div>
           </div>
         )}
       </div>
@@ -211,36 +267,36 @@ const MainPage = () => {
       </div>
 
       {!isSearching && (
-        <section className="mt-50 flex flex-col gap-24">
-          {popularActivities.length > 0 && (
-            <div className="flex justify-between">
-              <h2 className="md:leading-43 font-bold sm:text-18 md:text-36 md:leading-[21.48px]">🔥인기 체험</h2>
+        <section className="mt-50 flex flex-col gap-24 lg:h-480 lg:w-1200">
+          <div className="flex items-center justify-between">
+            <h2 className="md:leading-43 font-bold sm:text-18 md:text-36 md:leading-[21.48px]">🔥인기 체험</h2>
+            {isDesktop && filteredPopularActivities.length > 3 && (
               <div className="flex gap-12">
                 <button onClick={handlePrevClick} disabled={startIndex === 0} className="cursor-pointer">
                   <PrevButton />
                 </button>
                 <button
                   onClick={handleNextClick}
-                  disabled={startIndex >= popularActivities.length - visibleCards}
+                  disabled={startIndex >= filteredPopularActivities.length - 3}
                   className="cursor-pointer"
                 >
                   <NextButton />
                 </button>
               </div>
-            </div>
-          )}
-          <div className="flex sm:w-340 md:w-695 md:gap-32 lg:w-1200 lg:gap-24">
-            {popularActivities.map((activity) => (
-              <PopularActivityCard key={activity.id} activity={activity} />
+            )}
+          </div>
+          <div className="flex sm:gap-16 md:gap-32 lg:w-1200 lg:gap-24">
+            {filteredPopularActivities.slice(startIndex, startIndex + (isDesktop ? 3 : 2)).map((activity) => (
+              <PopularActivityCard key={`${activity.id}-${Math.random()}`} activity={activity} />
             ))}
           </div>
         </section>
       )}
 
-      <section className="flex flex-col gap-24">
-        {!isSearching && (
+      {!isSearching && (
+        <section className="flex flex-col gap-24">
           <div className="mb-24 flex items-center justify-between sm:w-340 md:w-695 md:gap-14 lg:w-1204">
-            <div className="relative flex items-center overflow-hidden md:w-640 lg:w-full">
+            <div className="relative flex items-center overflow-hidden sm:w-375 md:w-640 lg:w-full">
               {isTablet && !isDesktop && (
                 <div className="flex-shrink-0">
                   {categoryStartIndex > 0 && (
@@ -255,24 +311,38 @@ const MainPage = () => {
               )}
 
               <div
-                className={`${isTablet && !isDesktop ? 'mx-10 w-[calc(100%-5rem)] overflow-hidden pr-60' : 'w-full'}`}
+                className={`${
+                  isDesktop || isTablet
+                    ? `${isTablet && !isDesktop ? 'mx-10 w-[calc(100%-5rem)] overflow-hidden pr-60' : 'w-full'}`
+                    : 'w-250 overflow-x-auto scrollbar-hide'
+                }`}
+                onMouseDown={handleMouseDown}
+                onMouseUp={handleMouseUp}
+                onMouseLeave={handleMouseUp}
+                onMouseMove={handleMouseMove}
               >
                 <RadioTab.Root defaultTab={activeCategory} onTabChange={handleCategoryChange}>
                   <div
                     ref={tabsContainerRef}
                     className={`flex ${
-                      isTablet && !isDesktop ? 'gap-10 transition-transform duration-300 ease-in-out' : 'lg:gap-24'
+                      isTablet && !isDesktop
+                        ? 'gap-10 transition-transform duration-300 ease-in-out'
+                        : isDesktop
+                          ? 'lg:gap-24'
+                          : 'sm:gap-8'
                     }`}
                     style={isTablet && !isDesktop ? { width: `${(categories.length / VISIBLE_TABS) * 105}%` } : {}}
                   >
                     {categories.map((category) => (
                       <div
                         key={category}
-                        className={`${isTablet && !isDesktop ? 'flex-shrink-0' : 'group lg:mb-2'}`}
+                        className={`${
+                          isTablet && !isDesktop ? 'flex-shrink-0' : isDesktop ? 'group lg:mb-2' : 'flex-shrink-0'
+                        }`}
                         style={isTablet && !isDesktop ? { width: `${100 / categories.length}%` } : {}}
                       >
                         <RadioTab.Item id={category}>
-                          <span>{category}</span>
+                          <span className="block whitespace-nowrap px-3 py-2 text-sm">{category}</span>
                         </RadioTab.Item>
                       </div>
                     ))}
@@ -302,7 +372,9 @@ const MainPage = () => {
             >
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className={`flex w-full items-center justify-center sm:py-9 md:px-20 md:py-14 ${sortBy ? 'gap-5' : 'md:20 sm:gap-10 lg:gap-40'}`}
+                className={`flex w-full items-center justify-center sm:py-9 md:px-20 md:py-14 ${
+                  sortBy ? 'gap-5' : 'md:20 sm:gap-10 lg:gap-40'
+                }`}
               >
                 <span className="text-black-100 sm:text-md-medium md:text-lg-medium">
                   {sortBy ? dropdownOptions.find((option) => option.value === sortBy)?.label : '가격'}
@@ -328,43 +400,43 @@ const MainPage = () => {
               )}
             </div>
           </div>
+        </section>
+      )}
+
+      <div className="m-auto flex flex-col gap-24 sm:w-340 md:w-695 lg:w-1200">
+        {isSearching ? (
+          <h2 className="leading-42 mt-50 text-32 font-normal">
+            <span className="text-3xl-bold text-black-100">{searchTerm}</span>(으)로 검색한 결과입니다.
+          </h2>
+        ) : (
+          <h2 className="md:leading-43 font-bold sm:text-18 md:text-36 md:leading-[21.48px]">
+            {activeCategory || '🥾모든 체험'}
+          </h2>
         )}
 
-        <div className="m-auto flex flex-col gap-24 sm:w-340 md:w-695 lg:w-1200">
-          {isSearching ? (
-            <h2 className="leading-42 mt-50 text-32 font-normal">
-              <span className="text-3xl-bold text-black-100">{searchTerm}</span>(으)로 검색한 결과입니다.
-            </h2>
+        {isSearching && <span className="mb-24 text-lg-regular">총 {displayedActivities.length}개의 결과</span>}
+
+        <div className="min-h-600">
+          {displayedActivities.length > 0 ? (
+            <div className="flex flex-wrap sm:w-340 sm:gap-4 md:w-695 md:gap-16 lg:w-1204 lg:gap-24">
+              {displayedActivities.map((activity) => (
+                <ActivityCards key={activity.id} activity={activity} />
+              ))}
+            </div>
           ) : (
-            <h2 className="md:leading-43 font-bold sm:text-18 md:text-36 md:leading-[21.48px]">
-              {activeCategory || '🥾모든 체험'}
-            </h2>
-          )}
-
-          {isSearching && <span className="mb-24 text-lg-regular">총 {displayedActivities.length}개의 결과</span>}
-
-          <div className="min-h-600">
-            {displayedActivities.length > 0 ? (
-              <div className="flex flex-wrap sm:w-340 sm:gap-4 md:w-695 md:gap-16 lg:w-1204 lg:gap-24">
-                {displayedActivities.map((activity) => (
-                  <ActivityCards key={activity.id} activity={activity} />
-                ))}
-              </div>
-            ) : (
-              <p className="h-600 text-xl text-gray-500">검색 결과가 없습니다.</p>
-            )}
-          </div>
-
-          {displayedActivities.length > 0 && (
-            <Pagination
-              currentPage={page}
-              totalPages={totalPages}
-              onPageChange={handlePageChange}
-              isPlaceholderData={isActivitiesLoading}
-            />
+            <p className="h-600 text-xl text-gray-500">검색 결과가 없습니다.</p>
           )}
         </div>
-      </section>
+
+        {displayedActivities.length > 0 && (
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+            isPlaceholderData={isActivitiesLoading}
+          />
+        )}
+      </div>
     </main>
   );
 };
