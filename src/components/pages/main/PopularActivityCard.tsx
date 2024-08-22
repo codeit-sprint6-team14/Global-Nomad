@@ -1,33 +1,50 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { useMemo, useState } from 'react';
 
 import Star from '../../../../public/assets/icons/star.svg';
+import BasicThumbnail1 from '../../../../public/assets/images/testImg/air-balloon.png';
+import BasicThumbnail2 from '../../../../public/assets/images/testImg/dance.png';
+import BasicThumbnail3 from '../../../../public/assets/images/testImg/dog.png';
+import BasicThumbnail4 from '../../../../public/assets/images/testImg/fish.png';
+import BasicThumbnail5 from '../../../../public/assets/images/testImg/village.png';
 import { ActivityCardProps } from './mainPage.type';
 
+const backupThumbnails = [BasicThumbnail1, BasicThumbnail2, BasicThumbnail3, BasicThumbnail4, BasicThumbnail5];
+
 const PopularActivityCard: React.FC<ActivityCardProps> = ({ activity }) => {
+  const [imageLoadError, setImageLoadError] = useState(false);
+
+  const randomBackupThumbnail = useMemo(() => {
+    return backupThumbnails[Math.floor(Math.random() * backupThumbnails.length)];
+  }, []);
+
+  const handleImageError = () => {
+    setImageLoadError(true);
+  };
+
   return (
     <Link
       href={`/activities/${activity.id}`}
       className="group relative mb-48 overflow-hidden rounded-25 sm:h-168 sm:w-168 md:h-384 md:w-384"
     >
       <Image
-        src={activity.bannerImageUrl}
-        alt="PopularActivityThumnail"
-        width={384}
-        height={384}
-        className="absolute"
+        src={activity.bannerImageUrl && !imageLoadError ? activity.bannerImageUrl : randomBackupThumbnail}
+        alt={imageLoadError ? 'Backup Popular Activity Thumbnail' : 'Popular Activity Thumbnail'}
+        layout="fill"
+        objectFit="cover"
+        onError={handleImageError}
       />
-      <div className="absolute bottom-0 flex flex-col justify-end px-20 pb-12 pt-30 text-white sm:gap-6 md:gap-20 md:py-30">
-        <div className="flex items-center gap-5 text-md-semibold">
-          <Star width={20} height={20} />
-          <span>{activity.rating}</span>
-          <span>({activity.reviewCount})</span>
+      <div className="absolute inset-0 flex flex-col justify-end p-4 text-white">
+        <div className="flex items-center gap-2">
+          <Star width={16} height={16} />
+          <span className="text-sm">{activity.rating.toFixed(1)}</span>
+          <span className="text-sm">({activity.reviewCount})</span>
         </div>
-        <p className="line-clamp-2 text-wrap break-words sm:text-2lg-bold md:text-3xl-bold">{activity.title}</p>
-        <div className="flex items-center gap-5">
-          <span className="sm:text-lg-bold md:text-xl-bold">\ {activity.price.toLocaleString()}</span>
-          <span className="text-md-regular text-gray-600">/인</span>
-        </div>
+        <h3 className="mt-2 line-clamp-2 text-lg font-bold">{activity.title}</h3>
+        <p className="mt-1 text-sm">
+          ₩{activity.price.toLocaleString()} <span className="text-xs opacity-70">/인</span>
+        </p>
       </div>
     </Link>
   );
