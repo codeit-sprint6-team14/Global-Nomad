@@ -31,6 +31,7 @@ const MainPage = () => {
   const [sortBy, setSortBy] = useState<string | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
+  const [bannerLoadError, setBannerLoadError] = useState<Record<number, boolean>>({});
   const [startIndex, setStartIndex] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
   const [isSearching, setIsSearching] = useState(false);
@@ -43,6 +44,16 @@ const MainPage = () => {
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+  const backgroundColors = useMemo(() => ['bg-purple-100', 'bg-pink-200', 'bg-sky-200'], []);
+
+  const getRandomBackgroundColor = () => {
+    return backgroundColors[Math.floor(Math.random() * backgroundColors.length)];
+  };
+
+  const handleImageError = (activityId: number) => {
+    setBannerLoadError((prev) => ({ ...prev, [activityId]: true }));
+  };
 
   const {
     data: activitiesData,
@@ -231,14 +242,21 @@ const MainPage = () => {
                 }`}
               >
                 <div className="relative h-full w-full">
-                  <Image
-                    src={activity.bannerImageUrl}
-                    alt={`Featured Activity Banner ${index + 1}`}
-                    layout="fill"
-                    objectFit="cover"
-                    priority={index === currentBannerIndex}
-                    className="transition-transform duration-300"
-                  />
+                  {bannerLoadError[activity.id] ? (
+                    <div
+                      className={`absolute inset-0 ${getRandomBackgroundColor()} flex items-center justify-center`}
+                    ></div>
+                  ) : (
+                    <Image
+                      src={activity.bannerImageUrl}
+                      alt={`Featured Activity Banner ${index + 1}`}
+                      layout="fill"
+                      objectFit="cover"
+                      priority={index === currentBannerIndex}
+                      className="transition-transform duration-300"
+                      onError={() => handleImageError(activity.id)}
+                    />
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50"></div>
                 </div>
                 <div className="absolute flex flex-col text-white sm:bottom-[30%] sm:left-[18%] sm:w-200 sm:gap-8 md:bottom-200 md:left-[4%] md:w-450 lg:left-[1%] lg:w-600 lg:gap-24">
