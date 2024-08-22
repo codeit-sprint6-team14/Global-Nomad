@@ -11,7 +11,7 @@ const Desktop = ({
   classNames: string;
   handleReservationSubmit: () => void;
 }) => {
-  const { isReservationButtonActive, isPending } = useReservationSubmit();
+  const { isReservationButtonDisabled, isPending } = useReservationSubmit();
 
   return (
     <section
@@ -22,8 +22,8 @@ const Desktop = ({
       <ReservationScheduleSelect />
       <DesktopComponents.ParticipantCounter />
       <Button.Default
-        disabled={isReservationButtonActive || isPending}
-        className="h-56 w-full hover:bg-gray-800"
+        disabled={isReservationButtonDisabled || isPending}
+        className={`h-56 w-full ${!(isReservationButtonDisabled || isPending) && 'hover:bg-gray-800'} `}
         onClick={handleReservationSubmit}
       >
         {isPending ? '예약 중...' : '예약하기'}

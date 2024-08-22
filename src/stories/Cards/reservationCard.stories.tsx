@@ -1,5 +1,5 @@
+import { MyReservation } from '@/apis/myPage/myReservations.types';
 import ReservationCard from '@/components/common/Cards/reservationCard';
-import { reservationCard } from '@/types/cardDataList';
 import { StatusType } from '@/utils/cardStatus';
 import type { Meta, StoryObj } from '@storybook/react';
 
@@ -14,22 +14,22 @@ const imageOptions = [
 
 // 래퍼 컴포넌트 정의
 const ReservationCardWrapper = ({
-  card,
+  myReservationData,
   status,
   bannerImageUrl,
 }: {
-  card: Omit<reservationCard, 'status' | 'activity'> & {
-    activity: Omit<reservationCard['activity'], 'bannerImageUrl'>;
+  myReservationData: Omit<MyReservation, 'status' | 'activity'> & {
+    activity: Omit<MyReservation['activity'], 'bannerImageUrl'>;
   };
   status: StatusType;
   bannerImageUrl: string;
 }) => (
   <ReservationCard
-    card={{
-      ...card,
+    myReservationData={{
+      ...myReservationData,
       status,
       activity: {
-        ...card.activity,
+        ...myReservationData.activity,
         bannerImageUrl,
       },
     }}
@@ -55,20 +55,30 @@ const meta: Meta<typeof ReservationCardWrapper> = {
 export default meta;
 type Story = StoryObj<typeof ReservationCardWrapper>;
 
-const baseCard = {
-  activity: {
-    title: '샘플 액티비티',
-  },
+const baseReservation: Omit<MyReservation, 'status' | 'activity'> & {
+  activity: Omit<MyReservation['activity'], 'bannerImageUrl'>;
+} = {
+  id: 1,
+  scheduleId: 1,
+  teamId: 'team1',
+  userId: 1,
+  reviewSubmitted: false,
   totalPrice: 50000,
   headCount: 2,
   date: '2024-08-15',
   startTime: '14:00',
   endTime: '16:00',
+  createdAt: '2023-08-15T14:00:00Z',
+  updatedAt: '2023-08-15T14:00:00Z',
+  activity: {
+    id: 1,
+    title: '샘플 액티비티',
+  },
 };
 
 export const WithControls: Story = {
   args: {
-    card: baseCard,
+    myReservationData: baseReservation,
     status: 'pending',
     bannerImageUrl: imageOptions[0],
   },

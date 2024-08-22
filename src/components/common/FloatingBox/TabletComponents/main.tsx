@@ -7,7 +7,7 @@ import { useState } from 'react';
 
 const Main = ({ handleReservationSubmit }: { handleReservationSubmit: () => void }) => {
   const [isCalendarModalOpen, setIsCalendarModalOpen] = useState(false);
-  const { isPending, isReservationButtonActive, selectedDate, selectedSlot } = useReservationSubmit();
+  const { isPending, isReservationButtonDisabled, selectedDate, selectedSlot } = useReservationSubmit();
 
   const handleDateSelectModal = () => {
     setIsCalendarModalOpen((prev) => !prev);
@@ -45,9 +45,9 @@ const Main = ({ handleReservationSubmit }: { handleReservationSubmit: () => void
           <Counter />
         </div>
         <Button.Default
-          className="h-56 w-203 hover:bg-gray-800"
+          className={`h-56 w-203 ${!(isReservationButtonDisabled || isPending) && 'hover:bg-gray-800'} `}
           onClick={handleReservationSubmit}
-          disabled={isReservationButtonActive || isPending}
+          disabled={isReservationButtonDisabled || isPending}
         >
           {isPending ? '예약 중...' : '예약하기'}
         </Button.Default>

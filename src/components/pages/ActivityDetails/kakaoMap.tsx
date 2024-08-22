@@ -7,7 +7,7 @@ interface Coordinates {
   lng: number;
 }
 
-const KakaoMap = ({ address }: { address: string }) => {
+const KakaoMap = ({ address, kakaoKey }: { address: string; kakaoKey: string }) => {
   const [coordinates, setCoordinates] = useState<Coordinates | null>(null);
 
   useEffect(() => {
@@ -31,10 +31,10 @@ const KakaoMap = ({ address }: { address: string }) => {
     } else {
       const script = document.createElement('script');
       script.onload = loadKakaoMap;
-      script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.KAKAO_KEY}&libraries=services&autoload=false`;
+      script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoKey}&libraries=services&autoload=false`;
       document.head.appendChild(script);
     }
-  }, [address]);
+  }, [address, kakaoKey]);
 
   if (!coordinates) {
     return <div>지도 로딩중...</div>;
