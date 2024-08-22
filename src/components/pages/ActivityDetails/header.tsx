@@ -1,4 +1,5 @@
 import DropDown from '@/components/common/Dropdown';
+import { useClickOutside } from '@/hooks/useClickOutside';
 import { HeaderProps } from '@/types/activity';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
@@ -17,11 +18,13 @@ const Header = ({
   handleDeleteConfirmation,
 }: HeaderProps) => {
   const [isOpenDropdown, setIsOpenDropdown] = useState(false);
+  const [showCopiedMessage, setShowCopiedMessage] = useState(false);
   const router = useRouter();
 
   const handleDropdownVisible = () => {
     setIsOpenDropdown((prev) => !prev);
   };
+  const modalRef = useClickOutside(handleDropdownVisible);
 
   const handleOptionClick = async (option: string) => {
     if (option === '수정하기') {
@@ -35,7 +38,13 @@ const Header = ({
 
   const kebabButtonVariants = {
     rest: { scale: 1 },
-    hover: { scale: 1.5, rotate: 90 },
+    hover: { scale: 1.15 },
+    tap: { scale: 0.95 },
+  };
+
+  const shareButtonVariants = {
+    rest: { scale: 1 },
+    hover: { scale: 1.2 },
     tap: { scale: 0.95 },
   };
 
@@ -57,34 +66,60 @@ const Header = ({
     },
   };
 
+  const handleShareClick = () => {
+    const currentUrl = window.location.href;
+    navigator.clipboard.writeText(currentUrl).then(() => {
+      setShowCopiedMessage(true);
+      setTimeout(() => setShowCopiedMessage(false), 2000);
+    });
+  };
+
   return (
     <div className="px-16 pt-16 md:px-24 md:pt-24 lg:p-0">
       <div className="text-md-regular text-black-100">{category}</div>
       <div className="relative mt-10 flex items-center justify-between">
         <h1 className="text-2xl-bold text-black-100 md:text-3xl-bold">{title}</h1>
-        {myId === userId && (
-          <motion.svg
-            width="40"
-            height="40"
-            viewBox="0 0 32 33"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            variants={kebabButtonVariants}
+        <div className="flex items-center">
+          <motion.button
+            onClick={handleShareClick}
+            className="relative mr-8 flex h-24 w-24 cursor-pointer items-center justify-center rounded-full focus:outline-none"
+            variants={shareButtonVariants}
             initial="rest"
             whileHover="hover"
             whileTap="tap"
-            onClick={handleDropdownVisible}
-            className="cursor-pointer focus:outline-none"
-            style={{ originX: '50%', originY: '50%' }}
           >
-            <circle cx="16.0001" cy="7.70005" r="2.4" fill="#79747E" />
-            <circle cx="16.0001" cy="16.5001" r="2.4" fill="#79747E" />
-            <circle cx="16.0001" cy="25.2999" r="2.4" fill="#79747E" />
-          </motion.svg>
+            <Image src="/assets/icons/share.svg" fill sizes="(min-width: 375px) 30px," alt="링크 복사" />
+          </motion.button>
+          {myId === userId && (
+            <motion.svg
+              width="30"
+              height="30"
+              viewBox="0 0 32 33"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              variants={kebabButtonVariants}
+              initial="rest"
+              whileHover="hover"
+              whileTap="tap"
+              onClick={handleDropdownVisible}
+              className="cursor-pointer focus:outline-none"
+              style={{ originX: '50%', originY: '50%' }}
+            >
+              <circle cx="16.0001" cy="7.70005" r="2.4" fill="#79747E" />
+              <circle cx="16.0001" cy="16.5001" r="2.4" fill="#79747E" />
+              <circle cx="16.0001" cy="25.2999" r="2.4" fill="#79747E" />
+            </motion.svg>
+          )}
+        </div>
+        {showCopiedMessage && (
+          <div className="absolute bottom-40 right-0 rounded-md bg-gray-600 px-6 py-2 text-white">
+            링크가 복사되었습니다
+          </div>
         )}
         <AnimatePresence>
           {isOpenDropdown && (
             <motion.div
+              ref={modalRef}
               initial="hidden"
               animate="visible"
               exit="hidden"
@@ -113,7 +148,8 @@ const Header = ({
         <div className="relative mt-2 h-16 w-16">
           <Image fill src="/assets/icons/star.svg" alt="별점 아이콘" />
         </div>
-        <div className="ml-6 text-md-regular text-black">{`${rating} (${reviewCount})`}</div>
+        <div className="ml-6 text-md-regular text-black">{rating}</div>
+        <div className="ml-6 text-gray-700 underline">{`후기 ${reviewCount}개`}</div>
         <div className="relative ml-12 mt-2 h-18 w-18">
           <Image src="/assets/icons/map.svg" fill alt="지도 아이콘" />
         </div>
