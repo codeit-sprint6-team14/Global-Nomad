@@ -20,8 +20,7 @@ const pretendard = localFont({
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const showNavBarAndFooter =
-    !['/signup', '/signin', '/my-page/reservation-list'].includes(router.pathname) &&
-    !router.pathname.startsWith('/my-page/regist-activity');
+    !['/signup', '/signin'].includes(router.pathname) && !router.pathname.startsWith('/my-page');
 
   return (
     <Provider>
