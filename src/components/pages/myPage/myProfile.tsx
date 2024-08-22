@@ -114,7 +114,7 @@ const MyProfile = () => {
             value={user.nickname}
             onChange={(e) => setUser({ ...user, nickname: e.target.value })}
           />
-          <InputSection title="이메일" value={user.email} />
+          <InputSection title="이메일" value={user.email} readonly={true} />
           <PasswordInputSection
             title="새 비밀번호"
             placeholder="8자 이상 입력해 주세요"
