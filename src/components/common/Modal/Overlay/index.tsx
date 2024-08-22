@@ -2,7 +2,7 @@ import { MouseEvent, ReactNode, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 
 interface ModalOverlayProps {
-  isOpen: boolean;
+  isOpen: boolean | string | null;
   onClose: () => void;
   children: ReactNode;
 }

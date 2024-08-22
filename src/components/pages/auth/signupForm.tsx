@@ -2,7 +2,6 @@ import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
 import Modal from '@/components/common/Modal';
 import SuccessMessages from '@/constants/successMessages';
-import { useClickOutside } from '@/hooks/useClickOutside';
 import { useToggle } from '@/hooks/useToggle';
 import { SignupFormData } from '@/types/auth';
 import { signupValidationSchema } from '@/utils/schema';
@@ -38,8 +37,6 @@ const SignupForm = () => {
       router.push('/signin');
     }
   };
-
-  const modalRef = useClickOutside(handleModalClose);
 
   return (
     <>
@@ -96,15 +93,11 @@ const SignupForm = () => {
           {isLoading ? '처리 중...' : '회원가입 하기'}
         </Button.Default>
       </form>
-      {isModalOpen && (
-        <Modal.Overlay>
-          <div ref={modalRef}>
-            <Modal.RegisterConfirm onClose={handleModalClose}>
-              {isSuccess ? SuccessMessages.SIGNUP_SUCCESS : error}
-            </Modal.RegisterConfirm>
-          </div>
-        </Modal.Overlay>
-      )}
+      <Modal.Overlay onClose={handleModalClose} isOpen={isModalOpen}>
+        <Modal.RegisterConfirm onClose={handleModalClose}>
+          {isSuccess ? SuccessMessages.SIGNUP_SUCCESS : error}
+        </Modal.RegisterConfirm>
+      </Modal.Overlay>
     </>
   );
 };
