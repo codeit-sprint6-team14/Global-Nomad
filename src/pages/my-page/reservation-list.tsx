@@ -1,3 +1,4 @@
+/* eslint-disable import/no-named-as-default-member */
 import AnimatedContainer from '@/components/common/Animation/AnimatedContainer';
 import Footer from '@/components/common/Footer';
 import Modal from '@/components/common/Modal';
@@ -17,14 +18,8 @@ const ReservationList = () => {
   const isTablet = deviceState === Device.TABLET;
   const isDesktop = deviceState === Device.DESKTOP;
 
-  const {
-    myReservationsData,
-    isMyReservationsEmpty,
-    error: queryError,
-    setTarget,
-    handleStatusChange,
-    selectedStatus,
-  } = useMyReservationsQuery();
+  const { myReservationsData, isMyReservationsEmpty, setTarget, handleStatusChange, selectedStatus } =
+    useMyReservationsQuery();
 
   const handleCloseModal = () => {
     setModalType(null);
@@ -35,7 +30,6 @@ const ReservationList = () => {
       <NavBar />
       <AnimatedContainer>
         <main className="md:mb-400 lg:mb-270 mx-auto mb-[496px] mt-94 w-344 md:w-696 lg:mb-142 lg:mt-142 lg:w-1200">
-          {queryError && <div className="mb-4 text-red-500">{queryError.message}</div>}
           {isMobile && (
             <div>
               <ReservationContent
