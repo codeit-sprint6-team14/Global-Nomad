@@ -28,7 +28,7 @@ const ReservationContent = ({
         {showFilter && <Filter content="필터" onOptionSelect={onStatusChange} selectedOption={selectedStatus} />}
       </div>
       {isEmptyMyReservationData ? (
-        <div className="md:w-429 lg:w-792">
+        <div className="mb-420 md:mb-601 md:w-429 lg:mb-[469px] lg:w-792">
           <EmptyContent />
         </div>
       ) : (

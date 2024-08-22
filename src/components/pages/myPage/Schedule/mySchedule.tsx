@@ -75,40 +75,40 @@ const MySchedule = () => {
 
   return (
     <div>
-      <div className="mb-60 ml-auto mr-auto mt-30 w-343 md:mr-0 md:w-430 lg:w-800">
-        <div className="flex items-center">
-          <div className="block cursor-pointer md:hidden" onClick={handleGoMyPage}>
-            <LeftArrow />
-          </div>
-          <h2 className="ml-10 mt-5 text-3xl-bold md:ml-0">예약 현황</h2>
+      <div className="flex items-center">
+        <div className="block cursor-pointer md:hidden" onClick={handleGoMyPage}>
+          <LeftArrow />
         </div>
-        {hasExperiences ? (
-          <div className="relative mb-20 mt-20">
-            <div className="absolute z-10 ml-10 h-24 w-45 -translate-y-2.5 transform bg-white text-center text-md-regular">
-              체험명
-            </div>
-            <Input.Dropdown
-              options={activities}
-              defaultOption={selectedOption ? selectedOption.label : '내 체험을 선택하세요'}
-              onSelect={handleOptionSelect}
-              className="h-56"
-            />
-          </div>
-        ) : (
-          <div className="mb-50 mt-100 flex justify-center">
-            <Paper />
-          </div>
-        )}
-        {hasExperiences ? (
-          <Calendar
-            activityId={parseInt(selectedOption?.value ?? '0', 10)}
-            reservations={reservations}
-            onMonthChange={handleMonthChange}
-          />
-        ) : (
-          <div className="mb-200 text-center text-2xl-medium text-gray-700">아직 등록한 체험이 없어요</div>
-        )}
+        <h2 className="ml-10 text-3xl-bold md:ml-0">예약 현황</h2>
       </div>
+      {hasExperiences ? (
+        <div className="relative mb-20 mt-20">
+          <div className="absolute z-10 ml-10 h-24 w-45 -translate-y-2.5 transform bg-white text-center text-md-regular">
+            체험명
+          </div>
+          <Input.Dropdown
+            options={activities}
+            defaultOption={selectedOption ? selectedOption.label : '내 체험을 선택하세요'}
+            onSelect={handleOptionSelect}
+            className="h-56"
+          />
+        </div>
+      ) : (
+        <div className="mb-50 mt-100 flex justify-center">
+          <Paper />
+        </div>
+      )}
+      {hasExperiences ? (
+        <Calendar
+          activityId={parseInt(selectedOption?.value ?? '0', 10)}
+          reservations={reservations}
+          onMonthChange={handleMonthChange}
+        />
+      ) : (
+        <div className="mb-420 md:mb-601 mb-200 text-center text-2xl-medium text-gray-700 lg:mb-[469px]">
+          아직 등록한 체험이 없어요
+        </div>
+      )}
     </div>
   );
 };

@@ -32,8 +32,8 @@ const ReservationList = () => {
   return (
     <>
       <NavBar />
-      {queryError && <div className="mb-4 text-red-500">{queryError.message}</div>}
-      <main className="mx-auto mb-94 mt-94 w-344 md:w-696 lg:mb-142 lg:mt-142 lg:w-1200">
+      <main className="md:mb-400 lg:mb-270 mx-auto mb-[496px] mt-94 w-344 md:w-696 lg:mb-142 lg:mt-142 lg:w-1200">
+        {queryError && <div className="mb-4 text-red-500">{queryError.message}</div>}
         {isMobile && (
           <div>
             <ReservationContent

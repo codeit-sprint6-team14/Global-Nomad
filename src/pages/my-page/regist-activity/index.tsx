@@ -15,7 +15,7 @@ const RegistActivity = () => {
   return (
     <>
       <NavBar />
-      <main className="mx-auto mb-94 mt-94 w-343 md:w-696 lg:mb-142 lg:mt-142 lg:w-1200">
+      <main className="mx-auto mb-94 mt-24 w-343 md:w-696 lg:mb-142 lg:mt-72 lg:w-1200">
         {isMobile && <RegistActivityContent />}
         {(isTablet || isDesktop) && (
           <div className="flex justify-between">

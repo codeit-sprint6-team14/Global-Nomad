@@ -1,3 +1,5 @@
+import Footer from '@/components/common/Footer';
+import NavBar from '@/components/common/NavBar';
 import SideNavMenu from '@/components/common/SideNavMenu';
 import MySchedule from '@/components/pages/myPage/Schedule/mySchedule';
 import useViewportSize from '@/hooks/useViewportSize';
@@ -8,20 +10,18 @@ const Schedule = () => {
 
   return (
     <div>
-      <div className="bg-gray-100">
-        <div className="ml-auto mr-auto flex md:w-744 lg:w-1200">
-          <div className="ml-30 mt-30">
-            {isSideNavbarOpen && (
-              <div className="hidden w-60 bg-white md:block">
-                <SideNavMenu />
-              </div>
-            )}
+      <NavBar />
+      <div className="ml-auto mr-auto mt-94 flex w-343 md:w-696 lg:mt-142 lg:w-1200">
+        {isSideNavbarOpen && (
+          <div className="hidden w-60 bg-white md:block">
+            <SideNavMenu />
           </div>
-          <div className="mb-60 ml-auto mr-auto w-343 md:mr-0 md:w-430 lg:w-750">
-            <MySchedule />
-          </div>
+        )}
+        <div className="mb-60 ml-auto mr-auto md:mr-0 md:w-430 lg:w-792">
+          <MySchedule />
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

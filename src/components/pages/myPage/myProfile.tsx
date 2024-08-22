@@ -86,16 +86,14 @@ const MyProfile = () => {
   const isSideNavbarOpen = viewportSize === 'tablet' || 'desktop';
 
   return (
-    <div className="bg-gray-100">
-      <div className="ml-auto mr-auto flex md:w-744 lg:w-1200">
-        <div className="ml-30 mt-30">
-          {isSideNavbarOpen && (
-            <div className="hidden w-60 bg-white md:block">
-              <SideNavMenu />
-            </div>
-          )}
-        </div>
-        <div className="mb-60 ml-auto mr-auto mt-30 w-343 md:mr-0 md:w-430 lg:w-750">
+    <div className="md:mb-363 l lg:mb-208 mb-168 mt-94 lg:mt-142">
+      <div className="mx-auto flex justify-between md:w-696 lg:w-1200">
+        {isSideNavbarOpen && (
+          <div className="hidden bg-white md:block">
+            <SideNavMenu />
+          </div>
+        )}
+        <div className="mx-auto mb-60 w-343 md:mx-0 md:w-429 lg:w-792">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <div className="block cursor-pointer md:hidden" onClick={handleGoMyPage}>
@@ -116,7 +114,7 @@ const MyProfile = () => {
             value={user.nickname}
             onChange={(e) => setUser({ ...user, nickname: e.target.value })}
           />
-          <InputSection title="이메일" value={user.email} readonly={true} />
+          <InputSection title="이메일" value={user.email} />
           <PasswordInputSection
             title="새 비밀번호"
             placeholder="8자 이상 입력해 주세요"
@@ -135,11 +133,9 @@ const MyProfile = () => {
       </div>
 
       {/* 모달 조건부 렌더링 */}
-      {isModalOpen && (
-        <Modal.Overlay>
-          <Modal.RegisterConfirm onClose={handleModalClose}>{modalMessage}</Modal.RegisterConfirm>
-        </Modal.Overlay>
-      )}
+      <Modal.Overlay isOpen={isModalOpen} onClose={handleModalClose}>
+        <Modal.RegisterConfirm onClose={handleModalClose}>{modalMessage}</Modal.RegisterConfirm>
+      </Modal.Overlay>
     </div>
   );
 };
