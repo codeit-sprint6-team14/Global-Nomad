@@ -23,7 +23,7 @@ const getToastIcon = (type?: ToastType) => {
   }
 };
 
-const TOAST_DURATION = 2000;
+const TOAST_DURATION = 3000;
 const ANIMATION_DURATION = 300;
 
 const Toast: React.FC<ToastProps> = ({ type, message = '테스트 메세지입니다.', id }) => {
@@ -44,7 +44,9 @@ const Toast: React.FC<ToastProps> = ({ type, message = '테스트 메세지입�
 
   return (
     <div
-      className={`fixed left-1/2 top-24 inline-flex w-300 -translate-x-1/2 items-center rounded-lg px-24 py-16 transition-all duration-300 ease-in-out md:bottom-24 md:left-auto md:right-24 md:top-auto md:max-w-none md:translate-x-0 ${type === 'success' ? 'bg-green-200' : 'bg-red-500'} ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'} `}
+      className={`fixed bottom-24 right-24 inline-flex w-300 items-center rounded-lg px-24 py-16 transition-all duration-300 ease-in-out ${
+        type === 'success' ? 'bg-green-200' : 'bg-red-500'
+      } ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'}`}
     >
       <div className="mr-10 text-white">{getToastIcon(type)}</div>
       <div className="inline-flex h-full w-full items-center justify-center text-sm font-semibold text-white">
