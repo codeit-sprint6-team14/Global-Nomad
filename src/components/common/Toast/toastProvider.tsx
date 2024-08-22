@@ -17,7 +17,7 @@ const ToastProvider = () => {
   }
 
   return ReactDOM.createPortal(
-    <div className="absolute left-1/2 top-5 flex -translate-x-1/2 flex-col items-center gap-5">
+    <div className="fixed bottom-0 right-0 flex flex-col items-end gap-5 p-5">
       {toasts?.map((toast) => <Toast key={toast.id} {...toast} />)}
     </div>,
     document.getElementById('toast-root') as HTMLElement,
