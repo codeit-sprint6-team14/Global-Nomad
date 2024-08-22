@@ -1,6 +1,8 @@
 import SocialAuth from '@/apis/socialAuth';
+import { tokenAtom } from '@/store/tokenAtom';
 import { getGoogleToken } from '@/utils/getSocialToken';
 import { isAxiosError } from 'axios';
+import { useSetAtom } from 'jotai';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -9,6 +11,7 @@ export const useGoogleAuth = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
+  const setToken = useSetAtom(tokenAtom);
 
   const handleAuth = useCallback(
     async (code: string) => {
@@ -30,6 +33,7 @@ export const useGoogleAuth = () => {
         } catch (error) {
           if (isAxiosError(error) && error.response?.status === 400) {
             await SocialAuth.postSignin('google', authBody);
+            setToken(authBody.token);
             setIsSuccess(true);
           } else {
             throw error;

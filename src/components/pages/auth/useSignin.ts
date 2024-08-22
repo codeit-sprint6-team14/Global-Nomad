@@ -16,7 +16,7 @@ export const useSignin = () => {
     mutationFn: postUserSignin,
     onSuccess: (result) => {
       if ('user' in result) {
-        setToken({ accessToken: result.accessToken, refreshToken: result.refreshToken });
+        setToken(result.accessToken);
 
         // 토큰을 로컬 스토리지에 저장
         localStorage.setItem('accessToken', result.accessToken);

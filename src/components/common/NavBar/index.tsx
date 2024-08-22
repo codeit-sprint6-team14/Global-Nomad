@@ -2,12 +2,13 @@ import { getUserProfile } from '@/apis/getUserProfile';
 import Modal from '@/components/common/Modal';
 import { useSignout } from '@/components/pages/auth/useSignout';
 import { useClickOutside } from '@/hooks/useClickOutside';
+import { tokenAtom } from '@/store/tokenAtom';
 import { userAtom } from '@/store/userAtom';
 import { useAtom } from 'jotai';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import DropDown from '../Dropdown';
 import Notification from './Notification';
@@ -15,12 +16,13 @@ import Notification from './Notification';
 function NavBar({ accessToken }: { accessToken?: boolean }) {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
   const [user, setUser] = useAtom(userAtom);
+  const [token, setToken] = useAtom(tokenAtom);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const router = useRouter();
   const signout = useSignout();
 
-  useEffect(() => {
-    const loadUserProfile = async () => {
+  const loadUserProfile = useCallback(async () => {
+    if (token) {
       try {
         const data = await getUserProfile();
         setUser({
@@ -30,11 +32,19 @@ function NavBar({ accessToken }: { accessToken?: boolean }) {
         });
       } catch (error) {
         console.error('유저 정보 불러오기 실패: ', error);
+        // 에러 발생 시 토큰 제거 및 사용자 정보 초기화
+        setToken(null);
+        setUser({ email: '', nickname: '', profileImage: '' });
       }
-    };
+    } else {
+      // 토큰이 없는 경우 사용자 정보 초기화
+      setUser({ email: '', nickname: '', profileImage: '' });
+    }
+  }, [token, setUser, setToken]);
 
+  useEffect(() => {
     loadUserProfile();
-  }, [user]);
+  }, [loadUserProfile]);
 
   const handleDropdownVisible = () => {
     setIsOpenMenu(!isOpenMenu);
@@ -62,6 +72,7 @@ function NavBar({ accessToken }: { accessToken?: boolean }) {
   const handleModalClose = () => {
     setShowLogoutModal(false);
     signout();
+    setToken(null);
   };
 
   const modalRef = useClickOutside(handleModalClose);
