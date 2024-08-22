@@ -15,7 +15,7 @@ export type GetNotificationsResponse = {
 };
 
 export type GetNotificationsParams = {
-  cursorId?: number | undefined;
+  cursorId?: number | null;
   size?: number;
 };
 export type AlarmType = {

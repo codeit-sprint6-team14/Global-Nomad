@@ -62,43 +62,56 @@ const Notification = () => {
     }
   };
 
-  const fetchNotifications = useCallback(async () => {
-    if (isLoading || !hasMore) return;
+  const fetchNotifications = useCallback(
+    async (initial = false) => {
+      if (isLoading || (!hasMore && !initial)) return;
 
-    setIsLoading(true);
-    try {
-      const response = await getNotifications({ cursorId: cursorId || undefined, size: 10 });
+      setIsLoading(true);
+      try {
+        const response = await getNotifications({ cursorId: initial ? 0 : cursorId, size: 10 });
 
-      // 이전 요청과 동일한 cursorId로 요청하지 않도록 방지
-      if (response.notifications.length === 0) {
-        setHasMore(false);
-      } else {
-        setAlarms((prevAlarms) => {
-          const newAlarms = response.notifications.filter(
-            (newAlarm) => !prevAlarms.some((alarm) => alarm.id === newAlarm.id),
-          );
-          return [...prevAlarms, ...newAlarms];
-        });
-        setTotalCount(response.totalCount);
-        setCursorId(response.cursorId); // cursorId 업데이트를 이 시점에서 수행
-        setHasMore(response.notifications.length === 10); // 10개 미만이면 더 이상 데이터가 없다고 가정
+        if (response.notifications.length === 0) {
+          setHasMore(false);
+        } else {
+          setAlarms((prevAlarms) => {
+            const newAlarms = response.notifications.filter(
+              (newAlarm) => !prevAlarms.some((alarm) => alarm.id === newAlarm.id),
+            );
+            return initial ? newAlarms : [...prevAlarms, ...newAlarms];
+          });
+          setTotalCount(response.totalCount);
+          setCursorId(response.cursorId); // cursorId 업데이트
+          setHasMore(response.notifications.length === 10); // 10개 미만이면 더 이상 데이터가 없다고 가정
+        }
+      } catch (error) {
+        console.error('Failed to fetch notifications:', error);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.error('Failed to fetch notifications:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [cursorId, isLoading, hasMore]);
+    },
+    [cursorId, isLoading, hasMore],
+  );
 
   useEffect(() => {
     setPortalRoot(document.getElementById('notification-root'));
+  }, []);
+
+  // 페이지 로드 시와 일정 간격마다 알림을 가져오기 위한 useEffect
+  useEffect(() => {
+    fetchNotifications(true); // 초기 알림 로드
+
+    const intervalId = setInterval(() => {
+      fetchNotifications(true); // 5분에 한 번씩 알림 호출
+    }, 300000);
+
+    return () => clearInterval(intervalId);
   }, []);
 
   useEffect(() => {
     if (isOpen && alarms.length === 0) {
       fetchNotifications();
     }
-  }, [isOpen, alarms.length, fetchNotifications]);
+  }, [isOpen, alarms.length]);
 
   useEffect(() => {
     console.log('Total count:', totalCount);
@@ -130,14 +143,24 @@ const Notification = () => {
     <div className="relative">
       <Popover.Root>
         <Popover.Trigger>
-          <Image
-            src="/assets/icons/bell.svg"
-            alt="네비바 알림 벨"
-            width={20}
-            height={20}
-            className="cursor-pointer"
-            onClick={() => setIsOpen(true)}
-          />
+          <div className="relative inline-block">
+            <Image
+              src="/assets/icons/bell.svg"
+              alt="네비바 알림 벨"
+              width={20}
+              height={20}
+              className="cursor-pointer"
+              onClick={() => setIsOpen(true)}
+            />
+            {totalCount > 0 && (
+              <div
+                className="absolute right-0 top-0 h-5 w-5 rounded-full bg-red-600"
+                style={{
+                  transform: 'translate(50%, -50%)',
+                }}
+              ></div>
+            )}
+          </div>
         </Popover.Trigger>
         {isOpen &&
           portalRoot &&
