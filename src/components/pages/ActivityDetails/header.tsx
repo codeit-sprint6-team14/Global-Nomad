@@ -1,5 +1,6 @@
 import DropDown from '@/components/common/Dropdown';
 import { HeaderProps } from '@/types/activity';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -16,7 +17,6 @@ const Header = ({
   handleDeleteConfirmation,
 }: HeaderProps) => {
   const [isOpenDropdown, setIsOpenDropdown] = useState(false);
-
   const router = useRouter();
 
   const handleDropdownVisible = () => {
@@ -33,32 +33,47 @@ const Header = ({
     setIsOpenDropdown(false);
   };
 
+  const kebabButtonVariants = {
+    rest: { scale: 1 },
+    hover: { scale: 1.5, rotate: 90 },
+    tap: { scale: 0.95 },
+  };
+
   return (
     <div className="px-16 pt-16 md:px-24 md:pt-24 lg:p-0">
       <div className="text-md-regular text-black-100">{category}</div>
       <div className="relative mt-10 flex items-center justify-between">
         <h1 className="text-2xl-bold text-black-100 md:text-3xl-bold">{title}</h1>
         {myId === userId && (
-          <Image
-            width={40}
-            height={40}
-            style={{ width: 'auto' }}
-            src="/assets/icons/kebab.svg"
-            alt="케밥 아이콘"
-            className="cursor-pointer"
+          <motion.svg
+            width="40"
+            height="40"
+            viewBox="0 0 32 33"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            variants={kebabButtonVariants}
+            initial="rest"
+            whileHover="hover"
+            whileTap="tap"
             onClick={handleDropdownVisible}
-          />
+            className="cursor-pointer focus:outline-none"
+            style={{ originX: '50%', originY: '50%' }}
+          >
+            <circle cx="16.0001" cy="7.70005" r="2.4" fill="#79747E" />
+            <circle cx="16.0001" cy="16.5001" r="2.4" fill="#79747E" />
+            <circle cx="16.0001" cy="25.2999" r="2.4" fill="#79747E" />
+          </motion.svg>
         )}
         {isOpenDropdown && (
-          <DropDown classNames="h-max w-120 right-0 top-48 z-50 ">
+          <DropDown classNames="h-max w-120 right-0 top-48 z-50">
             <DropDown.Option
-              className=""
+              className="hover:rounded-t-6"
               key="수정하기"
               handleOptionClick={() => handleOptionClick('수정하기')}
               label="수정하기"
             />
             <DropDown.Option
-              className=""
+              className="hover:rounded-b-6"
               key="삭제하기"
               handleOptionClick={() => handleOptionClick('삭제하기')}
               label="삭제하기"
