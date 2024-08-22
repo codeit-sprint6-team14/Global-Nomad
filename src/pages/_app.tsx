@@ -1,5 +1,6 @@
 import Footer from '@/components/common/Footer';
 import NavBar from '@/components/common/NavBar';
+import ToastProvider from '@/components/common/Toast/toastProvider';
 import '@/styles/globals.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -29,6 +30,7 @@ export default function App({ Component, pageProps }: AppProps) {
           {showNavBarAndFooter && <NavBar />}
           <div id="notification-root" />
           <Component {...pageProps} />
+          <ToastProvider />
           {showNavBarAndFooter && <Footer />}
           <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
