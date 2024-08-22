@@ -1,6 +1,5 @@
 import LeftArrow from '@/../public/assets/icons/left-arrow.svg';
-import { getUserProfile } from '@/apis/getUserProfile';
-import { updateProfile } from '@/apis/updateProfile';
+import { getUserProfile, updateProfile } from '@/apis/myPage/myProfile';
 import Button from '@/components/common/Button';
 import Modal from '@/components/common/Modal';
 import SideNavMenu from '@/components/common/SideNavMenu';

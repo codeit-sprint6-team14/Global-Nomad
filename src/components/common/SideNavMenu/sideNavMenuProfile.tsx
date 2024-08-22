@@ -1,5 +1,4 @@
-import { updateProfile } from '@/apis/updateProfile';
-import { uploadImage } from '@/apis/uploadImage';
+import { updateProfile, uploadImage } from '@/apis/myPage/myProfile';
 import { userAtom } from '@/store/userAtom';
 import { useAtom } from 'jotai';
 import Image from 'next/image';

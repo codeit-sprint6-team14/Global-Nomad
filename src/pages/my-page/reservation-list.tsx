@@ -2,10 +2,10 @@ import Footer from '@/components/common/Footer';
 import Modal from '@/components/common/Modal';
 import NavBar from '@/components/common/NavBar';
 import SideNavMenu from '@/components/common/SideNavMenu';
+import { useMyReservationsQuery } from '@/components/pages/myPage/ReservationList/hooks/useMyReservationsQuery';
 import ReservationContent from '@/components/pages/myPage/ReservationList/reservationContent';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { useDeviceState } from '@/hooks/useDeviceState';
-import reservationCardsData from '@/mockData/reservationCardsData';
 import { modalAtom } from '@/store/modalAtom';
 import { Device } from '@/types/deviceTypes';
 import { useAtom } from 'jotai';
@@ -14,13 +14,18 @@ import { useEffect } from 'react';
 const ReservationList = () => {
   const [modalType, setModalType] = useAtom(modalAtom);
   const deviceState = useDeviceState();
-
-  // 디바이스 크기
   const isMobile = deviceState === Device.MOBILE;
   const isTablet = deviceState === Device.TABLET;
   const isDesktop = deviceState === Device.DESKTOP;
 
-  const isReservationEmpty = reservationCardsData.length === 0;
+  const {
+    myReservationsData,
+    isMyReservationsEmpty,
+    error: queryError,
+    setTarget,
+    handleStatusChange,
+    selectedStatus,
+  } = useMyReservationsQuery();
 
   const handleCloseModal = () => {
     setModalType(null);
@@ -53,24 +58,42 @@ const ReservationList = () => {
   return (
     <>
       <NavBar />
+      {queryError && <div className="mb-4 text-red-500">{queryError.message}</div>}
       <main className="mx-auto mb-94 mt-94 w-344 md:w-696 lg:mb-142 lg:mt-142 lg:w-1200">
-        {isMobile && <ReservationContent isEmpty={isReservationEmpty} />}
+        {isMobile && (
+          <div>
+            <ReservationContent
+              myReservationsData={myReservationsData}
+              isEmptyMyReservationData={isMyReservationsEmpty}
+              onStatusChange={handleStatusChange}
+              selectedStatus={selectedStatus}
+            />
+          </div>
+        )}
         {(isTablet || isDesktop) && (
           <div className="flex justify-between">
             <SideNavMenu />
-            <ReservationContent showFilter={isDesktop} isEmpty={isReservationEmpty} />
+            <div>
+              <ReservationContent
+                myReservationsData={myReservationsData}
+                showFilter={isDesktop}
+                isEmptyMyReservationData={isMyReservationsEmpty}
+                onStatusChange={handleStatusChange}
+                selectedStatus={selectedStatus}
+              />
+            </div>
           </div>
         )}
         {modalType === 'cancel' && (
           <Modal.Overlay>
             <div ref={modalRef}>
-              <Modal.CancelReservation />
+              <Modal.CancelConfirm />
             </div>
           </Modal.Overlay>
         )}
         {modalType === 'review' && (
           <Modal.Overlay>
-            <div ref={modalRef} className="h-full md:h-auto md:w-auto">
+            <div ref={modalRef} className="h-full w-full md:h-auto md:w-auto">
               <Modal.Review
                 title="함께 배우면 즐거운 스트릿 댄스"
                 bannerImageUrl="/images/test-profile-img.png"
@@ -83,6 +106,7 @@ const ReservationList = () => {
             </div>
           </Modal.Overlay>
         )}
+        <div ref={setTarget}></div>
       </main>
       <Footer />
     </>
