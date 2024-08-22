@@ -1,4 +1,4 @@
-import { getUserProfile } from '@/apis/getUserProfile';
+import { getUserProfile } from '@/apis/myPage/myProfile';
 import Modal from '@/components/common/Modal';
 import { useSignout } from '@/components/pages/auth/useSignout';
 import { useClickOutside } from '@/hooks/useClickOutside';
