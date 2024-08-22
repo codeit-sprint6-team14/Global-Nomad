@@ -292,13 +292,15 @@ const MainPage = () => {
               </div>
             )}
           </div>
-          <div className="flex sm:gap-16 md:gap-32 lg:w-1200 lg:gap-24">
-            {[0, 1, 2].map((offset) => {
-              const index = (startIndex + offset) % filteredPopularActivities.length;
-              const activity = filteredPopularActivities[index];
-              return <PopularActivityCard key={`${activity.id}-${index}`} activity={activity} />;
-            })}
-          </div>
+          {filteredPopularActivities.length > 0 && (
+            <div className="flex sm:gap-16 md:gap-32 lg:w-1200 lg:gap-24">
+              {[0, 1, 2].map((offset) => {
+                const index = (startIndex + offset) % filteredPopularActivities.length;
+                const activity = filteredPopularActivities[index];
+                return activity ? <PopularActivityCard key={`${activity.id}-${index}`} activity={activity} /> : null;
+              })}
+            </div>
+          )}
         </section>
       )}
 
