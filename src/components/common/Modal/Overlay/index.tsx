@@ -1,16 +1,16 @@
-import { useEffect, useState } from 'react';
+import { MouseEvent, ReactNode, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 
 interface ModalOverlayProps {
   isOpen: boolean;
   onClose: () => void;
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 const ModalOverlay = ({ isOpen, onClose, children }: ModalOverlayProps) => {
   const [isBrowser, setIsBrowser] = useState(false);
 
-  const handleBackgroundClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleBackgroundClick = (e: MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
       onClose();
     }
