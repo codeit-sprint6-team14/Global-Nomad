@@ -71,7 +71,7 @@ const MainPage = () => {
 
   const displayedActivities = activitiesData?.activities || [];
   const popularActivities = popularActivitiesData || [];
-  const totalPages = Math.ceil((activitiesData?.activities?.length ?? 0) / itemsPerPage);
+  const totalPages = Math.ceil((activitiesData?.totalCount ?? 0) / itemsPerPage);
 
   const filteredPopularActivities = useMemo(() => {
     return popularActivities.filter((activity) => activity.rating >= 4);
@@ -83,6 +83,14 @@ const MainPage = () => {
       const newIsTablet = window.innerWidth >= 744 && window.innerWidth < 1200;
       setIsDesktop(newIsDesktop);
       setIsTablet(newIsTablet);
+
+      if (newIsDesktop) {
+        setItemsPerPage(8);
+      } else if (newIsTablet) {
+        setItemsPerPage(9);
+      } else {
+        setItemsPerPage(4);
+      }
 
       if (newIsDesktop || newIsTablet) {
         setCategoryStartIndex(0);
@@ -129,13 +137,16 @@ const MainPage = () => {
     return () => clearInterval(interval);
   }, [filteredPopularActivities]);
 
+  useEffect(() => {
+    setPage(1);
+  }, [itemsPerPage, activeCategory, sortBy]);
+
   const handleCategoryChange = useCallback(
     (category: string) => {
       setActiveCategory(category);
       setPage(1);
       setIsSearching(false);
       setSearchTerm('');
-      setItemsPerPage(INITIAL_ITEMS_PER_PAGE);
       if (isDesktop) {
         setCategoryStartIndex(0);
       }
@@ -439,7 +450,7 @@ const MainPage = () => {
           )}
         </div>
 
-        {displayedActivities.length > 0 && (
+        {totalPages > 1 && (
           <Pagination
             currentPage={page}
             totalPages={totalPages}
