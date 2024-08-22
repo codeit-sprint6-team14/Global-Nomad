@@ -21,7 +21,6 @@ const dropdownOptions = [
   { value: 'priceHigh', label: '가격 높은순' },
 ];
 
-const visibleCards = 3;
 const INITIAL_ITEMS_PER_PAGE = 8;
 const SEARCH_ITEMS_PER_PAGE = 16;
 const VISIBLE_TABS = 4;
@@ -110,12 +109,14 @@ const MainPage = () => {
   }, []);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentBannerIndex((prevIndex) => (prevIndex === popularActivities.length - 1 ? 0 : prevIndex + 1));
+    if (filteredPopularActivities.length === 0) return;
+
+    const interval = setInterval(() => {
+      setCurrentBannerIndex((prevIndex) => (prevIndex + 1) % filteredPopularActivities.length);
     }, 5000);
 
-    return () => clearInterval(timer);
-  }, [popularActivities]);
+    return () => clearInterval(interval);
+  }, [filteredPopularActivities]);
 
   const handleCategoryChange = useCallback(
     (category: string) => {
@@ -159,11 +160,14 @@ const MainPage = () => {
   }, []);
 
   const handlePrevClick = () => {
-    setStartIndex((prevIndex) => Math.max(0, prevIndex - 1));
+    setStartIndex((prevIndex) => {
+      const newIndex = prevIndex - 3;
+      return newIndex < 0 ? filteredPopularActivities.length + newIndex : newIndex;
+    });
   };
 
   const handleNextClick = () => {
-    setStartIndex((prevIndex) => Math.min(popularActivities.length - visibleCards, prevIndex + 1));
+    setStartIndex((prevIndex) => (prevIndex + 3) % filteredPopularActivities.length);
   };
 
   const handleSearch = useCallback((term: string) => {
@@ -216,9 +220,9 @@ const MainPage = () => {
   return (
     <main className="flex flex-col items-center bg-gray-100">
       <div className="relative w-full">
-        {popularActivities.length > 0 && (
+        {filteredPopularActivities.length > 0 && (
           <div className="lg:max-w-1920 sm:h-240 sm:w-375 md:h-550 md:w-1440">
-            {popularActivities.map((activity, index) => (
+            {filteredPopularActivities.map((activity, index) => (
               <Link
                 key={activity.id}
                 href={`/activities/${activity.id}`}
@@ -247,17 +251,6 @@ const MainPage = () => {
                 </div>
               </Link>
             ))}
-            <div className="absolute bottom-4 left-1/2 z-20 flex -translate-x-1/2 transform space-x-2">
-              {popularActivities.map((_, index) => (
-                <button
-                  key={index}
-                  className={`h-3 w-3 rounded-full transition-colors ${
-                    index === currentBannerIndex ? 'bg-white' : 'bg-gray-400 hover:bg-gray-300'
-                  }`}
-                  onClick={() => setCurrentBannerIndex(index)}
-                />
-              ))}
-            </div>
           </div>
         )}
       </div>
@@ -270,25 +263,23 @@ const MainPage = () => {
         <section className="mt-50 flex flex-col gap-24 lg:h-480 lg:w-1200">
           <div className="flex items-center justify-between">
             <h2 className="md:leading-43 font-bold sm:text-18 md:text-36 md:leading-[21.48px]">🔥인기 체험</h2>
-            {isDesktop && filteredPopularActivities.length > 3 && (
+            {filteredPopularActivities.length > 3 && (
               <div className="flex gap-12">
-                <button onClick={handlePrevClick} disabled={startIndex === 0} className="cursor-pointer">
+                <button onClick={handlePrevClick} className="cursor-pointer">
                   <PrevButton />
                 </button>
-                <button
-                  onClick={handleNextClick}
-                  disabled={startIndex >= filteredPopularActivities.length - 3}
-                  className="cursor-pointer"
-                >
+                <button onClick={handleNextClick} className="cursor-pointer">
                   <NextButton />
                 </button>
               </div>
             )}
           </div>
           <div className="flex sm:gap-16 md:gap-32 lg:w-1200 lg:gap-24">
-            {filteredPopularActivities.slice(startIndex, startIndex + (isDesktop ? 3 : 2)).map((activity) => (
-              <PopularActivityCard key={`${activity.id}-${Math.random()}`} activity={activity} />
-            ))}
+            {[0, 1, 2].map((offset) => {
+              const index = (startIndex + offset) % filteredPopularActivities.length;
+              const activity = filteredPopularActivities[index];
+              return <PopularActivityCard key={`${activity.id}-${index}`} activity={activity} />;
+            })}
           </div>
         </section>
       )}
