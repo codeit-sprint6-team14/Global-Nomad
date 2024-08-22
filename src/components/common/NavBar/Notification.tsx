@@ -1,19 +1,24 @@
 import { deleteNotification, getNotifications } from '@/apis/notification';
+import { AlarmType } from '@/apis/notification.type';
 import { Popover } from '@/components/common/Popover';
 import PopoverUI from '@/components/common/Popover/PopoverUI';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { alarmsAtom, totalCountAtom } from '@/store/notificationAtom';
 import { useAtom } from 'jotai';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 const Notification = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [portalRoot, setPortalRoot] = useState<HTMLElement | null>(null);
-  const [alarms, setAlarms] = useAtom(alarmsAtom); // Jotai atom 사용
-  const [totalCount, setTotalCount] = useAtom(totalCountAtom); // Jotai atom 사용
-  const [cursorId, setCursorId] = useState<number | null>(1);
+  const [alarms, setAlarms] = useAtom(alarmsAtom);
+  const [totalCount, setTotalCount] = useAtom(totalCountAtom);
+  const [cursorId, setCursorId] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const handleClose = () => setIsOpen(false);
   const popoverRef = useClickOutside(handleClose);
@@ -35,21 +40,17 @@ const Notification = () => {
     }
   };
 
-  const transformedAlarms = alarms.map((alarm) => {
-    const status = alarm.content.includes('승인')
-      ? '승인'
-      : alarm.content.includes('거절')
-        ? '거절'
-        : '새로 들어왔어요';
-
-    return {
-      id: alarm.id, // ID를 추가
-      content: alarm.content,
-      dateTime: new Date(alarm.createdAt).toLocaleString(),
-      status,
-      timeAgo: getTimeAgo(alarm.createdAt),
-    };
-  });
+  const transformedAlarms: AlarmType[] = useMemo(
+    () =>
+      alarms.map((alarm) => ({
+        id: alarm.id,
+        content: alarm.content,
+        dateTime: new Date(alarm.createdAt).toLocaleString(),
+        status: alarm.content.includes('승인') ? '승인' : alarm.content.includes('거절') ? '거절' : '새로 들어왔어요',
+        timeAgo: getTimeAgo(alarm.createdAt),
+      })),
+    [alarms],
+  );
 
   const handleDeleteNotification = async (notificationId: number) => {
     try {
@@ -61,26 +62,69 @@ const Notification = () => {
     }
   };
 
+  const fetchNotifications = useCallback(async () => {
+    if (isLoading || !hasMore) return;
+
+    setIsLoading(true);
+    try {
+      const response = await getNotifications({ cursorId: cursorId || undefined, size: 10 });
+
+      // 이전 요청과 동일한 cursorId로 요청하지 않도록 방지
+      if (response.notifications.length === 0) {
+        setHasMore(false);
+      } else {
+        setAlarms((prevAlarms) => {
+          const newAlarms = response.notifications.filter(
+            (newAlarm) => !prevAlarms.some((alarm) => alarm.id === newAlarm.id),
+          );
+          return [...prevAlarms, ...newAlarms];
+        });
+        setTotalCount(response.totalCount);
+        setCursorId(response.cursorId); // cursorId 업데이트를 이 시점에서 수행
+        setHasMore(response.notifications.length === 10); // 10개 미만이면 더 이상 데이터가 없다고 가정
+      }
+    } catch (error) {
+      console.error('Failed to fetch notifications:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [cursorId, isLoading, hasMore]);
+
   useEffect(() => {
     setPortalRoot(document.getElementById('notification-root'));
   }, []);
 
   useEffect(() => {
-    const fetchNotifications = async () => {
-      try {
-        const response = await getNotifications();
-        setAlarms(response.notifications);
-        setCursorId(response.cursorId);
-        setTotalCount(response.totalCount); // totalCount 업데이트
-      } catch (error) {
-        console.error('Failed to fetch notifications:', error);
-      }
-    };
-
-    if (isOpen) {
+    if (isOpen && alarms.length === 0) {
       fetchNotifications();
     }
-  }, [isOpen, cursorId]);
+  }, [isOpen, alarms.length, fetchNotifications]);
+
+  useEffect(() => {
+    console.log('Total count:', totalCount);
+    console.log('Displayed alarms:', alarms.length);
+  }, [totalCount, alarms]);
+
+  const handleScroll = useCallback(() => {
+    if (containerRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
+      if (scrollHeight - scrollTop <= clientHeight * 1.5) {
+        fetchNotifications();
+      }
+    }
+  }, [fetchNotifications]);
+
+  useEffect(() => {
+    const currentContainer = containerRef.current;
+    if (currentContainer) {
+      currentContainer.addEventListener('scroll', handleScroll);
+    }
+    return () => {
+      if (currentContainer) {
+        currentContainer.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, [handleScroll]);
 
   return (
     <div className="relative">
@@ -101,9 +145,11 @@ const Notification = () => {
             <div ref={popoverRef} className="fixed left-0 top-0 z-[9999] md:left-auto md:right-[450px] md:top-80">
               <Popover.Content>
                 <PopoverUI
+                  ref={containerRef}
                   alarmCount={totalCount}
                   alarms={transformedAlarms}
-                  onDelete={handleDeleteNotification} // 삭제 콜백을 전달
+                  onDelete={handleDeleteNotification}
+                  onScroll={handleScroll}
                 />
               </Popover.Content>
             </div>,
