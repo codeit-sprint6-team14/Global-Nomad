@@ -21,7 +21,6 @@ const dropdownOptions = [
   { value: 'priceHigh', label: '가격 높은순' },
 ];
 
-const INITIAL_ITEMS_PER_PAGE = 8;
 const VISIBLE_TABS = 4;
 
 const MainPage = () => {
@@ -34,7 +33,6 @@ const MainPage = () => {
   const [startIndex, setStartIndex] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
   const [isSearching, setIsSearching] = useState(false);
-  const [itemsPerPage, setItemsPerPage] = useState(INITIAL_ITEMS_PER_PAGE);
   const [categoryStartIndex, setCategoryStartIndex] = useState(0);
   const [isTablet, setIsTablet] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
@@ -44,6 +42,11 @@ const MainPage = () => {
   const [scrollLeft, setScrollLeft] = useState(0);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const popularActivitiesRef = useRef<HTMLDivElement>(null);
+
+  const [allActivities, setAllActivities] = useState<Activity[]>([]);
+  const [displayedActivities, setDisplayedActivities] = useState<Activity[]>([]);
+  const [totalPages, setTotalPages] = useState(1);
+  const ITEMS_PER_PAGE = isDesktop ? 16 : isTablet ? 9 : 8;
 
   const backgroundColors = useMemo(() => ['bg-purple-100', 'bg-pink-200', 'bg-sky-200'], []);
 
@@ -59,7 +62,7 @@ const MainPage = () => {
     data: activitiesData,
     isLoading: isActivitiesLoading,
     error: activitiesError,
-  } = useActivities(page, itemsPerPage, activeCategory, sortBy, searchTerm);
+  } = useActivities(1, 1000, null, null, null);
 
   const { data: popularActivitiesData, isLoading: isPopularActivitiesLoading } = useQuery({
     queryKey: ['popularActivities'],
@@ -70,13 +73,22 @@ const MainPage = () => {
     placeholderData: [],
   });
 
-  const displayedActivities = activitiesData?.activities || [];
   const popularActivities = popularActivitiesData || [];
-  const totalPages = Math.ceil((activitiesData?.totalCount ?? 0) / itemsPerPage);
 
   const filteredPopularActivities = useMemo(() => {
     return popularActivities.filter((activity) => activity.rating >= 4);
   }, [popularActivities]);
+
+  useEffect(() => {
+    if (activitiesData && activitiesData.activities) {
+      setAllActivities(activitiesData.activities);
+      const categoryActivities = activeCategory
+        ? activitiesData.activities.filter((activity) => activity.category === activeCategory)
+        : activitiesData.activities;
+      setDisplayedActivities(categoryActivities);
+      setTotalPages(Math.ceil(categoryActivities.length / ITEMS_PER_PAGE));
+    }
+  }, [activitiesData, activeCategory, ITEMS_PER_PAGE]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -84,24 +96,6 @@ const MainPage = () => {
       const newIsTablet = window.innerWidth >= 744 && window.innerWidth < 1200;
       setIsDesktop(newIsDesktop);
       setIsTablet(newIsTablet);
-
-      if (isSearching) {
-        if (newIsDesktop) {
-          setItemsPerPage(16);
-        } else if (newIsTablet) {
-          setItemsPerPage(9);
-        } else {
-          setItemsPerPage(8);
-        }
-      } else {
-        if (newIsDesktop) {
-          setItemsPerPage(8);
-        } else if (newIsTablet) {
-          setItemsPerPage(9);
-        } else {
-          setItemsPerPage(4);
-        }
-      }
     };
 
     handleResize();
@@ -141,15 +135,26 @@ const MainPage = () => {
     return () => clearInterval(interval);
   }, [filteredPopularActivities]);
 
-  useEffect(() => {
-    setPage(1);
-  }, [itemsPerPage, activeCategory, sortBy]);
-
-  useEffect(() => {
-    if (searchTerm !== '') {
+  const handleSearch = useCallback(
+    (term: string) => {
+      setSearchTerm(term);
       setPage(1);
-    }
-  }, [searchTerm]);
+      if (term) {
+        setIsSearching(true);
+        const results = allActivities.filter((activity) => activity.title.toLowerCase().includes(term.toLowerCase()));
+        setDisplayedActivities(results);
+        setTotalPages(Math.ceil(results.length / ITEMS_PER_PAGE));
+      } else {
+        setIsSearching(false);
+        const categoryActivities = activeCategory
+          ? allActivities.filter((activity) => activity.category === activeCategory)
+          : allActivities;
+        setDisplayedActivities(categoryActivities);
+        setTotalPages(Math.ceil(categoryActivities.length / ITEMS_PER_PAGE));
+      }
+    },
+    [allActivities, activeCategory, ITEMS_PER_PAGE],
+  );
 
   const handleCategoryChange = useCallback(
     (category: string) => {
@@ -157,11 +162,13 @@ const MainPage = () => {
       setPage(1);
       setIsSearching(false);
       setSearchTerm('');
-      if (isDesktop) {
-        setCategoryStartIndex(0);
-      }
+      const categoryActivities = category
+        ? allActivities.filter((activity) => activity.category === category)
+        : allActivities;
+      setDisplayedActivities(categoryActivities);
+      setTotalPages(Math.ceil(categoryActivities.length / ITEMS_PER_PAGE));
     },
-    [isDesktop],
+    [allActivities, ITEMS_PER_PAGE],
   );
 
   const handleCategoryPrevClick = () => {
@@ -201,35 +208,6 @@ const MainPage = () => {
   const handleNextClick = () => {
     setStartIndex((prevIndex) => (prevIndex + 3) % filteredPopularActivities.length);
   };
-
-  const handleSearch = useCallback(
-    (term: string) => {
-      setSearchTerm(term);
-      setPage(1);
-      setActiveCategory('');
-      setSortBy(null);
-      if (term) {
-        setIsSearching(true);
-        if (isDesktop) {
-          setItemsPerPage(16);
-        } else if (isTablet) {
-          setItemsPerPage(9);
-        } else {
-          setItemsPerPage(8);
-        }
-      } else {
-        setIsSearching(false);
-        if (isDesktop) {
-          setItemsPerPage(8);
-        } else if (isTablet) {
-          setItemsPerPage(9);
-        } else {
-          setItemsPerPage(4);
-        }
-      }
-    },
-    [isDesktop, isTablet],
-  );
 
   const handlePageChange = useCallback((newPage: number) => {
     setPage(newPage);
@@ -518,7 +496,7 @@ const MainPage = () => {
         <div className="min-h-600">
           {displayedActivities.length > 0 ? (
             <div className="flex flex-wrap sm:w-340 sm:gap-4 md:w-695 md:gap-16 lg:w-1204 lg:gap-24">
-              {displayedActivities.map((activity) => (
+              {displayedActivities.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE).map((activity) => (
                 <ActivityCards key={activity.id} activity={activity} />
               ))}
             </div>
