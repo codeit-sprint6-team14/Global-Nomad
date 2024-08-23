@@ -1,10 +1,11 @@
 /**
- * 숫자 문자열에 1000 단위로 콤마를 추가합니다.
- * @param num 포맷팅할 숫자 문자열
+ * 숫자에 1000 단위로 콤마를 추가합니다.
+ * @param num 포맷팅할 숫자 또는 숫자 문자열 또는 null
  * @returns 콤마가 추가된 숫자 문자열
  */
-export const formatNumber = (num: string): string => {
-  return num.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+export const formatNumber = (num: number | null | undefined): string => {
+  if (num == null) return '';
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
 
 /**
@@ -22,5 +23,5 @@ export const unformatNumber = (num: string): string => {
  * @returns 숫자이면 true, 아니면 false
  */
 export const isNumber = (value: string): boolean => {
-  return value === '' || /^\d+$/.test(value);
+  return value === '' || /^\d+$/.test(unformatNumber(value));
 };

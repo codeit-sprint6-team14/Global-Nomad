@@ -1,6 +1,8 @@
+import { ModalType } from '@/store/modalAtom';
+
 export type StatusType = 'pending' | 'confirmed' | 'completed' | 'declined' | 'canceled';
 
-const getCardStatus = (status: StatusType): { text: string; colorClass: string } => {
+export const getCardStatus = (status: StatusType): { text: string; colorClass: string } => {
   switch (status) {
     case 'pending':
       return { text: '예약 완료', colorClass: 'text-blue-200' };
@@ -17,4 +19,13 @@ const getCardStatus = (status: StatusType): { text: string; colorClass: string }
   }
 };
 
-export default getCardStatus;
+export const getButtonInfo = (status: StatusType): { name: string; action: ModalType } => {
+  switch (status) {
+    case 'pending':
+      return { name: '예약 취소', action: 'cancel' };
+    case 'completed':
+      return { name: '후기 작성', action: 'review' };
+    default:
+      return { name: '', action: null };
+  }
+};

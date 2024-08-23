@@ -1,6 +1,7 @@
 import { useActivityReviewList } from '@/apis/ActivityDetailsPage/getActivityReviewList';
 import Pagination from '@/components/common/Pagination';
 import { ReviewType } from '@/types/activityReviews';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useState } from 'react';
 
@@ -42,6 +43,17 @@ const ReviewList = ({ activityId }: { activityId: string }) => {
     }
   };
 
+  const floatAnimation = {
+    initial: { y: 0 },
+    animate: { y: [0, -25, 0] },
+    transition: {
+      duration: 3,
+      ease: 'easeInOut',
+      repeat: Infinity,
+      repeatType: 'loop' as const,
+    },
+  };
+
   return (
     <>
       {totalCount !== 0 ? (
@@ -59,9 +71,11 @@ const ReviewList = ({ activityId }: { activityId: string }) => {
               </div>
             </div>
           </div>
-          {reviews.map((review: ReviewType) => (
-            <Review key={review.id} review={review} />
-          ))}
+          <div className="h-400 overflow-y-auto">
+            {reviews.map((review: ReviewType) => (
+              <Review key={review.id} review={review} />
+            ))}
+          </div>
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
@@ -71,10 +85,10 @@ const ReviewList = ({ activityId }: { activityId: string }) => {
         </div>
       ) : (
         <div className="mx-24 flex flex-col items-center gap-20 border-solid border-gray-300 p-40 md:border-t md:py-100 lg:mx-0 lg:py-140">
-          <div className="relative h-240 w-240">
+          <motion.div {...floatAnimation} className="relative h-160 w-160 md:h-240 md:w-240">
             <Image fill src="assets/icons/paper.svg" alt="후기가 없을 때" />
-          </div>
-          <p className="text-2xl-medium text-gray-700">아직 등록된 후기가 없어요</p>
+          </motion.div>
+          <p className="text-xl-medium text-gray-700 md:text-2xl-medium">아직 등록된 후기가 없어요</p>
         </div>
       )}
     </>

@@ -4,23 +4,10 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import DropdownInputList from './dropdownInputList';
 
-const DropdownInput = ({ options, defaultOption, onSelect, onFocus, error, className = '' }: DropdownProps) => {
+const DropdownInput = ({ options, defaultOption, onSelect, onFocus, value, error, className = '' }: DropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSelectedOption, setIsSelectedOption] = useState<Option | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -38,6 +25,24 @@ const DropdownInput = ({ options, defaultOption, onSelect, onFocus, error, class
       onSelect(option);
     }
   };
+
+  useEffect(() => {
+    const selectedOption = options.find((option) => option.value === value);
+    setIsSelectedOption(selectedOption || null);
+  }, [value, options]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className={`relative ${className}`} ref={dropdownRef}>
