@@ -12,6 +12,7 @@ const ErrorMessages = {
   SIGNIN_ERROR: '로그인 중 오류가 발생했습니다.',
   SIGNUP_ERROR: '회원가입 중 오류가 발생했습니다.',
   UNKOWN_ERROR: '알 수 없는 오류가 발생했습니다.',
+  USER_NOT_FOUND: '존재하지 않는 사용자입니다.',
 };
 
 export default ErrorMessages;
