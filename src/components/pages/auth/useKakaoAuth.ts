@@ -6,6 +6,8 @@ import { useSetAtom } from 'jotai';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 
+import { useRandomNickname } from './useRandomNickname';
+
 export const useKakaoAuth = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
@@ -13,6 +15,7 @@ export const useKakaoAuth = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const setToken = useSetAtom(tokenAtom);
   const domain = process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI;
+  const { generateNickname } = useRandomNickname();
 
   const saveTokens = useCallback(
     (accessToken: string, refreshToken: string) => {
@@ -84,7 +87,7 @@ export const useKakaoAuth = () => {
     const handleKakaoRedirect = async () => {
       try {
         const code = await getKakaoToken();
-        const nickname = '카카오 계정';
+        const nickname = generateNickname();
         const existUser = localStorage.getItem('existUser') === 'exist';
 
         if (code) {
