@@ -77,11 +77,11 @@ const Notification = () => {
             const newAlarms = response.notifications.filter(
               (newAlarm) => !prevAlarms.some((alarm) => alarm.id === newAlarm.id),
             );
-            return initial ? newAlarms : [...prevAlarms, ...newAlarms];
+            return [...prevAlarms, ...newAlarms]; // 새로운 알림을 추가
           });
           setTotalCount(response.totalCount);
-          setCursorId(response.cursorId); // cursorId 업데이트
-          setHasMore(response.notifications.length === 10); // 10개 미만이면 더 이상 데이터가 없다고 가정
+          setCursorId(response.cursorId);
+          setHasMore(response.notifications.length === 10);
         }
       } catch (error) {
         console.error('Failed to fetch notifications:', error);
@@ -111,12 +111,7 @@ const Notification = () => {
     if (isOpen && alarms.length === 0) {
       fetchNotifications();
     }
-  }, [isOpen, alarms.length]);
-
-  useEffect(() => {
-    console.log('Total count:', totalCount);
-    console.log('Displayed alarms:', alarms.length);
-  }, [totalCount, alarms]);
+  }, [isOpen, alarms.length]); //여기에서 fetchNotification을 어떻게 해야할지..
 
   const handleScroll = useCallback(() => {
     if (containerRef.current) {
