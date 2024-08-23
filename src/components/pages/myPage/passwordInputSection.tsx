@@ -19,7 +19,7 @@ const PasswordInputSection: React.FC<PasswordInputSectionProps> = ({
     <>
       <h3 className="mt-30 text-2xl-bold">{title}</h3>
       <Input.Password
-        className={`mt-20 ${readonly ? 'cursor-not-allowed bg-gray-200' : ''}`}
+        className="mt-20"
         placeholder={placeholder}
         value={value}
         onChange={onChange}

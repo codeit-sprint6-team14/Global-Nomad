@@ -11,15 +11,8 @@ const InputSection: React.FC<InputSectionProps> = ({ title, value, readonly, onC
   return (
     <>
       <h3 className="mt-30 text-2xl-bold">{title}</h3>
-      <Input
-        className={`mt-20 ${readonly ? 'cursor-not-allowed bg-gray-200' : ''}`}
-        placeholder=""
-        defaultValue={value}
-        readOnly={readonly}
-        onChange={onChange}
-      />
+      <Input className="mt-20" placeholder="" defaultValue={value} readOnly={readonly} onChange={onChange} />
     </>
   );
 };
-
 export default InputSection;
