@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useRef } from 'react';
+import { Children, ReactNode, useEffect, useRef } from 'react';
 
 import { useSwiperContext } from './SwiperContext';
 
@@ -37,7 +37,7 @@ const SwiperTrigger: React.FC<SwiperTriggerProps> = ({ children, className = '' 
       </button>
       <button
         className="absolute right-0 top-1/2 -translate-y-1/2 transform rounded-full bg-white bg-opacity-50 p-2"
-        onClick={() => setCurrentIndex(Math.min(React.Children.count(children) - 1, currentIndex + 1))}
+        onClick={() => setCurrentIndex(Math.min(Children.count(children) - 1, currentIndex + 1))}
       ></button>
     </div>
   );
