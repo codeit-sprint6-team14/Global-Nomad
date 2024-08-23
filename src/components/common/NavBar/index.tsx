@@ -1,7 +1,6 @@
 import { getUserProfile } from '@/apis/myPage/myProfile';
 import Modal from '@/components/common/Modal';
 import { useSignout } from '@/components/pages/auth/useSignout';
-import { useClickOutside } from '@/hooks/useClickOutside';
 import { tokenAtom } from '@/store/tokenAtom';
 import { userAtom } from '@/store/userAtom';
 import { useAtom } from 'jotai';
@@ -75,8 +74,6 @@ function NavBar({ accessToken }: { accessToken?: boolean }) {
     setToken(null);
   };
 
-  const modalRef = useClickOutside(handleModalClose);
-
   return (
     <div className="fixed left-0 right-0 top-0 z-10 border-b border-solid border-gray-300 bg-white">
       <div className="flex h-70 items-center justify-between p-20 lg:mx-auto lg:max-w-[1200px]">
@@ -123,13 +120,9 @@ function NavBar({ accessToken }: { accessToken?: boolean }) {
         )}
       </div>
 
-      {showLogoutModal && (
-        <Modal.Overlay>
-          <div ref={modalRef}>
-            <Modal.RegisterConfirm onClose={handleModalClose}>로그아웃 되었습니다!</Modal.RegisterConfirm>
-          </div>
-        </Modal.Overlay>
-      )}
+      <Modal.Overlay isOpen={showLogoutModal} onClose={handleModalClose}>
+        <Modal.RegisterConfirm onClose={handleModalClose}>로그아웃 되었습니다!</Modal.RegisterConfirm>
+      </Modal.Overlay>
     </div>
   );
 }

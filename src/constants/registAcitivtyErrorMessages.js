@@ -8,7 +8,7 @@ const REGIST_ACTIVITY_ERROR_MESSAGES = {
   DATE_REQUIRED: '날짜를 선택해 주세요',
   MIN_TIME_SLOTS: '최소 1개의 시간대를 추가해 주세요',
   BANNER_IMAGE_REQUIRED: '배너 이미지를 1개 이상 등록해 주세요.',
-  INTRO_IMAGES_REQUIRED: '소개 이미지를 1개 이상 등록해 주세요.',
+  INTRO_IMAGES_REQUIRED: '소개 이미지는 정확히 4개를 등록해 주세요.',
 };
 
 export default REGIST_ACTIVITY_ERROR_MESSAGES;

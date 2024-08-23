@@ -21,7 +21,7 @@ const ActivitySettingsContent = ({ activitiesData, isEmpty = false }: ActivitySe
         </Button.Default>
       </div>
       {isEmpty ? (
-        <div className="md:w-429 lg:w-792">
+        <div className="mb-420 md:mb-601 md:w-429 lg:mb-[469px] lg:w-792">
           <EmptyContent />
         </div>
       ) : (

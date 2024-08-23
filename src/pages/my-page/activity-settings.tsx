@@ -1,3 +1,5 @@
+import Footer from '@/components/common/Footer';
+import NavBar from '@/components/common/NavBar';
 import SideNavMenu from '@/components/common/SideNavMenu';
 import ActivitySettingsContent from '@/components/pages/myPage/ActivitySettings/activitySettingsContent';
 import { useActivitiesQuery } from '@/components/pages/myPage/ActivitySettings/hooks/useActivitiesQuery';
@@ -15,8 +17,9 @@ const ActivitySettings = () => {
 
   return (
     <>
-      {queryError && <div className="mb-4 text-red-500">{queryError.message}</div>}
-      <main className="mx-auto mb-86 mt-16 w-344 md:mb-94 md:mt-24 md:w-696 lg:mb-142 lg:mt-72 lg:w-1200">
+      <NavBar />
+      <main className="md:mb-400 lg:mb-270 mx-auto mb-[496px] mt-94 w-344 md:w-696 lg:mt-142 lg:w-1200">
+        {queryError && <div className="mb-4 text-red-500">{queryError.message}</div>}
         {isMobile && <ActivitySettingsContent activitiesData={activitiesData} isEmpty={isActivityEmpty} />}
         {(isTablet || isDesktop) && (
           <div className="flex justify-between">
@@ -26,6 +29,7 @@ const ActivitySettings = () => {
         )}
         <div ref={setTarget}></div>
       </main>
+      <Footer />
     </>
   );
 };

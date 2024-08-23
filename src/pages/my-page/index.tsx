@@ -7,11 +7,17 @@ const Mypage: React.FC = () => {
   const router = useRouter();
   const viewportSize = useViewportSize(); // 현재 화면 크기를 가져옴
 
+  const redirectPath = viewportSize !== 'mobile' && router.pathname === '/my-page';
+
   useEffect(() => {
-    if (viewportSize !== 'mobile' && router.pathname === '/my-page') {
+    if (redirectPath) {
       router.replace('/my-page/profile');
     }
-  }, [viewportSize, router]);
+  }, [redirectPath, router]);
+
+  if (redirectPath) {
+    return null;
+  }
 
   return (
     <div className="flex w-full justify-center bg-gray-100">

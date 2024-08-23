@@ -1,5 +1,6 @@
 import Footer from '@/components/common/Footer';
 import NavBar from '@/components/common/NavBar';
+import ToastProvider from '@/components/common/Toast/toastProvider';
 import { tokenAtom } from '@/store/tokenAtom';
 import '@/styles/globals.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -24,8 +25,7 @@ function AppContent({ Component, pageProps }: AppProps) {
   const [token, setToken] = useAtom(tokenAtom);
 
   const showNavBarAndFooter =
-    !['/signup', '/signin', '/my-page/reservation-list'].includes(router.pathname) &&
-    !router.pathname.startsWith('/my-page/regist-activity');
+    !['/signup', '/signin'].includes(router.pathname) && !router.pathname.startsWith('/my-page');
 
   useEffect(() => {
     const localToken = localStorage.getItem('accessToken');
@@ -40,6 +40,7 @@ function AppContent({ Component, pageProps }: AppProps) {
       {showNavBarAndFooter && <NavBar accessToken={isLoggedIn} />}
       <div id="notification-root" />
       <Component {...pageProps} />
+      <ToastProvider />
       {showNavBarAndFooter && <Footer />}
     </main>
   );

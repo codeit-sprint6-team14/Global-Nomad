@@ -61,6 +61,6 @@ export const registActivitySchema = yup.object().shape({
         return value.startsWith('data:image/') || value.startsWith('blob:') || /\.(jpg|jpeg|png|gif)$/i.test(value);
       }),
     )
-    .min(1, REGIST_ACTIVITY_ERROR_MESSAGES.INTRO_IMAGES_REQUIRED)
+    .test('is-exactly-four', REGIST_ACTIVITY_ERROR_MESSAGES.INTRO_IMAGES_REQUIRED, (value) => value?.length === 4)
     .required(REGIST_ACTIVITY_ERROR_MESSAGES.INTRO_IMAGES_REQUIRED),
 });
