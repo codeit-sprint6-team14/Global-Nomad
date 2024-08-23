@@ -1,6 +1,7 @@
 import Footer from '@/components/common/Footer';
 import NavBar from '@/components/common/NavBar';
 import ToastProvider from '@/components/common/Toast/toastProvider';
+import { useAuthRedirect } from '@/hooks/useAuthRedirect';
 import { tokenAtom } from '@/store/tokenAtom';
 import '@/styles/globals.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -23,6 +24,7 @@ const pretendard = localFont({
 function AppContent({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const [token, setToken] = useAtom(tokenAtom);
+  useAuthRedirect();
 
   const showNavBarAndFooter =
     !['/signup', '/signin'].includes(router.pathname) && !router.pathname.startsWith('/my-page');
