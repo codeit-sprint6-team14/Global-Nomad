@@ -15,6 +15,7 @@ const SocialAuth = {
     const { accessToken, refreshToken } = data;
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('refreshToken', refreshToken);
+    localStorage.setItem('social', 'true');
     return data;
   },
 };

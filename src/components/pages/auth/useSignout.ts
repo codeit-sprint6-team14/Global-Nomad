@@ -6,6 +6,7 @@ export const useSignout = () => {
   const signout = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
+    localStorage.removeItem('social');
     router.push('/');
   };
 
