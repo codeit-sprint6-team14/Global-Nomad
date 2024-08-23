@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import { Children, ReactNode, isValidElement } from 'react';
 
 import { CardBodyType } from './cardBody';
@@ -31,7 +32,11 @@ const CardItem = ({ contentsClassNames, children }: { contentsClassNames?: strin
   const cardFooter = getTypedChildren(CardFooterType, children);
 
   return (
-    <li className="flex w-344 rounded-24 bg-gray-100 shadow-modal md:w-429 lg:w-792">
+    <motion.li
+      whileHover={{ scale: 1.03 }}
+      transition={{ duration: 0.2 }}
+      className="flex w-344 rounded-24 bg-gray-100 shadow-modal md:w-429 lg:w-792"
+    >
       {cardImage}
       <div
         className={
@@ -44,7 +49,7 @@ const CardItem = ({ contentsClassNames, children }: { contentsClassNames?: strin
         {cardBody}
         {cardFooter}
       </div>
-    </li>
+    </motion.li>
   );
 };
 

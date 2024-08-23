@@ -4,7 +4,6 @@ import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
 import Modal from '@/components/common/Modal';
 import TextArea from '@/components/common/TextArea';
-import { useClickOutside } from '@/hooks/useClickOutside';
 import { formatNumber, isNumber, unformatNumber } from '@/utils/formatNumber';
 import { registActivitySchema } from '@/utils/schema';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -43,7 +42,6 @@ const RegistActivityContent = ({ activityId }: RegistActivityContentProps) => {
   const [initialSchedules, setInitialSchedules] = useState<Schedule[]>([]);
   const [scheduleIdsToRemove, setScheduleIdsToRemove] = useState<number[]>([]);
   const [schedulesToAdd, setSchedulesToAdd] = useState<Schedule[]>([]);
-  const modalRef = useClickOutside(() => setIsModalOpen(false));
   const isEditMode = !!activityId;
 
   const {
@@ -285,15 +283,11 @@ const RegistActivityContent = ({ activityId }: RegistActivityContentProps) => {
           <p className="text-2lg-regular text-gray-800">*이미지는 최대 4개까지 등록 가능합니다</p>
         </div>
       </form>
-      {isModalOpen && (
-        <Modal.Overlay>
-          <div ref={modalRef} className="h-full md:h-auto md:w-auto">
-            <Modal.RegisterConfirm onClose={handleCloseModal}>
-              {`체험 ${isEditMode ? '수정' : '등록'}이 완료되었습니다.`}
-            </Modal.RegisterConfirm>
-          </div>
-        </Modal.Overlay>
-      )}
+      <Modal.Overlay isOpen={isModalOpen} onClose={handleCloseModal}>
+        <Modal.RegisterConfirm onClose={handleCloseModal}>
+          {`체험 ${isEditMode ? '수정' : '등록'}이 완료되었습니다.`}
+        </Modal.RegisterConfirm>
+      </Modal.Overlay>
     </>
   );
 };

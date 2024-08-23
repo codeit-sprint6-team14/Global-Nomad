@@ -1,7 +1,6 @@
 import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
 import Modal from '@/components/common/Modal';
-import { useClickOutside } from '@/hooks/useClickOutside';
 import { SigninData } from '@/types/auth';
 import { signinValidationSchema } from '@/utils/schema';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -28,8 +27,6 @@ const SignInForm = () => {
   const handleModalClose = () => {
     resetError();
   };
-
-  const modalRef = useClickOutside(handleModalClose);
 
   return (
     <>
@@ -61,13 +58,9 @@ const SignInForm = () => {
         </Button.Default>
       </form>
 
-      {error && (
-        <Modal.Overlay>
-          <div ref={modalRef}>
-            <Modal.RegisterConfirm onClose={handleModalClose}>{error}</Modal.RegisterConfirm>
-          </div>
-        </Modal.Overlay>
-      )}
+      <Modal.Overlay onClose={handleModalClose} isOpen={error}>
+        <Modal.RegisterConfirm onClose={handleModalClose}>{error}</Modal.RegisterConfirm>
+      </Modal.Overlay>
     </>
   );
 };

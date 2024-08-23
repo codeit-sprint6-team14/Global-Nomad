@@ -1,9 +1,10 @@
+import { SearchProps } from '@/components/pages/main/mainPage.type';
 import Image from 'next/image';
 import React, { useState } from 'react';
 
 import Button from '../Button';
 
-const Search = () => {
+const Search: React.FC<SearchProps> = ({ onSearch }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [value, setValue] = useState('');
 
@@ -13,8 +14,16 @@ const Search = () => {
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value);
 
+  const handlesubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    onSearch(value);
+  };
+
   return (
-    <div className="box-shadow: 0px 4px 16px 0px #1122110D flex h-129 w-343 flex-col gap-15 rounded-16 border px-24 py-16 md:h-166 md:w-696 md:gap-20 md:py-32 lg:h-178 lg:w-1200 lg:gap-32">
+    <form
+      onSubmit={handlesubmit}
+      className="box-shadow: 0px 4px 16px 0px #1122110D flex h-129 w-343 flex-col gap-15 rounded-16 border bg-white px-24 py-16 md:h-166 md:w-696 md:gap-20 md:py-32 lg:h-178 lg:w-1200 lg:gap-32"
+    >
       <label htmlFor="search" className="text-lg-bold md:text-xl-bold">
         무엇을 체험하고 싶으신가요?
       </label>
@@ -46,9 +55,11 @@ const Search = () => {
             내가 원하는 체험은
           </p>
         </div>
-        <Button.Default className="h-56 w-96 rounded-4 px-15 py-8 text-lg-bold md:w-136">검색하기</Button.Default>
+        <Button.Default type="submit" className="h-56 w-96 rounded-4 px-15 py-8 text-lg-bold md:w-136">
+          검색하기
+        </Button.Default>
       </div>
-    </div>
+    </form>
   );
 };
 
