@@ -50,18 +50,16 @@ const ActivityInformation = ({
     modalMessage,
   } = useReservationSubmit();
 
-  const { userInformationData, isLoading: isLoadingUserData, error } = useMyInformation();
+  const { userInformationData, isLoading: isLoadingUserData } = useMyInformation();
 
   if (isLoadingUserData) return <div>유저 데이터 로딩중입니다...</div>;
-  if (error) return <div>유저 데이터를 불러오는데 실패했습니다.</div>;
-  if (!userInformationData) return null;
 
   const { category, title, rating, reviewCount, address, bannerImageUrl, description, subImages, price, userId } =
     activityData;
 
   setPrice(price);
 
-  const myId = userInformationData.id;
+  const myId = userInformationData?.id;
   const isCreateByMe = myId === userId;
 
   return (
