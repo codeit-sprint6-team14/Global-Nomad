@@ -25,6 +25,8 @@ const MyProfile = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
 
+  const [isSocialUser, setIsSocialUser] = useState(false);
+
   const passwordMismatch = password && password !== confirmPassword;
   const passwordLength = password.length < 8 && password.length > 0;
 
@@ -44,6 +46,12 @@ const MyProfile = () => {
     };
 
     loadUserProfile();
+
+    // 로컬 스토리지에서 social 키 확인
+    const social = localStorage.getItem('social');
+    if (social === 'true') {
+      setIsSocialUser(true);
+    }
   }, [setUser]);
 
   useEffect(() => {
@@ -86,7 +94,7 @@ const MyProfile = () => {
   const isSideNavbarOpen = viewportSize === 'tablet' || 'desktop';
 
   return (
-    <div className="md:mb-363 l lg:mb-208 mb-168 mt-94 lg:mt-142">
+    <div className="md:mb-363 lg:mb-208 mb-168 mt-24 lg:mt-72">
       <div className="mx-auto flex justify-between md:w-696 lg:w-1200">
         {isSideNavbarOpen && (
           <div className="hidden bg-white md:block">
@@ -120,15 +128,19 @@ const MyProfile = () => {
             placeholder="8자 이상 입력해 주세요"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            readonly={isSocialUser}
           />
-          {passwordLength && <p className="mt-4 text-sm text-red-500">8자 이상 입력해 주세요</p>}
+          {passwordLength && !isSocialUser && <p className="mt-4 text-sm text-red-500">8자 이상 입력해 주세요</p>}
           <PasswordInputSection
             title="비밀번호 재입력"
             placeholder="비밀번호를 한 번 더 입력해 주세요"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
+            readonly={isSocialUser}
           />
-          {passwordMismatch && <p className="mt-4 text-sm text-red-500">비밀번호가 일치하지 않습니다</p>}
+          {passwordMismatch && !isSocialUser && (
+            <p className="mt-4 text-sm text-red-500">비밀번호가 일치하지 않습니다</p>
+          )}
         </div>
       </div>
 
