@@ -1,3 +1,4 @@
+import AnimatedContainer from '@/components/common/Animation/AnimatedContainer';
 import Footer from '@/components/common/Footer';
 import NavBar from '@/components/common/NavBar';
 import SideNavMenu from '@/components/common/SideNavMenu';
@@ -18,7 +19,9 @@ const Schedule = () => {
           </div>
         )}
         <div className="mb-60 ml-auto mr-auto md:mr-0 md:w-430 lg:w-792">
-          <MySchedule />
+          <AnimatedContainer>
+            <MySchedule />
+          </AnimatedContainer>
         </div>
       </div>
       <Footer />
