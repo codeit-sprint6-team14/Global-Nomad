@@ -1,6 +1,5 @@
 import LeftArrow from '@/../public/assets/icons/left-arrow.svg';
 import { getUserProfile, updateProfile } from '@/apis/myPage/myProfile';
-import AnimatedContainer from '@/components/common/Animation/AnimatedContainer';
 import Button from '@/components/common/Button';
 import Modal from '@/components/common/Modal';
 import SideNavMenu from '@/components/common/SideNavMenu';
@@ -94,46 +93,43 @@ const MyProfile = () => {
             <SideNavMenu />
           </div>
         )}
-
-        <AnimatedContainer>
-          <div className="mx-auto mb-60 w-343 md:mx-0 md:w-429 lg:w-792">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <div className="block cursor-pointer md:hidden" onClick={handleGoMyPage}>
-                  <LeftArrow />
-                </div>
-                <h2 className="ml-10 mt-5 text-3xl-bold md:ml-0">내 정보</h2>
+        <div className="mx-auto mb-60 w-343 md:mx-0 md:w-429 lg:w-792">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <div className="block cursor-pointer md:hidden" onClick={handleGoMyPage}>
+                <LeftArrow />
               </div>
-              <Button.Default
-                className={`ml-auto h-48 w-120 ${isChanged ? '' : 'cursor-not-allowed bg-gray-400'}`}
-                onClick={handleSave}
-                disabled={!isChanged}
-              >
-                저장하기
-              </Button.Default>
+              <h2 className="ml-10 mt-5 text-3xl-bold md:ml-0">내 정보</h2>
             </div>
-            <InputSection
-              title="닉네임"
-              value={user.nickname}
-              onChange={(e) => setUser({ ...user, nickname: e.target.value })}
-            />
-            <InputSection title="이메일" value={user.email} readonly={true} />
-            <PasswordInputSection
-              title="새 비밀번호"
-              placeholder="8자 이상 입력해 주세요"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            {passwordLength && <p className="mt-4 text-sm text-red-500">8자 이상 입력해 주세요</p>}
-            <PasswordInputSection
-              title="비밀번호 재입력"
-              placeholder="비밀번호를 한 번 더 입력해 주세요"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-            {passwordMismatch && <p className="mt-4 text-sm text-red-500">비밀번호가 일치하지 않습니다</p>}
+            <Button.Default
+              className={`ml-auto h-48 w-120 ${isChanged ? '' : 'cursor-not-allowed bg-gray-400'}`}
+              onClick={handleSave}
+              disabled={!isChanged}
+            >
+              저장하기
+            </Button.Default>
           </div>
-        </AnimatedContainer>
+          <InputSection
+            title="닉네임"
+            value={user.nickname}
+            onChange={(e) => setUser({ ...user, nickname: e.target.value })}
+          />
+          <InputSection title="이메일" value={user.email} readonly={true} />
+          <PasswordInputSection
+            title="새 비밀번호"
+            placeholder="8자 이상 입력해 주세요"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          {passwordLength && <p className="mt-4 text-sm text-red-500">8자 이상 입력해 주세요</p>}
+          <PasswordInputSection
+            title="비밀번호 재입력"
+            placeholder="비밀번호를 한 번 더 입력해 주세요"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+          {passwordMismatch && <p className="mt-4 text-sm text-red-500">비밀번호가 일치하지 않습니다</p>}
+        </div>
       </div>
 
       {/* 모달 조건부 렌더링 */}
