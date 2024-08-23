@@ -10,7 +10,7 @@ import { Provider, useAtom } from 'jotai';
 import type { AppProps } from 'next/app';
 import localFont from 'next/font/local';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const queryClient = new QueryClient();
 
@@ -24,7 +24,8 @@ const pretendard = localFont({
 function AppContent({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const [token, setToken] = useAtom(tokenAtom);
-  useAuthRedirect();
+  const [isLoading, setIsLoading] = useState(true);
+  useAuthRedirect(isLoading);
 
   const showNavBarAndFooter =
     !['/signup', '/signin'].includes(router.pathname) && !router.pathname.startsWith('/my-page');
@@ -34,7 +35,12 @@ function AppContent({ Component, pageProps }: AppProps) {
     if (localToken && !token) {
       setToken(localToken);
     }
-  }, [token]);
+    setIsLoading(false);
+  }, [token, isLoading]);
+
+  if (isLoading) {
+    return <div>로딩중...</div>;
+  }
 
   const isLoggedIn = !!token;
   return (
