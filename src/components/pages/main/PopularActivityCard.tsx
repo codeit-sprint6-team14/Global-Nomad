@@ -1,7 +1,7 @@
+import Star from '@/../public/assets/icons/star.svg';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import Star from '../../../../public/assets/icons/star.svg';
 import { ActivityCardProps } from './mainPage.type';
 import { useBackupImage } from './useBackupImage';
 

@@ -1,11 +1,10 @@
+import BasicThumbnail1 from '@/../public/assets/images/testImg/air-balloon.png';
+import BasicThumbnail2 from '@/../public/assets/images/testImg/dance.png';
+import BasicThumbnail3 from '@/../public/assets/images/testImg/dog.png';
+import BasicThumbnail4 from '@/../public/assets/images/testImg/fish.png';
+import BasicThumbnail5 from '@/../public/assets/images/testImg/village.png';
 import { StaticImageData } from 'next/image';
 import { useMemo, useState } from 'react';
-
-import BasicThumbnail1 from '../../../../public/assets/images/testImg/air-balloon.png';
-import BasicThumbnail2 from '../../../../public/assets/images/testImg/dance.png';
-import BasicThumbnail3 from '../../../../public/assets/images/testImg/dog.png';
-import BasicThumbnail4 from '../../../../public/assets/images/testImg/fish.png';
-import BasicThumbnail5 from '../../../../public/assets/images/testImg/village.png';
 
 const backupThumnails: StaticImageData[] = [
   BasicThumbnail1,

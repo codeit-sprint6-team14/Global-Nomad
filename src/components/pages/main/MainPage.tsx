@@ -1,4 +1,7 @@
-import { getActivities, useActivities } from '@/apis/activities';
+import DownArrow from '@/../public/assets/icons/down-arrow.svg';
+import PrevButton from '@/../public/assets/icons/left-arrow.svg';
+import NextButton from '@/../public/assets/icons/right-arrow.svg';
+import { getActivities, useActivities } from '@/apis/mainPage/activities';
 import DropDownList from '@/components/common/Dropdown/dropDownList';
 import DropDownOption from '@/components/common/Dropdown/dropDownOption';
 import Pagination from '@/components/common/Pagination';
@@ -8,9 +11,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import DownArrow from '../../../../public/assets/icons/down-arrow.svg';
-import PrevButton from '../../../../public/assets/icons/left-arrow.svg';
-import NextButton from '../../../../public/assets/icons/right-arrow.svg';
 import ActivityCards from './ActivityCards';
 import PopularActivityCard from './PopularActivityCard';
 import { RadioTab } from './RadioTab';
