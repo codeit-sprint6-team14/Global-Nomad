@@ -1,9 +1,7 @@
 import { useMyInformation } from '@/apis/ActivityDetailsPage/getMyInformation';
 import FloatingBox from '@/components/common/FloatingBox';
 import Modal from '@/components/common/Modal';
-import ModalOverlay from '@/components/common/Modal/Overlay';
 import { useReservationSubmit } from '@/components/pages/ActivityDetails/useReservationSubmit';
-import { useClickOutside } from '@/hooks/useClickOutside';
 import useViewportSize from '@/hooks/useViewportSize';
 import { activityIdAtom, reservationPriceAtom } from '@/store/activityDetailsAtom';
 import { Activity } from '@/types/activity';
@@ -51,8 +49,6 @@ const ActivityInformation = ({
     handleDeleteConfirmation,
     modalMessage,
   } = useReservationSubmit();
-
-  const modalRef = useClickOutside(handleCloseModal);
 
   const { userInformationData, isLoading: isLoadingUserData, error } = useMyInformation();
 
@@ -107,19 +103,17 @@ const ActivityInformation = ({
           </div>
         )}
         {isModalOpen && (
-          <ModalOverlay>
-            <div ref={modalRef}>
-              <Modal.RegisterConfirm
-                onClose={isDeleteConfirmation ? handleDeleteActivity : handleCloseModal}
-                onCancel={handleCloseModal}
-                countdown={countdown}
-                showCountdown={showCountdown}
-                showCancelButton={isDeleteConfirmation}
-              >
-                {modalMessage}
-              </Modal.RegisterConfirm>
-            </div>
-          </ModalOverlay>
+          <Modal.Overlay isOpen={isModalOpen} onClose={isDeleteConfirmation ? handleDeleteActivity : handleCloseModal}>
+            <Modal.RegisterConfirm
+              onClose={isDeleteConfirmation ? handleDeleteActivity : handleCloseModal}
+              onCancel={handleCloseModal}
+              countdown={countdown}
+              showCountdown={showCountdown}
+              showCancelButton={isDeleteConfirmation}
+            >
+              {modalMessage}
+            </Modal.RegisterConfirm>
+          </Modal.Overlay>
         )}
         <ScrollToTopButton />
       </div>

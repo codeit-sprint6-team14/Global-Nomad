@@ -16,4 +16,23 @@ export interface TokensResponse {
   accessToken: string;
 }
 
-export type LoginResult = { success: true; data: TokensResponse } | { success: false; error: string };
+export interface UserProfile {
+  id: number;
+  email: string;
+  nickname: string;
+  profileImageUrl: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SigninResponse {
+  user: UserProfile;
+  refreshToken: string;
+  accessToken: string;
+}
+
+export interface SigninError {
+  error: string;
+}
+
+export type SigninResult = SigninResponse | SigninError;

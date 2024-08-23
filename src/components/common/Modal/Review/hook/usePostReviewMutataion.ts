@@ -13,7 +13,7 @@ export const usePostReviewMutation = () => {
     mutationFn: ({ reservationId, reviewData }: { reservationId: number | null; reviewData: ReviewData }) =>
       postReview(reservationId, reviewData),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['reviews'] });
+      queryClient.invalidateQueries({ queryKey: ['myReservations'] });
     },
     onError: (error) => {
       console.error('Post review error:', error);
