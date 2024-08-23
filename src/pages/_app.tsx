@@ -42,10 +42,9 @@ function AppContent({ Component, pageProps }: AppProps) {
     return <div>로딩중...</div>;
   }
 
-  const isLoggedIn = !!token;
   return (
     <main className={`${pretendard.variable} ${showNavBarAndFooter ? 'pt-70' : ''}`}>
-      {showNavBarAndFooter && <NavBar accessToken={isLoggedIn} />}
+      {showNavBarAndFooter && <NavBar />}
       <div id="notification-root" />
       <Component {...pageProps} />
       <ToastProvider />
