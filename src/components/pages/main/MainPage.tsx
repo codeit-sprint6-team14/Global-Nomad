@@ -14,6 +14,7 @@ import NextButton from '../../../../public/assets/icons/right-arrow.svg';
 import ActivityCards from './ActivityCards';
 import PopularActivityCard from './PopularActivityCard';
 import { RadioTab } from './RadioTab';
+import { Activity } from './mainPage.type';
 
 const categories = ['문화 · 예술', '식음료', '스포츠', '투어', '관광', '웰빙'];
 const dropdownOptions = [
@@ -44,6 +45,8 @@ const MainPage = () => {
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const [filteredActivities, setFilteredActivities] = useState<Activity[]>([]);
+  const [searchItemsPerPage, setSearchItemsPerPage] = useState(SEARCH_ITEMS_PER_PAGE);
 
   const backgroundColors = useMemo(() => ['bg-purple-100', 'bg-pink-200', 'bg-sky-200'], []);
 
@@ -60,6 +63,7 @@ const MainPage = () => {
     isLoading: isActivitiesLoading,
     error: activitiesError,
   } = useActivities(page, itemsPerPage, activeCategory, sortBy);
+
   const { data: popularActivitiesData, isLoading: isPopularActivitiesLoading } = useQuery({
     queryKey: ['popularActivities'],
     queryFn: async () => {
@@ -86,10 +90,13 @@ const MainPage = () => {
 
       if (newIsDesktop) {
         setItemsPerPage(8);
+        setSearchItemsPerPage(16);
       } else if (newIsTablet) {
         setItemsPerPage(9);
+        setSearchItemsPerPage(9);
       } else {
         setItemsPerPage(4);
+        setSearchItemsPerPage(8);
       }
 
       if (newIsDesktop || newIsTablet) {
@@ -192,20 +199,30 @@ const MainPage = () => {
     setStartIndex((prevIndex) => (prevIndex + 3) % filteredPopularActivities.length);
   };
 
-  const handleSearch = useCallback((term: string) => {
-    setSearchTerm(term);
-    setPage(1);
-    if (term) {
-      setIsSearching(true);
-      setItemsPerPage(SEARCH_ITEMS_PER_PAGE);
-    } else {
-      setIsSearching(false);
-      setItemsPerPage(INITIAL_ITEMS_PER_PAGE);
-    }
-  }, []);
+  const handleSearch = useCallback(
+    (term: string) => {
+      setSearchTerm(term);
+      setPage(1);
+      if (term) {
+        setIsSearching(true);
+        const lowercaseTerm = term.toLowerCase();
+        const filtered = displayedActivities.filter(
+          (activity) =>
+            activity.title.toLowerCase().includes(lowercaseTerm) ||
+            activity.category.toLowerCase().includes(lowercaseTerm),
+        );
+        setFilteredActivities(filtered);
+      } else {
+        setIsSearching(false);
+        setFilteredActivities([]);
+      }
+    },
+    [displayedActivities],
+  );
 
   const handlePageChange = useCallback((newPage: number) => {
     setPage(newPage);
+    window.scrollTo(0, 0);
   }, []);
 
   const getCurrentMonth = () => {
@@ -235,6 +252,12 @@ const MainPage = () => {
       tabsContainerRef.current.scrollLeft = scrollLeft - walk;
     }
   };
+
+  const searchPageCount = Math.ceil(filteredActivities.length / searchItemsPerPage);
+  const searchPageActivities = useMemo(() => {
+    const startIndex = (page - 1) * searchItemsPerPage;
+    return filteredActivities.slice(startIndex, startIndex + searchItemsPerPage);
+  }, [filteredActivities, page, searchItemsPerPage]);
 
   if (isActivitiesLoading || isPopularActivitiesLoading) return <div>loading...</div>;
   if (activitiesError) return <div>{activitiesError.message}</div>;
@@ -288,177 +311,201 @@ const MainPage = () => {
         <Search onSearch={handleSearch} />
       </div>
 
-      {!isSearching && (
-        <section className="mt-50 flex flex-col gap-24 lg:h-480 lg:w-1200">
-          <div className="flex items-center justify-between">
-            <h2 className="md:leading-43 font-bold sm:text-18 md:text-36 md:leading-[21.48px]">🔥인기 체험</h2>
-            {filteredPopularActivities.length > 3 && (
-              <div className="flex gap-12">
-                <button onClick={handlePrevClick} className="cursor-pointer">
-                  <PrevButton />
-                </button>
-                <button onClick={handleNextClick} className="cursor-pointer">
-                  <NextButton />
-                </button>
-              </div>
-            )}
-          </div>
-          {filteredPopularActivities.length > 0 && (
-            <div className="flex sm:gap-16 md:gap-32 lg:w-1200 lg:gap-24">
-              {[0, 1, 2].map((offset) => {
-                const index = (startIndex + offset) % filteredPopularActivities.length;
-                const activity = filteredPopularActivities[index];
-                return activity ? <PopularActivityCard key={`${activity.id}-${index}`} activity={activity} /> : null;
-              })}
-            </div>
-          )}
-        </section>
-      )}
-
-      {!isSearching && (
-        <section className="flex flex-col gap-24">
-          <div className="mb-24 flex items-center justify-between sm:w-340 md:w-695 md:gap-14 lg:w-1204">
-            <div className="relative flex items-center overflow-hidden sm:w-375 md:w-640 lg:w-full">
-              {isTablet && !isDesktop && (
-                <div className="flex-shrink-0">
-                  {categoryStartIndex > 0 && (
-                    <button
-                      onClick={handleCategoryPrevClick}
-                      className="z-1 flex h-32 w-32 items-center justify-center rounded-full border border-gray-600"
-                    >
-                      <PrevButton />
-                    </button>
-                  )}
-                </div>
-              )}
-
-              <div
-                className={`${
-                  isDesktop || isTablet
-                    ? `${isTablet && !isDesktop ? 'mx-10 w-[calc(100%-5rem)] overflow-hidden pr-60' : 'w-full'}`
-                    : 'w-250 overflow-x-auto scrollbar-hide'
-                }`}
-                onMouseDown={handleMouseDown}
-                onMouseUp={handleMouseUp}
-                onMouseLeave={handleMouseUp}
-                onMouseMove={handleMouseMove}
-              >
-                <RadioTab.Root defaultTab={activeCategory} onTabChange={handleCategoryChange}>
-                  <div
-                    ref={tabsContainerRef}
-                    className={`flex ${
-                      isTablet && !isDesktop
-                        ? 'gap-10 transition-transform duration-300 ease-in-out'
-                        : isDesktop
-                          ? 'lg:gap-24'
-                          : 'sm:gap-8'
-                    }`}
-                    style={isTablet && !isDesktop ? { width: `${(categories.length / VISIBLE_TABS) * 105}%` } : {}}
-                  >
-                    {categories.map((category) => (
-                      <div
-                        key={category}
-                        className={`${
-                          isTablet && !isDesktop ? 'flex-shrink-0' : isDesktop ? 'group lg:mb-2' : 'flex-shrink-0'
-                        }`}
-                        style={isTablet && !isDesktop ? { width: `${100 / categories.length}%` } : {}}
-                      >
-                        <RadioTab.Item id={category}>
-                          <span className="block whitespace-nowrap px-3 py-2 text-sm">{category}</span>
-                        </RadioTab.Item>
-                      </div>
-                    ))}
-                  </div>
-                </RadioTab.Root>
-              </div>
-
-              {isTablet && !isDesktop && (
-                <div className="w-32 flex-shrink-0">
-                  {categoryStartIndex + VISIBLE_TABS < categories.length && (
-                    <button
-                      onClick={handleCategoryNextClick}
-                      className="z-1 flex h-32 w-32 items-center justify-center rounded-full border border-gray-600"
-                    >
-                      <div className="flex h-20 w-35 items-center justify-center">
-                        <NextButton />
-                      </div>
-                    </button>
-                  )}
-                </div>
-              )}
-            </div>
-
-            <div
-              className="relative cursor-pointer rounded-15 border border-black-100 sm:h-41 sm:w-90 md:h-53 md:w-120 lg:w-150"
-              ref={dropdownRef}
-            >
-              <button
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className={`flex w-full items-center justify-center sm:py-9 md:px-20 md:py-14 ${
-                  sortBy ? 'gap-5' : 'md:20 sm:gap-10 lg:gap-40'
-                }`}
-              >
-                <span className="text-black-100 sm:text-md-medium md:text-lg-medium">
-                  {sortBy ? dropdownOptions.find((option) => option.value === sortBy)?.label : '가격'}
-                </span>
-                <div className={`transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`}>
-                  <DownArrow alt="down arrow" />
-                </div>
-              </button>
-              {isDropdownOpen && (
-                <DropDownList classNames="shadow-[0px_4px_16px_0px_#1122110D] absolute top-full left-0 right-0 mt-6 flex flex-col border border-gray-300 rounded-tl-[6px] rounded-tr-[6px]">
-                  {dropdownOptions.map((option) => (
-                    <DropDownOption
-                      key={option.value}
-                      label={option.label}
-                      handleOptionClick={() => {
-                        handleSortChange(option.value);
-                        setIsDropdownOpen(false);
-                      }}
-                      className="text-2lg-medium text-gray-800"
-                    />
-                  ))}
-                </DropDownList>
-              )}
-            </div>
-          </div>
-        </section>
-      )}
-
-      <div className="m-auto flex flex-col gap-24 sm:w-340 md:w-695 lg:w-1200">
-        {isSearching ? (
+      {isSearching ? (
+        <div className="m-auto flex flex-col gap-24 sm:w-340 md:w-695 lg:w-1200">
           <h2 className="leading-42 mt-50 text-32 font-normal">
             <span className="text-3xl-bold text-black-100">{searchTerm}</span>(으)로 검색한 결과입니다.
           </h2>
-        ) : (
-          <h2 className="md:leading-43 font-bold sm:text-18 md:text-36 md:leading-[21.48px]">
-            {activeCategory || '🥾모든 체험'}
-          </h2>
-        )}
-
-        {isSearching && <span className="mb-24 text-lg-regular">총 {displayedActivities.length}개의 결과</span>}
-
-        <div className="min-h-600">
-          {displayedActivities.length > 0 ? (
-            <div className="flex flex-wrap sm:w-340 sm:gap-4 md:w-695 md:gap-16 lg:w-1204 lg:gap-24">
-              {displayedActivities.map((activity) => (
-                <ActivityCards key={activity.id} activity={activity} />
-              ))}
-            </div>
-          ) : (
-            <p className="h-600 text-xl text-gray-500">검색 결과가 없습니다.</p>
+          <span className="mb-24 text-lg-regular">총 {filteredActivities.length}개의 결과</span>
+          <div className="min-h-600">
+            {searchPageActivities.length > 0 ? (
+              <div className="flex flex-wrap sm:w-340 sm:gap-4 md:w-695 md:gap-16 lg:w-1204 lg:gap-24">
+                {searchPageActivities.map((activity) => (
+                  <ActivityCards key={activity.id} activity={activity} />
+                ))}
+              </div>
+            ) : (
+              <p className="h-600 text-xl text-gray-500">검색 결과가 없습니다.</p>
+            )}
+          </div>
+          {searchPageCount > 1 && (
+            <Pagination
+              currentPage={page}
+              totalPages={searchPageCount}
+              onPageChange={handlePageChange}
+              isPlaceholderData={false}
+            />
           )}
         </div>
+      ) : (
+        <div className="m-auto flex flex-col gap-24 sm:w-340 md:w-695 lg:w-1200">
+          {!isSearching && (
+            <section className="mt-50 flex flex-col gap-24 lg:h-480 lg:w-1200">
+              <div className="flex items-center justify-between">
+                <h2 className="md:leading-43 font-bold sm:text-18 md:text-36 md:leading-[21.48px]">🔥인기 체험</h2>
+                {filteredPopularActivities.length > 3 && (
+                  <div className="flex gap-12">
+                    <button onClick={handlePrevClick} className="cursor-pointer">
+                      <PrevButton />
+                    </button>
+                    <button onClick={handleNextClick} className="cursor-pointer">
+                      <NextButton />
+                    </button>
+                  </div>
+                )}
+              </div>
+              {filteredPopularActivities.length > 0 && (
+                <div className="flex sm:gap-16 md:gap-32 lg:w-1200 lg:gap-24">
+                  {[0, 1, 2].map((offset) => {
+                    const index = (startIndex + offset) % filteredPopularActivities.length;
+                    const activity = filteredPopularActivities[index];
+                    return activity ? (
+                      <PopularActivityCard key={`${activity.id}-${index}`} activity={activity} />
+                    ) : null;
+                  })}
+                </div>
+              )}
+            </section>
+          )}
 
-        {totalPages > 1 && (
-          <Pagination
-            currentPage={page}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-            isPlaceholderData={isActivitiesLoading}
-          />
-        )}
-      </div>
+          {!isSearching && (
+            <section className="flex flex-col gap-24">
+              <div className="mb-24 flex items-center justify-between sm:w-340 md:w-695 md:gap-14 lg:w-1204">
+                <div className="relative flex items-center overflow-hidden sm:w-375 md:w-640 lg:w-full">
+                  {isTablet && !isDesktop && (
+                    <div className="flex-shrink-0">
+                      {categoryStartIndex > 0 && (
+                        <button
+                          onClick={handleCategoryPrevClick}
+                          className="z-1 flex h-32 w-32 items-center justify-center rounded-full border border-gray-600"
+                        >
+                          <PrevButton />
+                        </button>
+                      )}
+                    </div>
+                  )}
+
+                  <div
+                    className={`${
+                      isDesktop || isTablet
+                        ? `${isTablet && !isDesktop ? 'mx-10 w-[calc(100%-5rem)] overflow-hidden pr-60' : 'w-full'}`
+                        : 'w-250 overflow-x-auto scrollbar-hide'
+                    }`}
+                    onMouseDown={handleMouseDown}
+                    onMouseUp={handleMouseUp}
+                    onMouseLeave={handleMouseUp}
+                    onMouseMove={handleMouseMove}
+                  >
+                    <RadioTab.Root defaultTab={activeCategory} onTabChange={handleCategoryChange}>
+                      <div
+                        ref={tabsContainerRef}
+                        className={`flex ${
+                          isTablet && !isDesktop
+                            ? 'gap-10 transition-transform duration-300 ease-in-out'
+                            : isDesktop
+                              ? 'lg:gap-24'
+                              : 'sm:gap-8'
+                        }`}
+                        style={isTablet && !isDesktop ? { width: `${(categories.length / VISIBLE_TABS) * 105}%` } : {}}
+                      >
+                        {categories.map((category) => (
+                          <div
+                            key={category}
+                            className={`${
+                              isTablet && !isDesktop ? 'flex-shrink-0' : isDesktop ? 'group lg:mb-2' : 'flex-shrink-0'
+                            }`}
+                            style={isTablet && !isDesktop ? { width: `${100 / categories.length}%` } : {}}
+                          >
+                            <RadioTab.Item id={category}>
+                              <span className="block whitespace-nowrap px-3 py-2 text-sm">{category}</span>
+                            </RadioTab.Item>
+                          </div>
+                        ))}
+                      </div>
+                    </RadioTab.Root>
+                  </div>
+
+                  {isTablet && !isDesktop && (
+                    <div className="w-32 flex-shrink-0">
+                      {categoryStartIndex + VISIBLE_TABS < categories.length && (
+                        <button
+                          onClick={handleCategoryNextClick}
+                          className="z-1 flex h-32 w-32 items-center justify-center rounded-full border border-gray-600"
+                        >
+                          <div className="flex h-20 w-35 items-center justify-center">
+                            <NextButton />
+                          </div>
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                <div
+                  className="relative cursor-pointer rounded-15 border border-black-100 sm:h-41 sm:w-90 md:h-53 md:w-120 lg:w-150"
+                  ref={dropdownRef}
+                >
+                  <button
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    className={`flex w-full items-center justify-center sm:py-9 md:px-20 md:py-14 ${
+                      sortBy ? 'gap-5' : 'md:20 sm:gap-10 lg:gap-40'
+                    }`}
+                  >
+                    <span className="text-black-100 sm:text-md-medium md:text-lg-medium">
+                      {sortBy ? dropdownOptions.find((option) => option.value === sortBy)?.label : '가격'}
+                    </span>
+                    <div className={`transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`}>
+                      <DownArrow alt="down arrow" />
+                    </div>
+                  </button>
+                  {isDropdownOpen && (
+                    <DropDownList classNames="shadow-[0px_4px_16px_0px_#1122110D] absolute top-full left-0 right-0 mt-6 flex flex-col border border-gray-300 rounded-tl-[6px] rounded-tr-[6px]">
+                      {dropdownOptions.map((option) => (
+                        <DropDownOption
+                          key={option.value}
+                          label={option.label}
+                          handleOptionClick={() => {
+                            handleSortChange(option.value);
+                            setIsDropdownOpen(false);
+                          }}
+                          className="text-2lg-medium text-gray-800"
+                        />
+                      ))}
+                    </DropDownList>
+                  )}
+                </div>
+              </div>
+            </section>
+          )}
+
+          <div className="m-auto flex flex-col gap-24 sm:w-340 md:w-695 lg:w-1200">
+            <h2 className="md:leading-43 font-bold sm:text-18 md:text-36 md:leading-[21.48px]">
+              {activeCategory || '🥾모든 체험'}
+            </h2>
+
+            <div className="min-h-600">
+              {displayedActivities.length > 0 ? (
+                <div className="flex flex-wrap sm:w-340 sm:gap-4 md:w-695 md:gap-16 lg:w-1204 lg:gap-24">
+                  {displayedActivities.map((activity) => (
+                    <ActivityCards key={activity.id} activity={activity} />
+                  ))}
+                </div>
+              ) : (
+                <p className="h-600 text-xl text-gray-500">검색 결과가 없습니다.</p>
+              )}
+            </div>
+
+            {totalPages > 1 && (
+              <Pagination
+                currentPage={page}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+                isPlaceholderData={isActivitiesLoading}
+              />
+            )}
+          </div>
+        </div>
+      )}
     </main>
   );
 };
