@@ -22,7 +22,6 @@ const dropdownOptions = [
 ];
 
 const INITIAL_ITEMS_PER_PAGE = 8;
-const SEARCH_ITEMS_PER_PAGE = 16;
 const VISIBLE_TABS = 4;
 
 const MainPage = () => {
@@ -60,7 +59,8 @@ const MainPage = () => {
     data: activitiesData,
     isLoading: isActivitiesLoading,
     error: activitiesError,
-  } = useActivities(page, itemsPerPage, activeCategory, sortBy);
+  } = useActivities(page, itemsPerPage, activeCategory, sortBy, searchTerm);
+
   const { data: popularActivitiesData, isLoading: isPopularActivitiesLoading } = useQuery({
     queryKey: ['popularActivities'],
     queryFn: async () => {
@@ -85,18 +85,21 @@ const MainPage = () => {
       setIsDesktop(newIsDesktop);
       setIsTablet(newIsTablet);
 
-      if (newIsDesktop) {
-        setItemsPerPage(8);
-      } else if (newIsTablet) {
-        setItemsPerPage(9);
+      if (isSearching) {
+        if (newIsDesktop) {
+          setItemsPerPage(16);
+        } else if (newIsTablet) {
+          setItemsPerPage(9);
+        } else {
+          setItemsPerPage(8);
+        }
       } else {
-        setItemsPerPage(4);
-      }
-
-      if (newIsDesktop || newIsTablet) {
-        setCategoryStartIndex(0);
-        if (tabsContainerRef.current) {
-          tabsContainerRef.current.scrollLeft = 0;
+        if (newIsDesktop) {
+          setItemsPerPage(8);
+        } else if (newIsTablet) {
+          setItemsPerPage(9);
+        } else {
+          setItemsPerPage(4);
         }
       }
     };
@@ -141,6 +144,12 @@ const MainPage = () => {
   useEffect(() => {
     setPage(1);
   }, [itemsPerPage, activeCategory, sortBy]);
+
+  useEffect(() => {
+    if (searchTerm !== '') {
+      setPage(1);
+    }
+  }, [searchTerm]);
 
   const handleCategoryChange = useCallback(
     (category: string) => {
@@ -193,17 +202,34 @@ const MainPage = () => {
     setStartIndex((prevIndex) => (prevIndex + 3) % filteredPopularActivities.length);
   };
 
-  const handleSearch = useCallback((term: string) => {
-    setSearchTerm(term);
-    setPage(1);
-    if (term) {
-      setIsSearching(true);
-      setItemsPerPage(SEARCH_ITEMS_PER_PAGE);
-    } else {
-      setIsSearching(false);
-      setItemsPerPage(INITIAL_ITEMS_PER_PAGE);
-    }
-  }, []);
+  const handleSearch = useCallback(
+    (term: string) => {
+      setSearchTerm(term);
+      setPage(1);
+      setActiveCategory('');
+      setSortBy(null);
+      if (term) {
+        setIsSearching(true);
+        if (isDesktop) {
+          setItemsPerPage(16);
+        } else if (isTablet) {
+          setItemsPerPage(9);
+        } else {
+          setItemsPerPage(8);
+        }
+      } else {
+        setIsSearching(false);
+        if (isDesktop) {
+          setItemsPerPage(8);
+        } else if (isTablet) {
+          setItemsPerPage(9);
+        } else {
+          setItemsPerPage(4);
+        }
+      }
+    },
+    [isDesktop, isTablet],
+  );
 
   const handlePageChange = useCallback((newPage: number) => {
     setPage(newPage);
