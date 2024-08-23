@@ -1,10 +1,11 @@
 import DropDown from '@/components/common/Dropdown';
 import { useClickOutside } from '@/hooks/useClickOutside';
+import useToast from '@/hooks/useToast';
 import { HeaderProps } from '@/types/activity';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const Header = ({
   myId,
@@ -20,6 +21,13 @@ const Header = ({
   const [isOpenDropdown, setIsOpenDropdown] = useState(false);
   const [showCopiedMessage, setShowCopiedMessage] = useState(false);
   const router = useRouter();
+
+  const toast = useToast();
+  useEffect(() => {
+    if (showCopiedMessage) {
+      toast.success('링크가 복사됐습니다');
+    }
+  }, [showCopiedMessage]);
 
   const handleDropdownVisible = () => {
     setIsOpenDropdown((prev) => !prev);
@@ -111,11 +119,6 @@ const Header = ({
             </motion.svg>
           )}
         </div>
-        {showCopiedMessage && (
-          <div className="absolute bottom-40 right-0 rounded-md bg-gray-600 px-6 py-2 text-white">
-            링크가 복사되었습니다
-          </div>
-        )}
         <AnimatePresence>
           {isOpenDropdown && (
             <motion.div
