@@ -44,6 +44,7 @@ const MainPage = () => {
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const popularActivitiesRef = useRef<HTMLDivElement>(null);
 
   const backgroundColors = useMemo(() => ['bg-purple-100', 'bg-pink-200', 'bg-sky-200'], []);
 
@@ -236,6 +237,35 @@ const MainPage = () => {
     }
   };
 
+  const handleDragStart = useCallback((e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
+    if (!popularActivitiesRef.current) return;
+    setIsDragging(true);
+    setStartX(
+      'touches' in e
+        ? e.touches[0].pageX - popularActivitiesRef.current.offsetLeft
+        : e.pageX - popularActivitiesRef.current.offsetLeft,
+    );
+    setScrollLeft(popularActivitiesRef.current.scrollLeft);
+  }, []);
+
+  const handleDragEnd = useCallback(() => {
+    setIsDragging(false);
+  }, []);
+
+  const handleDragMove = useCallback(
+    (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
+      if (!isDragging || !popularActivitiesRef.current) return;
+      e.preventDefault();
+      const x =
+        'touches' in e
+          ? e.touches[0].pageX - popularActivitiesRef.current.offsetLeft
+          : e.pageX - popularActivitiesRef.current.offsetLeft;
+      const walk = (x - startX) * 2;
+      popularActivitiesRef.current.scrollLeft = scrollLeft - walk;
+    },
+    [isDragging, startX, scrollLeft],
+  );
+
   if (isActivitiesLoading || isPopularActivitiesLoading) return <div>loading...</div>;
   if (activitiesError) return <div>{activitiesError.message}</div>;
 
@@ -289,10 +319,10 @@ const MainPage = () => {
       </div>
 
       {!isSearching && (
-        <section className="mt-50 flex flex-col gap-24 lg:h-480 lg:w-1200">
+        <section className="mt-50 flex max-w-[1200px] flex-col gap-24 px-4 md:w-675 lg:w-1200">
           <div className="flex items-center justify-between">
             <h2 className="md:leading-43 font-bold sm:text-18 md:text-36 md:leading-[21.48px]">🔥인기 체험</h2>
-            {filteredPopularActivities.length > 3 && (
+            {isDesktop && filteredPopularActivities.length > 3 && (
               <div className="flex gap-12">
                 <button onClick={handlePrevClick} className="cursor-pointer">
                   <PrevButton />
@@ -304,12 +334,33 @@ const MainPage = () => {
             )}
           </div>
           {filteredPopularActivities.length > 0 && (
-            <div className="flex sm:gap-16 md:gap-32 lg:w-1200 lg:gap-24">
-              {[0, 1, 2].map((offset) => {
-                const index = (startIndex + offset) % filteredPopularActivities.length;
-                const activity = filteredPopularActivities[index];
-                return activity ? <PopularActivityCard key={`${activity.id}-${index}`} activity={activity} /> : null;
-              })}
+            <div
+              ref={popularActivitiesRef}
+              className={`m-auto flex overflow-x-auto scrollbar-hide sm:w-340 sm:gap-16 md:w-675 md:gap-32 lg:w-1200 lg:gap-24 ${!isDesktop ? 'snap-x snap-mandatory scroll-smooth' : ''}`}
+              style={{ scrollBehavior: 'smooth' }}
+              onMouseDown={!isDesktop ? handleDragStart : undefined}
+              onMouseUp={!isDesktop ? handleDragEnd : undefined}
+              onMouseLeave={!isDesktop ? handleDragEnd : undefined}
+              onMouseMove={!isDesktop ? handleDragMove : undefined}
+              onTouchStart={!isDesktop ? handleDragStart : undefined}
+              onTouchEnd={!isDesktop ? handleDragEnd : undefined}
+              onTouchMove={!isDesktop ? handleDragMove : undefined}
+            >
+              {isDesktop
+                ? [0, 1, 2].map((offset) => {
+                    const index = (startIndex + offset) % filteredPopularActivities.length;
+                    const activity = filteredPopularActivities[index];
+                    return activity ? (
+                      <PopularActivityCard key={`${activity.id}-${index}`} activity={activity} />
+                    ) : null;
+                  })
+                : filteredPopularActivities.map((activity, index) => (
+                    <div key={`${activity.id}-${index}`} className="flex-shrink-0 snap-center">
+                      <div className="flex">
+                        <PopularActivityCard activity={activity} />
+                      </div>
+                    </div>
+                  ))}
             </div>
           )}
         </section>
