@@ -33,7 +33,7 @@ const ReservationList = () => {
       <AnimatedContainer>
         <main className="md:mb-400 lg:mb-270 mx-auto mb-[496px] mt-94 w-344 md:w-696 lg:mb-142 lg:mt-142 lg:w-1200">
           {isMobile ? (
-            <div className={`flex flex-col ${isMyReservationsEmpty && 'mb-86 md:mb-82 lg:mb-[117px]'}`}>
+            <div className={`flex flex-col ${isMyReservationsEmpty && 'gap-86 md:gap-82 lg:gap-[117px]'}`}>
               <div className="mb-12 flex items-center">
                 <div className="cursor-pointer md:hidden">
                   <LeftArrow onClick={() => router.push('/my-page')} />
@@ -50,7 +50,7 @@ const ReservationList = () => {
               <SideNavMenu />
               <div className="flex flex-col">
                 <div
-                  className={`md:mb-24 md:flex md:items-center md:justify-between ${isMyReservationsEmpty && 'mb-86 md:mb-82 lg:mb-[117px]'}`}
+                  className={`md:mb-24 md:flex md:items-center md:justify-between ${isMyReservationsEmpty && 'md:mb-[64px] lg:mb-[80px]'}`}
                 >
                   <h1 className="text-3xl-bold">예약 내역</h1>
                   <Filter content="필터" onOptionSelect={handleStatusChange} selectedOption={selectedStatus} />

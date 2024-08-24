@@ -23,7 +23,7 @@ const ActivitySettings = () => {
       <AnimatedContainer>
         <main className="md:mb-400 lg:mb-270 mx-auto mb-[496px] mt-94 w-344 md:w-696 lg:mt-142 lg:w-1200">
           {isMobile ? (
-            <div className={`flex flex-col ${isActivityEmpty && 'mb-90'}`}>
+            <div className={`flex flex-col ${isActivityEmpty && 'gap-90'}`}>
               <div className="mb-12 flex items-center">
                 <div className="cursor-pointer md:hidden">
                   <LeftArrow onClick={() => router.push('/my-page')} />
@@ -36,7 +36,7 @@ const ActivitySettings = () => {
             <div className="flex justify-between">
               <SideNavMenu />
               <div className="flex flex-col">
-                <div className={`flex justify-between md:mb-24 ${isActivityEmpty && 'lg:mb-111'}`}>
+                <div className={`flex justify-between md:mb-24 ${isActivityEmpty && 'md:mb-64 lg:mb-80'}`}>
                   <h1 className="text-3xl-bold">내 체험 관리</h1>
                   <Button.Default
                     onClick={() => router.push('/my-page/regist-activity')}
