@@ -1,7 +1,7 @@
 import Footer from '@/components/common/Footer';
 import NavBar from '@/components/common/NavBar';
 import ToastProvider from '@/components/common/Toast/toastProvider';
-import { useAuthRedirect } from '@/hooks/useAuthRedirect';
+import useRedirectMessage from '@/hooks/useRedirectMessage';
 import { tokenAtom } from '@/store/tokenAtom';
 import '@/styles/globals.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -26,7 +26,7 @@ function AppContent({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const [token, setToken] = useAtom(tokenAtom);
   const [isLoading, setIsLoading] = useState(true);
-  useAuthRedirect(isLoading);
+  useRedirectMessage();
 
   const showNavBarAndFooter =
     !['/signup', '/signin'].includes(router.pathname) && !router.pathname.startsWith('/my-page');
