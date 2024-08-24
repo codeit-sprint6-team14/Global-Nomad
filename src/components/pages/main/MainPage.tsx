@@ -14,6 +14,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ActivityCards from './ActivityCards';
 import PopularActivityCard from './PopularActivityCard';
 import { RadioTab } from './RadioTab';
+import { Activity } from './mainPage.type';
 
 const categories = ['문화 · 예술', '식음료', '스포츠', '투어', '관광', '웰빙'];
 
@@ -319,7 +320,7 @@ const MainPage = () => {
                 <div className="absolute left-0 right-0 sm:top-[25%] md:top-[45%] lg:top-[35%]">
                   <div className="mx-auto px-0 sm:max-w-[375px] sm:px-[3%] md:max-w-[744px] md:px-[3%] lg:max-w-[1200px] lg:px-[1%]">
                     <div className="flex w-[95%] flex-col text-white sm:h-120 sm:w-[85%] md:h-162 md:w-[70%] md:gap-8 lg:h-215 lg:w-[55%] lg:gap-24">
-                      <h2 className="sm:h- line-clamp-2 text-wrap break-words text-24 font-bold leading-[28.64px] sm:text-32 sm:leading-[38px] md:h-128 md:text-54 md:leading-[64.44px] lg:h-162 lg:text-68 lg:leading-[81.15px]">
+                      <h2 className="line-clamp-2 text-wrap break-words text-24 font-bold leading-[28.64px] sm:h-75 sm:text-32 sm:leading-[38px] md:h-128 md:text-54 md:leading-[64.44px] lg:h-162 lg:text-68 lg:leading-[81.15px]">
                         {activity.title}
                       </h2>
                       <p className="sm:text-md-bold md:text-xl-bold lg:text-2xl-bold">
@@ -339,7 +340,7 @@ const MainPage = () => {
       </div>
 
       {!isSearching && (
-        <section className="mt-50 flex max-w-[1200px] flex-col gap-24 px-4 md:w-675 lg:w-1200">
+        <section className="mt-50 flex max-w-[1200px] flex-col px-4 sm:gap-16 md:w-675 md:gap-32 lg:w-1200 lg:gap-48">
           <div className="flex items-center justify-between">
             <h2 className="md:leading-43 font-bold sm:text-18 md:text-36 md:leading-[21.48px]">🔥인기 체험</h2>
             {isDesktop && filteredPopularActivities.length > 3 && (
@@ -387,9 +388,9 @@ const MainPage = () => {
       )}
 
       {!isSearching && (
-        <section className="flex flex-col gap-24">
+        <section className="flex flex-col sm:mb-8 md:mb-32 lg:mb-48">
           <div className="mb-24 flex items-center justify-between sm:w-340 md:w-695 md:gap-14 lg:w-1204">
-            <div className="relative flex items-center overflow-hidden sm:w-375 md:w-640 lg:w-full">
+            <div className="relative flex items-center overflow-hidden sm:w-375 md:w-680 lg:w-full">
               {isTablet && !isDesktop && (
                 <div className="flex-shrink-0">
                   {categoryStartIndex > 0 && (
@@ -500,7 +501,7 @@ const MainPage = () => {
         </section>
       )}
 
-      <div className="m-auto flex flex-col gap-24 sm:w-340 md:w-695 lg:w-1200">
+      <div className="m-auto flex flex-col sm:w-340 sm:gap-16 md:w-695 md:gap-32 lg:w-1200 lg:gap-48">
         {isSearching ? (
           <h2 className="leading-42 mt-50 text-32 font-normal">
             <span className="text-3xl-bold text-black-100">{searchTerm}</span>(으)로 검색한 결과입니다.
