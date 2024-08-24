@@ -94,7 +94,7 @@ const MyProfile = () => {
   const isSideNavbarOpen = viewportSize === 'tablet' || 'desktop';
 
   return (
-    <div className="md:mb-363 lg:mb-208 mb-168 mt-24 lg:mt-72">
+    <div className="md:mb-363 lg:mb-208 mb-168 mt-94 lg:mt-142">
       <div className="mx-auto flex justify-between md:w-696 lg:w-1200">
         {isSideNavbarOpen && (
           <div className="hidden bg-white md:block">

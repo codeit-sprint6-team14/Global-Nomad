@@ -13,7 +13,7 @@ const Schedule = () => {
     <div>
       <NavBar />
       <AnimatedContainer>
-        <div className="ml-auto mr-auto mt-24 flex w-343 md:w-696 lg:mt-72 lg:w-1200">
+        <div className="ml-auto mr-auto mt-94 flex w-343 md:w-696 lg:mt-142 lg:w-1200">
           {isSideNavbarOpen && (
             <div className="hidden w-60 bg-white md:block">
               <SideNavMenu />

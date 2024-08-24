@@ -62,7 +62,6 @@ const MySchedule = () => {
   }, [selectedOption, reservationsUpdated, currentYear, currentMonth]);
 
   const handleOptionSelect = (option: Option) => {
-    console.log(`선택한 옵션: ${option.label}`);
     setSelectedOption(option);
   };
 
