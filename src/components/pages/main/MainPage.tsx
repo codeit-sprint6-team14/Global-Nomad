@@ -92,16 +92,30 @@ const MainPage = () => {
     return popularActivities.filter((activity) => activity.rating >= 4);
   }, [popularActivities]);
 
+  const sortActivities = useCallback((activities: Activity[], sortOption: string | null) => {
+    if (!sortOption) return activities;
+
+    return [...activities].sort((a, b) => {
+      if (sortOption === 'priceLow') {
+        return a.price - b.price;
+      } else if (sortOption === 'priceHigh') {
+        return b.price - a.price;
+      }
+      return 0;
+    });
+  }, []);
+
   useEffect(() => {
     if (activitiesData && activitiesData.activities) {
       setAllActivities(activitiesData.activities);
       const categoryActivities = activeCategory
         ? activitiesData.activities.filter((activity) => activity.category === activeCategory)
         : activitiesData.activities;
-      setDisplayedActivities(categoryActivities);
-      setTotalPages(Math.ceil(categoryActivities.length / ITEMS_PER_PAGE));
+      const sortedActivities = sortActivities(categoryActivities, sortBy);
+      setDisplayedActivities(sortedActivities);
+      setTotalPages(Math.ceil(sortedActivities.length / ITEMS_PER_PAGE));
     }
-  }, [activitiesData, activeCategory, ITEMS_PER_PAGE]);
+  }, [activitiesData, activeCategory, ITEMS_PER_PAGE, sortBy, sortActivities]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -155,18 +169,20 @@ const MainPage = () => {
       if (term) {
         setIsSearching(true);
         const results = allActivities.filter((activity) => activity.title.toLowerCase().includes(term.toLowerCase()));
-        setDisplayedActivities(results);
-        setTotalPages(Math.ceil(results.length / ITEMS_PER_PAGE));
+        const sortedResults = sortActivities(results, sortBy);
+        setDisplayedActivities(sortedResults);
+        setTotalPages(Math.ceil(sortedResults.length / ITEMS_PER_PAGE));
       } else {
         setIsSearching(false);
         const categoryActivities = activeCategory
           ? allActivities.filter((activity) => activity.category === activeCategory)
           : allActivities;
-        setDisplayedActivities(categoryActivities);
-        setTotalPages(Math.ceil(categoryActivities.length / ITEMS_PER_PAGE));
+        const sortedActivities = sortActivities(categoryActivities, sortBy);
+        setDisplayedActivities(sortedActivities);
+        setTotalPages(Math.ceil(sortedActivities.length / ITEMS_PER_PAGE));
       }
     },
-    [allActivities, activeCategory, ITEMS_PER_PAGE],
+    [allActivities, activeCategory, ITEMS_PER_PAGE, sortBy, sortActivities],
   );
 
   const handleCategoryChange = useCallback(
@@ -178,10 +194,11 @@ const MainPage = () => {
       const categoryActivities = category
         ? allActivities.filter((activity) => activity.category === category)
         : allActivities;
-      setDisplayedActivities(categoryActivities);
-      setTotalPages(Math.ceil(categoryActivities.length / ITEMS_PER_PAGE));
+      const sortedActivities = sortActivities(categoryActivities, sortBy);
+      setDisplayedActivities(sortedActivities);
+      setTotalPages(Math.ceil(sortedActivities.length / ITEMS_PER_PAGE));
     },
-    [allActivities, ITEMS_PER_PAGE],
+    [allActivities, ITEMS_PER_PAGE, sortBy, sortActivities],
   );
 
   const handleCategoryPrevClick = () => {
@@ -207,9 +224,14 @@ const MainPage = () => {
     }
   };
 
-  const handleSortChange = useCallback((option: string) => {
-    setSortBy(option);
-  }, []);
+  const handleSortChange = useCallback(
+    (option: string) => {
+      setSortBy(option);
+      const sortedActivities = sortActivities(displayedActivities, option);
+      setDisplayedActivities(sortedActivities);
+    },
+    [displayedActivities, sortActivities],
+  );
 
   const handlePrevClick = () => {
     setStartIndex((prevIndex) => {
