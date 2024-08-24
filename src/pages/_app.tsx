@@ -7,6 +7,7 @@ import '@/styles/globals.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Provider, useAtom } from 'jotai';
+import Cookies from 'js-cookie';
 import type { AppProps } from 'next/app';
 import localFont from 'next/font/local';
 import { useRouter } from 'next/router';
@@ -31,9 +32,9 @@ function AppContent({ Component, pageProps }: AppProps) {
     !['/signup', '/signin'].includes(router.pathname) && !router.pathname.startsWith('/my-page');
 
   useEffect(() => {
-    const localToken = localStorage.getItem('accessToken');
-    if (localToken && !token) {
-      setToken(localToken);
+    const cookieToken = Cookies.get('accessToken');
+    if (cookieToken && !token) {
+      setToken(cookieToken);
     }
     setIsLoading(false);
   }, [token, isLoading]);
