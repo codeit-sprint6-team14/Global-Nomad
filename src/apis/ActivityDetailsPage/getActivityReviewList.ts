@@ -1,6 +1,6 @@
+import { ReviewListData } from '@/apis/ActivityDetailsPage/reviewList';
 import { axiosRequester } from '@/libs/axios';
-import { ReviewData } from '@/types/activityReviews';
-import { ReviewListData } from '@/types/reviewList';
+import { ReviewType } from '@/types/activityReviews';
 import { useQuery } from '@tanstack/react-query';
 
 export const getActivityReviewList = async ({
@@ -27,6 +27,12 @@ type useActivityReviewListProps = {
   page: number;
   size: number;
 };
+
+interface ReviewData {
+  averageRating: number;
+  totalCount: number;
+  reviews: Array<ReviewType>;
+}
 
 export const useActivityReviewList = ({
   activityId,
