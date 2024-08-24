@@ -11,7 +11,7 @@ const ActivityCards: React.FC<ActivityCardProps> = ({ activity }) => {
   return (
     <Link
       href={`/activities/${activity.id}`}
-      className="mb-48 flex h-293 w-168 flex-col gap-18 md:h-344 md:w-221 lg:h-414 lg:w-283"
+      className="flex h-293 w-168 flex-col gap-16 sm:mb-16 md:mb-32 md:h-344 md:w-221 lg:mb-48 lg:h-414 lg:w-283"
     >
       <div className="relative h-168 w-168 md:h-221 md:w-221 lg:h-283 lg:w-283">
         <Image
