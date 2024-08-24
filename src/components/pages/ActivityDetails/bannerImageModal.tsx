@@ -67,9 +67,10 @@ const BannerImageModal = ({ images, currentIndex, onClose, onPrev, onNext }: Ban
         </div>
         <button
           onClick={onClose}
-          className="absolute right-[5%] top-[5%] z-20 flex items-center justify-center rounded-8 px-20 pb-6 pt-8 text-lg-medium text-white hover:bg-gray-800"
+          className="absolute right-[5%] top-[5%] z-20 flex items-center justify-center gap-8 rounded-10 px-20 pb-6 pt-8 text-lg-medium text-white hover:bg-gray-800"
         >
-          ✕ 닫기
+          <p className="text-2lg-regular">✕</p>
+          <p className="text-lg-regular">닫기</p>
         </button>
         <div
           className="relative overflow-hidden"
