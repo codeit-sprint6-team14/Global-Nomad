@@ -16,10 +16,6 @@ import PopularActivityCard from './PopularActivityCard';
 import { RadioTab } from './RadioTab';
 
 const categories = ['문화 · 예술', '식음료', '스포츠', '투어', '관광', '웰빙'];
-const dropdownOptions = [
-  { value: 'priceLow', label: '가격 낮은순' },
-  { value: 'priceHigh', label: '가격 높은순' },
-];
 
 const VISIBLE_TABS = 4;
 
@@ -49,6 +45,22 @@ const MainPage = () => {
   const ITEMS_PER_PAGE = isDesktop ? 16 : isTablet ? 9 : 8;
 
   const backgroundColors = useMemo(() => ['bg-purple-100', 'bg-pink-200', 'bg-sky-200'], []);
+
+  const getDropdownOptions = useCallback(() => {
+    if (isDesktop) {
+      return [
+        { value: 'priceLow', label: '가격 낮은순' },
+        { value: 'priceHigh', label: '가격 높은순' },
+      ];
+    } else {
+      return [
+        { value: 'priceLow', label: '낮은순' },
+        { value: 'priceHigh', label: '높은순' },
+      ];
+    }
+  }, [isDesktop]);
+
+  const dropdownOptions = getDropdownOptions();
 
   const getRandomBackgroundColor = () => {
     return backgroundColors[Math.floor(Math.random() * backgroundColors.length)];
@@ -448,7 +460,7 @@ const MainPage = () => {
             </div>
 
             <div
-              className="relative cursor-pointer rounded-15 border border-black-100 sm:h-41 sm:w-90 md:h-53 md:w-120 lg:w-150"
+              className="relative cursor-pointer rounded-15 border border-black-100 sm:h-41 sm:w-100 md:h-53 md:w-130 lg:w-170"
               ref={dropdownRef}
             >
               <button
@@ -458,7 +470,11 @@ const MainPage = () => {
                 }`}
               >
                 <span className="text-black-100 sm:text-md-medium md:text-lg-medium">
-                  {sortBy ? dropdownOptions.find((option) => option.value === sortBy)?.label : '가격'}
+                  {sortBy
+                    ? isDesktop
+                      ? dropdownOptions.find((option) => option.value === sortBy)?.label
+                      : `${dropdownOptions.find((option) => option.value === sortBy)?.label}`
+                    : '가격'}
                 </span>
                 <div className={`transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`}>
                   <DownArrow alt="down arrow" />
@@ -469,7 +485,7 @@ const MainPage = () => {
                   {dropdownOptions.map((option) => (
                     <DropDownOption
                       key={option.value}
-                      label={option.label}
+                      label={isDesktop ? option.label : `${option.label}`}
                       handleOptionClick={() => {
                         handleSortChange(option.value);
                         setIsDropdownOpen(false);
