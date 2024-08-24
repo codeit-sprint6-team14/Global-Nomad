@@ -26,7 +26,7 @@ export type Schedules = {
 };
 
 export type HeaderProps = {
-  myId: number;
+  myId?: number;
   title: string;
   rating: number;
   userId: number;
@@ -34,5 +34,6 @@ export type HeaderProps = {
   category: string;
   activityId: string;
   reviewCount: number;
+  scrollToReviews: () => void;
   handleDeleteConfirmation: () => void;
 };

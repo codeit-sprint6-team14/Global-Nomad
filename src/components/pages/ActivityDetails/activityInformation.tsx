@@ -7,6 +7,7 @@ import { activityIdAtom, reservationPriceAtom } from '@/store/activityDetailsAto
 import { Activity } from '@/types/activity';
 import { useSetAtom } from 'jotai';
 import dynamic from 'next/dynamic';
+import { useRef } from 'react';
 
 import BannerImage from './bannerImage';
 import ActivityDescription from './description';
@@ -28,6 +29,8 @@ const ActivityInformation = ({
   activityId: string;
   kakaoKey: string;
 }) => {
+  const reviewListRef = useRef<HTMLDivElement>(null);
+
   const viewportSize = useViewportSize();
 
   const isMobile = viewportSize === 'mobile';
@@ -50,19 +53,21 @@ const ActivityInformation = ({
     modalMessage,
   } = useReservationSubmit();
 
-  const { userInformationData, isLoading: isLoadingUserData, error } = useMyInformation();
+  const { userInformationData, isLoading: isLoadingUserData } = useMyInformation();
 
   if (isLoadingUserData) return <div>유저 데이터 로딩중입니다...</div>;
-  if (error) return <div>유저 데이터를 불러오는데 실패했습니다.</div>;
-  if (!userInformationData) return null;
 
   const { category, title, rating, reviewCount, address, bannerImageUrl, description, subImages, price, userId } =
     activityData;
 
   setPrice(price);
 
-  const myId = userInformationData.id;
+  const myId = userInformationData?.id;
   const isCreateByMe = myId === userId;
+
+  const scrollToReviews = () => {
+    reviewListRef.current?.scrollIntoView({ behavior: 'auto' });
+  };
 
   return (
     <>
@@ -76,6 +81,7 @@ const ActivityInformation = ({
           category={category}
           activityId={activityId}
           reviewCount={reviewCount}
+          scrollToReviews={scrollToReviews}
           handleDeleteConfirmation={handleDeleteConfirmation}
         />
 
@@ -96,7 +102,9 @@ const ActivityInformation = ({
               />
             ))}
         </div>
-        <ReviewList activityId={activityId} />
+        <div ref={reviewListRef}>
+          <ReviewList activityId={activityId} />
+        </div>
         {isMobile && !isCreateByMe && (
           <div className="mt-89">
             <FloatingBox.Mobile handleReservationSubmit={handleReservationSubmit} />
