@@ -9,6 +9,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 
+import Terms from './terms';
 import { useSignup } from './useSignup';
 
 const SignupForm = () => {
@@ -24,6 +25,7 @@ const SignupForm = () => {
 
   const { handleSignup, isLoading, error, resetError, isSuccess } = useSignup();
   const { current: isModalOpen, handleToggle: toggleModal } = useToggle(false);
+  const { current: isTermsModalOpen, handleToggle: toggleTermsModal } = useToggle(false);
 
   const onSubmitUserData = async (data: SignupFormData) => {
     handleSignup(data);
@@ -88,15 +90,33 @@ const SignupForm = () => {
         {errors.passwordConfirmation && (
           <span className="block text-xs-regular text-red-200">{errors.passwordConfirmation.message}</span>
         )}
+        {/* 이용약관 */}
+        <div className="mt-20 flex items-center">
+          <input type="checkbox" id="terms" className="mr-2" {...register('termsAgreed')} />
+          <label htmlFor="terms" className="text-md-regular">
+            이용약관에 동의합니다.
+          </label>
+          <button type="button" onClick={toggleTermsModal} className="ml-4 text-sm text-blue-500 underline">
+            자세히 보기
+          </button>
+        </div>
+        {errors.termsAgreed && <span className="block text-xs-regular text-red-200">{errors.termsAgreed.message}</span>}
 
         <Button.Default type="submit" className="mt-28 h-48 w-full" disabled={!isValid || isLoading}>
           {isLoading ? '처리 중...' : '회원가입 하기'}
         </Button.Default>
       </form>
+
+      {/* 회원가입 완료 모달 */}
       <Modal.Overlay onClose={handleModalClose} isOpen={isModalOpen}>
         <Modal.RegisterConfirm onClose={handleModalClose}>
           {isSuccess ? SuccessMessages.SIGNUP_SUCCESS : error}
         </Modal.RegisterConfirm>
+      </Modal.Overlay>
+
+      {/* 이용약관 모달 */}
+      <Modal.Overlay onClose={toggleTermsModal} isOpen={isTermsModalOpen}>
+        <Terms onClose={toggleTermsModal} />
       </Modal.Overlay>
     </>
   );
