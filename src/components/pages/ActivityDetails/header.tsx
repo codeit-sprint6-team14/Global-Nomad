@@ -1,3 +1,4 @@
+import Star from '@/../public/assets/icons/new-star.svg';
 import DropDown from '@/components/common/Dropdown';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import useToast from '@/hooks/useToast';
@@ -16,6 +17,7 @@ const Header = ({
   category,
   activityId,
   reviewCount,
+  scrollToReviews,
   handleDeleteConfirmation,
 }: HeaderProps) => {
   const [isOpenDropdown, setIsOpenDropdown] = useState(false);
@@ -148,15 +150,16 @@ const Header = ({
         </AnimatePresence>
       </div>
       <div className="mt-16 flex">
-        <div className="relative mt-2 h-16 w-16">
-          <Image fill src="/assets/icons/star.svg" alt="별점 아이콘" />
-        </div>
-        <div className="ml-6 text-md-regular text-black">{rating}</div>
-        <div className="ml-6 text-gray-700 underline">{`후기 ${reviewCount}개`}</div>
-        <div className="relative ml-12 mt-2 h-18 w-18">
+        <Star height="18" width="18" alt="별점 아이콘" className="mt-1" />
+        <span className="ml-4 text-lg-bold text-black">{rating}</span>
+
+        <span className="ml-6 cursor-pointer text-gray-700 underline hover:text-gray-900" onClick={scrollToReviews}>
+          {`후기 ${reviewCount}개`}
+        </span>
+        <span className="relative ml-18 mt-2 h-18 w-18">
           <Image src="/assets/icons/map.svg" fill alt="지도 아이콘" />
-        </div>
-        <div className="ml-2 text-md-regular text-black-100">{address}</div>
+        </span>
+        <span className="ml-2 text-md-regular text-black-100">{address}</span>
       </div>
     </div>
   );

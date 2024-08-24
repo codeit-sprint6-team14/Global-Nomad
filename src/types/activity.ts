@@ -34,5 +34,6 @@ export type HeaderProps = {
   category: string;
   activityId: string;
   reviewCount: number;
+  scrollToReviews: () => void;
   handleDeleteConfirmation: () => void;
 };

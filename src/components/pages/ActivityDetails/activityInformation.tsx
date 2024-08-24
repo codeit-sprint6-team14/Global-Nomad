@@ -7,6 +7,7 @@ import { activityIdAtom, reservationPriceAtom } from '@/store/activityDetailsAto
 import { Activity } from '@/types/activity';
 import { useSetAtom } from 'jotai';
 import dynamic from 'next/dynamic';
+import { useRef } from 'react';
 
 import BannerImage from './bannerImage';
 import ActivityDescription from './description';
@@ -28,6 +29,8 @@ const ActivityInformation = ({
   activityId: string;
   kakaoKey: string;
 }) => {
+  const reviewListRef = useRef<HTMLDivElement>(null);
+
   const viewportSize = useViewportSize();
 
   const isMobile = viewportSize === 'mobile';
@@ -62,6 +65,10 @@ const ActivityInformation = ({
   const myId = userInformationData?.id;
   const isCreateByMe = myId === userId;
 
+  const scrollToReviews = () => {
+    reviewListRef.current?.scrollIntoView({ behavior: 'auto' });
+  };
+
   return (
     <>
       <div className="lg:mx-auto lg:max-w-[1200px] lg:pt-78">
@@ -74,6 +81,7 @@ const ActivityInformation = ({
           category={category}
           activityId={activityId}
           reviewCount={reviewCount}
+          scrollToReviews={scrollToReviews}
           handleDeleteConfirmation={handleDeleteConfirmation}
         />
 
@@ -94,7 +102,9 @@ const ActivityInformation = ({
               />
             ))}
         </div>
-        <ReviewList activityId={activityId} />
+        <div ref={reviewListRef}>
+          <ReviewList activityId={activityId} />
+        </div>
         {isMobile && !isCreateByMe && (
           <div className="mt-89">
             <FloatingBox.Mobile handleReservationSubmit={handleReservationSubmit} />
