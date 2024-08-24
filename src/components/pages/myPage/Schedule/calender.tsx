@@ -79,7 +79,7 @@ const Calendar: React.FC<CalendarProps> = ({ activityId, reservations, onMonthCh
     <div className="container relative mx-auto w-342 p-4 md:w-430 lg:w-800">
       <div className="mb-20 flex items-center justify-center gap-20 text-xl-bold">
         <button onClick={handlePrevClick}>&lt;&lt;</button>
-        <div className="text-xl-bold">{format(currentDate, 'yyyy년 M월', { locale: ko })}</div>
+        <h2 className="text-xl-bold">{format(currentDate, 'yyyy년 M월', { locale: ko })}</h2>
         <button onClick={handleNextClick}>&gt;&gt;</button>
       </div>
 

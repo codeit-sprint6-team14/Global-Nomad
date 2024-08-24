@@ -15,13 +15,13 @@ const Schedule = () => {
       <AnimatedContainer>
         <div className="ml-auto mr-auto mt-94 flex w-343 md:w-696 lg:mt-142 lg:w-1200">
           {isSideNavbarOpen && (
-            <div className="hidden w-60 bg-white md:block">
+            <nav className="hidden w-60 bg-white md:block">
               <SideNavMenu />
-            </div>
+            </nav>
           )}
-          <div className="mb-60 ml-auto mr-auto md:mr-0 md:w-430 lg:w-792">
+          <main className="mb-60 ml-auto mr-auto md:mr-0 md:w-430 lg:w-792">
             <MySchedule />
-          </div>
+          </main>
         </div>
       </AnimatedContainer>
       <Footer />

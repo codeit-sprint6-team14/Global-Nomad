@@ -94,12 +94,12 @@ const MyProfile = () => {
   const isSideNavbarOpen = viewportSize === 'tablet' || 'desktop';
 
   return (
-    <div className="md:mb-363 lg:mb-208 mb-168 mt-94 lg:mt-142">
+    <main className="md:mb-363 lg:mb-208 mb-168 mt-94 lg:mt-142">
       <div className="mx-auto flex justify-between md:w-696 lg:w-1200">
         {isSideNavbarOpen && (
-          <div className="hidden bg-white md:block">
+          <nav className="hidden bg-white md:block">
             <SideNavMenu />
-          </div>
+          </nav>
         )}
         <div className="mx-auto mb-60 w-343 md:mx-0 md:w-429 lg:w-792">
           <div className="flex items-center justify-between">
@@ -107,7 +107,7 @@ const MyProfile = () => {
               <div className="block cursor-pointer md:hidden" onClick={handleGoMyPage}>
                 <LeftArrow />
               </div>
-              <h2 className="ml-10 mt-5 text-3xl-bold md:ml-0">내 정보</h2>
+              <h1 className="ml-10 mt-5 text-3xl-bold md:ml-0">내 정보</h1>
             </div>
             <Button.Default
               className={`ml-auto h-48 w-120 ${isChanged ? '' : 'cursor-not-allowed bg-gray-400'}`}
@@ -148,7 +148,7 @@ const MyProfile = () => {
       <Modal.Overlay isOpen={isModalOpen} onClose={handleModalClose}>
         <Modal.RegisterConfirm onClose={handleModalClose}>{modalMessage}</Modal.RegisterConfirm>
       </Modal.Overlay>
-    </div>
+    </main>
   );
 };
 
