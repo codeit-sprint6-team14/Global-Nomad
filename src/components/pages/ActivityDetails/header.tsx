@@ -23,6 +23,7 @@ const Header = ({
   const [isOpenDropdown, setIsOpenDropdown] = useState(false);
   const [showCopiedMessage, setShowCopiedMessage] = useState(false);
   const router = useRouter();
+  const hasAccessToken = localStorage.getItem('accessToken');
 
   const toast = useToast();
   useEffect(() => {
@@ -100,7 +101,7 @@ const Header = ({
           >
             <Image src="/assets/icons/share.svg" fill sizes="(min-width: 375px) 30px," alt="링크 복사" />
           </motion.button>
-          {myId === userId && (
+          {myId === userId && hasAccessToken && (
             <motion.svg
               width="30"
               height="30"
