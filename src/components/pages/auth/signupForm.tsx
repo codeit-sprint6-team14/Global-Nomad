@@ -4,9 +4,11 @@ import Modal from '@/components/common/Modal';
 import SuccessMessages from '@/constants/successMessages';
 import { useToggle } from '@/hooks/useToggle';
 import { SignupFormData } from '@/types/auth';
+import { usePasswordStrength } from '@/utils/calculatePassword';
 import { signupValidationSchema } from '@/utils/schema';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/router';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 
 import Terms from './terms';
@@ -18,6 +20,7 @@ const SignupForm = () => {
     register,
     handleSubmit,
     formState: { errors, isValid },
+    watch,
   } = useForm<SignupFormData>({
     resolver: yupResolver(signupValidationSchema),
     mode: 'onChange',
@@ -26,6 +29,9 @@ const SignupForm = () => {
   const { handleSignup, isLoading, error, resetError, isSuccess } = useSignup();
   const { current: isModalOpen, handleToggle: toggleModal } = useToggle(false);
   const { current: isTermsModalOpen, handleToggle: toggleTermsModal } = useToggle(false);
+
+  const password = watch('password');
+  const { strength, getStrengthColor, getStrengthText } = usePasswordStrength(password || '');
 
   const onSubmitUserData = async (data: SignupFormData) => {
     handleSignup(data);
@@ -43,6 +49,7 @@ const SignupForm = () => {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmitUserData)} className="flex flex-col gap-8 sm:w-350 md:w-640">
+        {/* 이메일 필드 */}
         <label htmlFor="email">이메일</label>
         <Input
           id="email"
@@ -53,7 +60,7 @@ const SignupForm = () => {
           error={!!errors.email}
         />
         {errors.email && <span className="block text-xs-regular text-red-200">{errors.email.message}</span>}
-
+        {/* 닉네임 필드 */}
         <label htmlFor="nickname" className="mt-20">
           닉네임
         </label>
@@ -66,7 +73,7 @@ const SignupForm = () => {
           error={!!errors.nickname}
         />
         {errors.nickname && <span className="block text-xs-regular text-red-200">{errors.nickname.message}</span>}
-
+        {/* 비밀번호 필드 */}
         <label htmlFor="password" className="mt-20">
           비밀번호
         </label>
@@ -76,8 +83,22 @@ const SignupForm = () => {
           register={register('password')}
           error={'password' in errors}
         />
-        {errors.password && <span className="block text-xs-regular text-red-200">{errors.password.message}</span>}
+        <div className="flex justify-between">
+          {errors.password ? (
+            <span className="block text-xs-regular text-red-200">{errors.password.message}</span>
+          ) : (
+            <span> </span>
+          )}
+          {/* 비밀번호 강도 표시 */}
+          <div className="mt-2">
+            <div className="h-2 w-90 rounded-full bg-gray-200">
+              <div className={`h-full rounded-full ${getStrengthColor()}`} style={{ width: `${strength}%` }}></div>
+            </div>
+            <span className="mt-1 text-xs-regular">{`비밀번호 강도: ${getStrengthText()}`}</span>
+          </div>
+        </div>
 
+        {/* 비밀번호 확인 필드 */}
         <label htmlFor="passwordConfirmation" className="mt-20">
           비밀번호 확인
         </label>
@@ -90,7 +111,7 @@ const SignupForm = () => {
         {errors.passwordConfirmation && (
           <span className="block text-xs-regular text-red-200">{errors.passwordConfirmation.message}</span>
         )}
-        {/* 이용약관 */}
+        {/* 이용약관 동의 */}
         <div className="mt-20 flex items-center">
           <input type="checkbox" id="terms" className="mr-2" {...register('termsAgreed')} />
           <label htmlFor="terms" className="text-md-regular">
@@ -101,7 +122,7 @@ const SignupForm = () => {
           </button>
         </div>
         {errors.termsAgreed && <span className="block text-xs-regular text-red-200">{errors.termsAgreed.message}</span>}
-
+        {/* 회원가입 버튼 */}
         <Button.Default type="submit" className="mt-28 h-48 w-full" disabled={!isValid || isLoading}>
           {isLoading ? '처리 중...' : '회원가입 하기'}
         </Button.Default>
