@@ -15,7 +15,7 @@ const Desktop = ({
 
   return (
     <section
-      className={`${classNames} h-746 rounded-8 border border-gray-300 bg-white px-24 py-17 shadow-[0px_10px_30px_3px_rgba(5,16,55,0.15)]`}
+      className={`${classNames} h-max rounded-8 border border-gray-300 bg-white px-24 py-17 shadow-[0px_10px_30px_3px_rgba(5,16,55,0.15)]`}
     >
       <DesktopComponents.PriceInfo />
       <h2 className="mb-16 text-xl-bold">날짜</h2>

@@ -113,7 +113,7 @@ const ReservationScheduleSelect = () => {
         updateDateSelect={updateDateSelect}
         availableDates={availableDates}
         updateMonthChange={updateMonthChange}
-        className="mx-auto mb-16 h-241 pt-[11px]"
+        className="mx-auto mb-16 h-max pt-[11px]"
       />
       <TimeSlotSelection
         selectedDate={selectedDate}

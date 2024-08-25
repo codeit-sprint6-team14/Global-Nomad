@@ -18,10 +18,13 @@ export const useReservationSubmit = () => {
   const [isError, setIsError] = useState(false);
 
   const [isModalOpen, setIsModalOpen] = useAtom(isModalOpenAtom);
+
   const [modalMessage, setModalMessage] = useState('');
 
   const [countdown, setCountdown] = useState(5);
   const [showCountdown, setShowCountdown] = useState(false);
+
+  const [isUnauthorized, setIsUnauthorized] = useState(false);
 
   const [isDeleteConfirmation, setIsDeleteConfirmation] = useState(false);
 
@@ -52,8 +55,12 @@ export const useReservationSubmit = () => {
           setIsModalOpen(true);
         },
         onError: (error) => {
-          setModalMessage(getErrorMessage(error));
+          const errorMessage = getErrorMessage(error);
+          setModalMessage(errorMessage);
           setIsError(true);
+          if (errorMessage === '로그인 후 이용해주세요.') {
+            setIsUnauthorized(true);
+          }
           setIsModalOpen(true);
         },
       },
@@ -76,6 +83,7 @@ export const useReservationSubmit = () => {
         setShowCountdown(true);
         setCountdown(5);
         setTimeout(() => {
+          setIsModalOpen(false);
           router.push('/');
         }, 5000);
       },
@@ -94,6 +102,11 @@ export const useReservationSubmit = () => {
     setIsError(false);
     setIsDeleteConfirmation(false);
     setShowCountdown(false);
+
+    if (isUnauthorized) {
+      router.push('/signin');
+      setIsUnauthorized(false);
+    }
   };
 
   const isReservationButtonDisabled = !selectedDate || !selectedSlot || headCount <= 0;

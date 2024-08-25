@@ -85,8 +85,8 @@ const ReviewList = ({ activityId }: { activityId: string }) => {
         </div>
       ) : (
         <div className="mx-24 flex flex-col items-center gap-20 border-solid border-gray-300 p-40 md:border-t md:py-100 lg:mx-0 lg:py-140">
-          <motion.div {...floatAnimation} className="relative h-160 w-160 md:h-240 md:w-240">
-            <Image fill src="assets/icons/paper.svg" alt="후기가 없을 때" />
+          <motion.div {...floatAnimation} className="relative h-140 w-140 md:h-180 md:w-180 lg:h-220 lg:w-220">
+            <Image fill src="/assets/icons/paper.svg" alt="후기가 없을 때" />
           </motion.div>
           <p className="text-xl-medium text-gray-700 md:text-2xl-medium">아직 등록된 후기가 없어요</p>
         </div>
