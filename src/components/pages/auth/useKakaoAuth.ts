@@ -3,6 +3,7 @@ import { tokenAtom } from '@/store/tokenAtom';
 import { getKakaoToken } from '@/utils/getSocialToken';
 import { isAxiosError } from 'axios';
 import { useSetAtom } from 'jotai';
+import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -20,12 +21,12 @@ export const useKakaoAuth = () => {
   const saveTokens = useCallback(
     (accessToken: string, refreshToken: string) => {
       try {
-        localStorage.setItem('accessToken', accessToken);
-        localStorage.setItem('refreshToken', refreshToken);
+        Cookies.set('accessToken', accessToken, { expires: 1, secure: true, sameSite: 'strict' });
+        Cookies.set('refreshToken', refreshToken, { expires: 1, secure: true, sameSite: 'strict' });
         setToken(accessToken);
       } catch (e) {
-        console.error('Failed to save tokens to localStorage:', e);
-        setError(new Error('Failed to save authentication tokens'));
+        console.error('토큰 저장 실패:', e);
+        setError(new Error('토큰 저장 실패'));
       }
     },
     [setToken],

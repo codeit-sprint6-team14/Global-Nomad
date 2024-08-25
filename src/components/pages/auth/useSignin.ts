@@ -21,7 +21,7 @@ export const useSignin = () => {
 
         //토큰 쿠키에 저장
         Cookies.set('accessToken', result.accessToken, { expires: 1, secure: true, sameSite: 'strict' });
-        Cookies.set('refreshToken', result.refreshToken, { expires: 1, secure: true, sameSite: 'strict' });
+        Cookies.set('refreshToken', result.refreshToken, { expires: 7, secure: true, sameSite: 'strict' });
 
         router.push('/');
       } else {

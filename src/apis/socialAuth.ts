@@ -15,7 +15,7 @@ const SocialAuth = {
     const { data } = await axiosInstance.post<SigninResponse>(`/oauth/sign-in/${provider}`, body);
     const { accessToken, refreshToken } = data;
     Cookies.set('accessToken', accessToken, { expires: 1, secure: true, sameSite: 'strict' });
-    Cookies.set('refreshToken', refreshToken, { expires: 1, secure: true, sameSite: 'strict' });
+    Cookies.set('refreshToken', refreshToken, { expires: 7, secure: true, sameSite: 'strict' });
     localStorage.setItem('social', 'true');
     return data;
   },

@@ -16,7 +16,7 @@ export const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('accessToken');
+    const token = Cookies.get('accessToken');
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }
@@ -31,7 +31,7 @@ axiosInstance.interceptors.response.use(
     const originalRequest = error.config as AxiosRequestConfig & { _retry?: boolean };
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      const currentRefreshToken = Cookies.get('accessToken');
+      const currentRefreshToken = Cookies.get('refreshToken');
       try {
         const { data } = await axios.post(`${API_BASE_URL}/auth/tokens`, null, {
           headers: {
@@ -40,7 +40,7 @@ axiosInstance.interceptors.response.use(
         });
         const { accessToken, refreshToken } = data;
         Cookies.set('accessToken', accessToken, { expires: 1, secure: true, sameSite: 'strict' });
-        Cookies.set('refreshToken', refreshToken, { expires: 1, secure: true, sameSite: 'strict' });
+        Cookies.set('refreshToken', refreshToken, { expires: 7, secure: true, sameSite: 'strict' });
         if (originalRequest.headers) {
           originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
         }
