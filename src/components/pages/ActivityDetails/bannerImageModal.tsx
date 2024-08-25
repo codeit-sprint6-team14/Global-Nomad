@@ -59,12 +59,12 @@ const BannerImageModal = ({ images, currentIndex, onClose, onPrev, onNext }: Ban
   return (
     <div className="fixed inset-0 z-10 flex items-center justify-center bg-black">
       <div className="relative flex h-full w-full flex-col items-center justify-center">
-        <div className="absolute left-[50%] top-[10vh] z-20 text-lg-medium text-white">
+        <div className="absolute left-[50%] top-[5vh] z-20 text-lg-medium text-white">
           {currentIndex + 1} / {images.length}
         </div>
         <button
           onClick={onClose}
-          className="absolute right-[5%] top-[9vh] z-20 flex items-center justify-center gap-8 rounded-10 px-20 pb-6 pt-8 text-lg-medium text-white hover:bg-gray-800"
+          className="absolute right-[5%] top-[4vh] z-20 flex items-center justify-center gap-8 rounded-10 px-20 pb-6 pt-8 text-lg-medium text-white hover:bg-gray-800"
         >
           <p className="text-2lg-regular">✕</p>
           <p className="text-lg-regular">닫기</p>
