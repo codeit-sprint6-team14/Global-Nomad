@@ -301,7 +301,7 @@ const MainPage = () => {
           ? e.touches[0].pageX - popularActivitiesRef.current.offsetLeft
           : e.pageX - popularActivitiesRef.current.offsetLeft;
       const walk = (x - startX) * 2;
-      popularActivitiesRef.current.scrollLeft = scrollLeft - walk;
+      popularActivitiesRef.current.scrollLeft = scrollLeft + walk;
     },
     [isDragging, startX, scrollLeft],
   );
