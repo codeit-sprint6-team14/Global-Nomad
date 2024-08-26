@@ -28,6 +28,7 @@ const MainPage = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
   const [currentTranslate, setCurrentTranslate] = useState(0);
+  const [categoryTranslate, setCategoryTranslate] = useState(0);
   const [bannerLoadError, setBannerLoadError] = useState<Record<number, boolean>>({});
   const [startIndex, setStartIndex] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
@@ -39,14 +40,16 @@ const MainPage = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollPosition, setScrollPosition] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const popularActivitiesRef = useRef<HTMLDivElement>(null);
+  const prevIsTabletRef = useRef(false);
 
   const [allActivities, setAllActivities] = useState<Activity[]>([]);
   const [displayedActivities, setDisplayedActivities] = useState<Activity[]>([]);
   const [totalPages, setTotalPages] = useState(1);
   const ITEMS_PER_PAGE = isDesktop ? 16 : isTablet ? 9 : 8;
+  const isLeftButtonVisible = isTablet && !isDesktop && categoryStartIndex > 0;
+  const isRightButtonVisible = isTablet && !isDesktop && categoryStartIndex + VISIBLE_TABS < categories.length;
 
   const backgroundColors = useMemo(() => ['bg-purple-100', 'bg-pink-200', 'bg-sky-200'], []);
 
@@ -129,14 +132,20 @@ const MainPage = () => {
     const handleResize = () => {
       const newIsDesktop = window.innerWidth >= 1200;
       const newIsTablet = window.innerWidth >= 744 && window.innerWidth < 1200;
+      if (newIsTablet && !prevIsTabletRef.current && !isDesktop) {
+        setCategoryStartIndex(0);
+        setCategoryTranslate(0);
+      }
+
       setIsDesktop(newIsDesktop);
       setIsTablet(newIsTablet);
+      prevIsTabletRef.current = newIsTablet;
     };
 
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [isDesktop]);
 
   useEffect(() => {
     if (tabsContainerRef.current && (isTablet || !isDesktop)) {
@@ -210,25 +219,40 @@ const MainPage = () => {
   );
 
   const handleCategoryPrevClick = () => {
-    if (categoryStartIndex > 0) {
-      setCategoryStartIndex((prev) => Math.max(prev - 1, 0));
-    }
-    if (tabsContainerRef.current) {
-      const tabWidth = tabsContainerRef.current.scrollWidth / categories.length;
-      tabsContainerRef.current.scrollLeft = Math.max(0, tabsContainerRef.current.scrollLeft - tabWidth);
+    if (isTablet && !isDesktop) {
+      if (categoryStartIndex > 0) {
+        setCategoryStartIndex((prev) => prev - 1);
+        setCategoryTranslate((prev) => prev + 100); // 100%만큼 오른쪽으로 이동
+      }
+    } else {
+      // 기존 로직 유지
+      if (categoryStartIndex > 0) {
+        setCategoryStartIndex((prev) => Math.max(prev - 1, 0));
+        if (tabsContainerRef.current) {
+          const tabWidth = tabsContainerRef.current.scrollWidth / categories.length;
+          tabsContainerRef.current.scrollLeft = Math.max(0, tabsContainerRef.current.scrollLeft - tabWidth);
+        }
+      }
     }
   };
 
   const handleCategoryNextClick = () => {
-    if (categoryStartIndex + VISIBLE_TABS < categories.length) {
-      setCategoryStartIndex((prev) => Math.min(prev + 1, categories.length - VISIBLE_TABS));
-    }
-    if (tabsContainerRef.current) {
-      const tabWidth = tabsContainerRef.current.scrollWidth / categories.length;
-      tabsContainerRef.current.scrollLeft = Math.min(
-        tabsContainerRef.current.scrollWidth - tabsContainerRef.current.clientWidth,
-        tabsContainerRef.current.scrollLeft + tabWidth,
-      );
+    if (isTablet && !isDesktop) {
+      if (categoryStartIndex + VISIBLE_TABS < categories.length) {
+        setCategoryStartIndex((prev) => prev + 1);
+        setCategoryTranslate((prev) => prev - 100);
+      }
+    } else {
+      if (categoryStartIndex + VISIBLE_TABS < categories.length) {
+        setCategoryStartIndex((prev) => Math.min(prev + 1, categories.length - VISIBLE_TABS));
+        if (tabsContainerRef.current) {
+          const tabWidth = tabsContainerRef.current.scrollWidth / categories.length;
+          tabsContainerRef.current.scrollLeft = Math.min(
+            tabsContainerRef.current.scrollWidth - tabsContainerRef.current.clientWidth,
+            tabsContainerRef.current.scrollLeft + tabWidth,
+          );
+        }
+      }
     }
   };
 
@@ -301,29 +325,6 @@ const MainPage = () => {
   const getCurrentMonth = () => {
     const months = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
     return months[new Date().getMonth()];
-  };
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (isDesktop || isTablet || !tabsContainerRef.current) return;
-    setIsDragging(true);
-    setStartX(e.pageX - tabsContainerRef.current.offsetLeft);
-    setScrollLeft(tabsContainerRef.current.scrollLeft);
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (isDesktop || isTablet || !isDragging || !tabsContainerRef.current) return;
-    e.preventDefault();
-    const x = e.pageX - tabsContainerRef.current.offsetLeft;
-    const walk = (x - startX) * 2;
-    if (!isDesktop && !isTablet) {
-      tabsContainerRef.current.scrollLeft = scrollLeft + walk * -1;
-    } else {
-      tabsContainerRef.current.scrollLeft = scrollLeft - walk;
-    }
   };
 
   const handleDragStart = useCallback(
@@ -483,49 +484,46 @@ const MainPage = () => {
         <section className="flex flex-col sm:mb-8 md:mb-32 lg:mb-48">
           <div className="mb-24 flex items-center justify-between sm:w-340 md:w-695 md:gap-14 lg:w-1204">
             <div className="relative flex items-center overflow-hidden sm:w-375 md:w-680 lg:w-full">
-              {isTablet && !isDesktop && (
+              {isLeftButtonVisible && (
                 <div className="flex-shrink-0">
-                  {categoryStartIndex > 0 && (
-                    <button
-                      onClick={handleCategoryPrevClick}
-                      className="z-1 flex h-32 w-32 items-center justify-center rounded-full border border-gray-600"
-                    >
-                      <PrevButton />
-                    </button>
-                  )}
+                  <button
+                    onClick={handleCategoryPrevClick}
+                    className="z-1 flex h-32 w-32 items-center justify-center rounded-full border border-gray-600"
+                  >
+                    <PrevButton />
+                  </button>
                 </div>
               )}
 
               <div
                 className={`${
-                  isDesktop || isTablet
-                    ? `${isTablet && !isDesktop ? 'mx-10 w-[calc(100%-5rem)] overflow-hidden pr-60' : 'w-full'}`
-                    : 'w-250 overflow-x-auto scrollbar-hide'
+                  isDesktop || !isTablet
+                    ? `${!isDesktop ? 'w-250 overflow-x-auto scrollbar-hide' : 'w-full'}`
+                    : 'mx-10 w-[calc(100%-5rem)] overflow-hidden'
                 }`}
-                onMouseDown={handleMouseDown}
-                onMouseUp={handleMouseUp}
-                onMouseLeave={handleMouseUp}
-                onMouseMove={handleMouseMove}
               >
                 <RadioTab.Root defaultTab={activeCategory} onTabChange={handleCategoryChange}>
                   <div
                     ref={tabsContainerRef}
                     className={`flex ${
                       isTablet && !isDesktop
-                        ? 'gap-10 transition-transform duration-300 ease-in-out'
+                        ? 'gap-2 transition-transform duration-300 ease-in-out'
                         : isDesktop
                           ? 'lg:gap-24'
                           : 'sm:gap-8'
                     }`}
-                    style={isTablet && !isDesktop ? { width: `${(categories.length / VISIBLE_TABS) * 105}%` } : {}}
+                    style={isTablet && !isDesktop ? { transform: `translateX(${categoryTranslate}%)` } : {}}
                   >
                     {categories.map((category) => (
                       <div
                         key={category}
                         className={`${
-                          isTablet && !isDesktop ? 'flex-shrink-0' : isDesktop ? 'group lg:mb-2' : 'flex-shrink-0'
+                          isTablet && !isDesktop
+                            ? 'w-120 flex-shrink-0 px-1'
+                            : isDesktop
+                              ? 'group lg:mb-2'
+                              : 'flex-shrink-0'
                         }`}
-                        style={isTablet && !isDesktop ? { width: `${100 / categories.length}%` } : {}}
                       >
                         <RadioTab.Item id={category}>
                           <span className="block whitespace-nowrap px-3 py-2 text-sm">{category}</span>
@@ -536,18 +534,16 @@ const MainPage = () => {
                 </RadioTab.Root>
               </div>
 
-              {isTablet && !isDesktop && (
-                <div className="w-32 flex-shrink-0">
-                  {categoryStartIndex + VISIBLE_TABS < categories.length && (
-                    <button
-                      onClick={handleCategoryNextClick}
-                      className="z-1 flex h-32 w-32 items-center justify-center rounded-full border border-gray-600"
-                    >
-                      <div className="flex h-20 w-35 items-center justify-center">
-                        <NextButton />
-                      </div>
-                    </button>
-                  )}
+              {isRightButtonVisible && (
+                <div className="flex-shrink-0">
+                  <button
+                    onClick={handleCategoryNextClick}
+                    className="z-1 flex h-32 w-32 items-center justify-center rounded-full border border-gray-600"
+                  >
+                    <div className="flex h-20 w-35 items-center justify-center">
+                      <NextButton />
+                    </div>
+                  </button>
                 </div>
               )}
             </div>
