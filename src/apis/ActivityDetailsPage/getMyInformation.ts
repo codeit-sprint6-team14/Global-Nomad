@@ -27,7 +27,11 @@ export const useMyInformation = () => {
     data: userInformationData,
     isLoading,
     error,
-  } = useQuery<MyInformation>({ queryKey: ['userInformation'], queryFn: () => getMyInformation() });
+  } = useQuery<MyInformation>({
+    queryKey: ['userInformation'],
+    queryFn: () => getMyInformation(),
+    retry: false,
+  });
 
   return { userInformationData, isLoading, error };
 };

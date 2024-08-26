@@ -3,9 +3,10 @@ export interface SignupFormData {
   nickname: string;
   password: string;
   passwordConfirmation: string;
+  termsAgreed: boolean;
 }
 
-export type SignupData = Omit<SignupFormData, 'passwordConfirmation'>;
+export type SignupData = Omit<SignupFormData, 'passwordConfirmation' | 'termsAgreed'>;
 export interface SigninData {
   email: string;
   password: string;

@@ -3,8 +3,11 @@ import { tokenAtom } from '@/store/tokenAtom';
 import { getKakaoToken } from '@/utils/getSocialToken';
 import { isAxiosError } from 'axios';
 import { useSetAtom } from 'jotai';
+import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
+
+import { useRandomNickname } from './useRandomNickname';
 
 export const useKakaoAuth = () => {
   const router = useRouter();
@@ -13,16 +16,17 @@ export const useKakaoAuth = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const setToken = useSetAtom(tokenAtom);
   const domain = process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI;
+  const { generateNickname } = useRandomNickname();
 
   const saveTokens = useCallback(
     (accessToken: string, refreshToken: string) => {
       try {
-        localStorage.setItem('accessToken', accessToken);
-        localStorage.setItem('refreshToken', refreshToken);
+        Cookies.set('accessToken', accessToken, { expires: 1, secure: true, sameSite: 'strict' });
+        Cookies.set('refreshToken', refreshToken, { expires: 1, secure: true, sameSite: 'strict' });
         setToken(accessToken);
       } catch (e) {
-        console.error('Failed to save tokens to localStorage:', e);
-        setError(new Error('Failed to save authentication tokens'));
+        console.error('토큰 저장 실패:', e);
+        setError(new Error('토큰 저장 실패'));
       }
     },
     [setToken],
@@ -84,7 +88,7 @@ export const useKakaoAuth = () => {
     const handleKakaoRedirect = async () => {
       try {
         const code = await getKakaoToken();
-        const nickname = '카카오 계정';
+        const nickname = generateNickname();
         const existUser = localStorage.getItem('existUser') === 'exist';
 
         if (code) {
