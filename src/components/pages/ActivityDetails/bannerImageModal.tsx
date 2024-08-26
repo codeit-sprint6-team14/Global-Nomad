@@ -78,7 +78,7 @@ const BannerImageModal = ({ images, currentIndex, onClose, onPrev, onNext }: Ban
         >
           <AnimatePresence initial={false} custom={direction}>
             <motion.img
-              className={`h-full w-full object-cover`}
+              className={`h-full w-full`}
               sizes=""
               key={currentIndex}
               src={images[currentIndex]}
