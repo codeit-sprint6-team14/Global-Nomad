@@ -5,6 +5,7 @@ import { ReservationDashboardResponse } from '@/apis/myPage/schedule.types';
 import Input from '@/components/common/Input/index';
 import { reservationsUpdatedAtom } from '@/store/reservationsAtom';
 import { Option } from '@/types/dropDownInputTypes';
+import { motion } from 'framer-motion';
 import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -24,6 +25,16 @@ const MySchedule = () => {
     router.push('/my-page');
   };
 
+  const floatAnimation = {
+    initial: { y: 0 },
+    animate: { y: [0, -25, 0] },
+    transition: {
+      duration: 3,
+      ease: 'easeInOut',
+      repeat: Infinity,
+      repeatType: 'loop' as const,
+    },
+  };
   useEffect(() => {
     const fetchActivities = async () => {
       try {
@@ -62,7 +73,6 @@ const MySchedule = () => {
   }, [selectedOption, reservationsUpdated, currentYear, currentMonth]);
 
   const handleOptionSelect = (option: Option) => {
-    console.log(`선택한 옵션: ${option.label}`);
     setSelectedOption(option);
   };
 
@@ -79,7 +89,7 @@ const MySchedule = () => {
         <div className="block cursor-pointer md:hidden" onClick={handleGoMyPage}>
           <LeftArrow />
         </div>
-        <h2 className="ml-10 text-3xl-bold md:ml-0">예약 현황</h2>
+        <h1 className="ml-10 text-3xl-bold md:ml-0">예약 현황</h1>
       </div>
       {hasExperiences ? (
         <div className="relative mb-20 mt-20">
@@ -94,9 +104,9 @@ const MySchedule = () => {
           />
         </div>
       ) : (
-        <div className="mb-50 mt-100 flex justify-center">
+        <motion.div {...floatAnimation} className="mb-50 mt-100 flex justify-center">
           <Paper />
-        </div>
+        </motion.div>
       )}
       {hasExperiences ? (
         <Calendar
@@ -105,9 +115,9 @@ const MySchedule = () => {
           onMonthChange={handleMonthChange}
         />
       ) : (
-        <div className="mb-420 md:mb-601 mb-200 text-center text-2xl-medium text-gray-700 lg:mb-[469px]">
+        <h2 className="mb-420 md:mb-601 mb-200 text-center text-2xl-medium text-gray-700 lg:mb-[469px]">
           아직 등록한 체험이 없어요
-        </div>
+        </h2>
       )}
     </div>
   );
