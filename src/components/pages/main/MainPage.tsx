@@ -7,6 +7,7 @@ import DropDownOption from '@/components/common/Dropdown/dropDownOption';
 import Pagination from '@/components/common/Pagination';
 import Search from '@/components/common/Search';
 import { useQuery } from '@tanstack/react-query';
+import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -539,14 +540,39 @@ const MainPage = () => {
         {isSearching && <span className="mb-24 text-lg-regular">총 {displayedActivities.length}개의 결과</span>}
 
         <div className="min-h-600">
-          {displayedActivities.length > 0 ? (
-            <div className="flex flex-wrap sm:w-340 sm:gap-4 md:w-695 md:gap-16 lg:w-1204 lg:gap-24">
+          <motion.div className="flex flex-wrap sm:w-340 sm:gap-4 md:w-695 md:gap-16 lg:w-1204 lg:gap-24" layout>
+            <AnimatePresence>
               {displayedActivities.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE).map((activity) => (
-                <ActivityCards key={activity.id} activity={activity} />
+                <motion.div
+                  key={activity.id}
+                  layout
+                  initial={{ opacity: 1, x: 100 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 100 }}
+                  transition={{
+                    opacity: { duration: 0.2 },
+                    x: { type: 'spring', stiffness: 100, damping: 15 },
+                    layout: {
+                      type: 'spring',
+                      stiffness: 100,
+                      damping: 15,
+                    },
+                  }}
+                >
+                  <ActivityCards activity={activity} />
+                </motion.div>
               ))}
-            </div>
-          ) : (
-            <p className="h-600 text-xl text-gray-500">검색 결과가 없습니다.</p>
+            </AnimatePresence>
+          </motion.div>
+          {displayedActivities.length === 0 && (
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="h-600 text-xl text-gray-500"
+            >
+              검색 결과가 없습니다.
+            </motion.p>
           )}
         </div>
 
