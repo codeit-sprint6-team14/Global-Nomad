@@ -4,6 +4,7 @@ import { tokenAtom } from '@/store/tokenAtom';
 import { SigninData, SigninResult } from '@/types/auth';
 import { useMutation } from '@tanstack/react-query';
 import { useSetAtom } from 'jotai';
+import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
@@ -18,9 +19,9 @@ export const useSignin = () => {
       if ('user' in result) {
         setToken(result.accessToken);
 
-        // 토큰을 로컬 스토리지에 저장
-        localStorage.setItem('accessToken', result.accessToken);
-        localStorage.setItem('refreshToken', result.refreshToken);
+        //토큰 쿠키에 저장
+        Cookies.set('accessToken', result.accessToken, { expires: 1, secure: true, sameSite: 'strict' });
+        Cookies.set('refreshToken', result.refreshToken, { expires: 7, secure: true, sameSite: 'strict' });
 
         router.push('/');
       } else {
