@@ -39,7 +39,7 @@ const Header = ({
 
   const handleOptionClick = async (option: string) => {
     if (option === '수정하기') {
-      router.push(`my-page/regist-activity/${activityId}`);
+      router.push(`/my-page/regist-activity/${activityId}`);
     }
     if (option === '삭제하기') {
       handleDeleteConfirmation();
