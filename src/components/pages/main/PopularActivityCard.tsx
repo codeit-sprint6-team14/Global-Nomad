@@ -28,8 +28,9 @@ const PopularActivityCard: React.FC<ActivityCardProps> = ({ activity }) => {
       <Image
         src={imageSource}
         alt={altText}
-        layout="fill"
-        objectFit="cover"
+        fill
+        sizes="(max-width: 768px) 168px, 384px"
+        style={{ objectFit: 'cover' }}
         className={`transition-opacity duration-300 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
         onError={handleImageError}
         onLoad={() => setImageLoaded(true)}

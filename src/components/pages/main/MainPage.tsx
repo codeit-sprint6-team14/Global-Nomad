@@ -330,9 +330,11 @@ const MainPage = () => {
                     <Image
                       src={activity.bannerImageUrl}
                       alt={`Featured Activity Banner ${index + 1}`}
-                      layout="fill"
-                      objectFit="cover"
-                      priority={index === currentBannerIndex}
+                      width={1440}
+                      height={550}
+                      sizes="100vw"
+                      style={{ objectFit: 'cover', width: '100%', height: 'auto' }}
+                      priority
                       className="transition-transform duration-300"
                       onError={() => handleImageError(activity.id)}
                     />
