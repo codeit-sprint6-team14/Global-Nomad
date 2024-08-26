@@ -7,7 +7,7 @@ import { useState } from 'react';
 
 import Review from './review';
 
-const REVIEWS_PER_PAGE = 1;
+const REVIEWS_PER_PAGE = 5;
 
 const ReviewList = ({ activityId }: { activityId: string }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -71,7 +71,7 @@ const ReviewList = ({ activityId }: { activityId: string }) => {
               </div>
             </div>
           </div>
-          <div className="h-400 overflow-y-auto">
+          <div className="h-400 overflow-y-auto md:h-550">
             {reviews.map((review: ReviewType) => (
               <Review key={review.id} review={review} />
             ))}
