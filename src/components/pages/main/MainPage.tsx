@@ -27,6 +27,7 @@ const MainPage = () => {
   const [sortBy, setSortBy] = useState<string | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
+  const [currentTranslate, setCurrentTranslate] = useState(0);
   const [bannerLoadError, setBannerLoadError] = useState<Record<number, boolean>>({});
   const [startIndex, setStartIndex] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
@@ -37,6 +38,7 @@ const MainPage = () => {
   const tabsContainerRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
+  const [scrollPosition, setScrollPosition] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const popularActivitiesRef = useRef<HTMLDivElement>(null);
@@ -61,6 +63,11 @@ const MainPage = () => {
       ];
     }
   }, [isDesktop]);
+
+  const getScrollDistance = useCallback(() => {
+    if (isTablet) return 500;
+    return 300;
+  }, [isTablet]);
 
   const dropdownOptions = getDropdownOptions();
 
@@ -234,16 +241,58 @@ const MainPage = () => {
     [displayedActivities, sortActivities],
   );
 
-  const handlePrevClick = () => {
-    setStartIndex((prevIndex) => {
-      const newIndex = prevIndex - 3;
-      return newIndex < 0 ? filteredPopularActivities.length + newIndex : newIndex;
-    });
-  };
+  const handlePrevClick = useCallback(() => {
+    if (isDesktop) {
+      setStartIndex((prevIndex) => {
+        const newIndex = prevIndex - 3;
+        return newIndex < 0 ? filteredPopularActivities.length + newIndex : newIndex;
+      });
+    } else if (popularActivitiesRef.current) {
+      const scrollDistance = getScrollDistance();
+      const newScrollPosition = Math.max(0, scrollPosition - scrollDistance);
+      popularActivitiesRef.current.scrollTo({
+        left: newScrollPosition,
+        behavior: 'smooth',
+      });
+      setScrollPosition(newScrollPosition);
+    }
+  }, [isDesktop, scrollPosition, getScrollDistance, filteredPopularActivities.length]);
 
-  const handleNextClick = () => {
-    setStartIndex((prevIndex) => (prevIndex + 3) % filteredPopularActivities.length);
-  };
+  const handleNextClick = useCallback(() => {
+    if (isDesktop) {
+      setStartIndex((prevIndex) => (prevIndex + 3) % filteredPopularActivities.length);
+    } else if (popularActivitiesRef.current) {
+      const scrollDistance = getScrollDistance();
+      const maxScroll = popularActivitiesRef.current.scrollWidth - popularActivitiesRef.current.clientWidth;
+      const newScrollPosition = Math.min(maxScroll, scrollPosition + scrollDistance);
+      popularActivitiesRef.current.scrollTo({
+        left: newScrollPosition,
+        behavior: 'smooth',
+      });
+      setScrollPosition(newScrollPosition);
+    }
+  }, [isDesktop, scrollPosition, getScrollDistance, filteredPopularActivities.length]);
+
+  useEffect(() => {
+    if (isDesktop) return;
+
+    const handleScroll = () => {
+      if (popularActivitiesRef.current) {
+        setScrollPosition(popularActivitiesRef.current.scrollLeft);
+      }
+    };
+
+    const popularActivities = popularActivitiesRef.current;
+    if (popularActivities) {
+      popularActivities.addEventListener('scroll', handleScroll);
+    }
+
+    return () => {
+      if (popularActivities) {
+        popularActivities.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, [isDesktop]);
 
   const handlePageChange = useCallback((newPage: number) => {
     setPage(newPage);
@@ -277,34 +326,46 @@ const MainPage = () => {
     }
   };
 
-  const handleDragStart = useCallback((e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
-    if (!popularActivitiesRef.current) return;
-    setIsDragging(true);
-    setStartX(
-      'touches' in e
-        ? e.touches[0].pageX - popularActivitiesRef.current.offsetLeft
-        : e.pageX - popularActivitiesRef.current.offsetLeft,
-    );
-    setScrollLeft(popularActivitiesRef.current.scrollLeft);
-  }, []);
-
-  const handleDragEnd = useCallback(() => {
-    setIsDragging(false);
-  }, []);
+  const handleDragStart = useCallback(
+    (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
+      if (isDesktop) return;
+      setIsDragging(true);
+      setStartX('touches' in e ? e.touches[0].clientX : e.clientX);
+      setCurrentTranslate(0);
+    },
+    [isDesktop],
+  );
 
   const handleDragMove = useCallback(
     (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
-      if (!isDragging || !popularActivitiesRef.current) return;
-      e.preventDefault();
-      const x =
-        'touches' in e
-          ? e.touches[0].pageX - popularActivitiesRef.current.offsetLeft
-          : e.pageX - popularActivitiesRef.current.offsetLeft;
-      const walk = (x - startX) * 2;
-      popularActivitiesRef.current.scrollLeft = scrollLeft + walk;
+      if (isDesktop || !isDragging) return;
+      const currentX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+      const diff = currentX - startX;
+      setCurrentTranslate(diff);
     },
-    [isDragging, startX, scrollLeft],
+    [isDesktop, isDragging, startX],
   );
+
+  const handleDragEnd = useCallback(() => {
+    if (isDesktop || !isDragging) return;
+    setIsDragging(false);
+    const movedBy = currentTranslate;
+
+    if (Math.abs(movedBy) > 100) {
+      if (movedBy > 0) {
+        handlePrevClick();
+      } else {
+        handleNextClick();
+      }
+    }
+    setCurrentTranslate(0);
+  }, [isDesktop, currentTranslate, handleNextClick, handlePrevClick, isDragging]);
+
+  useEffect(() => {
+    const handleMouseUp = () => handleDragEnd();
+    document.addEventListener('mouseup', handleMouseUp);
+    return () => document.removeEventListener('mouseup', handleMouseUp);
+  }, [handleDragEnd]);
 
   if (isActivitiesLoading || isPopularActivitiesLoading) return <div>loading...</div>;
   if (activitiesError) return <div>{activitiesError.message}</div>;
@@ -368,12 +429,12 @@ const MainPage = () => {
         <section className="mt-50 flex max-w-[1200px] flex-col px-4 sm:gap-16 md:w-675 md:gap-32 lg:w-1200 lg:gap-48">
           <div className="flex items-center justify-between">
             <h2 className="md:leading-43 font-bold sm:text-18 md:text-36 md:leading-[21.48px]">🔥인기 체험</h2>
-            {isDesktop && filteredPopularActivities.length > 3 && (
+            {filteredPopularActivities.length > (isDesktop ? 3 : 1) && (
               <div className="flex gap-12">
-                <button onClick={handlePrevClick} className="cursor-pointer">
+                <button onClick={handlePrevClick} className="cursor-pointer transition-transform hover:scale-110">
                   <PrevButton />
                 </button>
-                <button onClick={handleNextClick} className="cursor-pointer">
+                <button onClick={handleNextClick} className="cursor-pointer transition-transform hover:scale-110">
                   <NextButton />
                 </button>
               </div>
@@ -401,10 +462,16 @@ const MainPage = () => {
                     ) : null;
                   })
                 : filteredPopularActivities.map((activity, index) => (
-                    <div key={`${activity.id}-${index}`} className="flex-shrink-0 snap-center">
-                      <div className="flex">
-                        <PopularActivityCard activity={activity} />
-                      </div>
+                    <div
+                      key={`${activity.id}-${index}`}
+                      className={`flex flex-shrink-0 transition-transform duration-300 ease-in-out ${
+                        index === startIndex ? 'translate-x-0' : 'translate-x-full'
+                      }`}
+                      style={{
+                        transform: `translateX(-${startIndex * 100}%)`,
+                      }}
+                    >
+                      <PopularActivityCard activity={activity} />
                     </div>
                   ))}
             </div>
