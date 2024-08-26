@@ -14,15 +14,24 @@ const Description = ({ description }: { description: string }) => {
     visible: { height: 'auto', opacity: 1 },
   };
 
+  const renderDescription = (text: string) => {
+    const paragraphs = text.split('\n\n');
+    return paragraphs.map((paragraph, index) => (
+      <p key={index} className="mb-4 whitespace-pre-line text-lg-regular text-black-100 last:mb-0">
+        {paragraph}
+      </p>
+    ));
+  };
+
   return (
     <div className="flex flex-col border-b border-solid border-gray-300 py-16 md:border-t md:py-40">
       <h1 className="text-xl-bold text-black-100">체험 설명</h1>
-      <p className="mt-16 text-lg-regular text-black-100">
-        {description.slice(0, maxLength)}
-        {description.length > maxLength && !isExpanded && '...'}
-      </p>
+      <div className="mt-16">
+        {renderDescription(isExpanded ? description : description.slice(0, maxLength))}
+        {!isExpanded && description.length > maxLength && '...'}
+      </div>
       <AnimatePresence initial={false}>
-        {isExpanded && (
+        {isExpanded && description.length > maxLength && (
           <motion.div
             initial="hidden"
             animate="visible"
@@ -30,7 +39,7 @@ const Description = ({ description }: { description: string }) => {
             variants={variants}
             transition={{ duration: 0.2 }}
           >
-            <p className="mt-4 text-lg-regular text-black-100">{description.slice(maxLength)}</p>
+            {renderDescription(description.slice(maxLength))}
           </motion.div>
         )}
       </AnimatePresence>
@@ -39,7 +48,7 @@ const Description = ({ description }: { description: string }) => {
           onClick={toggleExpand}
           className="mt-16 cursor-pointer self-start text-lg-bold text-blue-200 hover:text-blue-300"
         >
-          {isExpanded ? '접기' : '더보기'}
+          {isExpanded ? <a href="#title">접기</a> : '더보기'}
         </button>
       )}
     </div>
