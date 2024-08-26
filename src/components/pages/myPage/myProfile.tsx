@@ -21,17 +21,20 @@ const MyProfile = () => {
   const [confirmPassword, setConfirmPassword] = useAtom(confirmPasswordAtom);
   const [isChanged, setIsChanged] = useAtom(isChangedAtom);
 
+  const [localNickname, setLocalNickname] = useState('');
   const [initialNickname, setInitialNickname] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
 
   const [isSocialUser, setIsSocialUser] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const passwordMismatch = confirmPassword && password !== confirmPassword;
   const passwordLength = password.length < 8 && password.length > 0;
 
   useEffect(() => {
     const loadUserProfile = async () => {
+      setIsLoading(true);
       try {
         const data = await getUserProfile();
         setUser({
@@ -40,8 +43,11 @@ const MyProfile = () => {
           profileImage: data.profileImageUrl,
         });
         setInitialNickname(data.nickname);
+        setLocalNickname(data.nickname);
       } catch (error) {
         console.error('Failed to load user profile:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -55,7 +61,7 @@ const MyProfile = () => {
   }, [setUser]);
 
   useEffect(() => {
-    const hasNicknameChanged = user.nickname !== initialNickname;
+    const hasNicknameChanged = localNickname !== initialNickname;
     const isPasswordLongEnough = password.length >= 8;
     const isPasswordValid = Boolean(password) && isPasswordLongEnough && password === confirmPassword;
     const isPasswordAttempted = Boolean(password) || Boolean(confirmPassword);
@@ -65,7 +71,7 @@ const MyProfile = () => {
       (isPasswordValid && (hasNicknameChanged || !hasNicknameChanged)); // 비밀번호가 유효하고 (닉네임 변경 여부 상관없음)
 
     setIsChanged(shouldEnableButton);
-  }, [user.nickname, initialNickname, password, confirmPassword, setIsChanged]);
+  }, [localNickname, initialNickname, password, confirmPassword, setIsChanged]);
 
   const handleModalClose = () => {
     setIsModalOpen(false); // 모달 닫기
@@ -74,12 +80,14 @@ const MyProfile = () => {
   const handleSave = async () => {
     try {
       await updateProfile({
-        nickname: user.nickname,
+        nickname: localNickname,
         profileImageUrl: user.profileImage,
         newPassword: password || undefined,
       });
+      setUser({ ...user, nickname: localNickname }); // 저장 성공 시에만 userAtom 업데이트
       setModalMessage('변경 사항이 저장되었습니다');
       setIsModalOpen(true);
+      setInitialNickname(localNickname); // 초기 닉네임 업데이트
     } catch (error) {
       console.error('Failed to update profile:', error);
       setModalMessage('프로필 업데이트에 실패했습니다');
@@ -92,6 +100,10 @@ const MyProfile = () => {
   };
 
   const isSideNavbarOpen = viewportSize === 'tablet' || 'desktop';
+
+  if (isLoading) {
+    return <div>로딩중...</div>;
+  }
 
   return (
     <main className="md:mb-363 lg:mb-208 mb-168 mt-94 lg:mt-142">
@@ -117,11 +129,7 @@ const MyProfile = () => {
               저장하기
             </Button.Default>
           </div>
-          <InputSection
-            title="닉네임"
-            value={user.nickname}
-            onChange={(e) => setUser({ ...user, nickname: e.target.value })}
-          />
+          <InputSection title="닉네임" value={localNickname} onChange={(e) => setLocalNickname(e.target.value)} />
           <InputSection title="이메일" value={user.email} readonly={true} />
           <PasswordInputSection
             title="새 비밀번호"
