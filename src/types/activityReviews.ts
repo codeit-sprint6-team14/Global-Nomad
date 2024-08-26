@@ -1,8 +1,3 @@
-export interface ReviewData {
-  averageRating: number;
-  totalCount: number;
-  reviews: Array<ReviewType>;
-}
 export interface User {
   profileImageUrl: string;
   nickname: string;

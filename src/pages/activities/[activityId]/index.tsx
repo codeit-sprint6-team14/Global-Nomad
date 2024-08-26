@@ -8,14 +8,18 @@ interface ActivityDetailsPageProps {
   kakaoKey: string;
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const kakaoKey = process.env.KAKAO_KEY;
-  const activityId = '2213';
-  // 리뷰 페이지네이션 테스트 activityId => 2192
-  // 캘린더 예약 가능 스케줄 테스트 activityId => 2213
+  const activityId = context.params?.activityId as string;
 
   if (!kakaoKey) {
     throw new Error('환경 변수에 카카오 키가 정의되지 않았습니다.');
+  }
+
+  if (!activityId) {
+    return {
+      notFound: true,
+    };
   }
 
   return {

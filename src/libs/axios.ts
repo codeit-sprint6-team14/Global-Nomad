@@ -2,6 +2,7 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import Cookies from 'js-cookie';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -15,7 +16,7 @@ export const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('accessToken');
+    const token = Cookies.get('accessToken');
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }
@@ -30,7 +31,7 @@ axiosInstance.interceptors.response.use(
     const originalRequest = error.config as AxiosRequestConfig & { _retry?: boolean };
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      const currentRefreshToken = localStorage.getItem('refreshToken');
+      const currentRefreshToken = Cookies.get('refreshToken');
       try {
         const { data } = await axios.post(`${API_BASE_URL}/auth/tokens`, null, {
           headers: {
@@ -38,15 +39,15 @@ axiosInstance.interceptors.response.use(
           },
         });
         const { accessToken, refreshToken } = data;
-        localStorage.setItem('accessToken', accessToken);
-        localStorage.setItem('refreshToken', refreshToken);
+        Cookies.set('accessToken', accessToken, { expires: 1, secure: true, sameSite: 'strict' });
+        Cookies.set('refreshToken', refreshToken, { expires: 7, secure: true, sameSite: 'strict' });
         if (originalRequest.headers) {
           originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
         }
         return axiosInstance(originalRequest);
       } catch (refreshError) {
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
+        Cookies.remove('accessToken');
+        Cookies.remove('refreshToken');
         return Promise.reject(refreshError);
       }
     }
@@ -63,7 +64,7 @@ type AxiosRequester = <T, D = any>(params: AxiosRequesterParams<T, D>) => Promis
 
 export const axiosRequester: AxiosRequester = async ({ options, includeAuth = false }) => {
   if (includeAuth) {
-    const accessToken = localStorage.getItem('accessToken');
+    const accessToken = Cookies.get('accessToken');
     if (accessToken) {
       options.headers = {
         ...options.headers,

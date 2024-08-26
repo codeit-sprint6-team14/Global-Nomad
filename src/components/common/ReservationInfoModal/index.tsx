@@ -116,7 +116,7 @@ const ReservationInfoModal = ({ activityId, schedules, onClose }: ReservationInf
       <div className="mx-auto w-400 flex-col">
         <div className="flex h-98 flex-col gap-16 px-24 py-12">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl-bold md:text-xl-bold">예약 정보</h1>
+            <h2 className="text-2xl-bold md:text-xl-bold">예약 정보</h2>
             <button type="button" onClick={onClose}>
               <Close width={40} height={40} />
             </button>

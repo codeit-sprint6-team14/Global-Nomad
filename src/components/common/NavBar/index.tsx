@@ -12,7 +12,7 @@ import { useCallback, useEffect, useState } from 'react';
 import DropDown from '../Dropdown';
 import Notification from './Notification';
 
-function NavBar({ accessToken }: { accessToken?: boolean }) {
+function NavBar() {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
   const [user, setUser] = useAtom(userAtom);
   const [token, setToken] = useAtom(tokenAtom);
@@ -80,7 +80,7 @@ function NavBar({ accessToken }: { accessToken?: boolean }) {
         <Link href="/">
           <Image width={172} height={30} src="/assets/images/navbar-logo.svg" alt="네비바 로고" priority />
         </Link>
-        {accessToken ? (
+        {token ? (
           <div className="flex items-center">
             <Notification />
             <div className="mx-12 h-22 border-l border-solid border-gray-300 md:mx-25" />

@@ -6,12 +6,15 @@ import { useSetAtom } from 'jotai';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 
+import { useRandomNickname } from './useRandomNickname';
+
 export const useGoogleAuth = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
   const setToken = useSetAtom(tokenAtom);
+  const { generateNickname } = useRandomNickname();
 
   const handleAuth = useCallback(
     async (code: string) => {
@@ -22,7 +25,7 @@ export const useGoogleAuth = () => {
         const idToken = await getGoogleToken(code);
 
         const authBody = {
-          nickname: '구글 계정',
+          nickname: generateNickname(),
           redirectUri: GOOGLE_URI || '',
           token: idToken,
         };

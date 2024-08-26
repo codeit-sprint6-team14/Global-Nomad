@@ -13,7 +13,7 @@ interface DateCellProps {
   onClick: () => void;
 }
 
-const DateCell: React.FC<DateCellProps> = ({ day, isCurrentMonth, reservation, onClick }) => {
+const DateCell: React.FC<DateCellProps> = ({ day, isCurrentMonth, reservation, onClick = () => {} }) => {
   const circleColor = getCircleColor();
   const isClickable = !!reservation;
 

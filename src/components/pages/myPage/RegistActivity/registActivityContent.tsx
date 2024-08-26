@@ -279,8 +279,6 @@ const RegistActivityContent = ({ activityId }: RegistActivityContentProps) => {
             />
             {errors.subImageUrls && <span className="errorText">{errors.subImageUrls.message}</span>}
           </div>
-
-          <p className="text-2lg-regular text-gray-800">*이미지는 최대 4개까지 등록 가능합니다</p>
         </div>
       </form>
       <Modal.Overlay isOpen={isModalOpen} onClose={handleCloseModal}>
