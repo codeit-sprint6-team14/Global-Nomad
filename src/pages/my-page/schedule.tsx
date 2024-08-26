@@ -1,3 +1,4 @@
+import AnimatedContainer from '@/components/common/Animation/AnimatedContainer';
 import Footer from '@/components/common/Footer';
 import NavBar from '@/components/common/NavBar';
 import SideNavMenu from '@/components/common/SideNavMenu';
@@ -11,16 +12,18 @@ const Schedule = () => {
   return (
     <div>
       <NavBar />
-      <div className="ml-auto mr-auto mt-94 flex w-343 md:w-696 lg:mt-142 lg:w-1200">
-        {isSideNavbarOpen && (
-          <div className="hidden w-60 bg-white md:block">
-            <SideNavMenu />
-          </div>
-        )}
-        <div className="mb-60 ml-auto mr-auto md:mr-0 md:w-430 lg:w-792">
-          <MySchedule />
+      <AnimatedContainer>
+        <div className="ml-auto mr-auto mt-94 flex w-343 md:w-696 lg:mt-142 lg:w-1200">
+          {isSideNavbarOpen && (
+            <nav className="hidden w-60 bg-white md:block">
+              <SideNavMenu />
+            </nav>
+          )}
+          <main className="mb-60 ml-auto mr-auto md:mr-0 md:w-430 lg:w-792">
+            <MySchedule />
+          </main>
         </div>
-      </div>
+      </AnimatedContainer>
       <Footer />
     </div>
   );

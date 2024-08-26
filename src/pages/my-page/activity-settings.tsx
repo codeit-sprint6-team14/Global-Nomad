@@ -1,3 +1,6 @@
+import LeftArrow from '@/../public/assets/icons/left-arrow.svg';
+import AnimatedContainer from '@/components/common/Animation/AnimatedContainer';
+import Button from '@/components/common/Button';
 import Footer from '@/components/common/Footer';
 import NavBar from '@/components/common/NavBar';
 import SideNavMenu from '@/components/common/SideNavMenu';
@@ -5,30 +8,50 @@ import ActivitySettingsContent from '@/components/pages/myPage/ActivitySettings/
 import { useActivitiesQuery } from '@/components/pages/myPage/ActivitySettings/hooks/useActivitiesQuery';
 import { useDeviceState } from '@/hooks/useDeviceState';
 import { Device } from '@/types/deviceTypes';
+import { useRouter } from 'next/router';
 
 const ActivitySettings = () => {
+  const router = useRouter();
   const deviceState = useDeviceState();
-
   const isMobile = deviceState === Device.MOBILE;
-  const isTablet = deviceState === Device.TABLET;
-  const isDesktop = deviceState === Device.DESKTOP;
 
-  const { activitiesData, isActivityEmpty, error: queryError, setTarget } = useActivitiesQuery();
+  const { activitiesData, isActivityEmpty, setTarget } = useActivitiesQuery();
 
   return (
     <>
       <NavBar />
-      <main className="md:mb-400 lg:mb-270 mx-auto mb-[496px] mt-94 w-344 md:w-696 lg:mt-142 lg:w-1200">
-        {queryError && <div className="mb-4 text-red-500">{queryError.message}</div>}
-        {isMobile && <ActivitySettingsContent activitiesData={activitiesData} isEmpty={isActivityEmpty} />}
-        {(isTablet || isDesktop) && (
-          <div className="flex justify-between">
-            <SideNavMenu />
-            <ActivitySettingsContent activitiesData={activitiesData} isEmpty={isActivityEmpty} />
-          </div>
-        )}
-        <div ref={setTarget}></div>
-      </main>
+      <AnimatedContainer>
+        <main className="md:mb-400 lg:mb-270 mx-auto mb-[496px] mt-94 w-344 md:w-696 lg:mt-142 lg:w-1200">
+          {isMobile ? (
+            <div className={`flex flex-col ${isActivityEmpty && 'gap-90'}`}>
+              <div className="mb-12 flex items-center">
+                <div className="cursor-pointer md:hidden">
+                  <LeftArrow onClick={() => router.push('/my-page')} />
+                </div>
+                <h1 className="ml-10 text-3xl-bold">내 체험 관리</h1>
+              </div>
+              <ActivitySettingsContent activitiesData={activitiesData} isEmpty={isActivityEmpty} />
+            </div>
+          ) : (
+            <div className="flex justify-between">
+              <SideNavMenu />
+              <div className="flex flex-col">
+                <div className={`flex justify-between md:mb-24 ${isActivityEmpty && 'md:mb-64 lg:mb-80'}`}>
+                  <h1 className="text-3xl-bold">내 체험 관리</h1>
+                  <Button.Default
+                    onClick={() => router.push('/my-page/regist-activity')}
+                    className="h-48 w-128 rounded-4"
+                  >
+                    체험 등록하기
+                  </Button.Default>
+                </div>
+                <ActivitySettingsContent activitiesData={activitiesData} isEmpty={isActivityEmpty} />
+              </div>
+            </div>
+          )}
+          <div ref={setTarget}></div>
+        </main>
+      </AnimatedContainer>
       <Footer />
     </>
   );

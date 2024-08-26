@@ -3,7 +3,7 @@ import { ReservationDashboardResponse, ReservationScheduleArray } from '@/apis/m
 import ReservationInfoModal from '@/components/common/ReservationInfoModal';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import DateCell from './dateCell';
 
@@ -75,46 +75,53 @@ const Calendar: React.FC<CalendarProps> = ({ activityId, reservations, onMonthCh
     setModalOpen(false);
     setSelectedDate(null);
   };
-
   return (
     <div className="container relative mx-auto w-342 p-4 md:w-430 lg:w-800">
       <div className="mb-20 flex items-center justify-center gap-20 text-xl-bold">
         <button onClick={handlePrevClick}>&lt;&lt;</button>
-        <div className="text-xl-bold">{format(currentDate, 'yyyy년 M월', { locale: ko })}</div>
+        <h2 className="text-xl-bold">{format(currentDate, 'yyyy년 M월', { locale: ko })}</h2>
         <button onClick={handleNextClick}>&gt;&gt;</button>
       </div>
-      <div className="mb-12 grid grid-cols-7 text-sm-medium text-gray-600">
-        {dayArr.map((day) => (
-          <div key={day} className="flex items-center justify-center p-10">
-            {day}
-          </div>
-        ))}
-      </div>
-      <div className="grid grid-cols-7 gap-y-12 text-xl-bold">
-        {days.map((day, index) => {
-          const isPrevMonth = index < prevMonthStartDay;
-          const isNextMonth = index >= prevMonthStartDay + currentMonthDates.length;
-          const isCurrentMonth = !isPrevMonth && !isNextMonth;
-          const date = isPrevMonth
-            ? new Date(currentYear, currentMonth - 1, day)
-            : isNextMonth
-              ? new Date(currentYear, currentMonth + 1, day)
-              : new Date(currentYear, currentMonth, day);
 
-          const formattedDate = format(date, 'yyyy-MM-dd');
-          const reservation = reservations?.find((res) => res.date === formattedDate);
+      <table className="w-full">
+        <thead>
+          <tr className="grid grid-cols-7 text-sm-medium text-gray-600">
+            {dayArr.map((day) => (
+              <th key={day} className="flex items-center justify-center p-10">
+                {day}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          <tr className="grid grid-cols-7 gap-y-12 text-xl-bold">
+            {days.map((day, index) => {
+              const isPrevMonth = index < prevMonthStartDay;
+              const isNextMonth = index >= prevMonthStartDay + currentMonthDates.length;
+              const isCurrentMonth = !isPrevMonth && !isNextMonth;
+              const date = isPrevMonth
+                ? new Date(currentYear, currentMonth - 1, day)
+                : isNextMonth
+                  ? new Date(currentYear, currentMonth + 1, day)
+                  : new Date(currentYear, currentMonth, day);
 
-          return (
-            <DateCell
-              key={index}
-              day={day}
-              isCurrentMonth={isCurrentMonth}
-              reservation={reservation ? reservation.reservations : undefined}
-              onClick={() => isCurrentMonth && reservation && handleDateClick(day)}
-            />
-          );
-        })}
-      </div>
+              const formattedDate = format(date, 'yyyy-MM-dd');
+              const reservation = reservations?.find((res) => res.date === formattedDate);
+
+              return (
+                <DateCell
+                  key={index}
+                  day={day}
+                  isCurrentMonth={isCurrentMonth}
+                  reservation={reservation ? reservation.reservations : undefined}
+                  onClick={() => isCurrentMonth && reservation && handleDateClick(day)}
+                />
+              );
+            })}
+          </tr>
+        </tbody>
+      </table>
+
       {isModalOpen && selectedDate && activityId && (
         <div className="fixed inset-0 z-20 md:absolute md:z-0 md:mt-50 lg:ml-auto lg:mr-0 lg:w-429">
           <ReservationInfoModal onClose={handleCloseModal} activityId={activityId} schedules={selectedSchedules} />

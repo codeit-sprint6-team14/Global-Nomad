@@ -17,6 +17,7 @@ export const signupValidationSchema = yup.object().shape({
     .required(ErrorMessages.NICKNAME_REQUIRED)
     .max(10, ErrorMessages.NICKNAME_TOO_LONG)
     .matches(/^[가-힣a-zA-Z0-9]+$/, ErrorMessages.NICKNAME_NO_SPECIAL_CHARS),
+  termsAgreed: yup.boolean().oneOf([true], '이용약관에 동의해야 합니다.').required('이용약관에 동의해야 합니다.'),
 });
 
 export const signinValidationSchema = yup.object().shape({
