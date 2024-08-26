@@ -16,7 +16,7 @@ const Mobile = ({ handleReservationSubmit }: { handleReservationSubmit: () => vo
   return (
     <>
       {isDateModalOpen && (
-        <DateSelectModal setIsModalOpen={setIsDateModalOpen} classNames="fixed bottom-0 w-full z-[9999]" />
+        <DateSelectModal setIsModalOpen={setIsDateModalOpen} classNames="fixed bottom-0 h-full w-full z-[9999]" />
       )}
 
       <div className="fixed bottom-0 left-0 right-0 z-50 h-83 w-full max-w-[743px] border-y border-gray-300 bg-white">

@@ -125,7 +125,9 @@ const ActivityInformation = ({
             </Modal.RegisterConfirm>
           </Modal.Overlay>
         )}
-        <ScrollToTopButton />
+        <div className="fixed bottom-170 right-10 flex lg:sticky lg:bottom-0 lg:right-0 lg:mb-20 lg:justify-end">
+          <ScrollToTopButton />
+        </div>
       </div>
     </>
   );
