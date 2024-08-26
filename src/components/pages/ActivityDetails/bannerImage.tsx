@@ -29,7 +29,7 @@ const BannerImage = ({ bannerImageUrl, subImages }: { bannerImageUrl: string; su
 
   return (
     <>
-      <div className="flex flex-col md:flex-row md:gap-5 md:px-24 md:pb-32 md:pt-16 lg:px-0 lg:pb-85 lg:pt-24">
+      <div className="flex flex-col md:flex-row md:gap-5 md:px-24 md:pb-32 md:pt-16 lg:px-0 lg:pb-45 lg:pt-24">
         {bannerImageUrl && (
           <div
             className="group relative w-full cursor-pointer pb-[100%] md:h-auto md:w-[50%] md:overflow-hidden md:rounded-l-7 md:pb-[33.33%] lg:pb-[44.5%]"
@@ -72,6 +72,7 @@ const BannerImage = ({ bannerImageUrl, subImages }: { bannerImageUrl: string; su
           </div>
         )}
       </div>
+      <div id="title" className="h-40" />
       {isModalOpen && (
         <BannerImageModal
           images={allImages}

@@ -33,7 +33,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 const ActivitiesPage = ({ activityId, kakaoKey }: ActivityDetailsPageProps) => {
   const { activityData, isLoading, error } = useActivityData(activityId);
 
-  if (isLoading) return <div>로딩 중...</div>;
+  if (isLoading) return <div className="flex h-[90vh] items-center justify-center">로딩 중...</div>;
   if (error) return <div>체험에 대한 데이터를 불러오는데 실패했습니다.</div>;
   if (!activityData) return null;
 
