@@ -116,11 +116,10 @@ const ReservationScheduleSelect = () => {
         className="mx-auto mb-16 h-max pt-[11px]"
       />
       <TimeSlotSelection
-        selectedDate={selectedDate}
-        selectedSlot={selectedSlot}
         handleSlotSelect={handleSlotSelect}
         availableSchedule={availableSchedule}
         getSelectedDateSlots={getSelectedDateSlots}
+        currentDate={currentDate}
       />
     </div>
   );

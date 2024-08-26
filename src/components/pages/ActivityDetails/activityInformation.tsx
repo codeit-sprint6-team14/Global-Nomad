@@ -62,8 +62,10 @@ const ActivityInformation = ({
 
   setPrice(price);
 
+  const hasAccessToken = localStorage.getItem('accessToken');
+
   const myId = userInformationData?.id;
-  const isCreateByMe = myId === userId;
+  const isCreateByMe = myId === userId && hasAccessToken;
 
   const scrollToReviews = () => {
     reviewListRef.current?.scrollIntoView({ behavior: 'auto' });
