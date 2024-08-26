@@ -27,7 +27,7 @@ const MyProfile = () => {
 
   const [isSocialUser, setIsSocialUser] = useState(false);
 
-  const passwordMismatch = password && password !== confirmPassword;
+  const passwordMismatch = confirmPassword && password !== confirmPassword;
   const passwordLength = password.length < 8 && password.length > 0;
 
   useEffect(() => {
@@ -138,7 +138,7 @@ const MyProfile = () => {
             onChange={(e) => setConfirmPassword(e.target.value)}
             readonly={isSocialUser}
           />
-          {passwordMismatch && !isSocialUser && (
+          {passwordMismatch && confirmPassword && !isSocialUser && (
             <p className="mt-4 text-sm text-red-500">비밀번호가 일치하지 않습니다</p>
           )}
         </div>
