@@ -1,3 +1,4 @@
+import AnimatedContainer from '@/components/common/Animation/AnimatedContainer';
 import Footer from '@/components/common/Footer';
 import NavBar from '@/components/common/NavBar';
 import MyProfile from '@/components/pages/myPage/myProfile';
@@ -6,7 +7,9 @@ const Profile = () => {
   return (
     <div>
       <NavBar />
-      <MyProfile />
+      <AnimatedContainer>
+        <MyProfile />
+      </AnimatedContainer>
       <Footer />
     </div>
   );
