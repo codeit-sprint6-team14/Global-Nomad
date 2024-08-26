@@ -1,12 +1,21 @@
 import Star from '@/../public/assets/icons/star.svg';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
+import Skeleton from './Skeleton/Skeleton';
 import { ActivityCardProps } from './mainPage.type';
 import { useBackupImage } from './useBackupImage';
 
 const ActivityCards: React.FC<ActivityCardProps> = ({ activity }) => {
   const { imageSource, altText, handleImageError } = useBackupImage(activity.bannerImageUrl);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [backgroundColor, setBackgroundColor] = useState('');
+
+  useEffect(() => {
+    const colors = ['bg-purple-100', 'bg-pink-200', 'bg-sky-200'];
+    setBackgroundColor(colors[Math.floor(Math.random() * colors.length)]);
+  }, []);
 
   return (
     <Link
@@ -14,13 +23,17 @@ const ActivityCards: React.FC<ActivityCardProps> = ({ activity }) => {
       className="flex h-293 w-168 flex-col gap-16 sm:mb-16 md:mb-32 md:h-344 md:w-221 lg:mb-48 lg:h-414 lg:w-283"
     >
       <div className="relative h-168 w-168 md:h-221 md:w-221 lg:h-283 lg:w-283">
+        <div className={`absolute inset-0 ${backgroundColor} rounded-25 ${imageLoaded ? 'hidden' : 'block'}`}>
+          <Skeleton className="h-full w-full rounded-25" />
+        </div>
         <Image
           src={imageSource}
           alt={altText}
           layout="fill"
           objectFit="cover"
-          className="rounded-25"
+          className={`rounded-25 transition-opacity duration-300 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
           onError={handleImageError}
+          onLoad={() => setImageLoaded(true)}
         />
       </div>
       <div className="flex flex-col gap-15">
