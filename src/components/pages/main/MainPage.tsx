@@ -48,9 +48,26 @@ const MainPage = () => {
   const [allActivities, setAllActivities] = useState<Activity[]>([]);
   const [displayedActivities, setDisplayedActivities] = useState<Activity[]>([]);
   const [totalPages, setTotalPages] = useState(1);
-  const ITEMS_PER_PAGE = isDesktop ? 16 : isTablet ? 9 : 8;
+  const getItemsPerPage = useCallback(
+    (isSearching: boolean) => {
+      if (isSearching) {
+        return isDesktop ? 16 : isTablet ? 9 : 8;
+      } else {
+        return isDesktop ? 8 : isTablet ? 9 : 4;
+      }
+    },
+    [isDesktop, isTablet],
+  );
   const isLeftButtonVisible = isTablet && !isDesktop && categoryStartIndex > 0;
   const isRightButtonVisible = isTablet && !isDesktop && categoryStartIndex + VISIBLE_TABS < categories.length;
+  const ITEMS_PER_PAGE = useMemo(() => getItemsPerPage(isSearching), [getItemsPerPage, isSearching]);
+
+  const calculateTotalPages = useCallback(
+    (activities: Activity[]) => {
+      return Math.ceil(activities.length / ITEMS_PER_PAGE);
+    },
+    [ITEMS_PER_PAGE],
+  );
 
   const backgroundColors = useMemo(() => ['bg-purple-100', 'bg-pink-200', 'bg-sky-200'], []);
 
@@ -125,9 +142,9 @@ const MainPage = () => {
         : activitiesData.activities;
       const sortedActivities = sortActivities(categoryActivities, sortBy);
       setDisplayedActivities(sortedActivities);
-      setTotalPages(Math.ceil(sortedActivities.length / ITEMS_PER_PAGE));
+      setTotalPages(calculateTotalPages(sortedActivities));
     }
-  }, [activitiesData, activeCategory, ITEMS_PER_PAGE, sortBy, sortActivities]);
+  }, [activitiesData, activeCategory, sortBy, sortActivities, calculateTotalPages]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -186,21 +203,20 @@ const MainPage = () => {
       setPage(1);
       if (term) {
         setIsSearching(true);
+        setActiveCategory('');
         const results = allActivities.filter((activity) => activity.title.toLowerCase().includes(term.toLowerCase()));
         const sortedResults = sortActivities(results, sortBy);
         setDisplayedActivities(sortedResults);
-        setTotalPages(Math.ceil(sortedResults.length / ITEMS_PER_PAGE));
+        setTotalPages(calculateTotalPages(sortedResults));
       } else {
         setIsSearching(false);
-        const categoryActivities = activeCategory
-          ? allActivities.filter((activity) => activity.category === activeCategory)
-          : allActivities;
-        const sortedActivities = sortActivities(categoryActivities, sortBy);
+
+        const sortedActivities = sortActivities(allActivities, sortBy);
         setDisplayedActivities(sortedActivities);
-        setTotalPages(Math.ceil(sortedActivities.length / ITEMS_PER_PAGE));
+        setTotalPages(calculateTotalPages(sortedActivities));
       }
     },
-    [allActivities, activeCategory, ITEMS_PER_PAGE, sortBy, sortActivities],
+    [allActivities, sortBy, sortActivities, calculateTotalPages],
   );
 
   const handleCategoryChange = useCallback(
@@ -214,19 +230,18 @@ const MainPage = () => {
         : allActivities;
       const sortedActivities = sortActivities(categoryActivities, sortBy);
       setDisplayedActivities(sortedActivities);
-      setTotalPages(Math.ceil(sortedActivities.length / ITEMS_PER_PAGE));
+      setTotalPages(calculateTotalPages(sortedActivities));
     },
-    [allActivities, ITEMS_PER_PAGE, sortBy, sortActivities],
+    [allActivities, sortBy, sortActivities, calculateTotalPages],
   );
 
   const handleCategoryPrevClick = () => {
     if (isTablet && !isDesktop) {
       if (categoryStartIndex > 0) {
         setCategoryStartIndex((prev) => prev - 1);
-        setCategoryTranslate((prev) => prev + 100); // 100%만큼 오른쪽으로 이동
+        setCategoryTranslate((prev) => prev + 100);
       }
     } else {
-      // 기존 로직 유지
       if (categoryStartIndex > 0) {
         setCategoryStartIndex((prev) => Math.max(prev - 1, 0));
         if (tabsContainerRef.current) {
@@ -262,8 +277,9 @@ const MainPage = () => {
       setSortBy(option);
       const sortedActivities = sortActivities(displayedActivities, option);
       setDisplayedActivities(sortedActivities);
+      setTotalPages(calculateTotalPages(sortedActivities));
     },
-    [displayedActivities, sortActivities],
+    [displayedActivities, sortActivities, calculateTotalPages],
   );
 
   const handlePrevClick = useCallback(() => {
@@ -604,34 +620,35 @@ const MainPage = () => {
         {isSearching && <span className="mb-24 text-lg-regular">총 {displayedActivities.length}개의 결과</span>}
 
         <div className="min-h-600">
-          <motion.div
-            className="flex flex-wrap sm:min-h-[550px] sm:w-340 sm:gap-4 md:min-h-[650px] md:w-695 md:gap-16 lg:min-h-[800px] lg:w-1204 lg:gap-24"
-            layout
-          >
-            <AnimatePresence>
-              {displayedActivities.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE).map((activity) => (
-                <motion.div
-                  key={activity.id}
-                  layout
-                  initial={{ opacity: 1, x: 100 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 100 }}
-                  transition={{
-                    opacity: { duration: 0.2 },
-                    x: { type: 'spring', stiffness: 100, damping: 15 },
-                    layout: {
-                      type: 'spring',
-                      stiffness: 100,
-                      damping: 15,
-                    },
-                  }}
-                >
-                  <ActivityCards activity={activity} />
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </motion.div>
-          {displayedActivities.length === 0 && (
+          {displayedActivities.length > 0 ? (
+            <motion.div
+              className="flex flex-wrap sm:min-h-[550px] sm:w-340 sm:gap-4 md:min-h-[650px] md:w-695 md:gap-16 lg:min-h-[800px] lg:w-1204 lg:gap-24"
+              layout
+            >
+              <AnimatePresence>
+                {displayedActivities.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE).map((activity) => (
+                  <motion.div
+                    key={activity.id}
+                    layout
+                    initial={{ opacity: 1, x: 100 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 100 }}
+                    transition={{
+                      opacity: { duration: 0.2 },
+                      x: { type: 'spring', stiffness: 100, damping: 15 },
+                      layout: {
+                        type: 'spring',
+                        stiffness: 100,
+                        damping: 15,
+                      },
+                    }}
+                  >
+                    <ActivityCards activity={activity} />
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </motion.div>
+          ) : (
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
