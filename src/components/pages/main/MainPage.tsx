@@ -670,7 +670,7 @@ const MainPage = () => {
               exit={{ opacity: 0 }}
               className="h-600 text-xl text-gray-500"
             >
-              검색 결과가 없습니다.
+              {isSearching ? '검색 결과가 없습니다' : '등록된 활동이 없습니다'}
             </motion.p>
           )}
         </div>
