@@ -111,7 +111,7 @@ const Notification = () => {
     if (isOpen && alarms.length === 0) {
       fetchNotifications();
     }
-  }, [isOpen, alarms.length]); //여기에서 fetchNotification을 어떻게 해야할지..
+  }, [isOpen, alarms.length]);
 
   const handleScroll = useCallback(() => {
     if (containerRef.current) {
@@ -160,16 +160,21 @@ const Notification = () => {
         {isOpen &&
           portalRoot &&
           createPortal(
-            <div ref={popoverRef} className="fixed left-0 top-0 z-[9999] md:left-auto md:right-[450px] md:top-80">
-              <Popover.Content>
-                <PopoverUI
-                  ref={containerRef}
-                  alarmCount={totalCount}
-                  alarms={transformedAlarms}
-                  onDelete={handleDeleteNotification}
-                  onScroll={handleScroll}
-                />
-              </Popover.Content>
+            <div className="relative lg:mx-auto lg:w-1200">
+              <div
+                ref={popoverRef}
+                className="absolute top-0 z-[9999] md:left-auto md:right-[490px] md:top-10 lg:right-[380px]"
+              >
+                <Popover.Content>
+                  <PopoverUI
+                    ref={containerRef}
+                    alarmCount={totalCount}
+                    alarms={transformedAlarms}
+                    onDelete={handleDeleteNotification}
+                    onScroll={handleScroll}
+                  />
+                </Popover.Content>
+              </div>
             </div>,
             portalRoot,
           )}

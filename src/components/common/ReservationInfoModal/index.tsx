@@ -126,7 +126,7 @@ const ReservationInfoModal = ({ activityId, schedules, onClose }: ReservationInf
         <div className="mt-4 border border-gray-300"></div>
         <div className="flex flex-col gap-24 px-24 py-24">
           <div className="flex flex-col gap-16">
-            <h2 className="text-xl-semibold">예약 날짜</h2>
+            <h2 className="text-xl-semibold">예약 시간</h2>
             <div className="flex flex-col gap-2">
               <Input.Dropdown
                 options={dropdownOptions}

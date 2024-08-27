@@ -1,8 +1,10 @@
 import { getUserProfile } from '@/apis/myPage/myProfile';
 import Modal from '@/components/common/Modal';
 import { useSignout } from '@/components/pages/auth/useSignout';
+import { useClickOutside } from '@/hooks/useClickOutside';
 import { tokenAtom } from '@/store/tokenAtom';
 import { userAtom } from '@/store/userAtom';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useAtom } from 'jotai';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -19,6 +21,24 @@ function NavBar() {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const router = useRouter();
   const signout = useSignout();
+
+  const dropdownVariants = {
+    hidden: {
+      opacity: 0,
+      scale: 0.95,
+      transition: {
+        duration: 0.1,
+      },
+    },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        type: 'spring',
+        duration: 0.3,
+      },
+    },
+  };
 
   const loadUserProfile = useCallback(async () => {
     if (token) {
@@ -46,8 +66,12 @@ function NavBar() {
   }, [loadUserProfile]);
 
   const handleDropdownVisible = () => {
-    setIsOpenMenu(!isOpenMenu);
+    setIsOpenMenu((prev) => !prev);
   };
+
+  const modalRef = useClickOutside(() => {
+    setIsOpenMenu(false);
+  });
 
   const handleSignout = () => {
     setShowLogoutModal(true);
@@ -82,30 +106,52 @@ function NavBar() {
         </Link>
         {token ? (
           <div className="flex items-center">
-            <Notification />
+            <div className="mt-8">
+              <Notification />
+            </div>
+
             <div className="mx-12 h-22 border-l border-solid border-gray-300 md:mx-25" />
-            <div className="relative flex items-center gap-10">
-              <Image
-                src={user.profileImage || '/assets/images/profile-image.png'}
-                alt="프로필 이미지"
-                className="rounded-full"
-                width={32}
-                height={32}
-              />
-              <div className="cursor-pointer text-md-medium text-black" onClick={handleDropdownVisible}>
-                {user.nickname}
+            <div
+              className="relative flex cursor-pointer items-center gap-10"
+              ref={modalRef}
+              onClick={handleDropdownVisible}
+            >
+              <div className="relative h-32 w-32 overflow-hidden rounded-full border">
+                <Image
+                  src={user.profileImage || '/assets/images/profile-image.png'}
+                  alt="프로필 이미지"
+                  fill
+                  style={{ objectFit: 'cover' }}
+                  sizes="100vw"
+                />
               </div>
-              {isOpenMenu && (
-                <DropDown classNames="h-max w-120 top-40 right-0 z-50">
-                  <DropDown.Option className="" key="로그아웃" handleOptionClick={handleOptionClick} label="로그아웃" />
-                  <DropDown.Option
-                    className=""
-                    key="마이페이지"
-                    handleOptionClick={handleOptionClick}
-                    label="마이페이지"
-                  />
-                </DropDown>
-              )}
+              <div className="cursor-pointer text-md-medium text-black">{user.nickname}</div>
+              <AnimatePresence>
+                {isOpenMenu && (
+                  <motion.div
+                    initial="hidden"
+                    animate="visible"
+                    exit="hidden"
+                    variants={dropdownVariants}
+                    className="absolute right-110 top-40 z-50"
+                  >
+                    <DropDown classNames="h-max w-120">
+                      <DropDown.Option
+                        className=""
+                        key="로그아웃"
+                        handleOptionClick={handleOptionClick}
+                        label="로그아웃"
+                      />
+                      <DropDown.Option
+                        className=""
+                        key="마이페이지"
+                        handleOptionClick={handleOptionClick}
+                        label="마이페이지"
+                      />
+                    </DropDown>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </div>
         ) : (

@@ -32,6 +32,7 @@ export const useGoogleAuth = () => {
 
         try {
           await SocialAuth.postSignup('google', authBody);
+          setToken(authBody.token);
           setIsSuccess(true);
         } catch (error) {
           if (isAxiosError(error) && error.response?.status === 400) {

@@ -55,7 +55,8 @@ const ActivityInformation = ({
 
   const { userInformationData, isLoading: isLoadingUserData } = useMyInformation();
 
-  if (isLoadingUserData) return <div>유저 데이터 로딩중입니다...</div>;
+  if (isLoadingUserData)
+    return <div className="flex h-[90vh] items-center justify-center">유저 데이터 로딩중입니다...</div>;
 
   const { category, title, rating, reviewCount, address, bannerImageUrl, description, subImages, price, userId } =
     activityData;
@@ -99,7 +100,7 @@ const ActivityInformation = ({
               <FloatingBox.Tablet handleReservationSubmit={handleReservationSubmit} />
             ) : (
               <FloatingBox.Desktop
-                classNames="sticky top-0 w-[384px]"
+                classNames="sticky top-76 w-[354px] max-w-[354px]"
                 handleReservationSubmit={handleReservationSubmit}
               />
             ))}
@@ -125,7 +126,9 @@ const ActivityInformation = ({
             </Modal.RegisterConfirm>
           </Modal.Overlay>
         )}
-        <ScrollToTopButton />
+        <div className="fixed bottom-170 right-10 flex lg:sticky lg:bottom-0 lg:right-0 lg:mb-20 lg:justify-end">
+          <ScrollToTopButton />
+        </div>
       </div>
     </>
   );

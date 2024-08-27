@@ -8,7 +8,7 @@ const SocialAuth = {
     const { data } = await axiosInstance.post<SigninResponse>(`/oauth/sign-up/${provider}`, body);
     const { accessToken, refreshToken } = data;
     Cookies.set('accessToken', accessToken, { expires: 1, secure: true, sameSite: 'strict' });
-    Cookies.set('refreshToken', refreshToken, { expires: 1, secure: true, sameSite: 'strict' });
+    Cookies.set('refreshToken', refreshToken, { expires: 7, secure: true, sameSite: 'strict' });
     return data;
   },
   postSignin: async (provider: 'google' | 'kakao', body: { redirectUri: string; token: string }) => {

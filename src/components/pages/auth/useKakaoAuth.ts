@@ -9,10 +9,12 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { useRandomNickname } from './useRandomNickname';
 
+type KakaoAuthError = Error & { type: 'EXISTING_USER' | 'OTHER_ERROR' };
+
 export const useKakaoAuth = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState<KakaoAuthError | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
   const setToken = useSetAtom(tokenAtom);
   const domain = process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI;
@@ -22,15 +24,20 @@ export const useKakaoAuth = () => {
     (accessToken: string, refreshToken: string) => {
       try {
         Cookies.set('accessToken', accessToken, { expires: 1, secure: true, sameSite: 'strict' });
-        Cookies.set('refreshToken', refreshToken, { expires: 1, secure: true, sameSite: 'strict' });
+        Cookies.set('refreshToken', refreshToken, { expires: 7, secure: true, sameSite: 'strict' });
         setToken(accessToken);
       } catch (e) {
         console.error('토큰 저장 실패:', e);
-        setError(new Error('토큰 저장 실패'));
+        setError({ message: '토큰 저장 실패', type: 'OTHER_ERROR' } as KakaoAuthError);
       }
     },
     [setToken],
   );
+
+  const redirectToKakaoAuth = useCallback(() => {
+    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}`;
+    router.push(kakaoAuthUrl);
+  }, [router]);
 
   const handleSignup = useCallback(
     async (code: string, nickname: string) => {
@@ -45,15 +52,16 @@ export const useKakaoAuth = () => {
       } catch (error) {
         if (isAxiosError(error) && error.response?.status === 400) {
           localStorage.setItem('existUser', 'exist');
+          setError({ message: '이미 존재하는 사용자', type: 'EXISTING_USER' } as KakaoAuthError);
           redirectToKakaoAuth();
         } else {
-          setError(error instanceof Error ? error : new Error('회원가입 중 알 수 없는 에러 발생'));
+          setError({ message: '회원가입 중 알 수 없는 에러 발생', type: 'OTHER_ERROR' } as KakaoAuthError);
         }
       } finally {
         setIsLoading(false);
       }
     },
-    [domain, saveTokens],
+    [domain, saveTokens, redirectToKakaoAuth],
   );
 
   const handleSignin = useCallback(
@@ -66,7 +74,11 @@ export const useKakaoAuth = () => {
           setIsSuccess(true);
         }
       } catch (error) {
-        setError(error instanceof Error ? error : new Error('로그인 중 알 수 없는 에러 발생'));
+        if (isAxiosError(error) && error.response?.status === 400) {
+          setError({ message: '이미 존재하는 사용자', type: 'EXISTING_USER' } as KakaoAuthError);
+        } else {
+          setError({ message: 'hihi', type: 'OTHER_ERROR' } as KakaoAuthError);
+        }
       } finally {
         setIsLoading(false);
         localStorage.removeItem('existUser');
@@ -74,11 +86,6 @@ export const useKakaoAuth = () => {
     },
     [domain, saveTokens],
   );
-
-  const redirectToKakaoAuth = useCallback(() => {
-    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}`;
-    router.push(kakaoAuthUrl);
-  }, [router]);
 
   const resetError = useCallback(() => {
     setError(null);
@@ -98,10 +105,10 @@ export const useKakaoAuth = () => {
             await handleSignin(code);
           }
         } else {
-          setError(new Error('카카오 인증 코드를 받지 못했습니다.'));
+          setError({ message: '카카오 인증 코드를 받지 못했습니다.', type: 'OTHER_ERROR' } as KakaoAuthError);
         }
       } catch (error) {
-        setError(error instanceof Error ? error : new Error('카카오 인증 중 알 수 없는 에러 발생'));
+        setError({ message: '카카오 인증 중 알 수 없는 에러 발생', type: 'OTHER_ERROR' } as KakaoAuthError);
       } finally {
         setIsLoading(false);
       }
@@ -110,5 +117,5 @@ export const useKakaoAuth = () => {
     handleKakaoRedirect();
   }, [handleSignin, handleSignup]);
 
-  return { isLoading, error, isSuccess, resetError };
+  return { isLoading, error, isSuccess, resetError, redirectToKakaoAuth };
 };
