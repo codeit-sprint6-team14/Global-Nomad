@@ -29,7 +29,7 @@ function AppContent({ Component, pageProps }: AppProps) {
   useRedirectMessage();
 
   const showNavBarAndFooter =
-    !['/signup', '/signin'].includes(router.pathname) &&
+    !['/signup', '/signin', '/'].includes(router.pathname) &&
     !router.pathname.startsWith('/my-page') &&
     !router.pathname.startsWith('/social');
 
