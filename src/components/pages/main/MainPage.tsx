@@ -5,6 +5,7 @@ import { getActivities, useActivities } from '@/apis/mainPage/activities';
 import DropDownList from '@/components/common/Dropdown/dropDownList';
 import DropDownOption from '@/components/common/Dropdown/dropDownOption';
 import Footer from '@/components/common/Footer';
+import NavBar from '@/components/common/NavBar';
 import Pagination from '@/components/common/Pagination';
 import Search from '@/components/common/Search';
 import { useQuery } from '@tanstack/react-query';
@@ -390,6 +391,7 @@ const MainPage = () => {
 
   return (
     <main className="flex flex-col items-center bg-gray-100">
+      <NavBar />
       <div className="relative w-full">
         {filteredPopularActivities.length > 0 && (
           <div className="lg:max-w-1920 sm:h-240 sm:w-375 md:h-550 md:w-1440">
