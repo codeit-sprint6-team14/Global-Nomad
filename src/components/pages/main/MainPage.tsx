@@ -32,6 +32,7 @@ const MainPage = () => {
   const [currentTranslate, setCurrentTranslate] = useState(0);
   const [categoryTranslate, setCategoryTranslate] = useState(0);
   const [bannerLoadError, setBannerLoadError] = useState<Record<number, boolean>>({});
+  const [bannerBackgrounds, setBannerActivityBackgrounds] = useState<Record<number, string>>({});
   const [startIndex, setStartIndex] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
   const [isSearching, setIsSearching] = useState(false);
@@ -93,13 +94,27 @@ const MainPage = () => {
 
   const dropdownOptions = getDropdownOptions();
 
-  const getRandomBackgroundColor = () => {
-    return backgroundColors[Math.floor(Math.random() * backgroundColors.length)];
-  };
+  const handleImageError = useCallback(
+    (id: number) => {
+      setBannerLoadError((prev) => ({ ...prev, [id]: true }));
 
-  const handleImageError = (activityId: number) => {
-    setBannerLoadError((prev) => ({ ...prev, [activityId]: true }));
-  };
+      setBannerActivityBackgrounds((prev) => {
+        if (!prev[id]) {
+          const randomColor = backgroundColors[Math.floor(Math.random() * backgroundColors.length)];
+          return { ...prev, [id]: randomColor };
+        }
+        return prev;
+      });
+    },
+    [backgroundColors],
+  );
+
+  const getBackgroundColor = useCallback(
+    (id: number): string => {
+      return bannerBackgrounds[id] || backgroundColors[0];
+    },
+    [bannerBackgrounds, backgroundColors],
+  );
 
   const {
     data: activitiesData,
@@ -418,7 +433,7 @@ const MainPage = () => {
                 <div className="relative h-full w-full">
                   {bannerLoadError[activity.id] ? (
                     <div
-                      className={`absolute inset-0 ${getRandomBackgroundColor()} flex items-center justify-center`}
+                      className={`absolute inset-0 ${getBackgroundColor(activity.id)} flex items-center justify-center`}
                     ></div>
                   ) : (
                     <Image
