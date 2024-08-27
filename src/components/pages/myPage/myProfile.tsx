@@ -106,7 +106,7 @@ const MyProfile = () => {
   }
 
   return (
-    <main className="md:mb-363 lg:mb-208 mb-168 mt-94 lg:mt-142">
+    <main className="md:mb-363 lg:mb-208 mb-168 pt-94 lg:pt-142">
       <div className="mx-auto flex justify-between md:w-696 lg:w-1200">
         {isSideNavbarOpen && (
           <nav className="hidden bg-white md:block">
