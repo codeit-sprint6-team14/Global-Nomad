@@ -47,10 +47,10 @@ const ActivityCards: React.FC<ActivityCardProps> = ({ activity }) => {
           <Skeleton className="h-full w-full rounded-25" />
         </div>
         <button
-          className="absolute right-10 top-10 z-[2] flex h-30 w-30 items-center justify-center rounded-25 bg-white hover:scale-110"
+          className="absolute right-10 top-10 z-[2] flex items-center justify-center rounded-25 bg-white hover:scale-110 sm:h-20 sm:w-20 md:h-30 md:w-30"
           onClick={handleShareClick}
         >
-          <Share width={20} height={20} />
+          <Share className="sm:h-15 sm:w-15 md:h-20 md:w-20" />
         </button>
         <Image
           src={imageSource}
