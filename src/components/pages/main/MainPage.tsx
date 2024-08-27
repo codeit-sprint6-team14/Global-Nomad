@@ -644,16 +644,17 @@ const MainPage = () => {
                   <motion.div
                     key={activity.id}
                     layout
-                    initial={{ opacity: 1, x: 100 }}
+                    initial={{ opacity: 1, x: 50 }}
                     animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 100 }}
+                    exit={{ opacity: 0, x: 50 }}
                     transition={{
                       opacity: { duration: 0.2 },
-                      x: { type: 'spring', stiffness: 100, damping: 15 },
+                      x: { type: 'spring', stiffness: 150, damping: 10, mass: 0.5 },
                       layout: {
                         type: 'spring',
-                        stiffness: 100,
-                        damping: 15,
+                        stiffness: 150,
+                        damping: 20,
+                        mass: 0.5,
                       },
                     }}
                   >
