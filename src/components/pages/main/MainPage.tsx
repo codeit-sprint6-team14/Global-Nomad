@@ -571,7 +571,7 @@ const MainPage = () => {
             >
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className={`flex w-full items-center justify-center sm:py-9 md:px-20 md:py-14 ${
+                className={`flex w-full items-center justify-center sm:py-9 md:px-18 md:py-14 ${
                   sortBy ? 'gap-5' : 'md:20 sm:gap-10 lg:gap-40'
                 }`}
               >
