@@ -568,13 +568,13 @@ const MainPage = () => {
             </div>
 
             <div
-              className="relative cursor-pointer rounded-15 border border-black-100 sm:h-41 sm:w-100 md:h-53 md:w-130 lg:w-170"
+              className="relative cursor-pointer rounded-15 border border-black-100 sm:h-41 sm:w-120 md:h-53 md:w-130 lg:w-170"
               ref={dropdownRef}
             >
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 className={`flex w-full items-center justify-center sm:py-9 md:px-18 md:py-14 ${
-                  sortBy ? 'gap-5' : 'md:20 sm:gap-10 lg:gap-40'
+                  sortBy ? 'gap-5' : 'sm:gap-10 md:gap-20 lg:gap-40'
                 }`}
               >
                 <span className="text-black-100 sm:text-md-medium md:text-lg-medium">
