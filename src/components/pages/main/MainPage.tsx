@@ -435,10 +435,10 @@ const MainPage = () => {
                   )}
                   <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50"></div>
                 </div>
-                <div className="absolute left-0 right-0 sm:top-[25%] md:top-[45%] lg:top-[35%]">
+                <div className="absolute left-0 right-0 sm:top-[35%] md:top-[45%] lg:top-[35%]">
                   <div className="mx-auto px-0 sm:max-w-[375px] sm:px-[3%] md:max-w-[744px] md:px-[3%] lg:max-w-[1200px] lg:px-[1%]">
-                    <div className="flex w-[95%] flex-col text-white sm:h-120 sm:w-[85%] md:h-162 md:w-[70%] md:gap-8 lg:h-215 lg:w-[55%] lg:gap-24">
-                      <h2 className="line-clamp-2 text-wrap break-words text-24 font-bold leading-[28.64px] sm:h-75 sm:text-32 sm:leading-[38px] md:h-128 md:text-54 md:leading-[64.44px] lg:h-162 lg:text-68 lg:leading-[81.15px]">
+                    <div className="flex w-[95%] flex-col text-white sm:h-120 sm:w-[85%] sm:gap-8 md:h-162 md:w-[70%] lg:h-215 lg:w-[55%] lg:gap-24">
+                      <h2 className="line-clamp-2 flex items-end text-wrap break-words font-bold sm:h-58 sm:text-24 sm:leading-[28.64px] md:h-128 md:text-54 md:leading-[64.44px] lg:h-162 lg:text-68 lg:leading-[81.15px]">
                         {activity.title}
                       </h2>
                       <p className="sm:text-md-bold md:text-xl-bold lg:text-2xl-bold">
