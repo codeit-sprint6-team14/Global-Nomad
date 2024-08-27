@@ -1,6 +1,8 @@
 import DownArrow from '@/../public/assets/icons/down-arrow.svg';
-import PrevButton from '@/../public/assets/icons/left-arrow.svg';
-import NextButton from '@/../public/assets/icons/right-arrow.svg';
+import LeftButton from '@/../public/assets/icons/left-arrow.svg';
+import NextButton from '@/../public/assets/icons/next-button.svg';
+import PrevButton from '@/../public/assets/icons/prev-button.svg';
+import RightButton from '@/../public/assets/icons/right-arrow.svg';
 import { getActivities, useActivities } from '@/apis/mainPage/activities';
 import DropDownList from '@/components/common/Dropdown/dropDownList';
 import DropDownOption from '@/components/common/Dropdown/dropDownOption';
@@ -477,12 +479,12 @@ const MainPage = () => {
           <div className="flex items-center justify-between">
             <h2 className="md:leading-43 font-bold sm:text-18 md:text-36 md:leading-[21.48px]">🔥인기 체험</h2>
             {filteredPopularActivities.length > (isDesktop ? 3 : 1) && (
-              <div className="flex gap-12">
-                <button onClick={handlePrevClick} className="cursor-pointer transition-transform hover:scale-110">
-                  <PrevButton />
+              <div className="flex items-center sm:gap-6 md:gap-12">
+                <button onClick={handlePrevClick} className="transition-transform hover:scale-110">
+                  {!isTablet && !isDesktop ? <PrevButton className="h-25 w-25" /> : <LeftButton />}
                 </button>
-                <button onClick={handleNextClick} className="cursor-pointer transition-transform hover:scale-110">
-                  <NextButton />
+                <button onClick={handleNextClick} className="transition-transform hover:scale-110">
+                  {!isTablet && !isDesktop ? <NextButton className="h-25 w-25" /> : <RightButton />}
                 </button>
               </div>
             )}
@@ -536,7 +538,7 @@ const MainPage = () => {
                     onClick={handleCategoryPrevClick}
                     className="z-1 flex h-32 w-32 items-center justify-center rounded-full border border-gray-600"
                   >
-                    <PrevButton />
+                    <LeftButton />
                   </button>
                 </div>
               )}
@@ -587,7 +589,7 @@ const MainPage = () => {
                     className="z-1 flex h-32 w-32 items-center justify-center rounded-full border border-gray-600"
                   >
                     <div className="flex h-20 w-35 items-center justify-center">
-                      <NextButton />
+                      <RightButton className="h-45 w-35" />
                     </div>
                   </button>
                 </div>
