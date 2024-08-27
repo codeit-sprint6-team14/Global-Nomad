@@ -1,4 +1,6 @@
+import Share from '@/../public/assets/icons/share.svg';
 import Star from '@/../public/assets/icons/star.svg';
+import useToast from '@/hooks/useToast';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -8,14 +10,32 @@ import { ActivityCardProps } from './mainPage.type';
 import { useBackupImage } from './useBackupImage';
 
 const PopularActivityCard: React.FC<ActivityCardProps> = ({ activity }) => {
-  const { imageSource, altText, handleImageError } = useBackupImage(activity.bannerImageUrl);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [showCopiedMessage, setShowCopiedMessage] = useState(false);
+  const { imageSource, altText, handleImageError } = useBackupImage(activity.bannerImageUrl);
   const [backgroundColor, setBackgroundColor] = useState('');
+  const toast = useToast();
 
   useEffect(() => {
     const colors = ['bg-purple-100', 'bg-pink-200', 'bg-sky-200'];
     setBackgroundColor(colors[Math.floor(Math.random() * colors.length)]);
   }, []);
+
+  useEffect(() => {
+    if (showCopiedMessage) {
+      toast.success('링크가 복사됐습니다');
+    }
+  }, [showCopiedMessage]);
+
+  const handleShareClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const activityUrl = `${window.location.origin}/activities/${activity.id}`;
+    navigator.clipboard.writeText(activityUrl).then(() => {
+      setShowCopiedMessage(true);
+      setTimeout(() => setShowCopiedMessage(false), 2000);
+    });
+  };
 
   return (
     <Link
@@ -25,6 +45,12 @@ const PopularActivityCard: React.FC<ActivityCardProps> = ({ activity }) => {
       <div className={`absolute inset-0 ${backgroundColor} ${imageLoaded ? 'hidden' : 'block'}`}>
         <Skeleton className="h-full w-full" />
       </div>
+      <button
+        className="absolute right-10 top-10 z-[2] flex items-center justify-center rounded-25 bg-white hover:scale-110 sm:h-20 sm:w-20 md:h-30 md:w-30"
+        onClick={handleShareClick}
+      >
+        <Share className="sm:h-15 sm:w-15 md:h-20 md:w-20" />
+      </button>
       <Image
         src={imageSource}
         alt={altText}
