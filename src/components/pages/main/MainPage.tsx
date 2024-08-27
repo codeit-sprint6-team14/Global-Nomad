@@ -202,23 +202,35 @@ const MainPage = () => {
     (term: string) => {
       setSearchTerm(term);
       setPage(1);
-      if (term) {
+      if (term.trim()) {
         setIsSearching(true);
-        setActiveCategory('');
+        setActiveCategory(''); // 검색 시 선택된 카테고리 초기화
         const results = allActivities.filter((activity) => activity.title.toLowerCase().includes(term.toLowerCase()));
         const sortedResults = sortActivities(results, sortBy);
         setDisplayedActivities(sortedResults);
         setTotalPages(calculateTotalPages(sortedResults));
       } else {
         setIsSearching(false);
-
+        // 검색어가 비어있으면 전체 활동 목록으로 되돌림
         const sortedActivities = sortActivities(allActivities, sortBy);
         setDisplayedActivities(sortedActivities);
         setTotalPages(calculateTotalPages(sortedActivities));
+        setActiveCategory(''); // 카테고리 선택 해제
       }
     },
     [allActivities, sortBy, sortActivities, calculateTotalPages],
   );
+
+  useEffect(() => {
+    if (isSearching) {
+      const results = allActivities.filter((activity) =>
+        activity.title.toLowerCase().includes(searchTerm.toLowerCase()),
+      );
+      const sortedResults = sortActivities(results, sortBy);
+      setDisplayedActivities(sortedResults);
+      setTotalPages(calculateTotalPages(sortedResults));
+    }
+  }, [isSearching, searchTerm, allActivities, sortBy, sortActivities, calculateTotalPages]);
 
   const handleCategoryChange = useCallback(
     (category: string) => {
