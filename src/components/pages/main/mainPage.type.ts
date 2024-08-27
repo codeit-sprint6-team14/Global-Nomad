@@ -35,7 +35,6 @@ export interface GetActivitiesParams {
   size: number;
   category?: string;
   sortBy?: string;
-  search?: string;
 }
 
 export interface SearchProps {

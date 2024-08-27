@@ -14,7 +14,6 @@ export const getActivities = async (
   size: number = 20,
   category: string | null = null,
   sortBy: string | null = null,
-  searchTerm: string | null = null,
 ): Promise<ActivitiesResponse> => {
   const params: GetActivitiesParams = {
     method: 'offset',
@@ -30,10 +29,6 @@ export const getActivities = async (
     params.sortBy = sortBy;
   }
 
-  if (searchTerm) {
-    params.search = searchTerm;
-  }
-
   const { data } = await axiosRequester.get<ActivitiesResponse>('/activities', {
     params,
   });
@@ -46,11 +41,10 @@ export const useActivities = (
   size: number,
   category: string | null,
   sortBy: string | null,
-  searchTerm: string | null,
 ): UseQueryResult<ActivitiesResponse, Error> => {
   return useQuery({
-    queryKey: ['activities', page, size, category, sortBy, searchTerm],
-    queryFn: () => getActivities(page, size, category, sortBy, searchTerm),
+    queryKey: ['activities', page, size, category, sortBy],
+    queryFn: () => getActivities(page, size, category, sortBy),
     placeholderData: (previousData) => previousData,
   });
 };
