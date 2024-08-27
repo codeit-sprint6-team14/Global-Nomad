@@ -4,6 +4,7 @@ import NextButton from '@/../public/assets/icons/right-arrow.svg';
 import { getActivities, useActivities } from '@/apis/mainPage/activities';
 import DropDownList from '@/components/common/Dropdown/dropDownList';
 import DropDownOption from '@/components/common/Dropdown/dropDownOption';
+import Footer from '@/components/common/Footer';
 import Pagination from '@/components/common/Pagination';
 import Search from '@/components/common/Search';
 import { useQuery } from '@tanstack/react-query';
@@ -603,7 +604,10 @@ const MainPage = () => {
         {isSearching && <span className="mb-24 text-lg-regular">총 {displayedActivities.length}개의 결과</span>}
 
         <div className="min-h-600">
-          <motion.div className="flex flex-wrap sm:w-340 sm:gap-4 md:w-695 md:gap-16 lg:w-1204 lg:gap-24" layout>
+          <motion.div
+            className="flex flex-wrap sm:min-h-[550px] sm:w-340 sm:gap-4 md:min-h-[650px] md:w-695 md:gap-16 lg:min-h-[800px] lg:w-1204 lg:gap-24"
+            layout
+          >
             <AnimatePresence>
               {displayedActivities.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE).map((activity) => (
                 <motion.div
@@ -648,6 +652,7 @@ const MainPage = () => {
           />
         )}
       </div>
+      <Footer />
     </main>
   );
 };
