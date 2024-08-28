@@ -29,7 +29,9 @@ function AppContent({ Component, pageProps }: AppProps) {
   useRedirectMessage();
 
   const showNavBarAndFooter =
-    !['/signup', '/signin'].includes(router.pathname) && !router.pathname.startsWith('/my-page');
+    !['/signup', '/signin', '/'].includes(router.pathname) &&
+    !router.pathname.startsWith('/my-page') &&
+    !router.pathname.startsWith('/social');
 
   useEffect(() => {
     const cookieToken = Cookies.get('accessToken');

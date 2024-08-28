@@ -36,7 +36,9 @@ const Header = ({
   const handleDropdownVisible = () => {
     setIsOpenDropdown((prev) => !prev);
   };
-  const modalRef = useClickOutside(handleDropdownVisible);
+  const modalRef = useClickOutside(() => {
+    setIsOpenDropdown(false);
+  });
 
   const handleOptionClick = async (option: string) => {
     if (option === '수정하기') {
@@ -103,30 +105,31 @@ const Header = ({
             <Image src="/assets/icons/share.svg" fill sizes="(min-width: 375px) 30px," alt="링크 복사" />
           </motion.button>
           {myId === userId && hasAccessToken && (
-            <motion.svg
-              width="30"
-              height="30"
-              viewBox="0 0 32 33"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              variants={kebabButtonVariants}
-              initial="rest"
-              whileHover="hover"
-              whileTap="tap"
-              onClick={handleDropdownVisible}
-              className="cursor-pointer focus:outline-none"
-              style={{ originX: '50%', originY: '50%' }}
-            >
-              <circle cx="16.0001" cy="7.70005" r="2.4" fill="#79747E" />
-              <circle cx="16.0001" cy="16.5001" r="2.4" fill="#79747E" />
-              <circle cx="16.0001" cy="25.2999" r="2.4" fill="#79747E" />
-            </motion.svg>
+            <div ref={modalRef}>
+              <motion.svg
+                width="30"
+                height="30"
+                viewBox="0 0 32 33"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                variants={kebabButtonVariants}
+                initial="rest"
+                whileHover="hover"
+                whileTap="tap"
+                onClick={handleDropdownVisible}
+                className="cursor-pointer focus:outline-none"
+                style={{ originX: '50%', originY: '50%' }}
+              >
+                <circle cx="16.0001" cy="7.70005" r="2.4" fill="#79747E" />
+                <circle cx="16.0001" cy="16.5001" r="2.4" fill="#79747E" />
+                <circle cx="16.0001" cy="25.2999" r="2.4" fill="#79747E" />
+              </motion.svg>
+            </div>
           )}
         </div>
         <AnimatePresence>
           {isOpenDropdown && (
             <motion.div
-              ref={modalRef}
               initial="hidden"
               animate="visible"
               exit="hidden"

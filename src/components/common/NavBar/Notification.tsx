@@ -163,7 +163,7 @@ const Notification = () => {
             <div className="relative lg:mx-auto lg:w-1200">
               <div
                 ref={popoverRef}
-                className="absolute top-0 z-[9999] md:left-auto md:right-[490px] md:top-10 lg:right-[380px]"
+                className="absolute top-0 z-[9999] md:left-auto md:right-[490px] md:top-80 lg:right-[380px]"
               >
                 <Popover.Content>
                   <PopoverUI
