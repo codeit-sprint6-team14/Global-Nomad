@@ -534,11 +534,8 @@ const MainPage = () => {
             <div className="relative flex items-center overflow-hidden sm:w-375 md:w-680 lg:w-full">
               {isLeftButtonVisible && (
                 <div className="flex-shrink-0">
-                  <button
-                    onClick={handleCategoryPrevClick}
-                    className="z-1 flex h-32 w-32 items-center justify-center rounded-full border border-gray-600"
-                  >
-                    <LeftButton />
+                  <button onClick={handleCategoryPrevClick}>
+                    <PrevButton className="flex h-32 w-32 items-center justify-center rounded-full border border-gray-600" />
                   </button>
                 </div>
               )}
@@ -584,13 +581,8 @@ const MainPage = () => {
 
               {isRightButtonVisible && (
                 <div className="flex-shrink-0">
-                  <button
-                    onClick={handleCategoryNextClick}
-                    className="z-1 flex h-32 w-32 items-center justify-center rounded-full border border-gray-600"
-                  >
-                    <div className="flex h-20 w-35 items-center justify-center">
-                      <RightButton className="h-45 w-35" />
-                    </div>
+                  <button onClick={handleCategoryNextClick}>
+                    <NextButton className="flex h-30 w-30 rounded-full border border-gray-600" />
                   </button>
                 </div>
               )}
