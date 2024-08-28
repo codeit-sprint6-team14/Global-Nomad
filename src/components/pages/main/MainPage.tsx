@@ -21,13 +21,13 @@ import PopularActivityCard from './PopularActivityCard';
 import { RadioTab } from './RadioTab';
 import { Activity } from './mainPage.type';
 
-const categories = ['문화 · 예술', '식음료', '스포츠', '투어', '관광', '웰빙'];
+const categories = ['전체', '문화 · 예술', '식음료', '스포츠', '투어', '관광', '웰빙'];
 
 const VISIBLE_TABS = 4;
 
 const MainPage = () => {
   const [page, setPage] = useState(1);
-  const [activeCategory, setActiveCategory] = useState('');
+  const [activeCategory, setActiveCategory] = useState('전체');
   const [sortBy, setSortBy] = useState<string | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
@@ -155,14 +155,11 @@ const MainPage = () => {
   useEffect(() => {
     if (activitiesData && activitiesData.activities) {
       setAllActivities(activitiesData.activities);
-      const categoryActivities = activeCategory
-        ? activitiesData.activities.filter((activity) => activity.category === activeCategory)
-        : activitiesData.activities;
-      const sortedActivities = sortActivities(categoryActivities, sortBy);
+      const sortedActivities = sortActivities(activitiesData.activities, sortBy);
       setDisplayedActivities(sortedActivities);
       setTotalPages(calculateTotalPages(sortedActivities));
     }
-  }, [activitiesData, activeCategory, sortBy, sortActivities, calculateTotalPages]);
+  }, [activitiesData, sortBy, sortActivities, calculateTotalPages]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -254,9 +251,15 @@ const MainPage = () => {
       setPage(1);
       setIsSearching(false);
       setSearchTerm('');
-      const categoryActivities = category
-        ? allActivities.filter((activity) => activity.category === category)
-        : allActivities;
+
+      let categoryActivities;
+      if (category === '전체') {
+        categoryActivities = allActivities;
+      } else {
+        categoryActivities = allActivities.filter((activity) => activity.category === category);
+      }
+
+      // 정렬 상태 유지
       const sortedActivities = sortActivities(categoryActivities, sortBy);
       setDisplayedActivities(sortedActivities);
       setTotalPages(calculateTotalPages(sortedActivities));
@@ -635,7 +638,7 @@ const MainPage = () => {
           </h2>
         ) : (
           <h2 className="md:leading-43 font-bold sm:text-18 md:text-36 md:leading-[21.48px]">
-            {activeCategory || '🥾모든 체험'}
+            {activeCategory === '전체' ? '🥾모든 체험' : activeCategory}
           </h2>
         )}
 
