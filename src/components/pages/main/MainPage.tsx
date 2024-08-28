@@ -647,22 +647,21 @@ const MainPage = () => {
               className="flex flex-wrap sm:min-h-[550px] sm:w-340 sm:gap-4 md:min-h-[650px] md:w-695 md:gap-16 lg:min-h-[800px] lg:w-1204 lg:gap-24"
               layout
             >
-              <AnimatePresence>
+              <AnimatePresence mode="popLayout">
                 {displayedActivities.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE).map((activity) => (
                   <motion.div
                     key={activity.id}
                     layout
-                    initial={{ opacity: 1, x: 50 }}
+                    initial={{ opacity: 0 }}
                     animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 50 }}
+                    exit={{ opacity: 0, x: 100 }}
                     transition={{
-                      opacity: { duration: 0.2 },
-                      x: { type: 'spring', stiffness: 150, damping: 10, mass: 0.5 },
+                      opacity: { duration: 0.1 },
+                      x: { type: 'spring', stiffness: 100, damping: 15 },
                       layout: {
                         type: 'spring',
-                        stiffness: 150,
-                        damping: 20,
-                        mass: 0.5,
+                        stiffness: 100,
+                        damping: 15,
                       },
                     }}
                   >
