@@ -1,31 +1,22 @@
-/* eslint-disable import/no-named-as-default-member */
 import LeftArrow from '@/../public/assets/icons/left-arrow.svg';
 import AnimatedContainer from '@/components/common/Animation/AnimatedContainer';
 import Filter from '@/components/common/Filter';
 import Footer from '@/components/common/Footer';
-import Modal from '@/components/common/Modal';
 import NavBar from '@/components/common/NavBar';
 import SideNavMenu from '@/components/common/SideNavMenu';
 import { useMyReservationsQuery } from '@/components/pages/myPage/ReservationList/hooks/useMyReservationsQuery';
 import ReservationContent from '@/components/pages/myPage/ReservationList/reservationContent';
 import { useDeviceState } from '@/hooks/useDeviceState';
-import { modalAtom } from '@/store/modalAtom';
 import { Device } from '@/types/deviceTypes';
-import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
 
 const ReservationList = () => {
   const router = useRouter();
-  const [modalType, setModalType] = useAtom(modalAtom);
   const deviceState = useDeviceState();
   const isMobile = deviceState === Device.MOBILE;
 
   const { myReservationsData, isMyReservationsEmpty, setTarget, handleStatusChange, selectedStatus } =
     useMyReservationsQuery();
-
-  const handleCloseModal = () => {
-    setModalType(null);
-  };
 
   return (
     <>
@@ -55,7 +46,6 @@ const ReservationList = () => {
                   <h1 className="text-3xl-bold">예약 내역</h1>
                   <Filter content="필터" onOptionSelect={handleStatusChange} selectedOption={selectedStatus} />
                 </div>
-
                 <ReservationContent
                   myReservationsData={myReservationsData}
                   isEmptyMyReservationData={isMyReservationsEmpty}
@@ -63,20 +53,6 @@ const ReservationList = () => {
               </div>
             </div>
           )}
-          <Modal.Overlay isOpen={modalType !== null} onClose={handleCloseModal}>
-            {modalType === 'cancel' && <Modal.CancelConfirm />}
-            {modalType === 'review' && (
-              <Modal.Review
-                title="함께 배우면 즐거운 스트릿 댄스"
-                bannerImageUrl="/images/test-profile-img.png"
-                date="2023. 2. 14"
-                startTime="11:00"
-                endTime="12:30"
-                totalPrice={10000}
-                headCount={10}
-              />
-            )}
-          </Modal.Overlay>
           <div ref={setTarget}></div>
         </main>
       </AnimatedContainer>

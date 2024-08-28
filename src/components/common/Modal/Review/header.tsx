@@ -30,7 +30,7 @@ const Header = ({ title, bannerImageUrl, date, startTime, endTime, totalPrice, h
             {date} · {startTime} - {endTime} · {headCount}명
           </p>
           <hr />
-          <p className="sm:text-xl-bold md:text-3xl-bold">&#8361; {totalPrice.toLocaleString('ko-KR')}</p>
+          <p className="sm:text-xl-bold md:text-3xl-bold">&#8361; {totalPrice?.toLocaleString('ko-KR')}</p>
         </div>
       </div>
     </>
