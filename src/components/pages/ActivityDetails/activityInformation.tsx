@@ -6,6 +6,7 @@ import useViewportSize from '@/hooks/useViewportSize';
 import { activityIdAtom, reservationPriceAtom } from '@/store/activityDetailsAtom';
 import { Activity } from '@/types/activity';
 import { useSetAtom } from 'jotai';
+import Cookies from 'js-cookie';
 import dynamic from 'next/dynamic';
 import { useRef } from 'react';
 
@@ -63,7 +64,7 @@ const ActivityInformation = ({
 
   setPrice(price);
 
-  const hasAccessToken = localStorage.getItem('accessToken');
+  const hasAccessToken = Cookies.get('accessToken');
 
   const myId = userInformationData?.id;
   const isCreateByMe = myId === userId && hasAccessToken;
