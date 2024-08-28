@@ -7,7 +7,13 @@ import { StatusType, getButtonInfo, getCardStatus } from '@/utils/cardStatus';
 import { formatPrice } from '@/utils/formatPrice';
 import { useAtom, useSetAtom } from 'jotai';
 
-const ReservationCard = ({ myReservationData }: { myReservationData: MyReservation }) => {
+const ReservationCard = ({
+  myReservationData,
+  onCardClick,
+}: {
+  myReservationData: MyReservation;
+  onCardClick: (reservation: MyReservation) => void;
+}) => {
   const [, setModalType] = useAtom(modalAtom);
   const setReservationId = useSetAtom(reservationIdAtom);
 
@@ -33,8 +39,12 @@ const ReservationCard = ({ myReservationData }: { myReservationData: MyReservati
     }
   };
 
+  const handleCardClick = () => {
+    onCardClick(myReservationData);
+  };
+
   return (
-    <>
+    <div onClick={handleCardClick}>
       <Card>
         <Card.Image imageUrl={bannerImageUrl} />
         <Card.Header ClassNames={`${colorClass} text-md-bold md:text-lg-bold `} text={statusText} />
@@ -51,7 +61,7 @@ const ReservationCard = ({ myReservationData }: { myReservationData: MyReservati
           <Card.Footer text={formatPrice(totalPrice)} status={status} />
         )}
       </Card>
-    </>
+    </div>
   );
 };
 
