@@ -1,10 +1,13 @@
 import DownArrow from '@/../public/assets/icons/down-arrow.svg';
-import PrevButton from '@/../public/assets/icons/left-arrow.svg';
-import NextButton from '@/../public/assets/icons/right-arrow.svg';
+import LeftButton from '@/../public/assets/icons/left-arrow.svg';
+import NextButton from '@/../public/assets/icons/next-button.svg';
+import PrevButton from '@/../public/assets/icons/prev-button.svg';
+import RightButton from '@/../public/assets/icons/right-arrow.svg';
 import { getActivities, useActivities } from '@/apis/mainPage/activities';
 import DropDownList from '@/components/common/Dropdown/dropDownList';
 import DropDownOption from '@/components/common/Dropdown/dropDownOption';
 import Footer from '@/components/common/Footer';
+import NavBar from '@/components/common/NavBar';
 import Pagination from '@/components/common/Pagination';
 import Search from '@/components/common/Search';
 import { useQuery } from '@tanstack/react-query';
@@ -31,6 +34,7 @@ const MainPage = () => {
   const [currentTranslate, setCurrentTranslate] = useState(0);
   const [categoryTranslate, setCategoryTranslate] = useState(0);
   const [bannerLoadError, setBannerLoadError] = useState<Record<number, boolean>>({});
+  const [bannerBackgrounds, setBannerActivityBackgrounds] = useState<Record<number, string>>({});
   const [startIndex, setStartIndex] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
   const [isSearching, setIsSearching] = useState(false);
@@ -48,9 +52,26 @@ const MainPage = () => {
   const [allActivities, setAllActivities] = useState<Activity[]>([]);
   const [displayedActivities, setDisplayedActivities] = useState<Activity[]>([]);
   const [totalPages, setTotalPages] = useState(1);
-  const ITEMS_PER_PAGE = isDesktop ? 16 : isTablet ? 9 : 8;
+  const getItemsPerPage = useCallback(
+    (isSearching: boolean) => {
+      if (isSearching) {
+        return isDesktop ? 16 : isTablet ? 9 : 8;
+      } else {
+        return isDesktop ? 8 : isTablet ? 9 : 4;
+      }
+    },
+    [isDesktop, isTablet],
+  );
   const isLeftButtonVisible = isTablet && !isDesktop && categoryStartIndex > 0;
   const isRightButtonVisible = isTablet && !isDesktop && categoryStartIndex + VISIBLE_TABS < categories.length;
+  const ITEMS_PER_PAGE = useMemo(() => getItemsPerPage(isSearching), [getItemsPerPage, isSearching]);
+
+  const calculateTotalPages = useCallback(
+    (activities: Activity[]) => {
+      return Math.ceil(activities.length / ITEMS_PER_PAGE);
+    },
+    [ITEMS_PER_PAGE],
+  );
 
   const backgroundColors = useMemo(() => ['bg-purple-100', 'bg-pink-200', 'bg-sky-200'], []);
 
@@ -75,13 +96,27 @@ const MainPage = () => {
 
   const dropdownOptions = getDropdownOptions();
 
-  const getRandomBackgroundColor = () => {
-    return backgroundColors[Math.floor(Math.random() * backgroundColors.length)];
-  };
+  const handleImageError = useCallback(
+    (id: number) => {
+      setBannerLoadError((prev) => ({ ...prev, [id]: true }));
 
-  const handleImageError = (activityId: number) => {
-    setBannerLoadError((prev) => ({ ...prev, [activityId]: true }));
-  };
+      setBannerActivityBackgrounds((prev) => {
+        if (!prev[id]) {
+          const randomColor = backgroundColors[Math.floor(Math.random() * backgroundColors.length)];
+          return { ...prev, [id]: randomColor };
+        }
+        return prev;
+      });
+    },
+    [backgroundColors],
+  );
+
+  const getBackgroundColor = useCallback(
+    (id: number): string => {
+      return bannerBackgrounds[id] || backgroundColors[0];
+    },
+    [bannerBackgrounds, backgroundColors],
+  );
 
   const {
     data: activitiesData,
@@ -125,9 +160,9 @@ const MainPage = () => {
         : activitiesData.activities;
       const sortedActivities = sortActivities(categoryActivities, sortBy);
       setDisplayedActivities(sortedActivities);
-      setTotalPages(Math.ceil(sortedActivities.length / ITEMS_PER_PAGE));
+      setTotalPages(calculateTotalPages(sortedActivities));
     }
-  }, [activitiesData, activeCategory, ITEMS_PER_PAGE, sortBy, sortActivities]);
+  }, [activitiesData, activeCategory, sortBy, sortActivities, calculateTotalPages]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -184,24 +219,35 @@ const MainPage = () => {
     (term: string) => {
       setSearchTerm(term);
       setPage(1);
-      if (term) {
+      if (term.trim()) {
         setIsSearching(true);
+        setActiveCategory(''); // 검색 시 선택된 카테고리 초기화
         const results = allActivities.filter((activity) => activity.title.toLowerCase().includes(term.toLowerCase()));
         const sortedResults = sortActivities(results, sortBy);
         setDisplayedActivities(sortedResults);
-        setTotalPages(Math.ceil(sortedResults.length / ITEMS_PER_PAGE));
+        setTotalPages(calculateTotalPages(sortedResults));
       } else {
         setIsSearching(false);
-        const categoryActivities = activeCategory
-          ? allActivities.filter((activity) => activity.category === activeCategory)
-          : allActivities;
-        const sortedActivities = sortActivities(categoryActivities, sortBy);
+        // 검색어가 비어있으면 전체 활동 목록으로 되돌림
+        const sortedActivities = sortActivities(allActivities, sortBy);
         setDisplayedActivities(sortedActivities);
-        setTotalPages(Math.ceil(sortedActivities.length / ITEMS_PER_PAGE));
+        setTotalPages(calculateTotalPages(sortedActivities));
+        setActiveCategory(''); // 카테고리 선택 해제
       }
     },
-    [allActivities, activeCategory, ITEMS_PER_PAGE, sortBy, sortActivities],
+    [allActivities, sortBy, sortActivities, calculateTotalPages],
   );
+
+  useEffect(() => {
+    if (isSearching) {
+      const results = allActivities.filter((activity) =>
+        activity.title.toLowerCase().includes(searchTerm.toLowerCase()),
+      );
+      const sortedResults = sortActivities(results, sortBy);
+      setDisplayedActivities(sortedResults);
+      setTotalPages(calculateTotalPages(sortedResults));
+    }
+  }, [isSearching, searchTerm, allActivities, sortBy, sortActivities, calculateTotalPages]);
 
   const handleCategoryChange = useCallback(
     (category: string) => {
@@ -214,19 +260,18 @@ const MainPage = () => {
         : allActivities;
       const sortedActivities = sortActivities(categoryActivities, sortBy);
       setDisplayedActivities(sortedActivities);
-      setTotalPages(Math.ceil(sortedActivities.length / ITEMS_PER_PAGE));
+      setTotalPages(calculateTotalPages(sortedActivities));
     },
-    [allActivities, ITEMS_PER_PAGE, sortBy, sortActivities],
+    [allActivities, sortBy, sortActivities, calculateTotalPages],
   );
 
   const handleCategoryPrevClick = () => {
     if (isTablet && !isDesktop) {
       if (categoryStartIndex > 0) {
         setCategoryStartIndex((prev) => prev - 1);
-        setCategoryTranslate((prev) => prev + 100); // 100%만큼 오른쪽으로 이동
+        setCategoryTranslate((prev) => prev + 100);
       }
     } else {
-      // 기존 로직 유지
       if (categoryStartIndex > 0) {
         setCategoryStartIndex((prev) => Math.max(prev - 1, 0));
         if (tabsContainerRef.current) {
@@ -262,8 +307,9 @@ const MainPage = () => {
       setSortBy(option);
       const sortedActivities = sortActivities(displayedActivities, option);
       setDisplayedActivities(sortedActivities);
+      setTotalPages(calculateTotalPages(sortedActivities));
     },
-    [displayedActivities, sortActivities],
+    [displayedActivities, sortActivities, calculateTotalPages],
   );
 
   const handlePrevClick = useCallback(() => {
@@ -374,6 +420,7 @@ const MainPage = () => {
 
   return (
     <main className="flex flex-col items-center bg-gray-100">
+      <NavBar />
       <div className="relative w-full">
         {filteredPopularActivities.length > 0 && (
           <div className="lg:max-w-1920 sm:h-240 sm:w-375 md:h-550 md:w-1440">
@@ -388,7 +435,7 @@ const MainPage = () => {
                 <div className="relative h-full w-full">
                   {bannerLoadError[activity.id] ? (
                     <div
-                      className={`absolute inset-0 ${getRandomBackgroundColor()} flex items-center justify-center`}
+                      className={`absolute inset-0 ${getBackgroundColor(activity.id)} flex items-center justify-center`}
                     ></div>
                   ) : (
                     <Image
@@ -405,10 +452,10 @@ const MainPage = () => {
                   )}
                   <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50"></div>
                 </div>
-                <div className="absolute left-0 right-0 sm:top-[25%] md:top-[45%] lg:top-[35%]">
+                <div className="absolute left-0 right-0 sm:top-[35%] md:top-[45%] lg:top-[35%]">
                   <div className="mx-auto px-0 sm:max-w-[375px] sm:px-[3%] md:max-w-[744px] md:px-[3%] lg:max-w-[1200px] lg:px-[1%]">
-                    <div className="flex w-[95%] flex-col text-white sm:h-120 sm:w-[85%] md:h-162 md:w-[70%] md:gap-8 lg:h-215 lg:w-[55%] lg:gap-24">
-                      <h2 className="line-clamp-2 text-wrap break-words text-24 font-bold leading-[28.64px] sm:h-75 sm:text-32 sm:leading-[38px] md:h-128 md:text-54 md:leading-[64.44px] lg:h-162 lg:text-68 lg:leading-[81.15px]">
+                    <div className="flex w-[95%] flex-col text-white sm:h-120 sm:w-[85%] sm:gap-8 md:h-162 md:w-[70%] lg:h-215 lg:w-[55%] lg:gap-24">
+                      <h2 className="line-clamp-2 flex items-end text-wrap break-words font-bold sm:h-58 sm:text-24 sm:leading-[28.64px] md:h-128 md:text-54 md:leading-[64.44px] lg:h-162 lg:text-68 lg:leading-[81.15px]">
                         {activity.title}
                       </h2>
                       <p className="sm:text-md-bold md:text-xl-bold lg:text-2xl-bold">
@@ -432,12 +479,12 @@ const MainPage = () => {
           <div className="flex items-center justify-between">
             <h2 className="md:leading-43 font-bold sm:text-18 md:text-36 md:leading-[21.48px]">🔥인기 체험</h2>
             {filteredPopularActivities.length > (isDesktop ? 3 : 1) && (
-              <div className="flex gap-12">
-                <button onClick={handlePrevClick} className="cursor-pointer transition-transform hover:scale-110">
-                  <PrevButton />
+              <div className="flex items-center sm:gap-6 md:gap-12">
+                <button onClick={handlePrevClick} className="transition-transform hover:scale-110">
+                  {!isTablet && !isDesktop ? <PrevButton className="h-25 w-25" /> : <LeftButton />}
                 </button>
-                <button onClick={handleNextClick} className="cursor-pointer transition-transform hover:scale-110">
-                  <NextButton />
+                <button onClick={handleNextClick} className="transition-transform hover:scale-110">
+                  {!isTablet && !isDesktop ? <NextButton className="h-25 w-25" /> : <RightButton />}
                 </button>
               </div>
             )}
@@ -491,7 +538,7 @@ const MainPage = () => {
                     onClick={handleCategoryPrevClick}
                     className="z-1 flex h-32 w-32 items-center justify-center rounded-full border border-gray-600"
                   >
-                    <PrevButton />
+                    <LeftButton />
                   </button>
                 </div>
               )}
@@ -542,7 +589,7 @@ const MainPage = () => {
                     className="z-1 flex h-32 w-32 items-center justify-center rounded-full border border-gray-600"
                   >
                     <div className="flex h-20 w-35 items-center justify-center">
-                      <NextButton />
+                      <RightButton className="h-45 w-35" />
                     </div>
                   </button>
                 </div>
@@ -550,13 +597,13 @@ const MainPage = () => {
             </div>
 
             <div
-              className="relative cursor-pointer rounded-15 border border-black-100 sm:h-41 sm:w-100 md:h-53 md:w-130 lg:w-170"
+              className="relative cursor-pointer rounded-15 border border-black-100 sm:h-41 sm:w-120 md:h-53 md:w-130 lg:w-170"
               ref={dropdownRef}
             >
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className={`flex w-full items-center justify-center sm:py-9 md:px-20 md:py-14 ${
-                  sortBy ? 'gap-5' : 'md:20 sm:gap-10 lg:gap-40'
+                className={`flex w-full items-center justify-center sm:py-9 md:px-18 md:py-14 ${
+                  sortBy ? 'gap-5' : 'sm:gap-10 md:gap-20 lg:gap-40'
                 }`}
               >
                 <span className="text-black-100 sm:text-md-medium md:text-lg-medium">
@@ -604,41 +651,43 @@ const MainPage = () => {
         {isSearching && <span className="mb-24 text-lg-regular">총 {displayedActivities.length}개의 결과</span>}
 
         <div className="min-h-600">
-          <motion.div
-            className="flex flex-wrap sm:min-h-[550px] sm:w-340 sm:gap-4 md:min-h-[650px] md:w-695 md:gap-16 lg:min-h-[800px] lg:w-1204 lg:gap-24"
-            layout
-          >
-            <AnimatePresence>
-              {displayedActivities.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE).map((activity) => (
-                <motion.div
-                  key={activity.id}
-                  layout
-                  initial={{ opacity: 1, x: 100 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 100 }}
-                  transition={{
-                    opacity: { duration: 0.2 },
-                    x: { type: 'spring', stiffness: 100, damping: 15 },
-                    layout: {
-                      type: 'spring',
-                      stiffness: 100,
-                      damping: 15,
-                    },
-                  }}
-                >
-                  <ActivityCards activity={activity} />
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </motion.div>
-          {displayedActivities.length === 0 && (
+          {displayedActivities.length > 0 ? (
+            <motion.div
+              className="flex flex-wrap sm:min-h-[550px] sm:w-340 sm:gap-4 md:min-h-[650px] md:w-695 md:gap-16 lg:min-h-[800px] lg:w-1204 lg:gap-24"
+              layout
+            >
+              <AnimatePresence>
+                {displayedActivities.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE).map((activity) => (
+                  <motion.div
+                    key={activity.id}
+                    layout
+                    initial={{ opacity: 1, x: 50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 50 }}
+                    transition={{
+                      opacity: { duration: 0.2 },
+                      x: { type: 'spring', stiffness: 150, damping: 10, mass: 0.5 },
+                      layout: {
+                        type: 'spring',
+                        stiffness: 150,
+                        damping: 20,
+                        mass: 0.5,
+                      },
+                    }}
+                  >
+                    <ActivityCards activity={activity} />
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </motion.div>
+          ) : (
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="h-600 text-xl text-gray-500"
             >
-              검색 결과가 없습니다.
+              {isSearching ? '검색 결과가 없습니다' : '등록된 활동이 없습니다'}
             </motion.p>
           )}
         </div>
