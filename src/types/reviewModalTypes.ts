@@ -1,11 +1,11 @@
 export interface reviewDataProps {
-  title: string;
+  title: string | undefined;
   bannerImageUrl: string;
-  date: string;
-  startTime: string;
-  endTime: string;
-  totalPrice: number;
-  headCount: number;
+  date: string | undefined;
+  startTime: string | undefined;
+  endTime: string | undefined;
+  totalPrice: number | undefined;
+  headCount: number | undefined;
 }
 
 export interface TextareaWithSubmitProps {

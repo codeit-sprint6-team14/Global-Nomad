@@ -28,7 +28,13 @@ const ActivitySettings = () => {
                 <div className="cursor-pointer md:hidden">
                   <LeftArrow onClick={() => router.push('/my-page')} />
                 </div>
-                <h1 className="ml-10 text-3xl-bold">내 체험 관리</h1>
+                <h1 className="ml-10 mr-15 text-3xl-bold">내 체험 관리</h1>
+                <Button.Default
+                  onClick={() => router.push('/my-page/regist-activity')}
+                  className="h-48 w-120 rounded-4"
+                >
+                  체험 등록하기
+                </Button.Default>
               </div>
               <ActivitySettingsContent activitiesData={activitiesData} isEmpty={isActivityEmpty} />
             </div>
@@ -40,7 +46,7 @@ const ActivitySettings = () => {
                   <h1 className="text-3xl-bold">내 체험 관리</h1>
                   <Button.Default
                     onClick={() => router.push('/my-page/regist-activity')}
-                    className="h-48 w-128 rounded-4"
+                    className="h-48 w-120 rounded-4"
                   >
                     체험 등록하기
                   </Button.Default>

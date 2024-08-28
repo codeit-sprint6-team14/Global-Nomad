@@ -4,6 +4,7 @@ import { useClickOutside } from '@/hooks/useClickOutside';
 import useToast from '@/hooks/useToast';
 import { HeaderProps } from '@/types/activity';
 import { AnimatePresence, motion } from 'framer-motion';
+import Cookies from 'js-cookie';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -23,7 +24,7 @@ const Header = ({
   const [isOpenDropdown, setIsOpenDropdown] = useState(false);
   const [showCopiedMessage, setShowCopiedMessage] = useState(false);
   const router = useRouter();
-  const hasAccessToken = localStorage.getItem('accessToken');
+  const hasAccessToken = Cookies.get('accessToken');
 
   const toast = useToast();
   useEffect(() => {
