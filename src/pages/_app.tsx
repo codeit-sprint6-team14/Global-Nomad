@@ -10,8 +10,11 @@ import { Provider, useAtom } from 'jotai';
 import Cookies from 'js-cookie';
 import type { AppProps } from 'next/app';
 import localFont from 'next/font/local';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+
+// 추가
 
 const queryClient = new QueryClient();
 
@@ -46,13 +49,19 @@ function AppContent({ Component, pageProps }: AppProps) {
   }
 
   return (
-    <main className={`${pretendard.variable} ${showNavBarAndFooter ? 'pt-70' : ''}`}>
-      {showNavBarAndFooter && <NavBar />}
-      <div id="notification-root" />
-      <Component {...pageProps} />
-      <ToastProvider />
-      {showNavBarAndFooter && <Footer />}
-    </main>
+    <>
+      <Head>
+        <title>Global Nomad</title>
+        <link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml" />
+      </Head>
+      <main className={`${pretendard.variable} ${showNavBarAndFooter ? 'pt-70' : ''}`}>
+        {showNavBarAndFooter && <NavBar />}
+        <div id="notification-root" />
+        <Component {...pageProps} />
+        <ToastProvider />
+        {showNavBarAndFooter && <Footer />}
+      </main>
+    </>
   );
 }
 

@@ -96,7 +96,6 @@ const Notification = () => {
     setPortalRoot(document.getElementById('notification-root'));
   }, []);
 
-  // 페이지 로드 시와 일정 간격마다 알림을 가져오기 위한 useEffect
   useEffect(() => {
     fetchNotifications(true); // 초기 알림 로드
 
@@ -161,10 +160,7 @@ const Notification = () => {
           portalRoot &&
           createPortal(
             <div className="relative lg:mx-auto lg:w-1200">
-              <div
-                ref={popoverRef}
-                className="absolute top-0 z-[9999] md:left-auto md:right-[490px] md:top-80 lg:right-[380px]"
-              >
+              <div ref={popoverRef} className={`fixed top-0 z-[9999] md:right-[490px] md:top-80`}>
                 <Popover.Content>
                   <PopoverUI
                     ref={containerRef}
