@@ -111,7 +111,7 @@ const ReservationInfoModal = ({ activityId, schedules, onClose }: ReservationInf
   return (
     <div
       ref={modalRef}
-      className="flex h-full min-h-80 w-full flex-col justify-between overflow-auto border bg-white px-1 pb-24 pt-12 md:h-582 md:w-429 md:rounded-24"
+      className="flex h-full min-h-80 w-full flex-col justify-between border bg-white px-1 pb-24 pt-12 md:h-582 md:w-429 md:rounded-24"
     >
       <div className="mx-auto w-400 flex-col">
         <div className="flex h-98 flex-col gap-16 px-24 py-12">
