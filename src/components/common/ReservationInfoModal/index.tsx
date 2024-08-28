@@ -136,7 +136,7 @@ const ReservationInfoModal = ({ activityId, schedules, onClose }: ReservationInf
               />
             </div>
           </div>
-          <div className="flex flex-col gap-16 overflow-auto">
+          <div className="flex flex-col gap-16">
             <h2 className="text-xl-semibold">총 예약 {totalReservationCount}건</h2>
             {currentReservations.map((reservation) => (
               <ReservationCard

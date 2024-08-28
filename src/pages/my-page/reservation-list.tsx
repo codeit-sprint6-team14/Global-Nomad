@@ -22,7 +22,7 @@ const ReservationList = () => {
     <>
       <NavBar />
       <AnimatedContainer>
-        <main className="md:mb-400 lg:mb-270 mx-auto mb-[496px] w-344 pt-94 md:w-696 lg:mb-142 lg:w-1200 lg:pt-142">
+        <main className="md:mb-400 lg:mb-270 mx-auto mb-[496px] w-344 pt-94 md:w-696 lg:w-1200 lg:pt-142">
           {isMobile ? (
             <div className={`flex flex-col ${isMyReservationsEmpty && 'gap-86 md:gap-82 lg:gap-[117px]'}`}>
               <div className="mb-12 flex items-center">
