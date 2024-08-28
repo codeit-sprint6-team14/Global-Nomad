@@ -128,7 +128,7 @@ const MainPage = () => {
     queryKey: ['popularActivities'],
     queryFn: async () => {
       const data = await getActivities(1, 100, null, null);
-      return data.activities.filter((activity) => activity.rating >= 2.0);
+      return data.activities.filter((activity) => activity.rating >= 4);
     },
     placeholderData: [],
   });
