@@ -221,18 +221,17 @@ const MainPage = () => {
       setPage(1);
       if (term.trim()) {
         setIsSearching(true);
-        setActiveCategory(''); // 검색 시 선택된 카테고리 초기화
+        setActiveCategory('');
         const results = allActivities.filter((activity) => activity.title.toLowerCase().includes(term.toLowerCase()));
         const sortedResults = sortActivities(results, sortBy);
         setDisplayedActivities(sortedResults);
         setTotalPages(calculateTotalPages(sortedResults));
       } else {
         setIsSearching(false);
-        // 검색어가 비어있으면 전체 활동 목록으로 되돌림
         const sortedActivities = sortActivities(allActivities, sortBy);
         setDisplayedActivities(sortedActivities);
         setTotalPages(calculateTotalPages(sortedActivities));
-        setActiveCategory(''); // 카테고리 선택 해제
+        setActiveCategory('');
       }
     },
     [allActivities, sortBy, sortActivities, calculateTotalPages],
