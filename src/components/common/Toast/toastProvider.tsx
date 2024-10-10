@@ -17,10 +17,10 @@ const ToastProvider = () => {
   }
 
   return ReactDOM.createPortal(
-    <div className="fixed bottom-0 right-0 flex flex-col items-end gap-5 p-5">
+    <div className="fixed bottom-24 right-24 z-50 flex flex-col items-end gap-2">
       {toasts?.map((toast) => <Toast key={toast.id} {...toast} />)}
     </div>,
-    document.getElementById('toast-root') as HTMLElement,
+    document.body,
   );
 };
 

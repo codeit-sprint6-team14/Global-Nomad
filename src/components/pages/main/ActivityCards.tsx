@@ -75,7 +75,7 @@ const ActivityCards: React.FC<ActivityCardProps> = ({ activity }) => {
           </p>
         </div>
         <div className="flex items-center gap-5">
-          <span className="text-black sm:text-xl-bold md:text-2xl-bold">\ {activity.price.toLocaleString()}</span>
+          <span className="text-black sm:text-xl-bold md:text-2xl-bold">{activity.price.toLocaleString()}</span>
           <span className="text-gray-800 sm:text-lg-regular md:text-xl-regular">/</span>
           <span className="text-gray-600 sm:text-lg-regular md:text-xl-regular">인</span>
         </div>
