@@ -2,11 +2,15 @@ import { updateProfile, uploadImage } from '@/apis/myPage/myProfile';
 import { userAtom } from '@/store/userAtom';
 import { useAtom } from 'jotai';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { useRef } from 'react';
+
+// useRouter 훅 import
 
 const SideNavMenuProfile = () => {
   const [user, setUser] = useAtom(userAtom);
   const initialProfileImage = useRef(user.profileImage);
+  const router = useRouter(); // 현재 경로 확인을 위한 useRouter 훅 사용
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
@@ -37,6 +41,8 @@ const SideNavMenuProfile = () => {
     }
   };
 
+  const isProfilePage = router.pathname === '/my-page' || router.pathname === '/my-page/profile';
+
   return (
     <div className="relative flex justify-center">
       <div className="relative h-160 w-160 overflow-hidden rounded-full">
@@ -49,13 +55,17 @@ const SideNavMenuProfile = () => {
           sizes="(min-width: 375px) 160px"
         />
       </div>
-      <label
-        htmlFor="FileInput"
-        className="absolute bottom-[-2px] right-70 flex h-44 w-44 cursor-pointer items-center justify-center rounded-full bg-green-300 md:right-30 lg:right-95"
-      >
-        <Image src="/assets/icons/pencil.svg" alt="연필이미지" width={24} height={24} />
-      </label>
-      <input id="FileInput" className="hidden" type="file" onChange={handleFileChange} />
+      {isProfilePage && (
+        <>
+          <label
+            htmlFor="FileInput"
+            className="absolute bottom-[-2px] right-70 flex h-44 w-44 cursor-pointer items-center justify-center rounded-full bg-green-300 md:right-30 lg:right-95"
+          >
+            <Image src="/assets/icons/pencil.svg" alt="연필이미지" width={24} height={24} />
+          </label>
+          <input id="FileInput" className="hidden" type="file" onChange={handleFileChange} />
+        </>
+      )}
     </div>
   );
 };
