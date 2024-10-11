@@ -4,7 +4,7 @@ export interface Activity {
   bannerImageUrl: string;
 }
 
-export interface MyReservation {
+export interface Reservation {
   activity: Activity;
   scheduleId: number;
   id: number;
@@ -21,8 +21,8 @@ export interface MyReservation {
   updatedAt: string;
 }
 
-export interface MyReservationResponse {
+export interface ReservationResponse {
   totalCount: number;
-  reservations: MyReservation[];
+  reservations: Reservation[];
   cursorId: number | null;
 }
