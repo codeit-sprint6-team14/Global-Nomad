@@ -1,46 +1,46 @@
-import { getMyReservations } from '@/apis/myPage/myReservations';
-import { MyReservationResponse } from '@/apis/myPage/myReservations.types';
+import { getReservationList } from '@/apis/myPage/myReservations';
+import { ReservationResponse } from '@/apis/myPage/myReservations.types';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import useToast from '@/hooks/useToast';
 import { InfiniteData, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError, isAxiosError } from 'axios';
 import { useEffect, useState } from 'react';
 
-export const useMyReservationsQuery = () => {
+export const useListQuery = () => {
   const queryClient = useQueryClient();
-  const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const toast = useToast();
 
   const { fetchNextPage, hasNextPage, error, data, refetch } = useInfiniteQuery<
-    MyReservationResponse,
+    ReservationResponse,
     AxiosError,
-    InfiniteData<MyReservationResponse>,
-    ['myReservations', string | null],
+    InfiniteData<ReservationResponse>,
+    ['reservationList', string | null],
     number | null
   >({
-    queryKey: ['myReservations', selectedStatus],
-    queryFn: ({ pageParam = null }) => getMyReservations({ pageParam, status: selectedStatus }),
+    queryKey: ['reservationList', selectedOption],
+    queryFn: ({ pageParam = null }) => getReservationList({ pageParam, status: selectedOption }),
     initialPageParam: null,
     getNextPageParam: (lastPage) => lastPage.cursorId,
   });
 
-  const { setTarget } = useIntersectionObserver({
+  const { divRef } = useIntersectionObserver({
     hasNextPage,
     fetchNextPage,
   });
 
   const handleStatusChange = (newStatus: string | null) => {
-    setSelectedStatus(newStatus);
+    setSelectedOption(newStatus);
   };
 
-  const myReservationsData = data?.pages.flatMap((page) => page.reservations) || [];
-  const isMyReservationsEmpty = myReservationsData.length === 0;
+  const list = data?.pages.flatMap((page) => page.reservations) || [];
+  const isListEmpty = list.length === 0;
 
   useEffect(() => {
     refetch();
 
     return () => {
-      queryClient.removeQueries({ queryKey: ['myReservations'] });
+      queryClient.removeQueries({ queryKey: ['reservationList'] });
     };
   }, [refetch, queryClient]);
 
@@ -59,11 +59,11 @@ export const useMyReservationsQuery = () => {
   }, [error, toast]);
 
   return {
-    myReservationsData,
-    isMyReservationsEmpty,
+    list,
+    isListEmpty,
     error,
-    setTarget,
+    divRef,
     handleStatusChange,
-    selectedStatus,
+    selectedOption,
   };
 };
