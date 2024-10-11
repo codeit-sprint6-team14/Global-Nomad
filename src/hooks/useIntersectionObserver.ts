@@ -1,5 +1,5 @@
 import { InfiniteQueryObserverResult } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 interface useIntersectionObserverProps {
   threshold?: number;
@@ -12,9 +12,11 @@ export const useIntersectionObserver = ({
   hasNextPage,
   fetchNextPage,
 }: useIntersectionObserverProps) => {
-  const [target, setTarget] = useState<HTMLDivElement | null | undefined>(null);
+  const divRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const target = divRef.current;
+
     if (!target) return;
 
     const observer = new IntersectionObserver(
@@ -33,7 +35,7 @@ export const useIntersectionObserver = ({
     observer.observe(target);
 
     return () => observer.unobserve(target);
-  }, [hasNextPage, fetchNextPage, threshold, target]);
+  }, [hasNextPage, fetchNextPage, threshold]);
 
-  return { setTarget };
+  return { divRef };
 };
