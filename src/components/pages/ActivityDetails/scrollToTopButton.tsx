@@ -1,5 +1,6 @@
 import { AnimatePresence, animate, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
+import { IoIosArrowRoundUp } from 'react-icons/io';
 
 const ScrollToTopButton = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -38,7 +39,7 @@ const ScrollToTopButton = () => {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
         >
-          ↑
+          <IoIosArrowRoundUp size={28} />
         </motion.button>
       )}
     </AnimatePresence>
