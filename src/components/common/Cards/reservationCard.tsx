@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { MyReservation } from '@/apis/myPage/myReservations.types';
+import { Reservation } from '@/apis/myPage/myReservations.types';
 import Card from '@/components/common/Cards/components';
 import { modalAtom } from '@/store/modalAtom';
 import { reservationIdAtom } from '@/store/reservationIdAtom';
@@ -8,11 +8,11 @@ import { formatPrice } from '@/utils/formatPrice';
 import { useAtom, useSetAtom } from 'jotai';
 
 const ReservationCard = ({
-  myReservationData,
+  data,
   onCardClick,
 }: {
-  myReservationData: MyReservation;
-  onCardClick: (reservation: MyReservation) => void;
+  data: Reservation;
+  onCardClick: (reservation: Reservation) => void;
 }) => {
   const [, setModalType] = useAtom(modalAtom);
   const setReservationId = useSetAtom(reservationIdAtom);
@@ -27,7 +27,7 @@ const ReservationCard = ({
     startTime,
     endTime,
     reviewSubmitted,
-  } = myReservationData;
+  } = data;
   const { id: activityId, bannerImageUrl, title } = activity;
   const { text: statusText, colorClass } = getCardStatus(status as StatusType);
   const { name: buttonName, action } = getButtonInfo(status as StatusType);
@@ -40,7 +40,7 @@ const ReservationCard = ({
   };
 
   const handleCardClick = () => {
-    onCardClick(myReservationData);
+    onCardClick(data);
   };
 
   return (
