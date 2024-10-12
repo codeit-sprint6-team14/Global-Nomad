@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Reservation } from '@/apis/myPage/myReservations.types';
 import Card from '@/components/common/Cards/components';
 import { modalAtom } from '@/store/modalAtom';
@@ -28,7 +27,7 @@ const ReservationCard = ({
     endTime,
     reviewSubmitted,
   } = data;
-  const { id: activityId, bannerImageUrl, title } = activity;
+  const { bannerImageUrl, title } = activity;
   const { text: statusText, colorClass } = getCardStatus(status as StatusType);
   const { name: buttonName, action } = getButtonInfo(status as StatusType);
 
