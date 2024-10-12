@@ -30,7 +30,7 @@ export const getReservationList = async ({
   return data;
 };
 
-export const patchMyReservation = async (reservationId: number) => {
+export const patchReservation = async (reservationId: number) => {
   const { data } = await axiosRequester({
     options: {
       method: 'PATCH',
