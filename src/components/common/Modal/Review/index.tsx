@@ -5,7 +5,7 @@ import { useAtom, useAtomValue } from 'jotai';
 import { useState } from 'react';
 
 import Header from './header';
-import { usePostReviewMutation } from './hook/usePostReviewMutataion';
+import { useReviewMutation } from './hook/useReviewMutation';
 import StarRating from './starRating';
 import TextareaWithSubmit from './textareaWithSubmit';
 
@@ -14,11 +14,11 @@ const Review = ({ title, bannerImageUrl, date, startTime, endTime, totalPrice, h
   const [content, setContent] = useState('');
   const [, setModalType] = useAtom(modalAtom);
   const reservationId = useAtomValue(reservationIdAtom);
-  const { mutate: postReviewData, error: postReviewError } = usePostReviewMutation();
+  const { mutate, error } = useReviewMutation();
 
   const handleSubmit = () => {
     if (rating > 0 && content.trim()) {
-      postReviewData(
+      mutate(
         { reservationId, reviewData: { rating, content } },
         {
           onSuccess: () => {
@@ -31,7 +31,7 @@ const Review = ({ title, bannerImageUrl, date, startTime, endTime, totalPrice, h
 
   return (
     <>
-      {postReviewError && <div className="mb-4 text-red-500">{postReviewError.message}</div>}
+      {error && <div className="mb-4 text-red-500">{error.message}</div>}
       <div className="h-full w-full bg-white sm:px-16 md:h-750 md:w-480 md:rounded-24 md:px-24">
         <Header
           title={title}
