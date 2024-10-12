@@ -1,11 +1,11 @@
-import { patchMyReservation } from '@/apis/myPage/myReservations';
+import { patchReservation } from '@/apis/myPage/myReservations';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-export const usePatchMyReservationMutation = () => {
+export const useReservationMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: patchMyReservation,
+    mutationFn: patchReservation,
     onSuccess: () => {
       queryClient.refetchQueries({ queryKey: ['myReservations'] });
     },
