@@ -6,12 +6,16 @@ interface ReviewData {
   content: string;
 }
 
+interface MutationParams {
+  reservationId: number | null;
+  reviewData: ReviewData;
+}
+
 export const useReviewMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ reservationId, reviewData }: { reservationId: number | null; reviewData: ReviewData }) =>
-      postReview(reservationId, reviewData),
+    mutationFn: ({ reservationId, reviewData }: MutationParams) => postReview(reservationId, reviewData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myReservations'] });
     },
