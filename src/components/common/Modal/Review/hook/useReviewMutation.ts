@@ -6,7 +6,7 @@ interface ReviewData {
   content: string;
 }
 
-export const usePostReviewMutation = () => {
+export const useReviewMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
