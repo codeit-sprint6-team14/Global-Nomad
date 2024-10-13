@@ -8,7 +8,7 @@ interface ContentProps {
   isListEmpty: boolean;
 }
 
-const Content = ({ list, isListEmpty = false }: ContentProps) => {
+const Content = ({ list, isListEmpty }: ContentProps) => {
   return (
     <>
       {isListEmpty ? (
