@@ -84,12 +84,12 @@ const MySchedule = () => {
   const hasExperiences = activities.length > 0;
 
   return (
-    <div>
+    <div className="mx-auto mb-60 w-343 md:mx-0 md:w-429 lg:w-792">
       <div className="flex items-center">
         <div className="block cursor-pointer md:hidden" onClick={handleGoMyPage}>
           <LeftArrow />
         </div>
-        <h1 className="ml-10 text-3xl-bold md:ml-0">예약 현황</h1>
+        <h1 className="ml-10 mt-5 text-3xl-bold md:ml-0">예약 현황</h1>
       </div>
       {hasExperiences ? (
         <div className="relative mb-20 mt-20">

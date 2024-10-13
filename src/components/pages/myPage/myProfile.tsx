@@ -148,7 +148,7 @@ const MyProfile = () => {
           />
           {/* 비밀번호 강도 표시 */}
           {!isSocialUser && (
-            <div className="ml-[250px] mt-10">
+            <div className="ml-[250px] mt-10 md:ml-[330px] lg:ml-[695px]">
               <div className="h-2 w-90 rounded-full bg-gray-200">
                 <div className={`h-full rounded-full ${getStrengthColor()}`} style={{ width: `${strength}%` }}></div>
               </div>
