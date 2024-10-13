@@ -44,18 +44,19 @@ export const useListQuery = () => {
     };
   }, [refetch, queryClient]);
 
+  // 에러 처리 로직
   useEffect(() => {
-    if (error) {
-      if (isAxiosError(error)) {
-        if (error.response?.status === 401) {
-          toast.error('인증에 실패했습니다. 다시 로그인해주세요.');
-        } else {
-          toast.error(error.message || '예약 정보를 불러오는 데 실패했습니다.');
-        }
-      } else {
-        toast.error('알 수 없는 오류가 발생했습니다.');
-      }
+    if (!error) return;
+
+    if (!isAxiosError(error)) {
+      return toast.error('알 수 없는 오류가 발생했습니다.');
     }
+
+    if (error.response?.status === 401) {
+      return toast.error('인증에 실패했습니다. 다시 로그인해주세요.');
+    }
+
+    return toast.error(error.message || '예약 정보를 불러오는 데 실패했습니다.');
   }, [error, toast]);
 
   return {
