@@ -5,16 +5,34 @@ import { modalAtom } from '@/store/modalAtom';
 import { useAtom } from 'jotai';
 import { useState } from 'react';
 
-const CardList = ({ list }: { list: Reservation[] }) => {
+interface CardListProps {
+  list: Reservation[];
+}
+
+const CardList = ({ list }: CardListProps) => {
   const [selectedCard, setSelectedCard] = useState<Reservation | null>(null);
   const [modalType, setModalType] = useAtom(modalAtom);
+
+  const handleCloseModal = () => {
+    setModalType(null);
+    setSelectedCard(null);
+  };
 
   const handleCardClick = (card: Reservation) => {
     setSelectedCard(card);
   };
 
-  const handleCloseModal = () => {
-    setModalType(null);
+  const modalContent = () => {
+    if (!modalType) return null;
+
+    switch (modalType) {
+      case 'cancel':
+        return <Modal.CancelConfirm />;
+      case 'review':
+        return selectedCard ? <Modal.Review selectedCard={selectedCard} onClose={handleCloseModal} /> : null;
+      default:
+        return null;
+    }
   };
 
   return (
@@ -24,19 +42,8 @@ const CardList = ({ list }: { list: Reservation[] }) => {
           <Card onCardClick={handleCardClick} key={data.id} data={data} />
         ))}
       </ul>
-      <Modal.Overlay isOpen={modalType !== null} onClose={handleCloseModal}>
-        {modalType === 'cancel' && <Modal.CancelConfirm />}
-        {modalType === 'review' && selectedCard && (
-          <Modal.Review
-            title={selectedCard.activity.title}
-            bannerImageUrl={selectedCard.activity.bannerImageUrl || ''}
-            date={selectedCard.date}
-            startTime={selectedCard.startTime}
-            endTime={selectedCard.endTime}
-            totalPrice={selectedCard.totalPrice}
-            headCount={selectedCard.headCount}
-          />
-        )}
+      <Modal.Overlay isOpen={!!modalType} onClose={handleCloseModal}>
+        {modalContent()}
       </Modal.Overlay>
     </>
   );
