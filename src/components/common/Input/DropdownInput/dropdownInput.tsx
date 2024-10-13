@@ -4,7 +4,20 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import DropdownInputList from './dropdownInputList';
 
-const DropdownInput = ({ options, defaultOption, onSelect, onFocus, value, error, className = '' }: DropdownProps) => {
+interface DropdownInputProps extends DropdownProps {
+  defaultOptionColor?: string; // 추가: 기본 옵션 색상을 위한 prop
+}
+
+const DropdownInput = ({
+  options,
+  defaultOption,
+  onSelect,
+  onFocus,
+  value,
+  error,
+  className = '',
+  defaultOptionColor = 'text-gray-500', // 추가: 기본 색상은 회색
+}: DropdownInputProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSelectedOption, setIsSelectedOption] = useState<Option | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -50,7 +63,9 @@ const DropdownInput = ({ options, defaultOption, onSelect, onFocus, value, error
         className={`flex h-full w-full cursor-pointer items-center justify-between rounded-4 border border-gray-700 bg-white px-12 md:px-16 ${error ? 'errorBorder' : 'normalBorder'} ${isOpen ? 'border-green-300' : ''} ${className}`}
         onClick={toggleDropdown}
       >
-        <span className={`${isSelectedOption ? 'text-black' : 'text-gray-500'}`}>
+        <span
+          className={`${isSelectedOption ? 'text-black' : defaultOptionColor} max-w-[300px] truncate md:max-w-[600px] lg:max-w-[1200px]`}
+        >
           {isSelectedOption ? isSelectedOption.label : defaultOption}
         </span>
         <span className={`transform transition-transform duration-200 ${isOpen && 'rotate-180'}`}>

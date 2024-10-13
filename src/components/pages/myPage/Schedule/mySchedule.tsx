@@ -101,6 +101,7 @@ const MySchedule = () => {
             defaultOption={selectedOption ? selectedOption.label : '내 체험을 선택하세요'}
             onSelect={handleOptionSelect}
             className="h-56"
+            defaultOptionColor="text-black-DEFAULT"
           />
         </div>
       ) : (
