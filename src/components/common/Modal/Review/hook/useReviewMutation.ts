@@ -19,8 +19,5 @@ export const useReviewMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myReservations'] });
     },
-    onError: (error) => {
-      console.error('Post review error:', error);
-    },
   });
 };
