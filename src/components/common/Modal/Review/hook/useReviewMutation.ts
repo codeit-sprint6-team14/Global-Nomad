@@ -17,7 +17,7 @@ export const useReviewMutation = () => {
   return useMutation({
     mutationFn: ({ reservationId, reviewData }: MutationParams) => postReview(reservationId, reviewData),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['myReservations'] });
+      queryClient.invalidateQueries({ queryKey: ['reservationList'] });
     },
   });
 };
