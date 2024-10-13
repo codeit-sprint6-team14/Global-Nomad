@@ -7,10 +7,7 @@ export const useReservationMutation = () => {
   return useMutation({
     mutationFn: patchReservation,
     onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: ['myReservations'] });
-    },
-    onError: (error) => {
-      console.error('Patch reservation error:', error);
+      queryClient.invalidateQueries({ queryKey: ['reservationList'] });
     },
   });
 };
