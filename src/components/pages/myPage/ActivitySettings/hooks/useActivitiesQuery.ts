@@ -23,7 +23,7 @@ export const useActivitiesQuery = () => {
     getNextPageParam: (lastPage) => lastPage.cursorId,
   });
 
-  const { setTarget } = useIntersectionObserver({
+  const { divRef } = useIntersectionObserver({
     hasNextPage,
     fetchNextPage,
   });
@@ -57,6 +57,6 @@ export const useActivitiesQuery = () => {
     activitiesData,
     isActivityEmpty,
     error,
-    setTarget,
+    divRef,
   };
 };
