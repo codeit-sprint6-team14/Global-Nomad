@@ -6,19 +6,18 @@ import { StatusType, getButtonInfo, getCardStatus } from '@/utils/cardStatus';
 import { formatPrice } from '@/utils/formatPrice';
 import { useAtom, useSetAtom } from 'jotai';
 
-const ReservationCard = ({
-  data,
-  onCardClick,
-}: {
+interface ReservationCardProps {
   data: Reservation;
   onCardClick: (reservation: Reservation) => void;
-}) => {
+}
+
+const ReservationCard = ({ data, onCardClick }: ReservationCardProps) => {
   const [, setModalType] = useAtom(modalAtom);
   const setReservationId = useSetAtom(reservationIdAtom);
 
   const {
-    id: reservationId,
-    activity,
+    id,
+    activity: { bannerImageUrl, title },
     status,
     totalPrice,
     headCount,
@@ -27,13 +26,13 @@ const ReservationCard = ({
     endTime,
     reviewSubmitted,
   } = data;
-  const { bannerImageUrl, title } = activity;
+
   const { text: statusText, colorClass } = getCardStatus(status as StatusType);
   const { name: buttonName, action } = getButtonInfo(status as StatusType);
 
   const handleButtonClick = () => {
-    if (action !== null) {
-      setReservationId(reservationId);
+    if (action) {
+      setReservationId(id);
       setModalType(action);
     }
   };
@@ -49,16 +48,12 @@ const ReservationCard = ({
         <Card.Header ClassNames={`${colorClass} text-md-bold md:text-lg-bold `} text={statusText} />
         <Card.Title title={title} />
         <Card.Body text={`${date} · ${startTime} - ${endTime} · ${headCount}명`} />
-        {reviewSubmitted === false ? (
-          <Card.Footer
-            text={formatPrice(totalPrice)}
-            status={status}
-            buttonName={buttonName}
-            onButtonClick={handleButtonClick}
-          />
-        ) : (
-          <Card.Footer text={formatPrice(totalPrice)} status={status} />
-        )}
+        <Card.Footer
+          text={formatPrice(totalPrice)}
+          status={status}
+          buttonName={!reviewSubmitted ? buttonName : undefined}
+          onButtonClick={!reviewSubmitted ? handleButtonClick : undefined}
+        />
       </Card>
     </div>
   );
