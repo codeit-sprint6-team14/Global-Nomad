@@ -6,6 +6,7 @@ import NavBar from '@/components/common/NavBar';
 import SideNavMenu from '@/components/common/SideNavMenu';
 import Content from '@/components/pages/myPage/ReservationList/content';
 import { useListQuery } from '@/components/pages/myPage/ReservationList/hooks/useListQuery';
+import { ROUTES } from '@/constants/routes';
 import { useDeviceState } from '@/hooks/useDeviceState';
 import { Device } from '@/types/deviceTypes';
 import { useRouter } from 'next/router';
@@ -26,7 +27,7 @@ const ReservationList = () => {
             <div className={`flex flex-col ${isListEmpty && 'gap-86 md:gap-82 lg:gap-[117px]'}`}>
               <div className="mb-12 flex items-center">
                 <div className="cursor-pointer md:hidden">
-                  <LeftArrow onClick={() => router.push('/my-page')} />
+                  <LeftArrow onClick={() => router.push(ROUTES.MY_PAGE)} />
                 </div>
                 <h1 className="ml-10 text-3xl-bold">예약 내역</h1>
               </div>
