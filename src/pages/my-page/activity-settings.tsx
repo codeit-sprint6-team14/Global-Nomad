@@ -15,7 +15,7 @@ const ActivitySettings = () => {
   const deviceState = useDeviceState();
   const isMobile = deviceState === Device.MOBILE;
 
-  const { activitiesData, isActivityEmpty, setTarget } = useActivitiesQuery();
+  const { activitiesData, isActivityEmpty, divRef } = useActivitiesQuery();
 
   return (
     <>
@@ -55,7 +55,7 @@ const ActivitySettings = () => {
               </div>
             </div>
           )}
-          <div ref={setTarget}></div>
+          <div ref={divRef}></div>
         </main>
       </AnimatedContainer>
       <Footer />

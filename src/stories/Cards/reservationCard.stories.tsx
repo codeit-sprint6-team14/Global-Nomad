@@ -1,4 +1,4 @@
-import { MyReservation } from '@/apis/myPage/myReservations.types';
+import { Reservation } from '@/apis/myPage/myReservations.types';
 import ReservationCard from '@/components/common/Cards/reservationCard';
 import { StatusType } from '@/utils/cardStatus';
 import type { Meta, StoryObj } from '@storybook/react';
@@ -18,14 +18,14 @@ const ReservationCardWrapper = ({
   status,
   bannerImageUrl,
 }: {
-  myReservationData: Omit<MyReservation, 'status' | 'activity'> & {
-    activity: Omit<MyReservation['activity'], 'bannerImageUrl'>;
+  myReservationData: Omit<Reservation, 'status' | 'activity'> & {
+    activity: Omit<Reservation['activity'], 'bannerImageUrl'>;
   };
   status: StatusType;
   bannerImageUrl: string;
 }) => (
   <ReservationCard
-    myReservationData={{
+    data={{
       ...myReservationData,
       status,
       activity: {
@@ -58,8 +58,8 @@ const meta: Meta<typeof ReservationCardWrapper> = {
 export default meta;
 type Story = StoryObj<typeof ReservationCardWrapper>;
 
-const baseReservation: Omit<MyReservation, 'status' | 'activity'> & {
-  activity: Omit<MyReservation['activity'], 'bannerImageUrl'>;
+const baseReservation: Omit<Reservation, 'status' | 'activity'> & {
+  activity: Omit<Reservation['activity'], 'bannerImageUrl'>;
 } = {
   id: 1,
   scheduleId: 1,

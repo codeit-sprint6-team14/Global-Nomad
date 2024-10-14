@@ -10,9 +10,11 @@ interface FilterProps {
   selectedOption: string | null;
 }
 
+type StatusMapping = { [key: string]: string };
+
 const sortOptions = ['예약 신청', '예약 취소', '예약 승인', '예약 거절', '체험 완료'];
 
-const statusMapping: { [key: string]: string } = {
+const statusMapping: StatusMapping = {
   '예약 신청': 'pending',
   '예약 취소': 'canceled',
   '예약 승인': 'confirmed',
@@ -23,25 +25,15 @@ const statusMapping: { [key: string]: string } = {
 const Filter = ({ content = '필터', onOptionSelect, selectedOption }: FilterProps) => {
   const { current: isOpen, handleToggle } = useToggle(false);
 
+  const filterRef = useClickOutside(() => isOpen && handleToggle());
+
   const handleOptionClick = (option: string) => {
     const status = statusMapping[option];
     onOptionSelect(status);
     handleToggle();
   };
 
-  const handleOutsideClick = () => {
-    if (isOpen) {
-      handleToggle();
-    }
-  };
-
-  const filterRef = useClickOutside(handleOutsideClick);
-
-  const getDisplayOption = (status: string | null) => {
-    if (!status) return content;
-
-    return Object.keys(statusMapping).find((key) => statusMapping[key] === status) || content;
-  };
+  const currentOption = Object.keys(statusMapping).find((key) => statusMapping[key] === selectedOption) || content;
 
   return (
     <div ref={filterRef}>
@@ -50,7 +42,7 @@ const Filter = ({ content = '필터', onOptionSelect, selectedOption }: FilterPr
         onClick={handleToggle}
         className={`flex h-51 w-107 items-center justify-center gap-21 rounded-15 border border-green-300 bg-white text-green-300 md:h-53 md:w-160 md:gap-70 md:text-2lg-medium ${selectedOption ? 'md:gap-[30px]' : ''}`}
       >
-        {getDisplayOption(selectedOption)}
+        {currentOption}
         <DownArrow />
       </button>
       {isOpen && (

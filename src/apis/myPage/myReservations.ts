@@ -1,8 +1,8 @@
 import { axiosRequester } from '@/libs/axios';
 
-import { MyReservationResponse } from './myReservations.types';
+import { ReservationResponse } from './myReservations.types';
 
-export const getMyReservations = async ({
+export const getReservationList = async ({
   pageParam = null,
   status,
 }: {
@@ -18,7 +18,7 @@ export const getMyReservations = async ({
     params.status = status;
   }
 
-  const { data } = await axiosRequester<MyReservationResponse>({
+  const { data } = await axiosRequester<ReservationResponse>({
     options: {
       method: 'GET',
       url: 'my-reservations',
@@ -30,7 +30,7 @@ export const getMyReservations = async ({
   return data;
 };
 
-export const patchMyReservation = async (reservationId: number) => {
+export const patchReservation = async (reservationId: number) => {
   const { data } = await axiosRequester({
     options: {
       method: 'PATCH',
