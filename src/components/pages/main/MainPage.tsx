@@ -21,13 +21,13 @@ import PopularActivityCard from './PopularActivityCard';
 import { RadioTab } from './RadioTab';
 import { Activity } from './mainPage.type';
 
-const categories = ['문화 · 예술', '식음료', '스포츠', '투어', '관광', '웰빙'];
+const categories = ['전체', '문화 · 예술', '식음료', '스포츠', '투어', '관광', '웰빙'];
 
 const VISIBLE_TABS = 4;
 
 const MainPage = () => {
   const [page, setPage] = useState(1);
-  const [activeCategory, setActiveCategory] = useState('');
+  const [activeCategory, setActiveCategory] = useState('전체');
   const [sortBy, setSortBy] = useState<string | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
@@ -128,7 +128,7 @@ const MainPage = () => {
     queryKey: ['popularActivities'],
     queryFn: async () => {
       const data = await getActivities(1, 100, null, null);
-      return data.activities.filter((activity) => activity.rating >= 2.0);
+      return data.activities.filter((activity) => activity.rating >= 4);
     },
     placeholderData: [],
   });
@@ -155,14 +155,11 @@ const MainPage = () => {
   useEffect(() => {
     if (activitiesData && activitiesData.activities) {
       setAllActivities(activitiesData.activities);
-      const categoryActivities = activeCategory
-        ? activitiesData.activities.filter((activity) => activity.category === activeCategory)
-        : activitiesData.activities;
-      const sortedActivities = sortActivities(categoryActivities, sortBy);
+      const sortedActivities = sortActivities(activitiesData.activities, sortBy);
       setDisplayedActivities(sortedActivities);
       setTotalPages(calculateTotalPages(sortedActivities));
     }
-  }, [activitiesData, activeCategory, sortBy, sortActivities, calculateTotalPages]);
+  }, [activitiesData, sortBy, sortActivities, calculateTotalPages]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -221,18 +218,17 @@ const MainPage = () => {
       setPage(1);
       if (term.trim()) {
         setIsSearching(true);
-        setActiveCategory(''); // 검색 시 선택된 카테고리 초기화
+        setActiveCategory('');
         const results = allActivities.filter((activity) => activity.title.toLowerCase().includes(term.toLowerCase()));
         const sortedResults = sortActivities(results, sortBy);
         setDisplayedActivities(sortedResults);
         setTotalPages(calculateTotalPages(sortedResults));
       } else {
         setIsSearching(false);
-        // 검색어가 비어있으면 전체 활동 목록으로 되돌림
         const sortedActivities = sortActivities(allActivities, sortBy);
         setDisplayedActivities(sortedActivities);
         setTotalPages(calculateTotalPages(sortedActivities));
-        setActiveCategory(''); // 카테고리 선택 해제
+        setActiveCategory('');
       }
     },
     [allActivities, sortBy, sortActivities, calculateTotalPages],
@@ -255,9 +251,15 @@ const MainPage = () => {
       setPage(1);
       setIsSearching(false);
       setSearchTerm('');
-      const categoryActivities = category
-        ? allActivities.filter((activity) => activity.category === category)
-        : allActivities;
+
+      let categoryActivities;
+      if (category === '전체') {
+        categoryActivities = allActivities;
+      } else {
+        categoryActivities = allActivities.filter((activity) => activity.category === category);
+      }
+
+      // 정렬 상태 유지
       const sortedActivities = sortActivities(categoryActivities, sortBy);
       setDisplayedActivities(sortedActivities);
       setTotalPages(calculateTotalPages(sortedActivities));
@@ -534,11 +536,8 @@ const MainPage = () => {
             <div className="relative flex items-center overflow-hidden sm:w-375 md:w-680 lg:w-full">
               {isLeftButtonVisible && (
                 <div className="flex-shrink-0">
-                  <button
-                    onClick={handleCategoryPrevClick}
-                    className="z-1 flex h-32 w-32 items-center justify-center rounded-full border border-gray-600"
-                  >
-                    <LeftButton />
+                  <button onClick={handleCategoryPrevClick}>
+                    <PrevButton className="flex h-32 w-32 items-center justify-center rounded-full border border-gray-600" />
                   </button>
                 </div>
               )}
@@ -584,13 +583,8 @@ const MainPage = () => {
 
               {isRightButtonVisible && (
                 <div className="flex-shrink-0">
-                  <button
-                    onClick={handleCategoryNextClick}
-                    className="z-1 flex h-32 w-32 items-center justify-center rounded-full border border-gray-600"
-                  >
-                    <div className="flex h-20 w-35 items-center justify-center">
-                      <RightButton className="h-45 w-35" />
-                    </div>
+                  <button onClick={handleCategoryNextClick}>
+                    <NextButton className="flex h-30 w-30 rounded-full border border-gray-600" />
                   </button>
                 </div>
               )}
@@ -644,7 +638,7 @@ const MainPage = () => {
           </h2>
         ) : (
           <h2 className="md:leading-43 font-bold sm:text-18 md:text-36 md:leading-[21.48px]">
-            {activeCategory || '🥾모든 체험'}
+            {activeCategory === '전체' ? '🥾모든 체험' : activeCategory}
           </h2>
         )}
 
@@ -656,22 +650,21 @@ const MainPage = () => {
               className="flex flex-wrap sm:min-h-[550px] sm:w-340 sm:gap-4 md:min-h-[650px] md:w-695 md:gap-16 lg:min-h-[800px] lg:w-1204 lg:gap-24"
               layout
             >
-              <AnimatePresence>
+              <AnimatePresence mode="popLayout">
                 {displayedActivities.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE).map((activity) => (
                   <motion.div
                     key={activity.id}
                     layout
-                    initial={{ opacity: 1, x: 50 }}
+                    initial={{ opacity: 0 }}
                     animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 50 }}
+                    exit={{ opacity: 0, x: 100 }}
                     transition={{
-                      opacity: { duration: 0.2 },
-                      x: { type: 'spring', stiffness: 150, damping: 10, mass: 0.5 },
+                      opacity: { duration: 0.1 },
+                      x: { type: 'spring', stiffness: 100, damping: 15 },
                       layout: {
                         type: 'spring',
-                        stiffness: 150,
-                        damping: 20,
-                        mass: 0.5,
+                        stiffness: 100,
+                        damping: 15,
                       },
                     }}
                   >
