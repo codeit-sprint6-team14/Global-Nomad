@@ -15,40 +15,33 @@ const Description = ({ description }: { description: string }) => {
   };
 
   const renderDescription = (text: string) => {
-    const paragraphs = text.split('\n\n');
-    return paragraphs.map((paragraph, index) => (
-      <p key={index} className="mb-4 whitespace-pre-line text-lg-regular text-black-100 last:mb-0">
-        {paragraph}
-      </p>
-    ));
+    return <pre className="whitespace-pre-wrap break-words font-sans text-16 leading-relaxed">{text}</pre>;
   };
 
+  const truncatedDescription = description.slice(0, maxLength);
+  const remainingDescription = description.slice(maxLength);
+
   return (
-    <div className="flex flex-col border-b border-solid border-gray-300 py-16 md:border-t md:py-40">
-      <h1 className="text-xl-bold text-black-100">체험 설명</h1>
-      <div className="mt-16">
-        {renderDescription(isExpanded ? description : description.slice(0, maxLength))}
-        {!isExpanded && description.length > maxLength && '...'}
-      </div>
-      <AnimatePresence initial={false}>
+    <div className="mb-32 md:mb-40">
+      <h2 className="mb-16 text-20 font-bold md:text-24">체험 설명</h2>
+      {renderDescription(truncatedDescription)}
+      {!isExpanded && description.length > maxLength && '...'}
+      <AnimatePresence>
         {isExpanded && description.length > maxLength && (
           <motion.div
             initial="hidden"
             animate="visible"
             exit="hidden"
             variants={variants}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.3 }}
           >
-            {renderDescription(description.slice(maxLength))}
+            {renderDescription(remainingDescription)}
           </motion.div>
         )}
       </AnimatePresence>
       {description.length > maxLength && (
-        <button
-          onClick={toggleExpand}
-          className="mt-16 cursor-pointer self-start text-lg-bold text-blue-200 hover:text-blue-300"
-        >
-          {isExpanded ? <a href="#title">접기</a> : '더보기'}
+        <button onClick={toggleExpand} className="mt-8 text-16 text-blue-500 hover:underline">
+          {isExpanded ? '접기' : '더보기'}
         </button>
       )}
     </div>
