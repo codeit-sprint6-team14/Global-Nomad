@@ -129,7 +129,7 @@ const ReservationInfoModal = ({ activityId, schedules, onClose }: ReservationInf
   return (
     <div
       ref={modalRef}
-      className="flex h-full min-h-80 w-full flex-col justify-between overflow-auto border bg-white px-1 pb-24 pt-12 md:h-582 md:w-429 md:rounded-24"
+      className="flex h-full min-h-80 w-full flex-col justify-between border bg-white px-1 pb-24 pt-12 md:h-582 md:w-429 md:rounded-24"
     >
       <div className="mx-auto w-400 flex-col">
         <div className="flex h-98 flex-col gap-16 px-24 py-12">
@@ -156,17 +156,19 @@ const ReservationInfoModal = ({ activityId, schedules, onClose }: ReservationInf
           </div>
           <div className="flex flex-col gap-16">
             <h2 className="text-xl-semibold">총 예약 {totalReservationCount}건</h2>
-            {currentReservations.map((reservation) => (
-              <ReservationCard
-                key={reservation.id}
-                selectedTab={selectedTab}
-                reservationId={reservation.id}
-                activityId={reservation.activityId}
-                reservationName={reservation.name}
-                reservationCount={reservation.count}
-                onUpdate={(status) => handleUpdateReservation(reservation.id, status)}
-              />
-            ))}
+            <div className="flex h-[calc(100vh-350px)] w-370 flex-col gap-16 overflow-y-auto md:h-250">
+              {currentReservations.map((reservation) => (
+                <ReservationCard
+                  key={reservation.id}
+                  selectedTab={selectedTab}
+                  reservationId={reservation.id}
+                  activityId={reservation.activityId}
+                  reservationName={reservation.name}
+                  reservationCount={reservation.count}
+                  onUpdate={(status) => handleUpdateReservation(reservation.id, status)}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
