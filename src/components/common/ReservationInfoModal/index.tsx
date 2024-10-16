@@ -49,18 +49,40 @@ const ReservationInfoModal = ({ activityId, schedules, onClose }: ReservationInf
     setSelectedScheduleId(parseInt(option.value));
   };
 
-  const handleUpdateReservation = (reservationId: number, status: 'confirmed' | 'declined') => {
-    setReservations((prevReservations) => {
-      const updatedReservations = { ...prevReservations };
-      const targetReservation = updatedReservations[selectedTab].find((res) => res.id === reservationId);
+  const handleUpdateReservation = async (reservationId: number, status: 'confirmed' | 'declined') => {
+    // 예약을 수락하거나 거절했을 때, 서버에서 최신 예약 상태를 다시 가져와 반영
+    if (status === 'confirmed') {
+      try {
+        // 서버에서 업데이트된 예약 상태 다시 가져오기
+        const 신청 = await getReservations(activityId, selectedScheduleId, 'pending');
+        const 승인 = await getReservations(activityId, selectedScheduleId, 'confirmed');
+        const 거절 = await getReservations(activityId, selectedScheduleId, 'declined');
 
-      if (targetReservation) {
-        updatedReservations[selectedTab] = updatedReservations[selectedTab].filter((res) => res.id !== reservationId);
-        updatedReservations[status === 'confirmed' ? '승인' : '거절'].push(targetReservation);
+        // 최신 예약 상태를 reservationsAtom에 반영
+        setReservations({
+          신청: 신청.reservations.map((res) => ({
+            id: res.id,
+            activityId: res.activityId,
+            name: res.nickname,
+            count: res.headCount,
+          })),
+          승인: 승인.reservations.map((res) => ({
+            id: res.id,
+            activityId: res.activityId,
+            name: res.nickname,
+            count: res.headCount,
+          })),
+          거절: 거절.reservations.map((res) => ({
+            id: res.id,
+            activityId: res.activityId,
+            name: res.nickname,
+            count: res.headCount,
+          })),
+        });
+      } catch (error) {
+        console.error('Failed to fetch reservations:', error);
       }
-
-      return updatedReservations;
-    });
+    }
   };
 
   const currentReservations = useMemo(() => reservations[selectedTab], [reservations, selectedTab]);
