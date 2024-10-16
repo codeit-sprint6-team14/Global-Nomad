@@ -49,45 +49,36 @@ const ReservationInfoModal = ({ activityId, schedules, onClose }: ReservationInf
     setSelectedScheduleId(parseInt(option.value));
   };
 
-  const handleUpdateReservation = async (reservationId: number, status: 'confirmed' | 'declined') => {
-    // 예약을 수락하거나 거절했을 때, 서버에서 최신 예약 상태를 다시 가져와 반영
-    if (status === 'confirmed') {
-      try {
-        // 서버에서 업데이트된 예약 상태 다시 가져오기
-        const 신청 = await getReservations(activityId, selectedScheduleId, 'pending');
-        const 승인 = await getReservations(activityId, selectedScheduleId, 'confirmed');
-        const 거절 = await getReservations(activityId, selectedScheduleId, 'declined');
+  const handleUpdateReservation = (reservationId: number, status: 'confirmed' | 'declined') => {
+    setReservations((prevReservations) => {
+      const updatedReservations = { ...prevReservations };
+      const targetReservation = updatedReservations[selectedTab].find((res) => res.id === reservationId);
 
-        // 최신 예약 상태를 reservationsAtom에 반영
-        setReservations({
-          신청: 신청.reservations.map((res) => ({
-            id: res.id,
-            activityId: res.activityId,
-            name: res.nickname,
-            count: res.headCount,
-          })),
-          승인: 승인.reservations.map((res) => ({
-            id: res.id,
-            activityId: res.activityId,
-            name: res.nickname,
-            count: res.headCount,
-          })),
-          거절: 거절.reservations.map((res) => ({
-            id: res.id,
-            activityId: res.activityId,
-            name: res.nickname,
-            count: res.headCount,
-          })),
-        });
-      } catch (error) {
-        console.error('Failed to fetch reservations:', error);
+      if (targetReservation) {
+        // 선택한 예약을 '신청' 목록에서 제거
+        updatedReservations[selectedTab] = updatedReservations[selectedTab].filter((res) => res.id !== reservationId);
+
+        // 승인일 경우 해당 예약을 '승인'으로, 거절일 경우 '거절'로 이동
+        if (status === 'confirmed') {
+          updatedReservations.승인.push(targetReservation);
+
+          // 나머지 예약들을 모두 '거절'로 이동
+          updatedReservations.신청.forEach((res) => {
+            updatedReservations.거절.push(res);
+          });
+
+          // '신청' 목록을 비우기
+          updatedReservations.신청 = [];
+        } else if (status === 'declined') {
+          updatedReservations.거절.push(targetReservation);
+        }
       }
-    }
+
+      return updatedReservations;
+    });
   };
 
-  const currentReservations = useMemo(() => reservations[selectedTab], [reservations, selectedTab]);
-  const totalReservationCount = useMemo(() => tabData.find((tab) => tab.type === '신청')?.count || 0, [tabData]);
-
+  // 서버에서 최신 데이터 다시 동기화 (필요한 경우)
   useEffect(() => {
     if (selectedScheduleId) {
       const fetchReservations = async () => {
@@ -123,6 +114,9 @@ const ReservationInfoModal = ({ activityId, schedules, onClose }: ReservationInf
       fetchReservations();
     }
   }, [selectedScheduleId, activityId, setReservations]);
+
+  const currentReservations = useMemo(() => reservations[selectedTab], [reservations, selectedTab]);
+  const totalReservationCount = useMemo(() => tabData.find((tab) => tab.type === '신청')?.count || 0, [tabData]);
 
   useEffect(() => {
     if (dropdownOptions.length > 0) {
