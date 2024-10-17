@@ -70,7 +70,7 @@ export const getReservationSchedule = async (activityId: number, date: string): 
 
 export const getReservations = async (
   activityId: number,
-  scheduleId: number,
+  scheduleId: number | null,
   status: 'declined' | 'pending' | 'confirmed',
   cursorId?: number,
   size?: number,

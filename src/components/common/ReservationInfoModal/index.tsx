@@ -32,13 +32,14 @@ const ReservationInfoModal = ({ activityId, schedules, onClose }: ReservationInf
     [schedules],
   );
 
+  // tabData 계산을 reservations 상태에 따라 동적으로 계산
   const tabData = useMemo(
     () => [
-      { type: '신청' as const, count: schedules.reduce((sum, schedule) => sum + schedule.count.pending, 0) },
-      { type: '승인' as const, count: schedules.reduce((sum, schedule) => sum + schedule.count.confirmed, 0) },
-      { type: '거절' as const, count: schedules.reduce((sum, schedule) => sum + schedule.count.declined, 0) },
+      { type: '신청' as const, count: reservations.신청.length },
+      { type: '승인' as const, count: reservations.승인.length },
+      { type: '거절' as const, count: reservations.거절.length },
     ],
-    [schedules],
+    [reservations], // reservations 상태가 변경될 때마다 재계산
   );
 
   const handleTabClick = (tab: TabType) => {
@@ -55,8 +56,23 @@ const ReservationInfoModal = ({ activityId, schedules, onClose }: ReservationInf
       const targetReservation = updatedReservations[selectedTab].find((res) => res.id === reservationId);
 
       if (targetReservation) {
+        // 선택한 예약을 '신청' 목록에서 제거
         updatedReservations[selectedTab] = updatedReservations[selectedTab].filter((res) => res.id !== reservationId);
-        updatedReservations[status === 'confirmed' ? '승인' : '거절'].push(targetReservation);
+
+        // 승인일 경우 해당 예약을 '승인'으로, 거절일 경우 '거절'로 이동
+        if (status === 'confirmed') {
+          updatedReservations.승인.push(targetReservation);
+
+          // 나머지 예약들을 모두 '거절'로 이동
+          updatedReservations.신청.forEach((res) => {
+            updatedReservations.거절.push(res);
+          });
+
+          // '신청' 목록을 비웁니다.
+          updatedReservations.신청 = [];
+        } else if (status === 'declined') {
+          updatedReservations.거절.push(targetReservation);
+        }
       }
 
       return updatedReservations;
@@ -64,6 +80,8 @@ const ReservationInfoModal = ({ activityId, schedules, onClose }: ReservationInf
   };
 
   const currentReservations = useMemo(() => reservations[selectedTab], [reservations, selectedTab]);
+
+  // 총 예약 건수: '신청' 탭의 예약 건수로 계산
   const totalReservationCount = useMemo(() => tabData.find((tab) => tab.type === '신청')?.count || 0, [tabData]);
 
   useEffect(() => {
@@ -111,7 +129,7 @@ const ReservationInfoModal = ({ activityId, schedules, onClose }: ReservationInf
   return (
     <div
       ref={modalRef}
-      className="flex h-full min-h-80 w-full flex-col justify-between overflow-auto border bg-white px-1 pb-24 pt-12 md:h-582 md:w-429 md:rounded-24"
+      className="flex h-full min-h-80 w-full flex-col justify-between border bg-white px-1 pb-24 pt-12 md:h-582 md:w-429 md:rounded-24"
     >
       <div className="mx-auto w-400 flex-col">
         <div className="flex h-98 flex-col gap-16 px-24 py-12">
@@ -138,17 +156,19 @@ const ReservationInfoModal = ({ activityId, schedules, onClose }: ReservationInf
           </div>
           <div className="flex flex-col gap-16">
             <h2 className="text-xl-semibold">총 예약 {totalReservationCount}건</h2>
-            {currentReservations.map((reservation) => (
-              <ReservationCard
-                key={reservation.id}
-                selectedTab={selectedTab}
-                reservationId={reservation.id}
-                activityId={reservation.activityId}
-                reservationName={reservation.name}
-                reservationCount={reservation.count}
-                onUpdate={(status) => handleUpdateReservation(reservation.id, status)}
-              />
-            ))}
+            <div className="flex h-[calc(100vh-350px)] w-370 flex-col gap-16 overflow-y-auto md:h-250">
+              {currentReservations.map((reservation) => (
+                <ReservationCard
+                  key={reservation.id}
+                  selectedTab={selectedTab}
+                  reservationId={reservation.id}
+                  activityId={reservation.activityId}
+                  reservationName={reservation.name}
+                  reservationCount={reservation.count}
+                  onUpdate={(status) => handleUpdateReservation(reservation.id, status)}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>

@@ -5,12 +5,15 @@ import Modal from '@/components/common/Modal';
 import SideNavMenu from '@/components/common/SideNavMenu';
 import useViewportSize from '@/hooks/useViewportSize';
 import { confirmPasswordAtom, isChangedAtom, passwordAtom, userAtom } from '@/store/userAtom';
+import { usePasswordStrength } from '@/utils/calculatePassword';
 import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 import InputSection from './inputSection';
 import PasswordInputSection from './passwordInputSection';
+
+// 비밀번호 강도 계산 훅 추가
 
 const MyProfile = () => {
   const router = useRouter();
@@ -31,6 +34,9 @@ const MyProfile = () => {
 
   const passwordMismatch = confirmPassword && password !== confirmPassword;
   const passwordLength = password.length < 8 && password.length > 0;
+
+  // 비밀번호 강도 계산을 위한 훅
+  const { strength, getStrengthColor, getStrengthText } = usePasswordStrength(password || '');
 
   useEffect(() => {
     const loadUserProfile = async () => {
@@ -53,7 +59,6 @@ const MyProfile = () => {
 
     loadUserProfile();
 
-    // 로컬 스토리지에서 social 키 확인
     const social = localStorage.getItem('social');
     if (social === 'true') {
       setIsSocialUser(true);
@@ -74,7 +79,7 @@ const MyProfile = () => {
   }, [localNickname, initialNickname, password, confirmPassword, setIsChanged]);
 
   const handleModalClose = () => {
-    setIsModalOpen(false); // 모달 닫기
+    setIsModalOpen(false);
   };
 
   const handleSave = async () => {
@@ -84,10 +89,10 @@ const MyProfile = () => {
         profileImageUrl: user.profileImage,
         newPassword: password || undefined,
       });
-      setUser({ ...user, nickname: localNickname }); // 저장 성공 시에만 userAtom 업데이트
+      setUser({ ...user, nickname: localNickname });
       setModalMessage('변경 사항이 저장되었습니다');
       setIsModalOpen(true);
-      setInitialNickname(localNickname); // 초기 닉네임 업데이트
+      setInitialNickname(localNickname);
     } catch (error) {
       console.error('Failed to update profile:', error);
       setModalMessage('프로필 업데이트에 실패했습니다');
@@ -130,7 +135,10 @@ const MyProfile = () => {
             </Button.Default>
           </div>
           <InputSection title="닉네임" value={localNickname} onChange={(e) => setLocalNickname(e.target.value)} />
-          <InputSection title="이메일" value={user.email} readonly={true} />
+          <h3 className="mt-30 text-2xl-bold">이메일</h3>
+          <p className="ml-5 mt-20 text-lg-regular">{user.email}</p>
+
+          {/* 새 비밀번호 필드 */}
           <PasswordInputSection
             title="새 비밀번호"
             placeholder="8자 이상 입력해 주세요"
@@ -138,7 +146,17 @@ const MyProfile = () => {
             onChange={(e) => setPassword(e.target.value)}
             readonly={isSocialUser}
           />
+          {/* 비밀번호 강도 표시 */}
+          {!isSocialUser && (
+            <div className="ml-[250px] mt-10 md:ml-[330px] lg:ml-[695px]">
+              <div className="h-2 w-90 rounded-full bg-gray-200">
+                <div className={`h-full rounded-full ${getStrengthColor()}`} style={{ width: `${strength}%` }}></div>
+              </div>
+              <span className="mt-1 text-xs-regular">{`비밀번호 강도: ${getStrengthText()}`}</span>
+            </div>
+          )}
           {passwordLength && !isSocialUser && <p className="mt-4 text-sm text-red-500">8자 이상 입력해 주세요</p>}
+
           <PasswordInputSection
             title="비밀번호 재입력"
             placeholder="비밀번호를 한 번 더 입력해 주세요"
@@ -152,7 +170,6 @@ const MyProfile = () => {
         </div>
       </div>
 
-      {/* 모달 조건부 렌더링 */}
       <Modal.Overlay isOpen={isModalOpen} onClose={handleModalClose}>
         <Modal.RegisterConfirm onClose={handleModalClose}>{modalMessage}</Modal.RegisterConfirm>
       </Modal.Overlay>
