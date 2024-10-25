@@ -1,7 +1,7 @@
 import useViewportSize from '@/hooks/useViewportSize';
 import { SubImage } from '@/types/activity';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import BannerImageModal from './bannerImageModal';
 
@@ -26,6 +26,19 @@ const BannerImage = ({ bannerImageUrl, subImages }: { bannerImageUrl: string; su
   const goToNextImage = () => {
     setCurrentImageIndex((prevIndex) => (prevIndex === allImages.length - 1 ? 0 : prevIndex + 1));
   };
+
+  // 모달 열렸을때 스크롤 방지
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [isModalOpen]);
 
   return (
     <>
