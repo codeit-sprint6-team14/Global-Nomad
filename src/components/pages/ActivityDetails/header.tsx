@@ -27,6 +27,7 @@ const Header = ({
   const hasAccessToken = Cookies.get('accessToken');
 
   const toast = useToast();
+
   useEffect(() => {
     if (showCopiedMessage) {
       toast.success('링크가 복사됐습니다');
